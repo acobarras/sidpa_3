@@ -1,0 +1,23 @@
+// en los comentarios del codigo podra encontrar algunos numeros que corresponden a la linea de este archivo
+
+► sizeof(Array) cuenta elementos de un array
+► $(this).parents("tr").find(`.selector${id_unico}`).val(); ejemplo de obtener valor de un input dentro de un datatable recordar que el selector tiene que ser unico para ello se recomiennda utilizar un id.
+
+//sacar datos de un array
+SELECT t1.codigo_producto, t2.descripcion_productos, 
+SUBSTRING(t1.codigo_producto, LOCATE('-', t1.codigo_producto)+4, 1) AS adh, t1.ubicacion, SUM(t1.entrada)- SUM(t1.salida) AS total 
+FROM entrada_tecnologia t1 
+INNER JOIN productos t2 ON t1.id_productos = t2.id_productos 
+INNER JOIN tipo_articulo t3 ON t2.id_tipo_articulo = t3.id_tipo_articulo 
+WHERE t3.id_clase_articulo = 2 GROUP BY t1.ubicacion
+<<<<<<< HEAD
+Esto es una prueba de comando git
+=======
+
+SELECT t2.nombre_empresa, t2.nit, t3.codigo_producto, t3.descripcion_productos, t1.precio_venta, t1.moneda, t1.precio_autorizado, t1.moneda_autoriza 
+FROM cliente_producto t1 
+INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov
+INNER JOIN productos t3 ON t1.id_producto = t3.id_productos
+>>>>>>> edwin
+
+prueba edwin

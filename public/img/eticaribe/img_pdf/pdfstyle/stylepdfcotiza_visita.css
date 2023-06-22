@@ -1,0 +1,97 @@
+@page {
+    margin: 0px 15px;
+}
+
+body {
+    margin-top: 48mm;
+    margin-bottom: 31mm;
+}
+
+#imgtitulo {
+    width: 220mm;
+    z-index: 4;
+}
+
+#imgpie {
+    width: 100%;
+    z-index: 4;
+}
+
+#imgpie_formato {
+    width: 80mm;
+}
+
+#imgencabezadop {
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+}
+
+#imgenpiedepaginap {
+    width: 100%;
+    position: fixed;
+    z-index: -1;
+    top: 243mm;
+    background: grey;
+}
+
+.text-center {
+    text-align: center;
+}
+
+
+header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 30px;
+    text-align: center;
+    line-height: 5px;
+}
+
+.numero {
+    text-align: right;
+}
+
+
+footer {
+    position: fixed;
+    bottom: 90px;
+    left: 0px;
+    right: 0px;
+    height: 40px;
+    text-align: center;
+    line-height: -2px;
+}
+
+.img_vertical {
+    font-size: medium;
+    position: fixed;
+    top: 60mm;
+    left: 207mm;
+    z-index: 4;
+}
+
+#vertical {
+    height: 100%;
+    width: 15px;
+}
+
+.contenido {
+    padding: 10px;
+    margin-top: 45px;
+    float: initial;
+    z-index: 2;
+    width: 95%;
+    height: 80%;
+}
+.titulo {
+    padding: 10px;
+    margin-top: -60px;
+    float: initial;
+    z-index: 2;
+    width: 95%;
+    height: 5%;
+}

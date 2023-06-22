@@ -1,0 +1,22 @@
+{
+    "name": "acobarras/inicio_proyecto",
+    "description": "inicio proyecto con inicio de sesion",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "MiApp\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Edwin Rios",
+            "email": "edwin.rios@acobarras.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "dompdf/dompdf": "dev-master",
+        "phpmailer/phpmailer": "dev-master"
+    }
+}

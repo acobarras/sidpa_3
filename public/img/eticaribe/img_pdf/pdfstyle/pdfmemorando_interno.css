@@ -1,0 +1,24 @@
+*{
+    padding: 0;
+    margin: 0;
+
+}
+#imgencabezadop{
+    /* position: fixed; */
+    z-index: -1;
+    top: 0px;
+    left: 0px;	
+}
+#imgtitulo, #imgpie{
+    width: 216mm;
+}
+
+table {
+    border: #b2b2b2 1px solid;
+  }
+  td, th {
+    border: black 1px solid;
+  }
+  .container{
+      margin: 20px;
+  }

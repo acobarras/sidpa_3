@@ -1,0 +1,22 @@
+1 git add . // Agrega los cambios al git
+2 git commit -m "se escribe un dato para saber cuando se actualizo o que se actualizo" // Referencia de actualización
+3 git push origin master // Sube los datos al repositorio segun la rama
+4 git branch nombre_rama // crea una rama de trabajo
+5 git status // Muestra los datos que estan pendientes por actualizar
+6 git checkout // cambia la rama de trabajo
+7 git branch -d nombre_rama // Borra una rama
+8 git pull nombre repositorio // Extrae el repositorio en git
+9 Clear // limpia la pantalla
+10 git merge nombre rama // actualiza la rama en la master local
+
+// Actualizar un repositorio ya existente
+
+git remote add origin // Ruta https://github.com/acobarras/Acobarras_web.git
+git push -u origin master
+
+
+Clave de usuarios para pruebas
+
+Edwin = 0bffb9109a39ac133a7156bd00f73948
+luis sua = ddba54e07c299c4968bb7978b7ab4493
+alirio = 0bcc9ad9aa77a206964b5eed87efad49

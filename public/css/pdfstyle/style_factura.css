@@ -1,0 +1,140 @@
+@page {
+    margin: 0px 15px;
+}
+
+body {
+    margin-top: 20mm;
+    margin-bottom: 5mm;
+    margin-left: 1mm;
+    margin-right: 1mm;
+}
+
+#imgtitulo,
+#imgpie {
+    width: 100%;
+}
+
+#imgpie_formato {
+    width: 80mm;
+}
+
+#imgencabezadop {
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+}
+
+#imgenpiedepaginap {
+    width: 100%;
+    position: fixed;
+    z-index: -1;
+    top: 243mm;
+}
+
+.primera_parte {
+    width: 98%;
+    border: black 2px solid;
+    padding: 2mm;
+    margin-bottom: 1.5mm;
+    text-align: left;
+}
+
+.contenido .primera_parte table {
+    margin-bottom: 2mm;
+    text-align: left;
+}
+
+.primera_parte table tr td {
+    background: #ece8e8;
+    text-align: left;
+}
+
+.contenido .segunda_parte {
+    width: 98%;
+    border: black 2px solid;
+    padding: 2mm;
+    margin-bottom: 1.5mm;
+}
+
+.segunda_parte table {
+    border: black 1px solid;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2mm;
+}
+
+.borde-1 {
+    border: 1px solid;
+}
+
+.borde-right-1 {
+    border-right: 1px solid;
+}
+
+.borde-top-1 {
+    border-top: 1px solid;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.trasparente {
+    color: #ece8e8;
+    height: 12mm;
+}
+
+header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 30px;
+    text-align: center;
+    line-height: 5px;
+}
+
+.numero {
+    float: initial;
+    z-index: 100;
+    margin-top: -60px;
+    margin-right: 50px;
+    text-align: right;
+}
+
+footer {
+
+    position: fixed;
+    bottom: 70px;
+    left: 0px;
+    right: 0px;
+    height: 30px;
+    text-align: center;
+    line-height: -2px;
+}
+
+footer table {
+    width: 100%;
+    border: black 2px solid;
+    padding: 2mm;
+    margin-bottom: 1.5mm;
+    text-align: left;
+}
+
+footer table tr td {
+    background: #ece8e8;
+    text-align: left;
+}
+
+.contenido {
+    width: auto;
+    height: 20%;
+}
+
+hr {
+    page-break-after: always;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,150 @@
+*{
+    padding: 0;
+    margin: 0;
+
+}
+#imgencabezadop{
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;	
+}
+#imgtitulo, #imgpie{
+    width: 216mm;
+}
+#imgenpiedepaginap{
+    position: fixed;
+    z-index: -1;
+    top: 275mm;
+    left: 70mm; 
+}
+#imgpie_formato{
+    width: 80mm;
+}
+.cabeza_op{
+
+    margin: 0 5px;
+    margin-top: 20mm;
+
+}
+.th_medio{
+    padding: 0 5px;
+}
+.text-center{
+    text-align: center;
+}
+.ptl-5{
+    padding: 5px 0;
+}
+.ptl-10{
+    padding: 10px 0;
+}
+.mt{
+    margin-top: 2mm;
+}
+.mt-5{
+    margin-top: 5mm;
+}
+.linea{
+    border-bottom: 1px solid;
+}
+.columna {
+    width:31.8%;
+    float:left;
+    padding: 5px;
+    border:1px solid;
+}
+.letra-10{
+    font-size:10px;
+
+}
+.letra-12{
+    font-size:12px;
+
+}
+.td-white{
+    border:1px solid white;
+    border: 1px solid white;
+    color: white;
+}
+.salto-pag{
+    page-break-after:always;
+}
+.obs{
+    height: 5mm; 
+    border: black 1.5px solid; 
+    background: rgb(178,178,178);
+    text-align: left; 
+    vertical-align: baseline;
+}
+
+@media (max-width: 500px) {
+
+    .columna {
+        width:auto;
+        float:none;
+        padding: 5px;
+        border:1px solid;
+    }
+
+}
+.primera_parte{
+    width: 100%;
+    padding: 2mm;
+    margin-bottom: 1.5mm;
+}
+.primera_parte table{
+    border: black 1px solid;
+    width: 208mm; 
+    border-collapse:collapse;
+    margin-bottom: 2mm;
+}
+.primera_parte table tr th{
+    border: black 1px solid;
+    margin: 0 auto;
+    text-align: center;
+}
+.primera_parte table tr td{
+    border: black 1px solid;
+    margin: 0 auto; 
+    text-align: center; 
+}
+.primera_parte table tr .sin{
+    border: white 1px solid;
+}
+.primera_parte table tr .con{
+    border: white 1px solid;
+    border-bottom: black 1px solid;
+    color: white;
+}
+.primera_parte table tr .con1{
+    border: white 1px solid;
+    border-bottom: black 1px solid;
+    color: rgb(215,215,215);
+} 
+.cuerpo_pedido table{
+    border: black 1px solid;
+    border-radius: 50%;
+    width: 210mm;
+    border-collapse:collapse;
+    margin: 0 auto;
+
+}
+.cuerpo_pedido table tr th{
+    font-size: 11px;
+    border: black 1px solid;
+    text-align: center;
+}
+.cuerpo_pedido table tr td{
+    font-size: 10px;
+    height: 6mm;
+    border: black 1px solid;
+    text-align: center;
+
+
+}
+.cuerpo_pedido table tr .descrip{
+    text-align: justify;
+    padding-left: 2px;
+
+}
