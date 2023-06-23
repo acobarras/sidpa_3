@@ -57,6 +57,7 @@ class PruebasControlador extends GenericoControlador
     {
         set_time_limit(3200);
         header('Content-Type: application/json');
+        Envio_Correo::pruebas();
         // COLOCAR EL PRECIO AUTORIZADO DE LA TECNOLOGIA EN 0 
         // $sql = "SELECT * FROM cliente_producto t1
         // INNER JOIN productos t2 ON t2.id_productos=t1.id_producto

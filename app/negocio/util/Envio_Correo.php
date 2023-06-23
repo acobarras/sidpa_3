@@ -29,7 +29,7 @@ class Envio_Correo
                     <div style="background-color: #001c85; ">
                         <br><br>
                         <div style="width: 800px;  margin:0px auto;">
-                            <img src="https://www.acobarras.com/sidpa/public/img/principal/sidpa.gif" style="width: 300px;" alt="Logo_acobarras">
+                            <img src="' . IMG_CORREO . '" style="width: 300px;" alt="Logo_empresa">
                             <br><br>
                             <div style="background-color: white; padding:30px">
                                 <div style="width:639px; font-size:25px;">
@@ -64,8 +64,8 @@ class Envio_Correo
                                 <div style="width:639px; font-size:25px;">
                                     <h6 style="color: #5f6368;font-weight: 200;">Quedamos atentos a sus comentarios.</h6>
                                     <h6 style="color: #5f6368;font-weight: 200;">Proceso Logistica.</h6>
-                                    <h6 style="color: #5f6368;font-weight: 200;">Tel: 3847979 Ext 127</h6>
-                                    <h6 style="color: #5f6368;font-weight: 200;">Acobarras S.A.S.</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">Tel: ' . TEL_EMPRESA . ' Ext 127</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">' . NOMBRE_EMPRESA . '</h6>
                                 </div>
                             </div>
                             <br><br>
@@ -74,7 +74,6 @@ class Envio_Correo
             </body>
 
             </html>';
-        // $correo = 'desarrollo@acobarras.com';
         $remite = 'Solicitud de Compra ' . $TipoCompra . ' Sidpa';
         $subject = "Solicitud " . $TipoCompra . " " . $data->nombre_empresa;
         self::php_miler($html, $remite, $subject, $correo);
@@ -95,7 +94,7 @@ class Envio_Correo
             <div style="background-color: #001c85; ">
             <br><br>
             <div style="width: 800px;  margin:0px auto;">
-            <img src="https://www.acobarras.com/sidpa/public/img/principal/sidpa.gif" style="width: 300px;" alt="Logo_acobarras">
+            <img src="' . IMG_CORREO . '" style="width: 300px;" alt="Logo_empresa">
             <br><br>
             <div style="background-color: white; padding:30px">
             <div style="width:639px; font-size:25px;">
@@ -135,7 +134,7 @@ class Envio_Correo
                                     <h6 style="color: #5f6368;font-weight: 200;">Cualquier duda comunicarse con el asesor .</h6>
                                     <h6 style="color: #5f6368;font-weight: 200;">Correo: ' . $user[0]->correo . '</h6>
                                     <h6 style="color: #5f6368;font-weight: 200;">Tel: ' . $user[0]->celular . '</h6>
-                                    <h6 style="color: #5f6368;font-weight: 200;">Acobarras S.A.S.</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">' . NOMBRE_EMPRESA . '</h6>
                                 </div>
                                 </div>
                                 <br><br>
@@ -144,7 +143,6 @@ class Envio_Correo
                                 </body>
                                 
                                 </html>';
-        // $correo = 'desarrollo@acobarras.com';
         $remite = 'Verificación de Precio ' . $data[0]->nombre_empresa . ' Sidpa';
         $subject = 'Solicitud Verificación de Precio ' . $data[0]->nombre_empresa;
         return self::php_miler($html, $remite, $subject, $correo);
@@ -170,7 +168,7 @@ class Envio_Correo
             <div style="background-color: #001c85; ">
             <br><br>
             <div style="width: 800px;  margin:0px auto;">
-            <img src="https://www.acobarras.com/sidpa/public/img/principal/sidpa.gif" style="width: 300px;" alt="Logo_acobarras">
+            <img src="' . IMG_CORREO . '" style="width: 300px;" alt="Logo_empresa">
             <br><br>
             <div style="background-color: white; padding:30px">
             <div style="width:639px; font-size:25px;">
@@ -216,7 +214,7 @@ class Envio_Correo
                                     <h6 style="color: #5f6368;font-weight: 200;">Cualquier duda comunicarse con el asesor .</h6>
                                     <h6 style="color: #5f6368;font-weight: 200;">Correo: ' . $user[0]->correo . '</h6>
                                     <h6 style="color: #5f6368;font-weight: 200;">Tel: ' . $user[0]->celular . '</h6>
-                                    <h6 style="color: #5f6368;font-weight: 200;">Acobarras S.A.S.</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">' . NOMBRE_EMPRESA . '</h6>
                                 </div>
                             </div>
                                 <br><br>
@@ -249,7 +247,7 @@ class Envio_Correo
             <div style="background-color: #001c85; ">
             <br><br>
             <div style="width: 800px;  margin:0px auto;">
-            <img src="https://www.acobarras.com/sidpa/public/img/principal/sidpa.gif" style="width: 300px;" alt="Logo_acobarras">
+            <img src="' . IMG_CORREO . '" style="width: 300px;" alt="Logo_empresa">
             <br><br>
             <div style="background-color: white; padding:30px">
             <div style="width:639px; font-size:25px;">
@@ -297,7 +295,7 @@ class Envio_Correo
                                     <h6 style="color: #5f6368;font-weight: 200;">Cualquier duda comunicarse con el asesor .</h6>
                                     <h6 style="color: #5f6368;font-weight: 200;">Correo: ' . $user[0]->correo . '</h6>
                                     <h6 style="color: #5f6368;font-weight: 200;">Tel: ' . $user[0]->celular . '</h6>
-                                    <h6 style="color: #5f6368;font-weight: 200;">Acobarras S.A.S.</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">' . NOMBRE_EMPRESA . '</h6>
                                 </div>
                             </div>
                                 <br><br>
@@ -305,7 +303,6 @@ class Envio_Correo
                     </div>
                 </body>
             </html>';
-        $asesor = 'desarrollo@acobarras.com';
         $remite = 'Confirmación de pedido para ' . $data[0]->nombre_empresa . ' Sidpa';
         $subject = 'Se ha creado un nuevo pedido para ' . $data[0]->nombre_empresa;
         return self::php_miler($html, $remite, $subject, $asesor);
@@ -332,7 +329,7 @@ class Envio_Correo
             <div style="background-color: #001c85; ">
             <br><br>
             <div style="width: 800px;  margin:0px auto;">
-            <img src="https://www.acobarras.com/sidpa/public/img/principal/sidpa.gif" style="width: 300px;" alt="Logo_acobarras">
+            <img src="' . IMG_CORREO . '" style="width: 300px;" alt="Logo_empresa">
             <br><br>
             <div style="background-color: white; padding:30px">
             <div style="width:639px; font-size:25px;">
@@ -346,7 +343,7 @@ class Envio_Correo
                                 <br><br>
                                 <div style="width:639px; font-size:25px;">
                                     <h6 style="color: #5f6368;font-weight: 200;">Ante cualquier duda, porfavor comuníquese con su asesor comercial.</h6>
-                                    <h6 style="color: #5f6368;font-weight: 200;">Acobarras S.A.S.</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">' . NOMBRE_EMPRESA . '</h6>
                                 </div>
                             </div>
                                 <br><br>
@@ -373,7 +370,7 @@ class Envio_Correo
     {
         $num_produccion = $orden['num_produccion'];
         $motivos1 = $motivos[0]['descripcion'];
-        $correo = 'producciongrafica@acobarras.com';
+        $correo = CORREO_PRODUCCION_GRAF;
 
         $body = "<div>
                     Buen día , <br>
@@ -426,7 +423,7 @@ class Envio_Correo
 
         $body = "<div>
                     Buen día , <br><br>
-                    El proceso de Servicio al Cliente de Acobarras, le informa que se ha radicado en nuestro sistema una petición, queja o reclamo, referente a uno de los bienes o servicios que previamente le hemos suministrado. <br><br>
+                    El proceso de Servicio al Cliente de " . NOMBRE_EMPRESA . ", le informa que se ha radicado en nuestro sistema una petición, queja o reclamo, referente a uno de los bienes o servicios que previamente le hemos suministrado. <br><br>
 
                     Tenga presente que cualquier consulta referente a este caso la podrá realizar con el número de radicado <span style='color: red;'>$num_pqr</span>. <br><br>
                     
@@ -440,16 +437,16 @@ class Envio_Correo
                   <br>
                   Equipo de servicio al cliente.
                   <br>
-                  servicioalcliente@acobarras.com
+                  " . CORREO_SERV_CLIENTE . "
                   <br>
-                  Tel.: (601)3847979
+                  Tel.: " . TEL_EMPRESA . "
                   <br>
                   <br>
                   ******ESTE CORREO ES AUTOMÁTICO, FAVOR NO RESPONDER ******
                 </div>";
         //----------------------------------------------------------------------
         $subject = "Notificación de radicado pqr " . $num_pqr;
-        $remite = 'Acobarras servicio al cliente';
+        $remite = '' . NOMBRE_EMPRESA . ' servicio al cliente';
         return self::php_miler($body, $remite, $subject, $correo);
     }
 
@@ -469,15 +466,15 @@ class Envio_Correo
                   <br><br>
                   Equipo de servicio al cliente.
                   <br>
-                  servicioalcliente@acobarras.com
+                 " . CORREO_SERV_CLIENTE . "
                   <br>
-                  Tel.: (601)3847979
+                  Tel.: " . TEL_EMPRESA . "
                   <br><br>
                   ******ESTE CORREO ES AUTOMÁTICO, FAVOR NO RESPONDER ******
                 </div>";
         //----------------------------------------------------------------------
         $subject = "Notificación de cierre pqr " . $num_pqr;
-        $remite = 'Acobarras servicio al cliente';
+        $remite = '' . NOMBRE_EMPRESA . ' servicio al cliente';
         return self::php_miler($body, $remite, $subject, $correo, $correo2, $archivo);
     }
 
@@ -497,7 +494,7 @@ class Envio_Correo
                     <div style="background-color: #001c85; ">
                         <br><br>
                         <div style="width: 800px;  margin:0px auto;">
-                            <img src="https://www.acobarras.com/sidpa/public/img/principal/sidpa.gif" style="width: 300px;" alt="Logo_acobarras">
+                            <img src="' . IMG_CORREO . '" style="width: 300px;" alt="Logo_empresa">
                             <br><br>
                             <div style="background-color: white; padding:30px">
                                 <div style="width:639px; font-size:25px;">
@@ -524,8 +521,8 @@ class Envio_Correo
                                 <div style="width:639px; font-size:25px;">
                                     <h6 style="color: #5f6368;font-weight: 200;">Quedamos atentos a sus comentarios.</h6>
                                     <h6 style="color: #5f6368;font-weight: 200;">Proceso Soporte Tecnico.</h6>
-                                    <h6 style="color: #5f6368;font-weight: 200;">Tel: 3847979 Ext 121</h6>
-                                    <h6 style="color: #5f6368;font-weight: 200;">Acobarras S.A.S.</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">Tel: ' . TEL_EMPRESA . ' Ext 121</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">' . NOMBRE_EMPRESA . '</h6>
                                 </div>
                             </div>
                             <br><br>
@@ -533,7 +530,6 @@ class Envio_Correo
                     </div>
             </body>
             </html>';
-        // $correo = 'desarrollo@acobarras.com';
         $remite = 'Solicitud de Compra Soporte tecnico Sidpa';
         $subject = "Solicitud Soporte Tecnico";
         return self::php_miler($html, $remite, $subject, $correo);
@@ -543,11 +539,11 @@ class Envio_Correo
     {
         $correo = 'mateorozotorres0420028@gmail.com';
         $correo2 = 'desarrollo@acobarras.com';
-        $body = "PRUEBAS";
-        $body .= "PRUEBAS";
+        $body = "<img src='" . IMG_CORREO . "' style='width: 300px;' alt='Logo_empresa'>";
+        $body .= "PRUEBAS<i style='width:30%;color:black' class='fas fa-helicopter'></i>";
         //----------------------------------------------------------------------
         $subject = "PRUEBAS";
-        $remite = 'Acobarras servicio al cliente';
+        $remite = '' . NOMBRE_EMPRESA . ' servicio al cliente';
         return self::php_miler($body, $remite, $subject, $correo, $correo2);
     }
 
@@ -562,14 +558,14 @@ class Envio_Correo
         //Server settings
         $mail->SMTPDebug = 0;
         $mail->isSMTP(); // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';
+        $mail->Host = HOST_CORREOS;
         $mail->SMTPAuth = true;
-        $mail->Username = 'soporte_entrega@acobarras.com';
-        $mail->Password = '@acobarras123';
+        $mail->Username = CORREO_ENTREGA;
+        $mail->Password = CLAVE_CORREOS;
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
         $remite = $remite;
-        $mail->setFrom('soporte_entrega@acobarras.com', $remite);
+        $mail->setFrom(CORREO_ENTREGA, $remite);
         $mail->isHTML(true);
         $mail->CharSet = 'UTF-8';
         $mail->Timeout = 300;
