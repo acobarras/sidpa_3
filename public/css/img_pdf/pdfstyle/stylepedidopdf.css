@@ -1,60 +1,77 @@
 @page {
     margin: 0;
 }
-html{
+
+html {
     margin: 0;
 }
-body{
+
+body {
     margin-top: 77mm;
     margin-bottom: 38mm;
-}	
+}
 
-input[type=radio] { display: inline; }
-input[type=radio]:before { font-family: DejaVu Sans; }
+input[type=radio] {
+    display: inline;
+}
 
-#imgtitulo, #imgpie{
+input[type=radio]:before {
+    font-family: DejaVu Sans;
+}
+
+#imgtitulo,
+#imgpie {
     width: 216mm;
 }
-#imgpie_formato{
+
+#imgpie_formato {
     width: 80mm;
 }
-#imgencabezadop{
+
+#imgencabezadop {
     position: fixed;
     z-index: -1;
     top: 0px;
-    left: 0px;	
+    left: 0px;
 }
-#imgenpiedepaginap{
+
+#imgenpiedepaginap {
     position: fixed;
     z-index: -1;
     top: 275mm;
-    left: 70mm; 
+    left: 70mm;
 }
-#firmacartera{
+
+#firmacartera {
     position: fixed;
     z-index: -1;
     top: 251mm;
-    left: 13mm; 
+    left: 13mm;
 }
-#firmacartera img{
-    width: 170px;    
+
+#firmacartera img {
+    width: 170px;
 }
-.radicacion{
+
+.radicacion {
     position: fixed;
     z-index: -1;
-    top: 20mm ;
+    top: 20mm;
     margin: 0 auto;
     margin-top: -5mm;
 }
-.radicacion ul{
+
+.radicacion ul {
     padding: 0;
     padding-left: 5mm;
     list-style-type: none;
 }
-.radicacion ul li{
+
+.radicacion ul li {
     display: inline;
 }
-.radicacion ul li u{
+
+.radicacion ul li u {
     display: inline;
     background: rgba(158, 158, 158, 0.09);
     padding-right: 6mm;
@@ -62,10 +79,12 @@ input[type=radio]:before { font-family: DejaVu Sans; }
     text-decoration: none;
     font-size: 14px;
 }
-.radicacion ul li b{
+
+.radicacion ul li b {
     padding-right: 3mm;
     text-transform: capitalize;
 }
+
 .titulo_pedido {
     position: fixed;
     z-index: -1;
@@ -73,7 +92,8 @@ input[type=radio]:before { font-family: DejaVu Sans; }
     margin-top: 6mm;
     margin-left: 3mm;
 }
-.titulo_pedido table{
+
+.titulo_pedido table {
     font-size: 11px;
     margin-top: 5mm;
     border: black 1px solid;
@@ -82,56 +102,66 @@ input[type=radio]:before { font-family: DejaVu Sans; }
     margin: 0 auto;
     /* border-radius: 3mm;*/
 }
-.titulo_pedido table th{
+
+.titulo_pedido table th {
     font-size: 14px;
     text-align: left;
 }
-.titulo_pedido .pinta{
+
+.titulo_pedido .pinta {
     background: rgba(208, 208, 208, 0.5);
     border-color: 2px solid black;
     padding-left: 2px;
 }
-.cuerpo_pedido table{
+
+.cuerpo_pedido table {
     border: black 1px solid;
     border-radius: 50%;
     width: 210mm;
-    border-collapse:collapse;
+    border-collapse: collapse;
     margin: 0 auto;
-   
+
 }
-.cuerpo_pedido table tr th{
+
+.cuerpo_pedido table tr th {
     font-size: 11px;
     border: black 1px solid;
     text-align: center;
 }
-.cuerpo_pedido table tr td{
+
+.cuerpo_pedido table tr td {
     font-size: 10px;
     height: 6mm;
     border: black 1px solid;
     text-align: center;
-   
+
 }
-.cuerpo_pedido table tr .descrip{
+
+.cuerpo_pedido table tr .descrip {
     text-align: justify;
     padding-left: 2px;
 }
-.fin_pedido table{
+
+.fin_pedido table {
     border: black 1px solid;
     width: 210mm;
-    border-collapse:collapse;
+    border-collapse: collapse;
     margin: 0 auto;
 }
-.fin_pedido table tr th{
+
+.fin_pedido table tr th {
     font-size: 11px;
     border: black 1px solid;
     text-align: center;
 }
-.fin_pedido table tr td{
+
+.fin_pedido table tr td {
     font-size: 11px;
     border: black 1px solid;
     text-align: center;
 }
-.fin_pedido1 table{
+
+.fin_pedido1 table {
     border-left: black 1px solid;
     border-right: black 1px solid;
     border-top: black 1px solid;
@@ -139,18 +169,25 @@ input[type=radio]:before { font-family: DejaVu Sans; }
     margin: 0 auto;
     padding-bottom: 2mm;
 }
-.fin_pedido1 table tr th{
-    font-size: 11px;
+
+.fin_pedido1 table tr th {
+    font-size: 13px;
     text-align: center;
     height: 7mm;
 }
-.fin_pedido1 table tr td{
+
+.fin_pedido1 table tr td {
     font-size: 13px;
     text-align: center;
     border-bottom: black 1px solid;
     height: 7mm;
 }
-.fin_pedido2 table{
+
+.espacio {
+    border-bottom: red 1px solid;
+}
+
+.fin_pedido2 table {
     border-left: black 1px solid;
     border-right: black 1px solid;
     border-bottom: black 1px solid;
@@ -158,20 +195,22 @@ input[type=radio]:before { font-family: DejaVu Sans; }
     margin: 0 auto;
     padding-top: 5mm;
 }
-.fin_pedido2 table tr th{
+
+.fin_pedido2 table tr th {
     font-size: 11px;
     text-align: center;
     border-top: black 1px solid;
 }
-.fin_pedido2 table tr td{
+
+.fin_pedido2 table tr td {
     font-size: 13px;
     text-align: center;
     height: 7mm;
 }
-.posicion{
+
+.posicion {
     position: fixed;
     z-index: -1;
     top: 240mm;
-    left: 3mm;	
+    left: 3mm;
 }
-

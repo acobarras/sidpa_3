@@ -72,14 +72,16 @@ class PDF
             $dir_radica = $pais . " " . $departamento . " " . $dire_radic->nombre_ciudad . " " . $dire_radic->direccion;
         }
 
-        $documento = "<img id='imgpie_formato' src='" . CARPETA_IMG . PROYECTO . "/firmas/empleados/1022964128.png'>";
+        $documento = "<img id='imgpie_formato' src='" . CARPETA_IMG . PROYECTO . "/firmas/empleados/" . FIRMA_PEDIDO . ".png'>";
 
         // Introducimos HTML de prueba
-        $html = "<html><head>
-		<meta charset='utf-8'>
-		<title>pdf Pedido</title>
-        <link type='text/css' rel='stylesheet' href='" . CARPETA_CSS . "/pdfstyle/stylepedidopdf.css'>
-	</head>
+        $html = "
+    <html>
+        <head>
+		    <meta charset='utf-8'>
+		    <title> pdf Pedido </title>
+            <link rel='stylesheet' href='" . CARPETA_CSS . "/img_pdf/pdfstyle/stylepedidopdf.css'>
+	    </head>
 	<body>
 		<div id='imgencabezadop'>
         $cabeza_pedido
@@ -302,7 +304,7 @@ class PDF
         $options->setIsHtml5ParserEnabled(true);
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO); //ESTA ES LA CARPETA GLOBAL PARA QUE ENTRE A LOS ESTILOS Y A LAS IMAGENES
         // Ejecucion de dompdf con la variable de obciones
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
@@ -322,11 +324,11 @@ class PDF
         $html = "<html>
             <head>
 		        <title>pdf Pedido</title>
-		        <link type='text/css' rel='stylesheet' href='" . CARPETA_IMG . "/img_pdf/pdfstyle/pdfnum_produccion.css'>
+		        <link type='text/css' rel='stylesheet' href='" . CARPETA_CSS . "/img_pdf/pdfstyle/pdfnum_produccion.css'>
             </head>
             <body>
             <div id='imgencabezadop'>
-                <img id='imgtitulo' src='" . CARPETA_IMG . "/img_pdf/cabezote_op.jpg'/>    
+                <img id='imgtitulo' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/cabezote_op.jpg'/>    
             </div>
             <div id='imgenpiedepaginap'>
             </div>
@@ -537,14 +539,12 @@ class PDF
             </div>
             </div>";
 
-
-
         // Opciones de dompdf
         $options = new Options();
         // $options->setIsHtml5ParserEnabled(true);
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO);
         // Ejecucion de dompdf con la variable de obciones
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
@@ -563,7 +563,7 @@ class PDF
         $html = '<html>
             <head>
     		    <title>pdf Factura</title>
-    		    <link rel="stylesheet" type="text/css" href="' . CARPETA_IMG . '/img_pdf/pdfstyle/style_cc.css" />
+    		    <link rel="stylesheet" type="text/css" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/style_cc.css" />
             </head>
             <body>
                 <div id="imgenpiedepaginap">
@@ -660,7 +660,7 @@ class PDF
         // $options->setIsHtml5ParserEnabled(true);
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO);
         // Ejecucion de dompdf con la variable de obciones
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
@@ -673,7 +673,6 @@ class PDF
 
     public static function listaEmpaquePdf($cabecera, $items)
     {
-
         if ($cabecera['tipo_documento'] == 8 || $cabecera['tipo_documento'] == 11 || $cabecera['tipo_documento'] == 6) {
             $cabeza = "/cabeza_remision_acosas";
         } else {
@@ -683,11 +682,11 @@ class PDF
         <html>
             <head>
                 <title>pdf Factura</title>
-                <link rel="stylesheet" type="text/css" href="' . CARPETA_IMG . '/img_pdf/pdfstyle/style_factura.css" />
+                <link rel="stylesheet" type="text/css" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/style_factura.css" />
             </head>
             <body>
                 <header>
-                    <img id="imgtitulo" src="' . CARPETA_IMG . '/img_qr' . $cabeza . '.jpg">
+                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_lista_empaque' . $cabeza . '.jpg">
                     <br>
                     <div class="numero">
                         <h5> N°' . $cabecera['numero_lista_empaque'] . '</h5>
@@ -777,7 +776,7 @@ class PDF
 
             $html .= '			
                 <tr>
-                    <td class="borde-right-1 text-center" style="width: 20mm"><img src="' . CARPETA_IMG . '/img_qr/QR/item' . $i . '.png" /></td>
+                    <td class="borde-right-1 text-center" style="width: 20mm"><img src="' . CARPETA_IMG . PROYECTO . '/img_qr/QR/item' . $i . '.png" /></td>
                     <td class="borde-right-1 text-center" style="width: 20mm">' . $codigo . '</td>
                     <td class="borde-right-1 text-center" style="width: 20mm">' . $cantidad_codigo . '</td>
                     <td class="borde-right-1" style="width: 100mm">' . strtoupper($items[$i]['descripcion_productos']) . '</td>
@@ -793,7 +792,7 @@ class PDF
         $options = new Options();
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO);
         // Ejecucion de dompdf con la variable de obciones
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
@@ -801,7 +800,7 @@ class PDF
         $dompdf->render(); // Generar el PDF desde contenido HTML
         // $pdf = $dompdf->output(); // Obtener el PDF generado
         $dompdf->stream('', array("Attachment" => true)); // Enviar el PDF generado al navegador
-        $files = glob(CARPETA_IMG . '/img_qr/QR/*'); //obtenemos todos los nombres de los ficheros
+        $files = glob(CARPETA_IMG . PROYECTO . '/img_qr/QR/*'); //obtenemos todos los nombres de los ficheros
         foreach ($files as $file) {
             if (is_file($file))
                 unlink($file); //elimino el fichero
@@ -813,12 +812,12 @@ class PDF
         $html = '<html>
             <head>
     		    <title>pdf Memorando Interno Entrega</title>
-    		    <link rel="stylesheet" type="text/css" href="' . CARPETA_IMG . '/img_pdf/pdfstyle/pdfmemorando_interno.css" />
+    		    <link rel="stylesheet" type="text/css" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/pdfmemorando_interno.css" />
             </head>
             <body>
             <div class="container">
                 <div id="imgencabezadop">
-                    <img id="imgtitulo" src="' . CARPETA_IMG . '/img_pdf/Cabezote_Memorando_Interno.png" />
+                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/Cabezote_Memorando_Interno.png" />
                 </div>
 
                 <table align="center" border="1" width="100%" cellspacing="0">
@@ -905,7 +904,7 @@ class PDF
         // $options->setIsHtml5ParserEnabled(true);
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO);
         // Ejecucion de dompdf con la variable de obciones
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
@@ -922,20 +921,20 @@ class PDF
             <head>
                 <meta charset='utf-8'>
                 <title>pdf Pedido</title>
-                <link type='text/css' rel='stylesheet' href='" . CARPETA_IMG . "/img_pdf/pdfstyle/stylepqrpdf.css'>
+                <link type='text/css' rel='stylesheet' href='" . CARPETA_CSS . "/img_pdf/pdfstyle/stylepqrpdf.css'>
 	        </head>
             <body>
             <header>
                 <div id='imgencabezadop'>
-                    <img id='imgtitulo' src='" . CARPETA_IMG . "/img_pdf/cabeza_respu_pqr.jpg'>
+                    <img id='imgtitulo' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/cabeza_respu_pqr.jpg'>
                 </div>
             </header>
             <footer>
                 <p>Cordialmente,</p>
                 <div id='caja_imgenfirma'>
-                    <img id='imgenfirma' src='" . CARPETA_IMG . "/firmas/empleados/firma_pablo_andres.png'>
+                    <img id='imgenfirma' src='" . CARPETA_IMG . PROYECTO . "/firmas/empleados/" . FIRMA_JEFE_SER . "'>
                     <h5>
-                        <p>PABLO ANDRES SUAREZ</p>
+                        <p>" . JEFE_SER_CLIENTE . "</p>
                         <p>JEFE DE SERVICIO AL CLIENTE</p>
                     </h5>
                 </div>
@@ -956,7 +955,7 @@ class PDF
                     <div class='justificado'>" . $datos_id_respuesta->analisis_pqr . "</div>
                     <h3>ACCIÓN DE MEJORA</h3>
                     <div class='justificado'>" . $datos_id_respuesta->accion . "</div>
-                    <div class='justificado'>Por último, ACOBARRAS S.A.S., desea presentar excusas por las fallas presentadas y los problemas que estas pudieron generar, así como manifestar su interés en fortalecer y mantener una relación comercial sana y productiva para ambas partes, por esta razón se generan constantemente planes de acción, para fortalecer los puntos débiles de la compañía y mejorar de manera continua nuestro desempeño.</div>
+                    <div class='justificado'>Por último, " . NOMBRE_EMPRESA . ", desea presentar excusas por las fallas presentadas y los problemas que estas pudieron generar, así como manifestar su interés en fortalecer y mantener una relación comercial sana y productiva para ambas partes, por esta razón se generan constantemente planes de acción, para fortalecer los puntos débiles de la compañía y mejorar de manera continua nuestro desempeño.</div>
                     <br>
                     <p>Nota: Se realizó la corrección correspondiente y entrega " . $data['cantidad_reclama'] . " unidades al cliente.</p>
                     <br>
@@ -968,7 +967,7 @@ class PDF
         // $options->setIsHtml5ParserEnabled(true);
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO);
         // Ejecucion de dompdf con la variable de obciones
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
@@ -991,18 +990,18 @@ class PDF
             <head>
                 <meta charset="utf-8">
                 <title>PDF Cotizacion</title>
-                <link type="text/css" rel="stylesheet" href="' . CARPETA_IMG . '/img_pdf/pdfstyle/stylepdfcotiza_visita.css">
+                <link type="text/css" rel="stylesheet" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/stylepdfcotiza_visita.css">
             </head>
             <body>
                 <header>
-                    <img id="imgtitulo" src="' . CARPETA_IMG . '/img_pdf/cabeza_cotiza_visita.jpg">
+                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/cabeza_cotiza_visita.jpg">
                     <br> 
                 </header>
                 <div class="img_vertical">
-                    <img id="vertical" src="' . CARPETA_IMG . '/img_pdf/vertical_cotiza_visita.png">
+                    <img id="vertical" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/vertical_cotiza_visita.png">
                 </div>
                 <footer>
-                    <img id="imgpie" src="' . CARPETA_IMG . '/img_pdf/pie_cotiza_visita.jpg">
+                    <img id="imgpie" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/pie_cotiza_visita.jpg">
                 </footer> 
                 <div class="titulo">
                     <h4 class="fecha">Fecha: ' . $fecha . '</h4>
@@ -1021,7 +1020,7 @@ class PDF
                     necesidades de identificación con tecnología de código de barras para el control y manejo de sus
                     productos e impresión de etiquetas adhesivas y no adhesivas en diferentes formas, tamaños y colores.
                     <p></p>
-                    De antemano agradecemos su interés por tener en cuenta a ACOBARRAS S.A.S., como la mejor
+                    De antemano agradecemos su interés por tener en cuenta a' . NOMBRE_EMPRESA . ', como la mejor
                     solución a sus necesidades y en donde encontrará múltiples ventajas en servicio, calidad y precio.
                     <p></p>
                     TECNOLOGÍA
@@ -1148,19 +1147,19 @@ class PDF
                      <p></p>
                      Cordialmente,
                      <br>
-                     Miguel Angel Aya Zarate
+                     ' . JEFE_SOPORTE . '
                      <br>
                      Jefe de Soporte Técnico
                      <br>
-                     Tel. 3847979 Opción 3
+                     Tel. ' . TEL_EMPRESA . '
                      <br>
-                     em@il: miguel.aya@acobarras.com
+                     em@il:' . CORREO_SOPORTE_TEC . '
                  </div>';
 
         $options = new Options();
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO);
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
         $dompdf->setPaper('letter', 'portrait');
@@ -1183,18 +1182,18 @@ class PDF
             <head>
                 <meta charset="utf-8">
                 <title>Acta Entrega</title>
-                <link type="text/css" rel="stylesheet" href="' . CARPETA_IMG . '/img_pdf/pdfstyle/stylepdfcotiza_visita.css">
+                <link type="text/css" rel="stylesheet" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/stylepdfcotiza_visita.css">
             </head>
             <body>
                 <header>
-                    <img id="imgtitulo" src="' . CARPETA_IMG . '/img_pdf/cabeza_acta_entrega.jpg">
+                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/cabeza_acta_entrega.jpg">
                     <br> 
                 </header>
                 <div class="img_vertical">
-                    <img id="vertical" src="' . CARPETA_IMG . '/img_pdf/vertical_cotiza_visita.png">
+                    <img id="vertical" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/vertical_cotiza_visita.png">
                 </div>
                 <footer>
-                    <img id="imgpie" src="' . CARPETA_IMG . '/img_pdf/pie_cotiza_visita.jpg">
+                    <img id="imgpie" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/pie_cotiza_visita.jpg">
                 </footer> 
                 <div class="titulo">
                     <h4 class="fecha">Fecha: ' . $fecha . '</h4>
@@ -1328,13 +1327,13 @@ class PDF
                                         <br>
                                         <br>
                                         <br>
-                                        Miguel Angel Aya Zarate
+                                        ' . JEFE_SOPORTE . '
                                         <br>
                                         Jefe de Soporte Técnico
                                         <br>
-                                        Tel. 3847979 Opción 3
+                                        Tel. ' . TEL_EMPRESA . '
                                         <br>
-                                        em@il: miguel.aya@acobarras.com
+                                        em@il:' . CORREO_SOPORTE_TEC . '
                             <td class="firma"> <img src="data:image/png;base64,' . $firma . '" width="150px" height="100px"/>
                         </td>
                     </tr>
@@ -1354,13 +1353,13 @@ class PDF
                     <br>
                     <br>
                     <br>
-                    Miguel Angel Aya Zarate
+                   ' . JEFE_SOPORTE . '
                     <br>
                     Jefe de Soporte Técnico
                     <br>
-                    Tel. 3847979 Opción 3
+                    Tel. ' . TEL_EMPRESA . '
                     <br>
-                    em@il: miguel.aya@acobarras.com
+                    em@il: ' . CORREO_SOPORTE_TEC . '
                 </td>
             </tr>
             </table>
@@ -1371,7 +1370,7 @@ class PDF
         $options = new Options();
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO);
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
         $dompdf->setPaper('letter', 'portrait');
@@ -1407,11 +1406,11 @@ class PDF
         <html>
             <head>
                 <title>Remision Equipos' . $datos[0]['num_consecutivo'] . ' </title>
-                <link rel="stylesheet" type="text/css" href="' . CARPETA_IMG . '/img_pdf/pdfstyle/style_equipo_soporte.css" />
+                <link rel="stylesheet" type="text/css" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/style_equipo_soporte.css" />
             </head>
             <body>
                 <header>
-                    <img id="imgtitulo" src="' . CARPETA_IMG . '/img_pdf' . $cabeza . '.jpg">
+                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf' . $cabeza . '.jpg">
                     <br>
                     <div class="numero">
                         <h5> N°' . $datos[0]['num_consecutivo'] . '</h5>
@@ -1498,7 +1497,7 @@ class PDF
         $options->set('enable_html5_parser', true);
         $options->set('isHtml5ParserEnabled', true);
         $options->setIsRemoteEnabled(true);
-        $options->set('chroot', CARPETA_IMG);
+        $options->set('chroot', PUBLICO);
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html, 'UTF-8');
         $dompdf->setPaper('letter', 'portrait');

@@ -46,7 +46,7 @@ class Validacion
             $ext = str_replace('image/', '', $foto['type']);
             $nombreFinal =  $nombre_imagen . '.' . $ext;
             $cache = $_FILES[$nombre]['tmp_name'];
-            $ruta = CARPETA_VIEW . '/public/img/foto_usuarios/' . $nombreFinal;
+            $ruta = CARPETA_VIEW .  CARPETA_IMG . PROYECTO . '/foto_usuarios/' . $nombreFinal;
             move_uploaded_file($cache, $ruta);
         }
         return $nombreFinal;
@@ -55,7 +55,7 @@ class Validacion
     public static function QR($data)
     {
         //verificar la carpeta QR
-        $dir = 'public/img/img_qr/';
+        $dir = CARPETA_IMG . PROYECTO . "/img_qr";
         if (!file_exists($dir)) {
             mkdir($dir);
         }
@@ -72,9 +72,9 @@ class Validacion
     {
 
         //verificar la carpeta QR
-        $dir = 'public/img/img_qr/QR/';
+        $dir = CARPETA_IMG . PROYECTO . "/img_qr/QR/";
         if (file_exists($dir)) {
-            $files = glob('public/img/img_qr/QR/*'); //obtenemos todos los nombres de los ficheros
+            $files = glob(CARPETA_IMG . PROYECTO . "/img_qr/QR/*"); //obtenemos todos los nombres de los ficheros
             foreach ($files as $file) {
                 if (is_file($file))
                     unlink($file); //elimino el fichero
@@ -85,7 +85,7 @@ class Validacion
 
     public static function GeneraQR($codigo, $nombre)
     {
-        QRcode::png($codigo, "public/img/img_qr/QR/" . $nombre . ".png", QR_ECLEVEL_L, 2, 1);
+        QRcode::png($codigo, CARPETA_IMG . PROYECTO . "/img_qr/QR/" . $nombre . ".png", QR_ECLEVEL_L, 2, 1);
     }
 
     // Pasa una variable get a un array
@@ -218,7 +218,7 @@ class Validacion
     public static function costo_tinta($costo, $tintas)
     {
         $nuevo_costo = $costo;
-        for ($i=0; $i < $tintas; $i++) { 
+        for ($i = 0; $i < $tintas; $i++) {
             $nuevo_costo = $nuevo_costo / CONST_TINTA;
         }
         return $nuevo_costo;

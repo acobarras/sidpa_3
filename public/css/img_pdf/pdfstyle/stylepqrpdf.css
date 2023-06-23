@@ -1,0 +1,46 @@
+@page {
+    margin: 0;
+}
+html{
+    margin: 0;
+}
+body{
+    margin-top: 20mm;
+    margin-bottom: 20mm;
+}	
+
+input[type=radio] { display: inline; }
+input[type=radio]:before { font-family: DejaVu Sans; }
+
+#imgtitulo, #imgpie{
+    width: 216mm;
+}
+
+#imgencabezadop{
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;	
+}
+
+.margen_documento {
+    margin-left: 20mm;
+    margin-right: 20mm;
+}
+
+#informacion_general p {
+    line-height:1mm;
+}
+.margen_documento p .tab_linea {
+    float: right;
+}
+
+.justificado {
+    text-align: justify;
+}
+
+#imgenfirma {
+    width: 50mm;
+    position: absolute;
+    top: -12mm;
+}
