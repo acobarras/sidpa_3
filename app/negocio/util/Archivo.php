@@ -26,7 +26,7 @@ class Archivo
             $pdf = $_FILES[$nombre];
             $ext = str_replace('application/', '', $pdf['type']);
             $nombreFinal = "" . $orden_compra . "_" . $id_pedido . "." . $ext;
-            $ruta = CARPETA_IMG . '/PDF/ocompra/' . $nombreFinal;
+            $ruta = CARPETA_IMG . PROYECTO . '/PDF/ocompra/' . $nombreFinal;
             move_uploaded_file($pdf['tmp_name'], $ruta);
         }
         return $nombreFinal;

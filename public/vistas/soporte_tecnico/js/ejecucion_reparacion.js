@@ -171,7 +171,7 @@ var no_ejecutado = function () {
         var data = $('#tabla_ejecucion').DataTable().row($(this).parents("tr")).data();
         var estado_cotiza = 8; //Estado de fin de proceso de los repuestos
         var estado_item = 16; // Reparacion fallida
-        alertify.confirm(`ALERTA ACOBARRAS`, `¿Esta seguro que quiere devolver sin reparar el equipo?`, function () {
+        alertify.confirm(`ALERTA SIDPA`, `¿Esta seguro que quiere devolver sin reparar el equipo?`, function () {
             $.ajax({
                 "url": `${PATH_NAME}/soporte_tecnico/reparacion_ejecutada`,
                 "type": 'POST',

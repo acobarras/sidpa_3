@@ -71,7 +71,7 @@ var valida_factura = function () {
                         }
                         limpiar_formulario('formulario', 'input'); //limpia formulario
                         limpiar_formulario('formulario', 'select'); //limpia formulario
-                        alertify.confirm('Alerta Acobarras Sidpa', 'Esta factura no Existe. ¿Decea crearla?', function () { // advierte que no existe factura
+                        alertify.confirm('Alerta Sidpa', 'Esta factura no Existe. ¿Decea crearla?', function () { // advierte que no existe factura
                             $('#iva').prop('checked', true);
                             $("#crea").empty().html('Crea '); // llena contenido del id
                             $("#nit_modifi").attr('disabled', false);

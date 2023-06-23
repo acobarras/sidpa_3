@@ -81,7 +81,7 @@ var cotizar = function () {
             var resta = array_item[0].total_items - cant_item_array;
             var numero = array_item[0].total_items - resta;
             if (cant_item_array < array_item[0].total_items) {
-                alertify.confirm(`ALERTA ACOBARRAS`, `¿Esta seguro que quiere realizar la cotizacion a ${numero} equipo de un total de ${array_item[0].total_items} equipos del diagnostico?`, function () {
+                alertify.confirm(`ALERTA SIDPA`, `¿Esta seguro que quiere realizar la cotizacion a ${numero} equipo de un total de ${array_item[0].total_items} equipos del diagnostico?`, function () {
                     mostrar_formulario();
                 }, function () { alertify.error('Cancelado') })
                     .set('labels', { ok: 'Si', cancel: 'No' });
@@ -309,7 +309,7 @@ var enviar_items_cotizacion = function () {
             var boton_procesando = 'enviar_cotizacion';
             enviar_ajax(boton_procesando, estado, array_storage);
         } else {
-            alertify.confirm(`ALERTA ACOBARRAS`, `¿Es un comodato o una garantia?`, function () {
+            alertify.confirm(`ALERTA SIDPA`, `¿Es un comodato o una garantia?`, function () {
                 if (array_storage == [] || array_storage[0] == null) {
                     alertify.error('Debe agregar repuestos para continuar');
                     return;

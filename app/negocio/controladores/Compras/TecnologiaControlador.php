@@ -112,9 +112,7 @@ class TecnologiaControlador extends GenericoControlador
                 // Envio del correo fecha de compromiso
                 $info_correo = $this->PedidosDAO->consulta_pedidos('t1.id_pedido =' .  $value['id_pedido']);
                 $persona = $this->PersonaDAO->consultar_personas_id($info_correo[0]->id_persona);
-                // $asesor = 'edwin.rios@acobarras.com';
                 $asesor = $persona[0]->correo;
-                // $cliente = 'edwin.rios@acobarras.com';
                 $cliente = $info_correo[0]->email;
                 Envio_Correo::correo_confirmacion_fecha_compromiso($info_correo, $fecha_compro, $cliente, $asesor);
             }

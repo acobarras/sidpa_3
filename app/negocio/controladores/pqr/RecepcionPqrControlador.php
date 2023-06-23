@@ -83,9 +83,7 @@ class RecepcionPqrControlador extends GenericoControlador
         ];
         $this->SeguimientoPqrDAO->insertar($inserta_seguimiento);
         // Realizamos el envio de la aceptacion
-        // $cliente = $data['datos_direccion'][0]['email'];
-        // $cliente = 'edwin.rios@acobarras.com';
-        $cliente = 'desarrollo@acobarras.com';
+        $cliente = $data['datos_direccion'][0]['email'];
         $correo = Envio_Correo::correos_apertura_pqr($data['num_pqr'], $redaccion, $cliente);
         echo json_encode($correo);
         return;

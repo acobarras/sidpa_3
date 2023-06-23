@@ -61,7 +61,7 @@ class PersonaControlador extends GenericoControlador
         foreach ($resultado as $value) {
             $value->nombre_estado = ESTADO_SIMPLE[$value->estado];
             $extencion = 'jpg';
-            $nombre_fichero = "./public/img/fotos_persona/" . $value->num_documento . '.' . $extencion;
+            $nombre_fichero = CARPETA_IMG . PROYECTO . "/fotos_persona/" . $value->num_documento . '.' . $extencion;
             $existencia = '';
             if (file_exists($nombre_fichero)) {
                 $existencia = "SI";
@@ -99,7 +99,7 @@ class PersonaControlador extends GenericoControlador
     {
         if (isset($nombre)) {
             $ruta = $nombre['tmp_name'];
-            $des = "./public/img/fotos_persona/" . $nuevo_nombre;
+            $des = CARPETA_IMG . PROYECTO . "/fotos_persona/" . $nuevo_nombre;
             move_uploaded_file($ruta, $des);
         }
         return $nuevo_nombre;
@@ -143,9 +143,9 @@ class PersonaControlador extends GenericoControlador
 
     public static function modificar_img($img, $img_ante)
     {
-        $nombre_fichero = './public/img/fotos_persona/' . $img_ante;
+        $nombre_fichero = CARPETA_IMG . PROYECTO . '/fotos_persona/' . $img_ante;
         if (file_exists($nombre_fichero)) {
-            unlink("./public/img/fotos_persona/" . $img_ante); //elimina acá le damos la direccion exacta del archivo 
+            unlink(CARPETA_IMG . PROYECTO . "/fotos_persona/" . $img_ante); //elimina acá le damos la direccion exacta del archivo 
             $respuesta = 1;
         } else {
             $respuesta = 2;

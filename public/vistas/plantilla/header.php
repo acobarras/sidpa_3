@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Acobarras | Sidpa</title>
+    <title><?= NOMBRE_EMPRESA ?> | Sidpa</title>
 
     <link rel="shortcut icon" href="<?= CARPETA_IMG ?>/img_sidpa/sidpa_ico.ico">
     <!-- Font Awesome Icons -->
@@ -135,7 +135,7 @@
             <div class="row" style="padding: 15px">
                 <div class="col-lg-12">
                     <a data-fancybox="gallery" href="../public/img/usuarios_foto/<?= $usuario->getRuta_foto() ?>">
-                        <img src="<?= CARPETA_IMG ?>/foto_usuarios/<?= $usuario->getRuta_foto() ?>" width="55" height="55" class="rounded-circle" alt="Responsive image">
+                        <img src="<?= CARPETA_IMG . PROYECTO ?>/foto_usuarios/<?= $usuario->getRuta_foto() ?>" width="55" height="55" class="rounded-circle" alt="Responsive image">
                     </a>
                     <strong style="font-size: 12px;color:black"> <?= $usuario->getNombre() . ' ' . $usuario->getApellido(); ?> </strong>
                 </div>

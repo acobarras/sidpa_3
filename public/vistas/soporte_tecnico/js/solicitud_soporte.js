@@ -71,7 +71,7 @@ var seleccion_checkbox = function () {
         var form = $('#crea_solicitud_soporte').serializeArray();
         if (valor == 1) {
             $('#requiere_visita').css('display', 'none');
-            alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro que no necesita una visita?', function () {
+            alertify.confirm('ALERTA SIDPA', '¿Esta seguro que no necesita una visita?', function () {
                 $.ajax({
                     "url": `${PATH_NAME}/soporte_tecnico/agregar_datos`,
                     "type": 'POST',
@@ -101,7 +101,7 @@ var seleccion_checkbox = function () {
             if ($('#visita_prese').val() != null) {
                 $('#visita_prese').val(0).change();
             }
-            alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro que no se debe realizar la visita presencial?', function () {
+            alertify.confirm('ALERTA SIDPA', '¿Esta seguro que no se debe realizar la visita presencial?', function () {
                 $.ajax({
                     "url": `${PATH_NAME}/soporte_tecnico/agregar_datos`,
                     "type": 'POST',
@@ -126,7 +126,7 @@ var seleccion_checkbox = function () {
             $('#req_cotiza').css('display', 'block');
         } else {
             $('#req_cotiza').css('display', 'none');
-            alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro que el servicio no posee ningun costo?', function () {
+            alertify.confirm('ALERTA SIDPA', '¿Esta seguro que el servicio no posee ningun costo?', function () {
                 $.ajax({
                     "url": `${PATH_NAME}/soporte_tecnico/agregar_datos`,
                     "type": 'POST',
@@ -163,7 +163,7 @@ var seleccion_checkbox = function () {
                 }
             });
         } else {
-            alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro que el servicio no necesita una cotizacion?', function () {
+            alertify.confirm('ALERTA SIDPA', '¿Esta seguro que el servicio no necesita una cotizacion?', function () {
                 $.ajax({
                     "url": `${PATH_NAME}/soporte_tecnico/agregar_datos`,
                     "type": 'POST',

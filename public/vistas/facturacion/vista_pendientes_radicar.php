@@ -29,8 +29,8 @@
                             <label for="remision_factura">Tipo Documento</label>
                             <select id="remision_factura" class="form-control">
                                 <option value="0"></option>
-                                <option value="8">Factura Acobarras S.A.S.</option>
-                                <option value="9">Factura Acobarras Colombia</option>
+                                <option value="8">Factura <?= NOMBRE_EMPRESA ?> S.A.S.</option>
+                                <option value="9">Factura <?= NOMBRE_EMPRESA ?> Colombia</option>
                                 <option value="99">Finalizar sin factura</option>
                             </select>
                         </div>

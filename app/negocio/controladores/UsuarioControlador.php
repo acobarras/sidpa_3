@@ -125,7 +125,7 @@ class UsuarioControlador extends GenericoControlador
 
     header('Content-Type:application/json');
     $imagen = $_POST['ruta_foto'];
-    $ruta = CARPETA_VIEW . '/public/img/foto_usuarios/' . $imagen;
+    $ruta = CARPETA_VIEW . CARPETA_IMG . PROYECTO . '/foto_usuarios/' . $imagen;
     unlink($ruta); //elimina acá le damos la direccion exacta del 
     $id = $_POST['id_usuario'];
     $condicion = 'id_usuario =' . $id;

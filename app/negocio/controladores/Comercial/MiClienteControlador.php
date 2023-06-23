@@ -425,11 +425,9 @@ class MiClienteControlador extends GenericoControlador
     public function correo_aprobar_precio($id_clien_produc, $id_tipo_articulo)
     {
         if ($id_tipo_articulo == 2) {
-            $correo = 'paola.castaneda@acobarras.com'; // correo del encargado de aprobacion de precios
-            // $correo = 'desarrollo@acobarras.com'; // correo del encargado de aprobacion de precios
+            $correo = CORREO_COMPRAS_MA; // correo del encargado de aprobacion de precios
         } else {
-            $correo = 'marcela.rodriguez@acobarras.com'; // correo del encargado de aprobacion de precios
-            // $correo = 'mateorozotorres0420028@gmail.com'; // correo del encargado de aprobacion de precios
+            $correo = CORREO_COMPRAS_TEC; // correo del encargado de aprobacion de precios
         }
         $producto = $this->cliente_productoDAO->cliente_producto_id($id_clien_produc);
         $user = $this->UsuarioDAO->consultarIdUsuario($producto[0]->id_usuario);

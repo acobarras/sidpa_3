@@ -20,7 +20,7 @@
 <!-- Footer -->
 <footer class="card-footer text-muted bg-light py-4">
     <div class="container">
-        <div class="small text-center text-muted">Copyright &copy; 2021 - Acobarras- Sidpa</div>
+        <div class="small text-center text-muted">Copyright &copy; 2021 - EDWIN RIOS- Sidpa</div>
     </div>
 </footer>
 </body>

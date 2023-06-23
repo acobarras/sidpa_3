@@ -102,7 +102,7 @@ var cambiar_cantidad_reclamacion = function () {
                 'id_pqr': data['id_pqr'],
 
             }
-            alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro que quiere cambiar la cantidad de la reclamacion?', function () {
+            alertify.confirm('ALERTA SIDPA', '¿Esta seguro que quiere cambiar la cantidad de la reclamacion?', function () {
                 console.log(data);
                 $.ajax({
                     "url": `${PATH_NAME}/pqr/cambiar_cantidad_reclamacion`,
@@ -359,7 +359,7 @@ var res_visita_tecnica = function () {
 var mercancia_bodega = function () {
     $('#tabla_gestion_pqr tbody').on('click', 'button.mercancia_bodega', function () {
         var data = $('#tabla_gestion_pqr').DataTable().row($(this).parents("tr")).data();
-        alertify.confirm('Validación Mercancia en Bodega', 'La mercancia se encuentra en las instalaciones de Acobarras S.A.S..',
+        alertify.confirm('Validación Mercancia en Bodega', `La mercancia se encuentra en las instalaciones de ${EMPRESA} S.A.S..`,
             function () {
                 envio_visita_tecnica(data, 6, 70);
             },

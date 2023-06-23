@@ -22,8 +22,12 @@ define('JEFE_SOPORTE', 'Miguel Angel Aya Zarate');
 define('CORREO_PRODUCCION_GRAF', 'producciongrafica@acobarras.com');
 define('CORREO_SERV_CLIENTE', 'servicioalcliente@acobarras.com');
 define('CORREO_ENTREGA', 'soporte_entrega@acobarras.com');
+define('CORREO_COMPRAS_MA', 'paola.castaneda@acobarras.com');
+define('CORREO_COMPRAS_TEC', 'marcela.rodriguez@acobarras.com');
 define('CLAVE_CORREOS', '@acobarras123');
 define('HOST_CORREOS', 'smtp.gmail.com');
+define('PLANTILLA_CONTABILIDAD', 'ACOBARRAS SAS');
+define('ANO', '2023');
 define('TEL_EMPRESA', '3847979'); //COLOCAR EL NOMBRE EN MAYUSCULA
 
 
@@ -39,6 +43,8 @@ define('TEL_EMPRESA', '3847979'); //COLOCAR EL NOMBRE EN MAYUSCULA
 // define('CORREO_PRODUCCION_GRAF', 'info@eticaribe.com.co');
 // define('CORREO_SERV_CLIENTE', 'servicioalcliente@eticaribe.com.co');
 // define('CORREO_ENTREGA', 'notificacion@eticaribe.com.co');
+// define('CORREO_COMPRAS_MA', 'paola.castaneda@acobarras.com');
+// define('CORREO_COMPRAS_TEC', 'marcela.rodriguez@acobarras.com');
 // define('CLAVE_CORREOS', '@Notificacion2022');
 // define('HOST_CORREOS', 'smtp.titan.email');
 // define('TEL_EMPRESA', '3847979'); //COLOCAR EL NOMBRE EN MAYUSCULA

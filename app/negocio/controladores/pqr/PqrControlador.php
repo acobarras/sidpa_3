@@ -148,9 +148,7 @@ class PqrControlador extends GenericoControlador
                 'fecha_crea' => date('Y-m-d H:i:s')
             ];
             $this->SeguimientoPqrDAO->insertar($inserta_seguimiento);
-            // $correo = $datos_asesor[0]->correo;
-            // $correo = 'edwin.rios@acobarras.com';
-            $correo = 'desarrollo@acobarras.com';
+            $correo = $datos_asesor[0]->correo;
             $correo2 = "";
             $correo_envio = Envio_Correo::correos_apertura_pqr($numero_pqr, $observacion, $correo);
             $respu = [

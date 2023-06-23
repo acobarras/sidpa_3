@@ -54,7 +54,7 @@ class PlantillasControlador extends GenericoControlador
             $value->fecha_crea_actividad = date("d/m/Y", strtotime($value->fecha_crea_actividad));
             $salida_mp = $this->material_usado_op($value, $numero_guardado);
             $value->salida_mp = $salida_mp;
-            $value->empresa = 'ACOBARRAS SAS';
+            $value->empresa = PLANTILLA_CONTABILIDAD;
             $value->encabezado = 'OP';
             $value->campo_vacio = '';
             $value->tercero = RESPONSABLE;
@@ -123,7 +123,7 @@ class PlantillasControlador extends GenericoControlador
                 $cantidad = $m2_desperdicio;
             }
             $datos_op = [
-                'empresa' => 'ACOBARRAS SAS 2023',
+                'empresa' => PLANTILLA_CONTABILIDAD . ANO,
                 'tipo_documento' => 'SA',
                 'campo_vacio' => '',
                 'abierto_cerrado' => 0,
@@ -151,7 +151,7 @@ class PlantillasControlador extends GenericoControlador
         foreach ($items_op as $items) {
             $etiquetas = $this->DesperdicioOpDAO->etiquetas_pedido_item($items->id_pedido_item);
             $items->q_etiq_reporte = $etiquetas[0]->q_etiq_item;
-            $items->empresa = 'ACOBARRAS SAS';
+            $items->empresa = PLANTILLA_CONTABILIDAD;
             $items->tipo_documento = 'EPT';
             $items->documento = $documento;
             $items->responsable = RESPONSABLE;

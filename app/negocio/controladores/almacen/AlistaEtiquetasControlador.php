@@ -170,9 +170,7 @@ class AlistaEtiquetasControlador extends GenericoControlador
                 // Envio del correo fecha de compromiso
                 $persona = $this->PersonaDAO->consultar_personas_id($fecha_programada[0]->id_persona);
                 $asesor = $persona[0]->correo;
-                // $asesor = 'desarrollo@acobarras.com';
                 $cliente = $fecha_programada[0]->email; 
-                // $cliente = 'mateorozotorres042002@gmail.com';
                 Envio_Correo::correo_confirmacion_fecha_compromiso($fecha_programada, $fecha_compro, $cliente, $asesor);
             }
         }
@@ -250,10 +248,8 @@ class AlistaEtiquetasControlador extends GenericoControlador
                 $this->PedidosDAO->editar($pedido, $condicion_pedido);
                 // Envio del correo fecha de compromiso
                 $persona = $this->PersonaDAO->consultar_personas_id($fecha_programada[0]->id_persona);
-                // $asesor = $persona[0]->correo;
-                $asesor = 'desarrollo@acobarras.com';
-                // $cliente = $fecha_programada[0]->email; 
-                $cliente = 'mateorozotorres042002@gmail.com';
+                $asesor = $persona[0]->correo;
+                $cliente = $fecha_programada[0]->email; 
                 Envio_Correo::correo_confirmacion_fecha_compromiso($fecha_programada, $fecha_compro, $cliente, $asesor);
             }
         }

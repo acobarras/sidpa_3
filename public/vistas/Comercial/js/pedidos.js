@@ -13,7 +13,7 @@ var envio_nuevo_pedido = function (form, storage) {
             if (res.status == 1) {
                 localStorage.removeItem('productos_pedido' + res.id_cli_prov);
                 $("#alert_aco").modal("show");
-                $("#title_modal").empty().html('Alerta Acobarras Sidpa');
+                $("#title_modal").empty().html('Alerta Sidpa');
                 $("#content_modal").empty().html(res.msg);
             } else {
                 alertify.error(res.msg);

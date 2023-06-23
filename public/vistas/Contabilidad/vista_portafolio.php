@@ -7,10 +7,10 @@
                         <a class="nav-link active" id="valida_factura-tab" data-bs-toggle="tab" href="#valida_factura" role="tab" aria-controls="valida_factura" aria-selected="true">Valida factura portafolio</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="acobarras_sas-tab" data-bs-toggle="tab" href="#acobarras_sas" role="tab" aria-controls="acobarras_sas" aria-selected="true">Acobarras S.A.S</a>
+                        <a class="nav-link" id="acobarras_sas-tab" data-bs-toggle="tab" href="#acobarras_sas" role="tab" aria-controls="acobarras_sas" aria-selected="true"><?= NOMBRE_EMPRESA ?> S.A.S</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="acobarras_col-tab" data-bs-toggle="tab" href="#acobarras_col" role="tab" aria-controls="acobarras_col" aria-selected="true">Acobarras Colombia</a>
+                        <a class="nav-link" id="acobarras_col-tab" data-bs-toggle="tab" href="#acobarras_col" role="tab" aria-controls="acobarras_col" aria-selected="true"><?= NOMBRE_EMPRESA ?> Colombia</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -165,7 +165,7 @@
                         <div class="container-fluid">
                             <div class="container-fluid">
                                 <br>
-                                <h3 class="text-center fw-bolder" style="font-family: 'gothic';">Portafolio Acobarras S.A.S</h3>
+                                <h3 class="text-center fw-bolder" style="font-family: 'gothic';">Portafolio <?= NOMBRE_EMPRESA ?></h3>
                                 <table id="tabla-acobarras-sas" style="background: white" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
                                     <thead style="background:#0d1b50;color:white">
                                         <tr>
@@ -200,7 +200,7 @@
                         <div class="container-fluid">
                             <div class="container-fluid">
                                 <br>
-                                <h3 class="text-center fw-bolder" style="font-family: 'gothic';">Portafolio Acobarras Colombia</h3>
+                                <h3 class="text-center fw-bolder" style="font-family: 'gothic';">Portafolio <?= NOMBRE_EMPRESA ?> Colombia</h3>
                                 <table id="tabla-acobarras-col" style="background: white" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
                                     <thead style="background:#0d1b50;color:white">
                                         <tr>

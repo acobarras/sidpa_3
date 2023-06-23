@@ -89,13 +89,13 @@ var carga_tabla_clientes_asesor = function () {
                         return 'SIN ASIGNAR';
                     }
                     if (row["pertenece"] == 1) {
-                        return 'ACOBARRAS S.A.S';
+                        return FAC_SAS;
                     }
                     if (row["pertenece"] == 2) {
-                        return 'ACOBARRAS COLOMBIA';
+                        return FAC_COL;
                     }
                     if (row["pertenece"] == 3) {
-                        return 'ACOBARRAS ESPECIAL';
+                        return FAC_ESP;
                     }
                 }
 
@@ -415,7 +415,7 @@ var obtener_data_dir = function (tbody, table) {
 
     $(tbody).on("click", "button.eliminar_direccion_cli", function () {
         var info = JSON.parse($(this).attr('info'));
-        alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro de eliminar esta dirección?', function () {
+        alertify.confirm('ALERTA SIDPA', '¿Esta seguro de eliminar esta dirección?', function () {
             $.ajax({
                 "url": `${PATH_NAME}/comercial/modificar_estado_dir`,
                 "type": 'POST',
@@ -751,7 +751,7 @@ var modificar_p_cliente = function (table) {
 var eliminar_pro_cli = function (tbody, table_ver_p) {
     $(tbody).on("click", "button.eliminar_pro_cli", function () {
         var datap = table_ver_p.row($(this).parents("tr")).data();
-        alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro de eliminar el producto: <strong>' + datap.codigo_producto + '</strong> ?', function () {
+        alertify.confirm('ALERTA SIDPA', '¿Esta seguro de eliminar el producto: <strong>' + datap.codigo_producto + '</strong> ?', function () {
             $.ajax({
                 url: `${PATH_NAME}/comercial/cambiar_estado_pro_cli`,
                 type: 'POST',

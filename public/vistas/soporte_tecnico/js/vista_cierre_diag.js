@@ -85,9 +85,9 @@ var generar_acta = function () {
             return;
         } else {
             if (array_item[0].estado_item == 15) {
-                alertify.confirm(`ALERTA ACOBARRAS`, `¿Requiere Factura?`,
+                alertify.confirm(`ALERTA SIDPA`, `¿Requiere Factura?`,
                     function () {
-                        alertify.alert('ALERTA ACOBARRAS', '¿Factura con IVA?"<a href="javascript:showConfirm(1);" class="btn btn-success">Si</a>  <a href="javascript:showConfirm(2);" class="btn btn-danger">No</a></div>',
+                        alertify.alert('ALERTA SIDPA', '¿Factura con IVA?"<a href="javascript:showConfirm(1);" class="btn btn-success">Si</a>  <a href="javascript:showConfirm(2);" class="btn btn-danger">No</a></div>',
                             function () {
                             }).set({
                                 'label': 'Cancelar',

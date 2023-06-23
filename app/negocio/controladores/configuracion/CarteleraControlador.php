@@ -31,7 +31,7 @@ class CarteleraControlador extends GenericoControlador
     public function insertar_cartelera()
     {
         header('Content-type: application/json');
-        $gestor = CARPETA_IMG . '/cartelera';
+        $gestor = CARPETA_IMG . PROYECTO . '/cartelera';
         if (isset($_POST['archivo'])) {
             $ruta = $gestor . "/" . $_POST['archivo'];
             unlink($ruta);

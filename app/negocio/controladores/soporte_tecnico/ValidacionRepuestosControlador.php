@@ -147,8 +147,7 @@ class ValidacionRepuestosControlador extends GenericoControlador
         header('Content-Type: application/json');
         $data = $_POST['datos_envio'];
         if ($_POST['valor'] == 2) {
-            // $correo = 'marcela.rodriguez@acobarras.com';
-            $correo = 'desarrollo@acobarras.com';
+            $correo = CORREO_COMPRAS_TEC;
             $envio_correo = Envio_Correo::Solicitud_compras_soporte($correo, $data);
             if ($envio_correo['state'] == 1) {
                 $id_cotizacion = ($data['id_cotizacion']);

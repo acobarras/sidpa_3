@@ -82,7 +82,7 @@ class MisEntregasControlador extends GenericoControlador
                 'num_pedido' => 'N/A',
                 'id_pago_flete' => $diligencia->id_pago_flete,
                 'documento' => $diligencia->documento,
-                'nombre_empresa' => 'Encargo Acobarras',
+                'nombre_empresa' => 'Encargo' . NOMBRE_EMPRESA,
                 'ruta' => 'N/A',
                 'direccion' => $diligencia->observacion,
                 'transportador' => $persona[0]->nombres,
@@ -181,14 +181,14 @@ class MisEntregasControlador extends GenericoControlador
         $datos = $_POST['data'];
         $estado = $_POST['estado'];
         if ($estado == 4) {
-            $elimina_pago_flete = 'id_pago_flete ='. $datos['id_pago_flete'];
+            $elimina_pago_flete = 'id_pago_flete =' . $datos['id_pago_flete'];
             $this->PagoFletesDAO->eliminar($elimina_pago_flete);
         } else {
             $edita_pago_flete = [
                 'estado' => 3
             ];
-            $condicion_pago_flete = 'id_pago_flete ='. $datos['id_pago_flete'];
-            $this->PagoFletesDAO->editar($edita_pago_flete,$condicion_pago_flete);
+            $condicion_pago_flete = 'id_pago_flete =' . $datos['id_pago_flete'];
+            $this->PagoFletesDAO->editar($edita_pago_flete, $condicion_pago_flete);
         }
         $respu = true;
         echo json_encode($respu);

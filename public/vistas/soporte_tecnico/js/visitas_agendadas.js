@@ -79,7 +79,7 @@ var agendamiento_visita = function (tbody, table) {
                 'data': data_envio,
                 'estado': 8,
             }
-            alertify.confirm('ALERTA ACOBARRAS', '¿Es instalacion de un equipo de venta comercial?', function () {
+            alertify.confirm('ALERTA SIDPA', '¿Es instalacion de un equipo de venta comercial?', function () {
                 $("#modal_instalacion").modal("show");
                 var firma_insta = document.getElementById('captura_firma');
                 var signaturePad = new SignaturePad(firma_insta, {

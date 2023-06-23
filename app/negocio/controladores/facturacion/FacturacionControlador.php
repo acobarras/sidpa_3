@@ -118,7 +118,7 @@ class FacturacionControlador extends GenericoControlador
         $id_pedido = $data[0]->id_pedido;
         $orden_compra = $data[0]->orden_compra;
         $nombre = $orden_compra . "_" . $id_pedido . ".pdf";
-        $ruta_archivo = "public/img/PDF/ocompra/" . $nombre;
+        $ruta_archivo = CARPETA_IMG . PROYECTO . "/PDF/ocompra/" . $nombre;
         header("Content-Type: application/force-download");
         header("Content-Disposition: attachment; filename=\"$nombre\"");
         readfile($ruta_archivo);
@@ -206,7 +206,7 @@ class FacturacionControlador extends GenericoControlador
                     'id_actividad' => $id_actividad,
                     'pedido' => $value['num_pedido'],
                     'item' => $value['item'],
-                    'observacion' => $prefijo . " " . $documento_relacionado[0]->numero_guardado." LE-".$num_lista_empaque,
+                    'observacion' => $prefijo . " " . $documento_relacionado[0]->numero_guardado . " LE-" . $num_lista_empaque,
                     'estado' => 1,
                     'id_usuario' => $_SESSION['usuario']->getid_usuario(),
                     'fecha_crea' => date('Y-m-d'),

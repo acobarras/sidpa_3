@@ -403,7 +403,7 @@ class PedidoControlador extends GenericoControlador
         unset($datos['id_clien_produc'], $datos['trm'], $datos['cantidad'], $datos['id_pedido'], $datos['orden_compra_antigua']);
         if (!empty($_FILES['orden_compra_file']['name'])) {
             $nombreFinal = $orden_compra_antigua . "_" . $id_pedido . '.pdf';
-            $ruta = CARPETA_IMG . '/PDF/ocompra/' . $nombreFinal;
+            $ruta = CARPETA_IMG . PROYECTO . '/PDF/ocompra/' . $nombreFinal;
             if (file_exists($ruta)) {
                 unlink($ruta);
             }
@@ -435,7 +435,7 @@ class PedidoControlador extends GenericoControlador
             'total_tec' => $recalcular_valor['total_tec']
         ];
         $condicion_edita_pedido = 'id_pedido =' . $data['id_pedido'];
-        $this->PedidosDAO->editar($edita_pedido,$condicion_edita_pedido);
+        $this->PedidosDAO->editar($edita_pedido, $condicion_edita_pedido);
         $envio = $this->consultar_pedido($data['id_pedido']);
         return $envio;
     }

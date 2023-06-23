@@ -442,11 +442,11 @@ class MiPedidoControlador extends GenericoControlador
         $cons_pedido = $this->pedidosDAO->consulta_pedidos($parametro); //consultamos la tabla pedido
         if ($data->id_clase_articulo == 2) {
             $nombre_comprador = "Paola";
-            $correo = 'paola.castaneda@acobarras.com';
+            $correo = CORREO_COMPRAS_MA;
             $TipoCompra = 'Materia Prima';
         } elseif ($data->id_clase_articulo == 3) {
             $nombre_comprador = "Marcela";
-            $correo = 'marcela.rodriguez@acobarras.com';
+            $correo = CORREO_COMPRAS_TEC;
             $TipoCompra = 'Tecnologia';
         }
         if ($cons_pedido[0]->forma_pago == 4) {

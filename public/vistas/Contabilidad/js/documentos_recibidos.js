@@ -60,7 +60,7 @@ var recibe_documento = function () {
         var form = $(this).serializeArray();
         var valida_form = validar_formulario(form);
         if (valida_form) {
-            alertify.confirm('Alerta Acobarras Sidpa', '¿Esta seguro que desea recibir este documento?', function () { // advierte sobre la aceptacion de el documento
+            alertify.confirm('Alerta Sidpa', '¿Esta seguro que desea recibir este documento?', function () { // advierte sobre la aceptacion de el documento
                 var num_factura = JSON.parse($("#btn_recibe_doc").attr('id_recibe'));
                 var fecha_recibe = $("#fecha_reci_doc_d_modifi").val();
                 $.ajax({

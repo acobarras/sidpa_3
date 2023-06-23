@@ -132,7 +132,7 @@ var reportar_alistamiento_inf_variable = function () {
                 success: function (res) {
                     if (res.status == -1) {
                         envio = 2;
-                        alertify.confirm('Alerta Acobarras', `${res.msg} ¿desea continuar?`,
+                        alertify.confirm('Alerta Sidpa', `${res.msg} ¿desea continuar?`,
                             function () {
                                 $.ajax({
                                     url: `${PATH_NAME}/diseno/reportar_etiq_procesadas`,

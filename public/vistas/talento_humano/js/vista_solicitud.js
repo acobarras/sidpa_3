@@ -34,7 +34,7 @@ var soporte_falla = function () {
         var elegido = $(this).val();
         var mensaje = '';
         if (elegido == 1) {
-            var mensaje = `Por favor enviar el soporte al correo diego.wilches@acobarras.com previo a la creacióm de la solicitud`;
+            var mensaje = `Por favor enviar el soporte al correo ${CORREO_TALENTO} previo a la creacióm de la solicitud`;
         }
         $('#mensaje').empty().html(mensaje);
         $('#mensaje').css('color', 'red');

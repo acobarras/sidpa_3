@@ -137,7 +137,7 @@ var enviar_cotizacion = function (tbody, table) {
                 'form': form,
             }
             if (valida) {
-                alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro que desea continuar con el valor digitado?', function () {
+                alertify.confirm('ALERTA SIDPA', '¿Esta seguro que desea continuar con el valor digitado?', function () {
                     $.ajax({
                         "url": `${PATH_NAME}/soporte_tecnico/cotizacion_visita`,
                         "type": 'POST',
@@ -208,7 +208,7 @@ var aprobacion_cotizacion = function (tbody, table) {
             'id': id_diagnostico,
             'estado': estado,
         };
-        alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro de no aprobar la cotización?', function () {
+        alertify.confirm('ALERTA SIDPA', '¿Esta seguro de no aprobar la cotización?', function () {
             $.ajax({
                 "url": `${PATH_NAME}/soporte_tecnico/aprueba_cotizacion`,
                 "type": 'POST',

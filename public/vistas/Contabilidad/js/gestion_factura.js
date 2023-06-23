@@ -52,7 +52,7 @@ var valida_factura_anular = function () {
 var anular_factura = function () {
     $("#btn_anula").click(function (e) {
         e.preventDefault();
-        alertify.confirm('Alerta Acobarras Sidpa', 'Esta apunto de anular este documento. ¿Esta seguro que desea continuar con la anulación?', function () { // advierte sobre la anulacion de la factura
+        alertify.confirm('Alerta Sidpa', 'Esta apunto de anular este documento. ¿Esta seguro que desea continuar con la anulación?', function () { // advierte sobre la anulacion de la factura
             var num_factura_anula = JSON.parse($("#btn_anula").attr('id_anula'));
             $.ajax({
                 url: `${PATH_NAME}/contabilidad/anula_factura`,
@@ -220,7 +220,7 @@ var fecha_pago_factura = function () {
         var exception = ['total_cintas', 'total_etiquetas', 'total_alquiler', 'total_tecnologia', 'total_soporte','total_fletes','total_m_prima'];
         var valida_form = validar_formulario(form, exception);
         if (valida_form) {
-            alertify.confirm('Alerta Acobarras Sidpa', 'Esta apunto de asignar fecha de pago a este documento. ¿Esta seguro que desea continuar con la asignación?', function () { // advierte sobre la anulacion de la factura
+            alertify.confirm('Alerta Sidpa', 'Esta apunto de asignar fecha de pago a este documento. ¿Esta seguro que desea continuar con la asignación?', function () { // advierte sobre la anulacion de la factura
                 var obj_inicial = $(`#btn_fecha_pago`).html();
                 btn_procesando(`btn_fecha_pago`);
                 $.ajax({

@@ -172,9 +172,7 @@ class InfoVariableControlador extends GenericoControlador
                     // Envio del correo fecha de compromiso
                     $persona = $this->PersonaDAO->consultar_personas_id($fecha_programada[0]->id_persona);
                     $asesor = $persona[0]->correo;
-                    // $asesor = 'desarrollo@acobarras.com';
                     $cliente = $fecha_programada[0]->email;
-                    // $cliente = 'mateorozotorres0420028@gmail.com';
                     Envio_Correo::correo_confirmacion_fecha_compromiso($fecha_programada, $fecha_compro, $cliente, $asesor);
                 }
             }

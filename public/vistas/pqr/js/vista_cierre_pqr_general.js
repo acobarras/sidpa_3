@@ -204,7 +204,7 @@ var envio_cierre_pqr = function () {
             return;
         }
 
-        alertify.confirm('ALERTA ACOBARRAS', '¿Desea enviar correo al cliente?', function () {
+        alertify.confirm('ALERTA SIDPA', '¿Desea enviar correo al cliente?', function () {
             var envio_correo = 1;
             enviar_data(data, codigo_motivo_cierre, clasificacion_cierre, analisis_pqr_cierre, accion_cierre, responsable_cierre, costo_cierre, observacion_cierre, envio_correo);
         }, function () {

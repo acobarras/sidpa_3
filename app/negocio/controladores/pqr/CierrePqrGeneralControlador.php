@@ -55,12 +55,11 @@ class CierrePqrGeneralControlador extends GenericoControlador
         $repite = $this->GestionPqrDAO->repite_motivo_cliente($data['id_cli_prov'], $id_respuesta_pqr);
         if ($repite[0]->cantidad_misma_respuesta < 1 && $datos_id_respuesta->tipo_pqr != 1) {
             // Generar pdf de contestacion y envio de correo
-            $ruta_archivo = CARPETA_IMG . '/PDF/pdf_pqr/' . $data['num_pqr'] . '.pdf';
+            $ruta_archivo = CARPETA_IMG . PROYECTO . '/PDF/pdf_pqr/' . $data['num_pqr'] . '.pdf';
             $respu = PDF::respuesta_pdf_pqr($data, $clasificacion, $datos_id_respuesta);
             $respu = file_put_contents($ruta_archivo, $respu);
             $correo = $data['datos_direccion'][0]['email'];
-            // $correo = 'edwin.rios@acobarras.com';
-            $correo2 = "servicioalcliente@acobarras.com";
+            $correo2 = CORREO_SERV_CLIENTE;
             $correo_envio = Envio_Correo::correos_cierre_pqr($num_pqr, $ruta_archivo, $correo, $correo2);
             if ($correo_envio['state'] == 1) {
                 $res = [
@@ -120,14 +119,13 @@ class CierrePqrGeneralControlador extends GenericoControlador
         $clasificacion = $_POST['clasificacion_cierre'];
         $num_pqr = $data['num_pqr'];
         // Generar pdf de contestacion y envio de correo
-        $ruta_archivo = CARPETA_IMG . '/PDF/pdf_pqr/' . $data['num_pqr'] . '.pdf';
+        $ruta_archivo = CARPETA_IMG . PROYECTO . '/PDF/pdf_pqr/' . $data['num_pqr'] . '.pdf';
         $respu = PDF::respuesta_pdf_pqr($data, $clasificacion, $datos_id_respuesta);
         $respu = file_put_contents($ruta_archivo, $respu);
         if ($_POST['envio_correo'] == 1) {
             // CORREO CLIENTE
-            // $correo = 'desarrollo@acobarras.com';
             $correo = $data['datos_direccion'][0]['email'];
-            $correo2 = "servicioalcliente@acobarras.com";
+            $correo2 = CORREO_SERV_CLIENTE;
             $correo2 = "";
             $correo_envio = Envio_Correo::correos_cierre_pqr($num_pqr, $ruta_archivo, $correo, $correo2);
             if ($correo_envio['state'] == 1) {
@@ -135,8 +133,7 @@ class CierrePqrGeneralControlador extends GenericoControlador
             }
         } else {
             // CORREO DE ATENCION AL CLIENTE
-            // $correo = 'mateorozotorres0420028@gmail.com';
-            $correo = "servicioalcliente@acobarras.com";
+            $correo = CORREO_SERV_CLIENTE;
             $correo2 = "";
             $correo_envio = Envio_Correo::correos_cierre_pqr($num_pqr, $ruta_archivo, $correo, $correo2);
             if ($correo_envio['state'] == 1) {

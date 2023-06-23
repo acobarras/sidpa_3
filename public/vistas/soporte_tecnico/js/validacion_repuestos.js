@@ -64,7 +64,7 @@ var cancelar_diagnostico = function () {
         var array_item = $("#tabla_repuestos").DataTable().row($(this).parents("tr")).data();
         var estado_cotiza = 8; //FIN PROCESO REPUESTOS
         var estado_item = 16; //REPARACION NO REALIZADA
-        alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro que desea devolver este equipo sin reparar?', function () {
+        alertify.confirm('ALERTA SIDPA', '¿Esta seguro que desea devolver este equipo sin reparar?', function () {
             $.ajax({
                 "url": `${PATH_NAME}/soporte_tecnico/cancelar_diagnostico`,
                 "type": 'POST',
@@ -89,7 +89,7 @@ var compras_diag = function () {
         var array_item = $("#tabla_repuestos").DataTable().row($(this).parents("tr")).data();
         var estado_cotiza = 5; //REPUESTOS EN REPACION
         var estado_item = 12; //EN EJECUCION DE REPARACION
-        alertify.confirm('ALERTA ACOBARRAS', '¿Esta seguro que ya cuenta con los repuestos de este equipo?', function () {
+        alertify.confirm('ALERTA SIDPA', '¿Esta seguro que ya cuenta con los repuestos de este equipo?', function () {
             $.ajax({
                 "url": `${PATH_NAME}/soporte_tecnico/compras_diag`,
                 "type": 'POST',

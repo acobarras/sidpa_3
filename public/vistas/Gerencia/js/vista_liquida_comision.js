@@ -35,11 +35,11 @@ var ver_comision = function () {
                 }
             );
         } else {
-            var exepcion = ['fecha_inicial','fecha_fin'];
+            var exepcion = ['fecha_inicial', 'fecha_fin'];
             if (form[0].value == 'cambio') {
                 exepcion = ['periodo'];
             }
-            var valida_form = validar_formulario(form,exepcion);
+            var valida_form = validar_formulario(form, exepcion);
             if (valida_form) {
                 ejecuta_comision(form);
             }
@@ -72,9 +72,9 @@ var ejecuta_comision = function (form) {
                         render: function (data, type, row) {
                             var nombre_empresa = '';
                             if (row.empresa == 1) {
-                                nombre_empresa = 'Acobarras SAS';
+                                nombre_empresa = FAC_SAS;
                             } else {
-                                nombre_empresa = 'Acobarras Colombia';
+                                nombre_empresa = FAC_COL;
                             }
                             return nombre_empresa;
                         }
