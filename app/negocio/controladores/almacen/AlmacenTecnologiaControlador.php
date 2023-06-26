@@ -302,6 +302,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         }
         $observacion = "PUESTO EN REPROCESO ";
         $responsable = $this->UsuarioDAO->consultarIdUsuario($_SESSION['usuario']->getid_usuario());
+        // LA ETIQUETA DE REPROCESO ES IGUAL PARA TODOS LOS PROYECTOS YA QUE NO CONTIENEN LOGOS NI DATOS INDIVIDUALES DE EMPRESAS
         $etiqueta_reproceso = '
                     ^XA
                     ^FO342,317^GB56,56,2^FS

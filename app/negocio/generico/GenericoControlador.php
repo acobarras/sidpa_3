@@ -81,6 +81,13 @@ abstract class GenericoControlador
         }
         include_once  CARPETA_VIEW . '/public/vistas/' . $view . '.php';
     }
+    public function zpl($view, $datos = [])
+    {
+        foreach ($datos as $key => $value) {
+            ${$key} = $value;
+        }
+        include_once  CARPETA_IMG . PROYECTO . '/ZPL/' . $view . '.php';
+    }
 
     public function cabecera()
     {

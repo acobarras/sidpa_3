@@ -73,6 +73,9 @@ class PedidoControlador extends GenericoControlador
             } else {
                 if ($_POST['tipo_consulta'] == 'num_pedido') {
                     $parametro = "t1." . $_POST['tipo_consulta'] . " = " . $_POST['dato_consulta'];
+                }
+                if ($_POST['tipo_consulta'] == 'id_cli_prov') {
+                    $parametro = "t2." . $_POST['tipo_consulta'] . " = " . $_POST['dato_consulta'];
                 } else {
                     $parametro = "t1." . $_POST['tipo_consulta'] . " LIKE '%" . $_POST['dato_consulta'] . "%'";
                 }

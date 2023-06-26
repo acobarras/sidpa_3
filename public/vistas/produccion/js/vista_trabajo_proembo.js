@@ -92,19 +92,19 @@ var carga_tablas = function (data, maquina) {
                         }
                         botones += `<button class="btn ${color} reasignar" data-id="${row.id_maquina}" title="Reasignar M.Q" ><i class="fa fa-retweet"></i></button> `;
                     }
-                    var hora = false;
-                    var fecha_antes = new Date();
-                    fecha_antes.setDate(fecha_antes.getDate() - 1);
-                    var fecha = fecha_antes.toLocaleDateString();
-                    fecha = fecha.split("/");
-                    var fecha_antigua = fecha[2] + "-0" + fecha[1] + "-" + fecha[0];
-                    if (HORA_HOY <= '06:10:00' && HORA_HOY >= '00:00:00' && row.fecha_produccion == fecha_antigua) {
-                        hora = true;
-                    }
-                    if (row.fecha_produccion == FECHA_HOY) {
-                        hora = true;
-                    }
-                    if (hora) {
+                    // var hora = false;
+                    // var fecha_antes = new Date();
+                    // fecha_antes.setDate(fecha_antes.getDate() - 1);
+                    // var fecha = fecha_antes.toLocaleDateString();
+                    // fecha = fecha.split("/");
+                    // var fecha_antigua = fecha[2] + "-0" + fecha[1] + "-" + fecha[0];
+                    // if (HORA_HOY <= '06:10:00' && HORA_HOY >= '00:00:00' && row.fecha_produccion == fecha_antigua) {
+                    //     hora = true;
+                    // }
+                    // if (row.fecha_produccion == FECHA_HOY) {
+                    //     hora = true;
+                    // }
+                    // if (hora) {
                         if (row['estado_item_producir'] == 6 || row['estado_item_producir'] == 10) {//pasar Puesta a punto
                             botones += `<button class="btn btn-primary puesta_punto" id="puesta_punto${row.id_item_producir}" data-puesta="${row.id_maquina}" title="Puesta Punto"><i class="fa fa-check"></i></button> `;
                         }
@@ -114,7 +114,7 @@ var carga_tablas = function (data, maquina) {
                         if (row['estado_item_producir'] == 9) {//pasar a inicio producción
                             botones += `<button class="btn btn-success reportar_trabajo" id="ver-pro${row.id_item_producir}" data-reporta="${row.id_maquina}" title="Ver Trabajo" ><i class="fa fa-search"></i></button>`;
                         }
-                    }
+                    // }
                     if (row['estado_item_producir'] == 15) {//pasar a inicio Embobinado
                         botones += `<button class="btn btn-success inicio_produccion" id="inicio_produc${row.id_item_producir}" inicio-produc="${row.id_maquina}" title="Inicio Producción"><i class="fa fa-check" ></i></button> `;
                     }

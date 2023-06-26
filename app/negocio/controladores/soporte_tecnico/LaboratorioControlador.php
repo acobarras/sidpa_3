@@ -124,7 +124,7 @@ class LaboratorioControlador extends GenericoControlador
                 "^PW831" .
                 "^LL0200" .
                 "^LS0" .
-                "^FT26,31^A0N,23,24^FH\^FDACOBARRAS^FS" .
+                "^FT26,31^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
                 "^FT185,32^A0N,23,24^FH\^FD" . $consecutivo . "-" . $i . "^FS" .
                 "^FT26,62^A0N,20,19^FH\^FDPROPIEDAD DEL CLIENTE^FS" .
                 "^FO26,73^GB234,98,4^FS" .
@@ -133,7 +133,7 @@ class LaboratorioControlador extends GenericoControlador
                 "^FT74,193^A0N,20,19^FH\^FDFECHA:^FS" .
                 "^FT137,192^A0N,20,19^FH\^FD" . $fecha . "^FS" .
 
-                "^FT298,31^A0N,23,24^FH\^FDACOBARRAS^FS" .
+                "^FT298,31^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
                 "^FT457,32^A0N,23,24^FH\^FD" . $consecutivo . "-" . $i . "^FS" .
                 "^FT298,62^A0N,20,19^FH\^FDPROPIEDAD DEL CLIENTE^FS" .
                 "^FO298,73^GB234,98,4^FS" .
@@ -142,7 +142,7 @@ class LaboratorioControlador extends GenericoControlador
                 "^FT346,193^A0N,20,19^FH\^FDFECHA:^FS" .
                 "^FT409,192^A0N,20,19^FH\^FD" . $fecha . "^FS" .
 
-                "^FT569,31^A0N,23,24^FH\^FDACOBARRAS^FS" .
+                "^FT569,31^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
                 "^FT728,32^A0N,23,24^FH\^FD" . $consecutivo . "-" . $i . "^FS" .
                 "^FT569,62^A0N,20,19^FH\^FDPROPIEDAD DEL CLIENTE^FS" .
                 "^FO569,73^GB234,98,4^FS" .
