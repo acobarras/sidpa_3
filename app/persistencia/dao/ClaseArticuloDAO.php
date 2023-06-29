@@ -29,6 +29,15 @@ class ClaseArticuloDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    
+    public function consulta_clase()
+    {
+        $sql = "SELECT * FROM clase_articulo";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 
     public function consulta_clase_articulo()
     {

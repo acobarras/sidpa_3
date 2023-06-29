@@ -341,3 +341,31 @@
         background-color: white;
         border: solid 1px black;
     }
+
+    .ficha_pie_pagina {
+        position: relative;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: white;
+        background-clip: padding-box;
+        padding: 10px;
+    }
+
+
+    .ficha_pie_pagina::after {
+
+        position: absolute;
+        top: -1px;
+        bottom: -1px;
+        left: -1px;
+        right: -1px;
+        background: linear-gradient(90deg, #0e052e 0%, #090979 35%, #044697 100%);
+        content: '';
+        z-index: -1;
+        border-radius: 8px;
+    }
+
+    .degradado_sidpa {
+        color: white;
+        background: linear-gradient(90deg, #0e052e 0%, #090979 35%, #044697 100%);
+    }

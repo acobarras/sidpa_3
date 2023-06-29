@@ -33,7 +33,7 @@ var cotizar_etiquetas = function () {
         var valida = validar_formulario(form, exepcion);
         if (valida) {
             var obj_inicial = $("#enviar_cotiza").html();
-            btn_procesando('enviar_cotiza');
+            // btn_procesando('enviar_cotiza');
             $.ajax({
                 url: `${PATH_NAME}/comercial/calcular_cotizacion_etiquetas`,
                 type: 'POST',

@@ -81,13 +81,6 @@ abstract class GenericoControlador
         }
         include_once  CARPETA_VIEW . '/public/vistas/' . $view . '.php';
     }
-    public function zpl($view, $datos = [])
-    {
-        foreach ($datos as $key => $value) {
-            ${$key} = $value;
-        }
-        include_once  CARPETA_IMG . PROYECTO . '/ZPL/' . $view . '.php';
-    }
 
     public function cabecera()
     {
@@ -165,31 +158,36 @@ abstract class GenericoControlador
         $datos_material = $this->TipoMaterialDAO->consulta_id_codigo($material);
         $adh = Validacion::DesgloceCodigo($codigo_producto, 4, 1);
         if (is_numeric($adh)) {
-            foreach (HOMOLOGO as $value) {
-                if ($value['tipo_material'] == $datos_material[0]->id_tipo_material && $value['adh'] == $adh) {
-                    $adh = $value['letra'];
-                }
-            }
+            $datos_etiq = [
+                'status' => -1,
+                'msg' => 'la estructura del codigo es errada'
+            ];
+            // foreach (HOMOLOGO as $value) {
+            //     if ($value['tipo_material'] == $datos_material[0]->id_tipo_material && $value['adh'] == $adh) {
+            //         $adh = $value['letra'];
+            //     }
+            // }
+        } else {
+            $datos_adh = $this->AdhesivoDAO->validar_adhesivo($adh);
+            $tintas = Validacion::DesgloceCodigo($codigo_producto, 6, 2);
+            $datos_tinta = $this->TintasDAO->consulta_tintas($tintas);
+            $data = [
+                "fecha" => date('Y-m-d H:i:s'),
+                'tipo_cotiza' => $tipo_cotiza,
+                "ancho" => $ancho,
+                "alto" => $alto,
+                "material" => $datos_material[0]->id_tipo_material,
+                "adh" => $datos_adh[0]->id_adh,
+                "tintas" => $datos_tinta[0]->cantidad,
+                "cyrel" => 1,
+                "troquel" => 2,
+                "estcalor" => 2,
+                "estfrio" => 2,
+                "cantidad" => $cantidad_cotiza,
+            ];
+            $datos_etiq = self::calculo_cotizador_etiquetas($data, $avance);
+            $datos_etiq['tamano'] = $ancho . 'X' . $alto_tex;
         }
-        $datos_adh = $this->AdhesivoDAO->validar_adhesivo($adh);
-        $tintas = Validacion::DesgloceCodigo($codigo_producto, 6, 2);
-        $datos_tinta = $this->TintasDAO->consulta_tintas($tintas);
-        $data = [
-            "fecha" => date('Y-m-d H:i:s'),
-            'tipo_cotiza' => $tipo_cotiza,
-            "ancho" => $ancho,
-            "alto" => $alto,
-            "material" => $datos_material[0]->id_tipo_material,
-            "adh" => $datos_adh[0]->id_adh,
-            "tintas" => $datos_tinta[0]->cantidad,
-            "cyrel" => 1,
-            "troquel" => 2,
-            "estcalor" => 2,
-            "estfrio" => 2,
-            "cantidad" => $cantidad_cotiza,
-        ];
-        $datos_etiq = self::calculo_cotizador_etiquetas($data, $avance);
-        $datos_etiq['tamano'] = $ancho . 'X' . $alto_tex;
         return $datos_etiq;
     }
 
@@ -255,10 +253,10 @@ abstract class GenericoControlador
         $avance_m2 = $avance / 1000;
         $m2 = ($ancho_m2) * ($avance_m2);
         $costo = ($m2 * $valor_material) * VALORES_COTIZADOR['costo_desperdicio']; // 1.1;
-        $monto_q = VALORES_COTIZADOR['monto_blanco'];
+        $montaje_minimo = VALORES_COTIZADOR['monto_blanco'];
         if ($tintas != 0) {
             $texto_tinta = 'monto_' . $tintas . 'tinta';
-            $monto_q = VALORES_COTIZADOR[$texto_tinta];
+            $montaje_minimo = VALORES_COTIZADOR[$texto_tinta];
             // $costo = Validacion::costo_tinta($costo, $tintas);
             $utilidad_tintas = 'utili_' . $tintas . 'tintas';
             $costo = ($costo / VALORES_COTIZADOR[$utilidad_tintas]);
@@ -269,11 +267,13 @@ abstract class GenericoControlador
         } else {
             $cavidad = number_format(round((110 / $ancgap), 0), 0, ".", ".");
         }
+        $cavidad_montaje = number_format(round((254 / $ancgap), 0), 0, ".", ".");
         $cav_ml = $cavidad * $ml;
         // Se calculan las cantidades y los precios despues del costo
         $precio_bajo = $costo / VALORES_COTIZADOR['utili_inicial']; //0.6;
         $precio_medio = $precio_bajo / VALORES_COTIZADOR['utili_medio'];
         $precio_alto = $precio_bajo / VALORES_COTIZADOR['utili_alto'];
+        $monto_q = round(((($montaje_minimo * 1000) / $avance) * $cavidad_montaje) * $precio_alto, -2);
         $cant_minima_etiq = (($cavidad * $ml) * (($monto_q / $precio_alto) * $avance) / ($cavidad * $ml) / $avance);
         $cant_minima_etiq1 = (($cavidad * $ml) * ((($monto_q / $precio_alto) * $avance) / ($cavidad * $ml) + 1000) / $avance);
         $cant_minima_etiq2 = (($cavidad * $ml) * ((($monto_q / $precio_alto) * $avance) / ($cavidad * $ml) + 2000) / $avance);
@@ -427,5 +427,12 @@ abstract class GenericoControlador
             'fecha_crea' => date('Y-m-d'),
         ];
         $agregar_seg = $this->SeguimientoDiagSoporteDAO->insertar($formulario_seg);
+    }
+    public function zpl($view, $datos = [])
+    {
+        foreach ($datos as $key => $value) {
+            ${$key} = $value;
+        }
+        include_once  CARPETA_IMG . PROYECTO . '/ZPL/' . $view . '.php';
     }
 }

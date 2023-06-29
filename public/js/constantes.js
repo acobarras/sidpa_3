@@ -541,3 +541,19 @@ var crea_ubicacion = function () {
         }
     });
 }
+
+var tamano_codigo = function (cod) {
+    var conector = 'X';
+    var conector2 = '-';
+    var posicion = cod.indexOf(conector);
+    var posicion2 = cod.indexOf(conector2);
+    var ancho = cod.substr(0, posicion);
+    ancho = parseFloat(ancho.replace(/,/g, '.'));
+    var alto = cod.substr(posicion + 1, posicion2 - posicion - 1);
+    alto = parseFloat(alto.replace(/,/g, '.'));
+    var res = {
+        'ancho': ancho,
+        'alto': alto
+    };
+    return res;
+}

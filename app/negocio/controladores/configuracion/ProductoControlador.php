@@ -4,6 +4,7 @@ namespace MiApp\negocio\controladores\configuracion;
 
 use MiApp\negocio\generico\GenericoControlador;
 use MiApp\negocio\util\Validacion;
+use MiApp\negocio\util\Archivo;
 use MiApp\persistencia\dao\TipoArticuloDAO;
 use MiApp\persistencia\dao\AdhesivoDAO;
 use MiApp\persistencia\dao\productosDAO;
@@ -11,6 +12,7 @@ use MiApp\persistencia\dao\TipoMaterialDAO;
 use MiApp\persistencia\dao\PrecioMateriaPrimaDAO;
 use MiApp\persistencia\dao\TintasDAO;
 use MiApp\persistencia\dao\FormaMaterialDAO;
+use MiApp\persistencia\dao\ClaseArticuloDAO;
 
 class ProductoControlador extends GenericoControlador
 {
@@ -22,6 +24,7 @@ class ProductoControlador extends GenericoControlador
     private $PrecioMateriaPrimaDAO;
     private $TintasDAO;
     private $FormaMaterialDAO;
+    private $ClaseArticuloDAO;
 
     public function __construct(&$cnn)
     {
@@ -36,6 +39,7 @@ class ProductoControlador extends GenericoControlador
         $this->PrecioMateriaPrimaDAO = new PrecioMateriaPrimaDAO($cnn);
         $this->TintasDAO = new TintasDAO($cnn);
         $this->FormaMaterialDAO = new FormaMaterialDAO($cnn);
+        $this->ClaseArticuloDAO = new ClaseArticuloDAO($cnn);
     }
 
     public function vista_productos()
@@ -46,7 +50,8 @@ class ProductoControlador extends GenericoControlador
             [
                 "tipo_articulo" => $this->TipoArticuloDAO->consultar_tipo_articulo(),
                 "adhesivo" => $this->AdhesivoDAO->consultar_adhesivo(),
-                "tipo_articulo_tecnologia" => $this->TipoArticuloDAO->consultar_articulo_tecnologia()
+                "tipo_articulo_tecnologia" => $this->TipoArticuloDAO->consultar_articulo_tecnologia(),
+                "clase_articulo" => $this->ClaseArticuloDAO->consulta_clase()
             ]
         );
     }
@@ -72,48 +77,76 @@ class ProductoControlador extends GenericoControlador
     public function modificar_producto()
     {
         header("Content-type: application/json; charset=utf-8");
-        $id_productos = $_POST['id'];
-        $formulario = Validacion::Decodifica($_POST['form']);
-        unset($formulario['id_clase_articulo']);
-        if ($formulario['id_tipo_articulo'] == 1) {
-            $codigo_producto = $formulario['codigo_producto'];
-            $avance = $formulario['avance'];
-            $datos_etiq = parent::precio_etiqueta($codigo_producto, 1, $avance);
-            if ($formulario['avance'] == 0.000) {
-                $formulario['avance'] = $datos_etiq['avance'];
+        $id_productos = $_POST['id_productos'];
+        $clase_articulo = $_POST['clase_articulo'];
+        unset($_POST['id_productos']);
+        unset($_POST['clase_articulo']);
+        if ($clase_articulo == 2) {
+            $base64 = '';
+            if ($_FILES['img_ficha_1']['name'][0] != '') {
+                $ficha_tecnica = $_POST['ficha_tecnica'];
+                $data_base64 = $_POST['img_ficha'];
+                $respu = Validacion::reArrayFiles($_FILES['img_ficha_1']);
+                foreach ($respu as $key => $value) {
+                    $nombre = "FT-" . $ficha_tecnica . "_" . $key;
+                    $imagen = $value;
+                    $imagen = Archivo::subirImagen($imagen, $nombre, '/PDF/ficha_tecnica/');
+                    if ($data_base64 == '') {
+                        $data_base64 = $imagen;
+                    } else {
+                        $data_base64 .= ',' . $imagen;
+                    }
+                }
+                $base64 = $data_base64;
             }
-            $formulario['costo'] = $datos_etiq['costo'];
-            $formulario['precio1'] = $datos_etiq['precio1'];
-            $formulario['precio2'] = $datos_etiq['precio2'];
-            $formulario['precio3'] = $datos_etiq['precio3'];
+        }
+        if ($clase_articulo == 2 && $base64 != '') {
+            $_POST['img_ficha'] = $base64;
         }
         $condicion = 'id_productos =' . $id_productos;
-        $resultado = $this->productosDAO->editar($formulario, $condicion);
-        echo json_encode($resultado);
+        $resultado = $this->productosDAO->editar($_POST, $condicion);
+        if ($resultado) {
+            $respu = [
+                'status' => true,
+                'msg' => 'Datos modificados correctamente'
+            ];
+        }
+        echo json_encode($respu);
+        return;
     }
 
     public function insertar_producto()
     {
         header("Content-type: application/json; charset=utf-8");
-        $datos = $_POST;
-        $consumo = $datos['consumo'];
-        if ($datos['consumo'] == '') {
-            $consumo = Validacion::consumo_etiqueta($datos['codigo_producto']);
-        }
-        $datos['consumo'] = $consumo;
-        if ($datos['paso'] == 'form_etiquetas') {
-            $datos['moneda_producto'] = 1;
-        }
-        $datos['fecha_crea'] = date('Y-m-d');
-        // Validar si el producto ya fue creado
-        $codigo = $this->productosDAO->consultar_productos_especifico($datos['codigo_producto']);
-        if (empty($codigo)) {
-            unset($datos['paso']);
-            $respu = $this->productosDAO->insertar($datos);
+        if ($_POST['id_productos'] == 0) {
+            print_r($_POST);
         } else {
-            $respu = ['estado' => false];
+            print_r($_FILES['img_ficha_1']['name'][0]);
+            if ($_FILES['img_ficha_1']['name'][0] != '') {
+                print_r($_POST);
+            }
+            self::modificar_producto();
         }
-        echo json_encode($respu);
+        // }
+        // $datos = $_POST;
+        // $consumo = $datos['consumo'];
+        // if ($datos['consumo'] == '') {
+        //     $consumo = Validacion::consumo_etiqueta($datos['codigo_producto']);
+        // }
+        // $datos['consumo'] = $consumo;
+        // if ($datos['paso'] == 'form_etiquetas') {
+        //     $datos['moneda_producto'] = 1;
+        // }
+        // $datos['fecha_crea'] = date('Y-m-d');
+        // // Validar si el producto ya fue creado
+        // $codigo = $this->productosDAO->consultar_productos_especifico($datos['codigo_producto']);
+        // if (empty($codigo)) {
+        //     unset($datos['paso']);
+        //     $respu = $this->productosDAO->insertar($datos);
+        // } else {
+        //     $respu = ['estado' => false];
+        // }
+        // echo json_encode($respu);
     }
 
     public function valida_precio_codigo()
