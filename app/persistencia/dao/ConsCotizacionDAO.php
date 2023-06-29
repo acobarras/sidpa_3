@@ -63,8 +63,13 @@ class ConsCotizacionDAO extends GenericoDAO
             $cambio_mes = new \DateTime(date("Y-m-d", strtotime($fecha_dia . "+ 1 month")));
             $mes_nuevo = $cambio_mes->format('F');
             $letra_mes = PQR_MES[$mes_nuevo];
-            // Se coloca el contador en 1 nuevamente
-            $num_pqr = 1;
+            $valida = 'PQR-' . $letra_mes . '01-' . $ano;
+            $existe = $this->GestionPqrDAO->valida_numero_pqr($valida);
+            if (empty($existe)) {
+                $num_pqr = 1;
+            } else {
+                $num_pqr = $num_pqr + 1;
+            }
             $canbio_numero = $num_pqr;
         } elseif ($fecha_dia >= $fecha_cierre) {
             $cambio_mes = new \DateTime(date("Y-m-d", strtotime($fecha_dia . "+ 1 month")));
