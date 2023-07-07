@@ -95,5 +95,4 @@
         </div>
     </div>
 </div>
-<?php include PUBLICO . '/vistas/plantilla/footer.php'; ?>
 <script src="<?= PUBLICO ?>/vistas/configuracion/js/vista_ficha_tec.js"></script>

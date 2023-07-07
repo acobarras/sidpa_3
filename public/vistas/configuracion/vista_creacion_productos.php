@@ -167,7 +167,7 @@
                                 <input autocomplete="off" type="text" class="form-control" name="nombre_color[]" id="nombre_color" multiple />
                             </div>
                             <!-- BOTON PARA VER FICHA -->
-                            <!-- <div class="col" id="muestro_img">
+                            <div class="col" id="muestro_img">
                                 <div class="text-center">
                                     <button class="btn btn-success d-none" type="button" data_produ="" id="ver_ficha">
                                         <i class="fa fa-plus-circle"></i>Ver Ficha Tecnica
@@ -175,7 +175,7 @@
                                 </div>
                             </div>
                             <div class="col" id="ficha_tec">
-                            </div> -->
+                            </div>
                         </div>
                         <div class="mb-3">
                             <div class="text-center">

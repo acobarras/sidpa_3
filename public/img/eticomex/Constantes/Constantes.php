@@ -22,6 +22,16 @@ define(
 );
 
 define(
+    'ETIQ_MARCACION',
+    array(
+        0 => "",
+        1 => "52X33",
+        2 => "100X50",
+        3 => "46X18",
+    )
+);
+
+define(
     'ESTADO_SIMPLE',
     array(
         0 => 'Inactivo',

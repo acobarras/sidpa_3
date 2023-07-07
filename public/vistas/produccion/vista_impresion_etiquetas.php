@@ -33,9 +33,9 @@
                     <label for="tamano" class="col-sm-2 col-form-label">Tamaño Etiqueta:</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="tamano" id="tamano">
-                            <option value="1" selected="">46x18</option>
-                            <option value="3">52x33</option>
-                            <option value="2">100x50</option>
+                            <?php foreach (ETIQ_MARCACION as $key => $etiq_marcacion) { ?>
+                                <option value="<?= $key ?>"><?= $etiq_marcacion ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
