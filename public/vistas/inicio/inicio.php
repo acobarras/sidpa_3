@@ -15,7 +15,7 @@ include PUBLICO . '/vistas/plantilla/header.php'; ?>
                             <hr>
                         </div>
                         <div>
-                            <img src="<?= CARPETA_IMG . PROYECTO ?>/login/sdp_logo.png" class="mx-auto d-block">
+                            <img src="<?= CARPETA_IMG . PROYECTO ?>/login/sdp_logo.png" style="max-width:100%;max-height:250px" class="mx-auto d-block">
                         </div>
 
                         <div class="ContentForm" style="padding: 0 20px;">

@@ -79,27 +79,11 @@ class ProductoControlador extends GenericoControlador
         header("Content-type: application/json; charset=utf-8");
         $id_productos = $_POST['id_productos'];
         $clase_articulo = $_POST['clase_articulo'];
+        $_POST['nombre_color'] = $_POST['nombre_color'][0];
+        $_POST['color_producto'] = $_POST['color_producto'][0];
         unset($_POST['id_productos']);
         unset($_POST['clase_articulo']);
-        if ($clase_articulo == 2) {
-            $base64 = '';
-            if ($_FILES['img_ficha_1']['name'][0] != '') {
-                $ficha_tecnica = $_POST['ficha_tecnica'];
-                $data_base64 = $_POST['img_ficha'];
-                $respu = Validacion::reArrayFiles($_FILES['img_ficha_1']);
-                foreach ($respu as $key => $value) {
-                    $nombre = "FT-" . $ficha_tecnica . "_" . $key;
-                    $imagen = $value;
-                    $imagen = Archivo::subirImagen($imagen, $nombre, '/PDF/ficha_tecnica/');
-                    if ($data_base64 == '') {
-                        $data_base64 = $imagen;
-                    } else {
-                        $data_base64 .= ',' . $imagen;
-                    }
-                }
-                $base64 = $data_base64;
-            }
-        }
+        $base64 = self::insertar_img_product($_FILES, $_POST);
         if ($clase_articulo == 2 && $base64 != '') {
             $_POST['img_ficha'] = $base64;
         }
@@ -115,38 +99,61 @@ class ProductoControlador extends GenericoControlador
         return;
     }
 
+    public function insertar_img_product($img, $data)
+    {
+        $base64 = '';
+        if ($img['img_ficha_1']['name'][0] != '') {
+            $ficha_tecnica = $data['ficha_tecnica_produc'];
+            $data_base64 = $data['img_ficha'];
+            $respu = Validacion::reArrayFiles($img['img_ficha_1']);
+            foreach ($respu as $key => $value) {
+                $nombre = "FT-" . $ficha_tecnica . "_" . $key;
+                $imagen = $value;
+                $imagen = Archivo::subirImagen($imagen, $nombre, '/PDF/ficha_tecnica/');
+                if ($data_base64 == '' || $data_base64 == 0) {
+                    $data_base64 = $imagen;
+                } else {
+                    $data_base64 .= ',' . $imagen;
+                }
+            }
+            $base64 = $data_base64;
+        }
+        return $base64;
+    }
+
     public function insertar_producto()
     {
         header("Content-type: application/json; charset=utf-8");
         if ($_POST['id_productos'] == 0) {
-            print_r($_POST);
-        } else {
-            print_r($_FILES['img_ficha_1']['name'][0]);
-            if ($_FILES['img_ficha_1']['name'][0] != '') {
-                print_r($_POST);
+            $datos = $_POST;
+            $consumo = $datos['consumo'];
+            $clase_articulo = $_POST['clase_articulo'];
+            if ($datos['consumo'] == '') {
+                $consumo = Validacion::consumo_etiqueta($datos['codigo_producto']);
             }
+            $base64 = self::insertar_img_product($_FILES, $_POST);
+            if ($clase_articulo == 2 && $base64 != '') {
+                $datos['img_ficha'] = $base64;
+            }
+            $datos['nombre_color'] = $datos['nombre_color'][0];
+            $datos['color_producto'] = $datos['color_producto'][0];
+            $datos['consumo'] = $consumo;
+            $datos['fecha_crea'] = date('Y-m-d');
+            $datos['estado_producto'] = 1;
+            unset($datos['id_productos']);
+            unset($datos['clase_articulo']);
+            // Validar si el producto ya fue creado
+            $codigo = $this->productosDAO->consultar_productos_especifico($datos['codigo_producto']);
+            if (empty($codigo)) {
+                $respu = $this->productosDAO->insertar($datos);
+            } else {
+                $respu = ['estado' => false];
+            }
+            echo json_encode($respu);
+            return;
+        } else {
             self::modificar_producto();
         }
-        // }
-        // $datos = $_POST;
-        // $consumo = $datos['consumo'];
-        // if ($datos['consumo'] == '') {
-        //     $consumo = Validacion::consumo_etiqueta($datos['codigo_producto']);
-        // }
-        // $datos['consumo'] = $consumo;
-        // if ($datos['paso'] == 'form_etiquetas') {
-        //     $datos['moneda_producto'] = 1;
-        // }
-        // $datos['fecha_crea'] = date('Y-m-d');
-        // // Validar si el producto ya fue creado
-        // $codigo = $this->productosDAO->consultar_productos_especifico($datos['codigo_producto']);
-        // if (empty($codigo)) {
-        //     unset($datos['paso']);
-        //     $respu = $this->productosDAO->insertar($datos);
-        // } else {
-        //     $respu = ['estado' => false];
-        // }
-        // echo json_encode($respu);
     }
 
     public function valida_precio_codigo()
@@ -243,5 +250,17 @@ class ProductoControlador extends GenericoControlador
         }
         echo json_encode($res);
         return;
+    }
+
+    public function vista_ficha_tec()
+    {
+        $data = $_POST;
+        print_r($data);
+        $this->view(
+            'configuracion/vista_ficha_tec',
+            [
+                'data' => $data,
+            ]
+        );
     }
 }

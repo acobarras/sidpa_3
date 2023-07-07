@@ -1,11 +1,12 @@
 <?php
-
 const IVA = 0.19;
 const PORCENTAJE_SOBRE_CUPO = 0.20;
 const GAP_LATERAL = 3.5;
 const RESPONSABLE = '1013579582';
 const NIT_CONTABLE = '830033050';
 const CONST_TINTA = 0.93;
+const FORM_DISENOCOD = "https://docs.google.com/forms/d/e/1FAIpQLSc3MWzDPRkevsupH8SYKoLIDeellDGpFqWQ2Uv7wggfw2mDHg/viewform?embedded=true"; //formulario para solicitud de codigo
+const FORM_DISENODIS = "https://docs.google.com/forms/d/e/1FAIpQLSe4HlUfabpECFOl7AYZXiFvxP02N8ZbuGTHY9OhVnFPQ66QuA/viewform?embedded=true"; //formulario para solicitud de diseño
 
 
 define(

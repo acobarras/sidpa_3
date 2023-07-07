@@ -76,8 +76,10 @@ class ConsCotizacionDAO extends GenericoDAO
             $mes_nuevo = $cambio_mes->format('F');
             $letra_mes = PQR_MES[$mes_nuevo];
             $canbio_numero = $num_pqr + 1;
+            $num_pqr = $num_pqr + 1;
         } else {
             $canbio_numero = $num_pqr + 1;
+            $num_pqr = $num_pqr + 1;
         }
         $replazo = [1 => '01', 2 => '02', 3 => '03', 4 => '04', 5 => '05', 6 => '06', 7 => '07', 8 => '08', 9 => '09'];
         if ($num_pqr == 1 || $num_pqr == 2 || $num_pqr == 3 || $num_pqr == 4 || $num_pqr == 5 || $num_pqr == 6 || $num_pqr == 7 || $num_pqr == 8 || $num_pqr == 9) {
@@ -86,7 +88,7 @@ class ConsCotizacionDAO extends GenericoDAO
         $respu = 'PQR-' . $letra_mes . $num_pqr . '-' . $ano;
         $creado = $this->GestionPqrDAO->valida_numero_pqr($respu);
         $retorno = '';
-        if (empty($creado)) {
+        if (!empty($creado)) {
             $retorno = $respu;
             $edita_numero = ['numero_guardado' => $canbio_numero];
             $condicion = 'id_consecutivo = 14';

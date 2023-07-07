@@ -19,7 +19,8 @@ class Core
         require_once './app/negocio/util/ConstantesRutas.php';
         require './app/negocio/rutas/ruta.php';
         // IMPORTACION DE LIBRERIAS ESPECIFICAS ANTES DE CUALQUIER CONEXION
-        require_once './app/negocio/util/Constantes.php';
+        // require_once './app/negocio/util/Constantes.php';
+        require_once CARPETA_IMG . PROYECTO . '/Constantes/Constantes.php';
 
         $this->cnn = Conexion::conectar();
         $this->URL();
@@ -36,10 +37,10 @@ class Core
                 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                     $url = explode('&', $query_string[1]);
-                    
+
                     // $url = explode("/", $uri[0]); //nombre de url
                     $ruta = explode("/:", $constant['url']); //obtener el nombre
-                    
+
                     if ('/' . $url[0] == $ruta[0]) { //validar que la ruta sea igual
                         if ($constant['estado'] === 0) {
                             return header('location:' . RUTA_PRINCIPAL);

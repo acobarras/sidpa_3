@@ -1,26 +1,8 @@
-// ACOBARRAS
-const PROYECTO = `/acobarras`; // constante para carpeta de imagenes de la empresa
-const EMPRESA = `ACOBARRAS`; // constante nombre empresa
-const FAC_SAS = `ACOBARRAS S.A.S`; // constante factura empresa
-const FAC_COL = `ACOBARRAS COLOMBIA`; // constante factura empresa
-const FAC_ESP = `ACOBARRAS ESPECIAL`; // constante factura empresa
-const CORREO_TALENTO = `diego.wilches@acobarras.com`; // constante correo de talento humano
-
-// ETICARIBE
-// const PROYECTO = `/eticaribe`; // constante para carpeta de imagenes de la empresa
-// const EMPRESA = `ETICARIBE`; // constante nombre empresa
-// const FAC_SAS = `ETICARIBE S.A.S`; // constante factura empresa
-// const FAC_COL = `ETICARIBE COLOMBIA`; // constante factura empresa
-// const FAC_ESP = `ETICARIBE ESPECIAL`; // constante factura empresa
-// const CORREO_TALENTO = `diego.wilches@acobarras.com`; // constante correo de talento humano
-
 const REG_EXP_ESPACIOS = /^\S+$/; //expresion regular para validar el que no tenga espacios.
 const IVA = 0.19; // constante del iva 
 const FECHA_HOY = document.getElementById('fecha_hoy').value;
 const HORA_HOY = document.getElementById('hora_hoy').value;
 const REG_EXP_NUMEROS = /^([0-9.])*$/; //expresion regular para validar el que solo tenga numeros o puntos.
-const ID_CLI_PROV_PQR = 1931;
-const ID_CLI_PROV_NO_PRODUCIR = 2441;
 const INVENTARIO = 1;
 const isMobile = {
     Android: function () {

@@ -13,7 +13,7 @@
                         <div class="recuadro">
                             <div class="container-fluid">
                                 <center>
-                                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc3MWzDPRkevsupH8SYKoLIDeellDGpFqWQ2Uv7wggfw2mDHg/viewform?embedded=true" width="1000" height="5420" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+                                    <iframe src=<?= FORM_DISENOCOD ?> width="1000" height="5420" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
                                 </center>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                         <div class="recuadro">
                             <div class="container-fluid">
                                 <center>
-                                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe4HlUfabpECFOl7AYZXiFvxP02N8ZbuGTHY9OhVnFPQ66QuA/viewform?embedded=true" width="1000" height="5420" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+                                    <iframe src=<?= FORM_DISENODIS ?> width="1000" height="5420" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
                                 </center>
 
                             </div>

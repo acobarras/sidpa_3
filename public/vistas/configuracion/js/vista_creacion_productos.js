@@ -10,12 +10,12 @@ $(document).ready(function () {
     crear_codigo_etiqueta();
     regresar_productos();
     agrega_edita_productos();
+    ver_ficha();
     $('#agrega-tab').on('click', function () {
         $('#clase_articulo').change();
         $('#codigo_producto').addClass('precio_etiq');
         $('#avance').addClass('precio_etiq');
     });
-    // dibujo();
 });
 
 var cargar_tabla_productos = function () {
@@ -125,117 +125,46 @@ var regresar_productos = function () {
         $('#crear_etiqueta').empty().html(`<i class="fa fa-plus-circle"></i> Crear Producto`);
         $('#codigo_producto').removeClass('precio_etiq');
         $('#avance').removeClass('precio_etiq');
-        $('#muestro_img').empty().html('');
+        $('#muestro_img').empty().html(`<div class="text-center">
+        <button class="btn btn-success d-none" type="submit" id="ver_ficha">
+            <i class="fa fa-plus-circle"></i>Ver Ficha Tecnica
+        </button>
+        </div>`);
     });
 }
 
 var obtener_data_editar = function () {
     $("#tabla_productos tbody").on('click', 'button.agregar_campos', function () {
         var data = $("#tabla_productos").DataTable().row($(this).parents("tr")).data();
-        var imagenes = vista_imagen(data.img_ficha, data);
         $('#agrega-tab').empty().html('Modificar Producto');
         $('#titulo_form').empty().html('Modificar Producto');
         $('#crear_etiqueta').empty().html(`<i class="fa fa-plus-circle"></i> Modificar Producto`);
         $('#clase_articulo').val(data.id_clase_articulo).change();
         $('label[for=clase_articulo]').empty().html('Producto A Modificar :');
+        $('#ver_ficha').removeClass('d-none');
+        $('#ver_ficha').attr('data_produ', JSON.stringify(data));
         rellenarFormulario(data);
         $('#codigo_producto').addClass('precio_etiq');
         $('#avance').addClass('precio_etiq');
-        $('#muestro_img').empty().html(imagenes);
-        if (data.img_ficha != '') {
-            new Splide('#image-carousel').mount();
-        }
-        $('#id_tipo_articulo').val(data.id_tipo_articulo).change();
+        setTimeout(function () {
+            $('#id_tipo_articulo').val(data.id_tipo_articulo).change();
+        }, 1000);
         $('#agrega-tab').click();
     });
 }
 
-var vista_imagen = function name(dataImagenes, data) {
-    var res = '';
-    res = `<div class="position-relative">
-    <img src="${IMG}${PROYECTO}/PDF/ficha_tecnica/ficha_encabezado.png" width="100%" alt="">
-    <div class="position-absolute top-50 start-50" style="font-size: x-small;line-height: 0; margin-left: 20.5%; margin-top: -6px; color: #001689;">
-    <p>No: 004924</p>
-    <p>Fecha: 09-Jun-2023</p>
-    </div>
-    </div>`;
-    if (dataImagenes != '') {
-        var imagenes = dataImagenes.split(",");
-        res += `<section id="image-carousel" class="splide" aria-label="Beautiful Images">
-            <div class="splide__track">
-                <ul class="splide__list">`;
-        imagenes.forEach(element => {
-            res += `<li class="splide__slide">
-                        <img src="${IMG}${PROYECTO}/PDF/ficha_tecnica/${element}" width="100%" alt="">
-                    </li>`;
-        });
-        res += `</ul>
-            </div>
-        </section>`;
-    } else {
-        res += `<div class="position-relative" style="width: 100%; height: 375px;" id="contenedor">
-            <div class="position-absolute top-50 start-50 translate-middle" id="lienzo1">
-                <div id="cota1" style="position: relative; top: -20px; text-align: center; border-top: 1px solid black;"></div>
-                <div id="cota2" style="position: relative; left: -23px; text-align: center; border-left: 1px solid black; writing-mode: vertical-lr; top: -20px;"></div>
-            </div>
-        </div>`;
-    }
-    res += `<div class="ficha_pie_pagina" style="padding: 0;">
-        <div class="row" style="font-size: 7px;">
-            <div class="col-5 pe-0">
-                <div class="text-center degradado_sidpa" style="border-radius: 7px 0px 0px 0px;">ESPECIFICACIONES TÉCNICAS</div>
-                <table class="table table-bordered border-dark border-2 table-sm my-0" width="100%">
-                    <tbody>
-                        <tr>
-                            <th class="py-0">referencia:</th>
-                            <th class="py-0" colspan="3">Cilindro de Impresión y/o Troquelado:</th>
-                        </tr>
-                        <tr>
-                            <th class="py-0">Versión:</th>
-                            <td class="py-0">01</td>
-                            <th class="py-0">Forma:</th>
-                            <td class="py-0">Rectangular</td>
-                        </tr>
-                        <tr>
-                            <th class="py-0">Dimensión:</th>
-                            <td class="py-0">100,5X105,4</td>
-                            <th class="py-0">Codigo:</th>
-                            <td class="py-0">100X100-1011A00001</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="text-center degradado_sidpa" style="border-radius: 0px 0px 0px 0px;">MONTAJE</div>
-                <table class="table table-bordered border-dark border-2 table-sm my-0" width="100%">
-                    <tbody>
-                        <tr>
-                            <th class="py-0">Cavidades:</th>
-                            <td class="py-0">1</td>
-                            <th class="py-0" colspan="2">Cilindro de Impresión y/o Troquelado:</th>
-                        </tr>
-                        <tr>
-                            <th class="py-0">Repeticiones:</th>
-                            <td class="py-0">4</td>
-                            <th class="py-0">Dientes:</th>
-                            <td class="py-0">72</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-3 px-0">
-                <div class="text-center degradado_sidpa" style="border-radius: 0px 0px 0px 0px;">TINTAS</div>
-            </div>
-            <div class="col-4 ps-0 border-dark border-start">
-                <div class="text-center degradado_sidpa" style="border-radius: 0px 7px 0px 0px;">ACABADOS ETIQUETA</div>
-                <p class="my-0 mx-0 px-2" style="text-align: justify;">como podemos ver este texto deberia llegar a una longitud de hasta 100 caracteres para poder determinar si no se sale de lo demarcado</p>
-                <div class="text-center degradado_sidpa" style="border-radius: 0px 0px 0px 0px;">OBSERVACIONES</div>
-                <p class="my-0 mx-0 px-2" style="text-align: justify;"></p>
-            </div>
-        </div>
-    </div>`;
-    setTimeout(function () {
-        dibujo(data);
-    }, 1000);
-    return res;
+var ver_ficha = function () {
+    $('#ver_ficha').on('click', function () {
+        var data = JSON.parse($('#ver_ficha').attr('data_produ'));
+        $.post(`${PATH_NAME}/configuracion/vista_ficha_tec`,
+            {
+                datos: data,
+            },
+            function (respu) {
+                $('#ficha_tec').empty().html(respu);
+            });
+        $()
+    });
 }
 
 var costo_etiq = function () {
@@ -283,9 +212,9 @@ function calculo_precios_tecno() {
         var clase_articulo = $('#clase_articulo').val();
         if (clase_articulo == 3) {
             var precio = $(this).val();
-            var precio1 = parseFloat(precio) / .8;
-            var precio2 = parseFloat(precio) / .78;
-            var precio3 = parseFloat(precio) / .76;
+            var precio1 = parseFloat(precio) / PRECIO1_TECNO;
+            var precio2 = parseFloat(precio) / PRECIO2_TECNO;
+            var precio3 = parseFloat(precio) / PRECIO3_TECNO;
             $('#precio1').val(precio1.toFixed(2));
             $('#precio2').val(precio2.toFixed(2));
             $('#precio3').val(precio3.toFixed(2));
@@ -300,19 +229,45 @@ var agrega_edita_productos = function () {
         var clase_articulo = $('#clase_articulo').val();
         var filename = $("#img_ficha_1").val();
         var imagen_base = $("#img_ficha").val();
+        var color_producto = $("#color_producto").val();
+        var nombre_color = $("#nombre_color").val();
+        var array_color = [];
+        var array_nombre_color = [];
         var exepcion;
         if (clase_articulo == 1) {
-            exepcion = ['id_productos', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'precio3', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha'];
+            exepcion = ['id_productos', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'precio3', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]'];
         }
         if (clase_articulo == 2 || clase_articulo == 0) {
-            exepcion = ['id_productos', 'avance', 'id_adh', 'consumo', 'img_ficha', 'acabados_ficha'];
+            exepcion = ['id_productos', 'avance', 'id_adh', 'consumo', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]'];
         }
         if (clase_articulo == 3) {
-            exepcion = ['id_productos', 'avance', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha'];
+            exepcion = ['id_productos', 'avance', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]'];
         }
         var form = $(this).serializeArray();
         var valida_form = validar_formulario(form, exepcion);
         if (valida_form) {
+            if (color_producto == '') {
+                alertify.error('Se requiere un color');
+                return;
+            }
+            if (nombre_color == '') {
+                alertify.error('Se requiere un nombre');
+                return;
+            }
+            if (color_producto.search(',') != -1) {
+                array_color = color_producto.split(',');
+            } else {
+                array_color.push(color_producto);
+            }
+            if (nombre_color.search(',') != -1) {
+                array_nombre_color = nombre_color.split(',');
+            } else {
+                array_nombre_color.push(nombre_color);
+            }
+            if (array_color.length != array_nombre_color.length) {
+                alertify.error('La cantidad de colores no corresponden a la cantidad de nombres');
+                return;
+            }
             if (clase_articulo == 2 && filename == '' && imagen_base == 0) {
                 alertify.error('Se requiere la imagen ficha tecnica para continuar');
                 return;
@@ -329,6 +284,7 @@ var agrega_edita_productos = function () {
                     if (respu['status'] == true) {
                         $("#tabla_productos").DataTable().ajax.reload();
                         alertify.success(respu.msg);
+                        $('#home-tab').click();
                     }
                     btn_procesando('crear_etiqueta', obj_inicial, 1);
                 }
@@ -347,41 +303,4 @@ var crear_codigo_etiqueta = function () {
             $("#Modal_crea_codigo").modal("show");
         });
     });
-}
-
-var dibujo = function (data) {
-    var cod = data.codigo_producto;
-    var tamano = tamano_codigo(cod);
-    var color = '#ffff';
-    if (data.color_producto != '') {
-        color = data.color_producto;
-    }
-    var ancho = tamano.ancho;
-    var alto = tamano.alto;
-    var ancho_text = `${ancho}mm`;
-    var alto_text = `${alto}mm`;
-    var scale = 1;
-    var scale1 = 1;
-    var scale2 = 1;
-    if (ancho > 150) {
-        scale1 = 150 / ancho;
-    }
-    if (alto > 90) {
-        scale2 = 90 / alto;
-    }
-    if (scale1 > scale2) {
-        scale = scale2;
-    } else {
-        scale = scale1;
-    }
-    $('#contenedor').css('transform', `scale(${scale})`);
-    $('#lienzo1').css('width', ancho_text);
-    $('#lienzo1').css('height', alto_text);
-    $('#lienzo1').css('border', '1px solid black');
-    $('#lienzo1').css('border-radius', '8px');
-    $('#lienzo1').css('background', color);
-    $('#cota1').css('width', ancho_text);
-    $('#cota1').empty().html(ancho_text);
-    $('#cota2').css('height', alto_text);
-    $('#cota2').empty().html(alto_text);
 }
