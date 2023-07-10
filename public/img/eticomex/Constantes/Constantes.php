@@ -1,6 +1,6 @@
 <?php
 
-const IVA = 0.19;
+const IVA = 0.16;
 const PORCENTAJE_SOBRE_CUPO = 0.20;
 const GAP_LATERAL = 3.5;
 const RESPONSABLE = '1013579582';
@@ -350,24 +350,15 @@ define(
     array(
         0 => ['cilindro' => 72, 'desarrollo' => 228.6],
         1 => ['cilindro' => 80, 'desarrollo' => 254],
-        2 => ['cilindro' => 82, 'desarrollo' => 260.35],
-        3 => ['cilindro' => 84, 'desarrollo' => 266.7],
-        4 => ['cilindro' => 88, 'desarrollo' => 279.4],
-        5 => ['cilindro' => 97, 'desarrollo' => 307.975],
-        6 => ['cilindro' => 104, 'desarrollo' => 330.2],
-        7 => ['cilindro' => 109, 'desarrollo' => 346.075],
-        8 => ['cilindro' => 120, 'desarrollo' => 381],
-        9 => ['cilindro' => 128, 'desarrollo' => 306.4],
-        10 => ['cilindro' => 136, 'desarrollo' => 431.8],
-        11 => ['cilindro' => 167, 'desarrollo' => 530.225],
+        2 => ['cilindro' => 84, 'desarrollo' => 266.7],
+        3 => ['cilindro' => 88, 'desarrollo' => 279.4],
+        4 => ['cilindro' => 97, 'desarrollo' => 307.975],
     )
 );
 
 define(
     'HOMOLOGO',
-    array(
-        ['tipo_material' => '13', 'adh' => 2, 'letra' => 'D'],
-    )
+    array()
 );
 
 define(
