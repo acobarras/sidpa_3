@@ -51,7 +51,8 @@
 <script src="<?= CARPETA_LIBRERIAS ?>/ckeditor_4.18.0_full/ckeditor/ckeditor.js"></script>
 <script src="<?= CARPETA_LIBRERIAS ?>/splide-3.6.9/dist/js/splide-extension-auto-scroll.min.js"></script>
 <script src="<?= CARPETA_LIBRERIAS ?>/splide-3.6.9/dist/js/splide.min.js"></script>
-<script src="<?= PUBLICO ?>/js/ConstantesRuta.js"></script>
+<script src="<?= PUBLICO ?>/js/ConstantesRutaSidpa.js"></script>
+<script src="<?= PUBLICO . CARPETA_IMG . PROYECTO ?>/Constantes/ConstantesRuta.js"></script>
 <script src="<?= PUBLICO ?>/js/constantes.js"></script>
 <script src="./public/vistas/inicio/js/menu.js"></script>
 
