@@ -2,7 +2,7 @@
 const PRECIO1_TECNO = 0.8;
 const PRECIO2_TECNO = 0.78;
 const PRECIO3_TECNO = 0.76;
-const PROYECTO = `/eticaribe`; // constante para carpeta de imagenes de la empresa
+// const PROYECTO = `/eticaribe`; // constante para carpeta de imagenes de la empresa
 const EMPRESA = `ETICARIBE`; // constante nombre empresa
 const FAC_SAS = `ETICARIBE`; // constante factura empresa
 const FAC_COL = `N/A`; // constante factura empresa

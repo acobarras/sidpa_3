@@ -20,6 +20,7 @@ class Core
         require './app/negocio/rutas/ruta.php';
         // IMPORTACION DE LIBRERIAS ESPECIFICAS ANTES DE CUALQUIER CONEXION
         // require_once './app/negocio/util/Constantes.php';
+        require_once CARPETA_IMG . PROYECTO . '/Constantes/ConstantesProyecto.php';
         require_once CARPETA_IMG . PROYECTO . '/Constantes/Constantes.php';
 
         $this->cnn = Conexion::conectar();
