@@ -93,13 +93,7 @@
                 </ul>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-sm-block">
                     <li class="nav-item ms-3">
-                        <!-- <?php if ($dias_produccion[0]->fecha == date('Y-m-d')) { ?>
-                            Estamos a: <strong><?= $dias_produccion[0]->cantidad_dias ?></strong> días para blanco.<br>
-                            Estamos a: <strong><?= $dias_produccion[0]->cantidad_color ?></strong> días para color.<br>
-                            Estamos a: <strong><?= $dias_produccion[0]->cantidad_plana ?></strong> días en maquina plana.
-                        <?php } else { ?>
-                            Días no asignados !!
-                        <?php } ?> -->
+                        
                     </li>
                 </ul>
                 <!-- Trm -->

@@ -40,56 +40,58 @@ class Core
                     $url = explode('&', $query_string[1]);
 
                     // $url = explode("/", $uri[0]); //nombre de url
-                    $ruta = explode("/:", $constant['url']); //obtener el nombre
+                    if (!empty($constant['url'])) {
+                        $ruta = explode("/:", $constant['url']); //obtener el nombre
 
-                    if ('/' . $url[0] == $ruta[0]) { //validar que la ruta sea igual
-                        if ($constant['estado'] === 0) {
-                            return header('location:' . RUTA_PRINCIPAL);
-                        }
-                        if ($constant['HTTP'] == $_SERVER['REQUEST_METHOD']) { //validar que el metodo sea igual
-                            if (count($url) > 1) {
+                        if ('/' . $url[0] == $ruta[0]) { //validar que la ruta sea igual
+                            if ($constant['estado'] === 0) {
+                                return header('location:' . RUTA_PRINCIPAL);
+                            }
+                            if ($constant['HTTP'] == $_SERVER['REQUEST_METHOD']) { //validar que el metodo sea igual
+                                if (count($url) > 1) {
 
-                                if (count($ruta) == count($url)) { //validar si ruta tiene mas parametros
-                                    unset($ruta[0]); //eliminar el nomrbe de ruta
-                                    unset($url[0]); //eliminar el nomrbe de ruta
+                                    if (count($ruta) == count($url)) { //validar si ruta tiene mas parametros
+                                        unset($ruta[0]); //eliminar el nomrbe de ruta
+                                        unset($url[0]); //eliminar el nomrbe de ruta
 
-                                    foreach ($url as $key => $valor) {
-                                        $request[$ruta[$key]] = $url[$key];
-                                    }
-                                } else if (count($ruta) < count($url)) {
-                                    unset($ruta[0]); //eliminar el nomrbe de ruta
-                                    if (count($ruta) == 0) {
-                                        $request = '';
+                                        foreach ($url as $key => $valor) {
+                                            $request[$ruta[$key]] = $url[$key];
+                                        }
+                                    } else if (count($ruta) < count($url)) {
+                                        unset($ruta[0]); //eliminar el nomrbe de ruta
+                                        if (count($ruta) == 0) {
+                                            $request = '';
+                                        } else {
+                                            foreach ($ruta as $key => $valor) {
+                                                $request[$valor] = $url[$key];  //asignar valores                              
+                                            }
+                                        }
                                     } else {
-                                        foreach ($ruta as $key => $valor) {
-                                            $request[$valor] = $url[$key];  //asignar valores                              
+
+                                        unset($url[0]); //eliminar el nomrbe de ruta
+                                        unset($ruta[0]);
+                                        foreach ($url as $key => $valor) {
+                                            $request[$ruta[$key]] = $url[$key];
                                         }
                                     }
                                 } else {
-
-                                    unset($url[0]); //eliminar el nomrbe de ruta
-                                    unset($ruta[0]);
-                                    foreach ($url as $key => $valor) {
-                                        $request[$ruta[$key]] = $url[$key];
-                                    }
+                                    $request = '';
                                 }
-                            } else {
-                                $request = '';
-                            }
-                            //instanciar los controladores de metodo GET
-                            $class = '\\MiApp\\negocio\\controladores\\' . $constant['controlador'];
-                            $obj = new $class($this->cnn);
-                            $method = $constant['method'];
-                            $m = (method_exists($obj, $method));
-                            if (!$m) {
-                                http_response_code(500);
-                                echo json_encode(array("Error" => "Error 500 no existe metodo => $method"));
+                                //instanciar los controladores de metodo GET
+                                $class = '\\MiApp\\negocio\\controladores\\' . $constant['controlador'];
+                                $obj = new $class($this->cnn);
+                                $method = $constant['method'];
+                                $m = (method_exists($obj, $method));
+                                if (!$m) {
+                                    http_response_code(500);
+                                    echo json_encode(array("Error" => "Error 500 no existe metodo => $method"));
+                                    return;
+                                }
+                                $obj->$method();
                                 return;
+                            } else {
+                                continue;
                             }
-                            $obj->$method();
-                            return;
-                        } else {
-                            continue;
                         }
                     }
                 } else {
