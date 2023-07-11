@@ -125,11 +125,9 @@ var regresar_productos = function () {
         $('#crear_etiqueta').empty().html(`<i class="fa fa-plus-circle"></i> Crear Producto`);
         $('#codigo_producto').removeClass('precio_etiq');
         $('#avance').removeClass('precio_etiq');
-        $('#muestro_img').empty().html(`<div class="text-center">
-        <button class="btn btn-success d-none" type="submit" id="ver_ficha">
-            <i class="fa fa-plus-circle"></i>Ver Ficha Tecnica
-        </button>
-        </div>`);
+        $('#ver_ficha').attr('data_produ', '');
+        $('#ver_ficha').addClass('d-none');
+        $('#ficha_tec').empty().html();
     });
 }
 
