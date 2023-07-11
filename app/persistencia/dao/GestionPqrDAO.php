@@ -108,12 +108,15 @@ class GestionPqrDAO extends GenericoDAO
 
     public function lista_tabla_pqr($ano)
     {
-        $sql = "SELECT t1.*, t2.nombre_empresa, t3.nombre_estado_pqr, t4.codigo, t5.nombres, t5.apellidos
+        $sql = "SELECT t1.*, t2.nombre_empresa, t3.nombre_estado_pqr, t4.codigo, t4.item, t5.nombres, t5.apellidos, t6.direccion, t6.contacto, t7.descripcion_productos, t8.num_pedido
             FROM gestion_pqr t1
             INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov
             INNER JOIN estados_pqr t3 ON t1.estado = t3.id_estado
             INNER JOIN pedidos_item t4 ON t1.id_pedido_item = t4.id_pedido_item
             INNER JOIN persona t5 ON t1.id_persona = t5.id_persona
+            INNER JOIN direccion t6 ON t1.id_dir_pqr = t6.id_direccion
+            INNER JOIN productos t7 ON t4.codigo = t7.codigo_producto
+            INNER JOIN pedidos t8 ON t4.id_pedido = t8.id_pedido
             WHERE YEAR(t1.fecha_crea) = '$ano'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
