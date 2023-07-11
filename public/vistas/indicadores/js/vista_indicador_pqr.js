@@ -172,6 +172,9 @@ var tabla_general_pqr = function (year) {
                     columns: [
                         { "data": "fecha_crea" },
                         { "data": "num_pqr" },
+                        { "data": "direccion" },
+                        { "data": "contacto" },
+                        { "data": "cantidad_reclama", render: $.fn.dataTable.render.number(',', '.', 0, '') },
                         { "data": "nombre_empresa" },
                         {
                             "data": "asesor", render: function (data, type, row) {
@@ -179,6 +182,12 @@ var tabla_general_pqr = function (year) {
                             }
                         },
                         { "data": "codigo" },
+                        { "data": "descripcion_productos" },
+                        {
+                            "data": "pedido_item", render: function (data, type, row) {
+                                return `${row.num_pedido}-${row.item}`;
+                            }
+                        },
                         { "data": "num_pedido_cambio" },
                         { "data": "codigo_motivo" },
                         { "data": "apertura_pqr" },

@@ -43,9 +43,14 @@
                             <tr>
                                 <th>Fecha Radicación</th>
                                 <th>Numero PQR</th>
+                                <th>Dirección PQR</th>
+                                <th>Contacto</th>
+                                <th>Cantidad PQR</th>
                                 <th>Cliente</th>
                                 <th>Asesor</th>
                                 <th>Codigo Producto</th>
+                                <th>Descripción Producto</th>
+                                <th>Pedido Item</th>
                                 <th>Pedido Cambio</th>
                                 <th>Codigo Motivo</th>
                                 <th>Descripción Motivo</th>
