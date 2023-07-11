@@ -255,7 +255,6 @@ class ProductoControlador extends GenericoControlador
     public function vista_ficha_tec()
     {
         $data = $_POST;
-        print_r($data);
         $this->view(
             'configuracion/vista_ficha_tec',
             [

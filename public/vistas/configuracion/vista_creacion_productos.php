@@ -166,26 +166,22 @@
                                 <label for="nombre_color" class="form-label">Nombre Color</label>
                                 <input autocomplete="off" type="text" class="form-control" name="nombre_color[]" id="nombre_color" multiple />
                             </div>
-                            <!-- BOTON PARA VER FICHA -->
-                            <!-- <div class="col" id="muestro_img">
-                                <div class="text-center">
-                                    <button class="btn btn-success d-none" type="button" data_produ="" id="ver_ficha">
-                                        <i class="fa fa-plus-circle"></i>Ver Ficha Tecnica
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col" id="ficha_tec">
-                            </div> -->
                         </div>
                         <div class="mb-3">
-                            <div class="text-center">
+                            <!-- BOTON PARA VER FICHA -->
+                            <div class="py-3 text-center">
                                 <button class="btn btn-primary" type="submit" id="crear_etiqueta">
                                     <i class="fa fa-plus-circle"></i> Crear Producto
+                                </button>
+                                <button class="btn btn-success d-none" type="button" data_produ="" id="ver_ficha">
+                                    <i class="fa fa-plus-circle"></i>Ver Ficha Tecnica
                                 </button>
                             </div>
                         </div>
                         <br>
                     </form>
+                    <div class="container" id="ficha_tec">
+                    </div>
                 </div>
             </div>
         </div>
