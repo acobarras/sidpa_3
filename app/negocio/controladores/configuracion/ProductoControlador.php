@@ -60,6 +60,19 @@ class ProductoControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $resultado = $this->productosDAO->consultar_productos();
+        $forma = $this->FormaMaterialDAO->consultar_forma_material();
+        foreach ($resultado as $value) {
+            if ($value->id_tipo_articulo == 1) {
+                $forma_material = Validacion::DesgloceCodigo($value->codigo_producto, 1, 1);
+                foreach ($forma as $value_forma) {
+                    if ($value_forma->id_forma == $forma_material) {
+                        $value->forma = $value_forma->nombre_forma;
+                    }
+                }
+            } else {
+                $value->forma = '';
+            }
+        }
         $arreglo["data"] = $resultado;
         echo json_encode($arreglo);
     }

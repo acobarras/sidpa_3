@@ -4,6 +4,7 @@ const FECHA_HOY = document.getElementById('fecha_hoy').value;
 const HORA_HOY = document.getElementById('hora_hoy').value;
 const REG_EXP_NUMEROS = /^([0-9.])*$/; //expresion regular para validar el que solo tenga numeros o puntos.
 const INVENTARIO = 1;
+const PINONES = 3.175;
 const isMobile = {
     Android: function () {
         return navigator.userAgent.match(/Android/i);

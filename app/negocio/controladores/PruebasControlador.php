@@ -57,7 +57,23 @@ class PruebasControlador extends GenericoControlador
     {
         set_time_limit(3200);
         header('Content-Type: application/json');
-        Envio_Correo::pruebas();
+        // CODIGO PARA CAMBIAR EL PRECIO AUTORIZADO EN 0.00
+        // $sql = "SELECT t1.*,t2.* FROM productos t1 
+        // INNER JOIN cliente_producto t2 ON t2.id_producto=t1.id_productos 
+        // WHERE t1.codigo_producto NOT REGEXP '[ABCDEFGHJKL]' AND t1.id_tipo_articulo=1 AND t1.estado_producto!=0";
+        // $sentencia = $this->cnn->prepare($sql);
+        // $sentencia->execute();
+        // $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        // foreach ($resultado as $value) {
+        //     $nuevo_valor = 0.00;
+        //     $envio = [
+        //         'precio_autorizado' => $nuevo_valor,
+        //     ];
+        //     $condicion = 'id_clien_produc =' . $value->id_clien_produc;
+        //     $this->cliente_productoDAO->editar($envio, $condicion);
+        // }
+        // echo 'Proceso Terminado .....';
+        // Envio_Correo::pruebas();
         // COLOCAR EL PRECIO AUTORIZADO DE LA TECNOLOGIA EN 0 
         // $sql = "SELECT * FROM cliente_producto t1
         // INNER JOIN productos t2 ON t2.id_productos=t1.id_producto

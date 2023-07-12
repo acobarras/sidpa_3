@@ -166,6 +166,10 @@
                                 <label for="nombre_color" class="form-label">Nombre Color</label>
                                 <input autocomplete="off" type="text" class="form-control" name="nombre_color[]" id="nombre_color" multiple />
                             </div>
+                            <div class="mb-3 col bobina tecnologia">
+                                <label for="version_ft" class="form-label">Versión Ficha Tec:</label>
+                                <input autocomplete="off" type="number" class="form-control" name="version_ft" id="version_ft" multiple />
+                            </div>
                         </div>
                         <div class="mb-3">
                             <!-- BOTON PARA VER FICHA -->

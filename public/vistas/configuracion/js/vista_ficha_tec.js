@@ -30,7 +30,7 @@ var vista_imagen = function name(data) {
                 <ul class="splide__list">`;
                 imagenes.forEach(element => {
                         res += `<li class="splide__slide">
-                        <img src="${IMG}${PROYECTO}/PDF/ficha_tecnica/${element}" width="100%" alt="">
+                        <img src="${IMG}${PROYECTO}/PDF/ficha_tecnica/${element}" style="max-width:100%;max-height:600px" alt="">
                     </li>`;
                 });
                 res += `</ul>
@@ -52,19 +52,19 @@ var vista_imagen = function name(data) {
                     <tbody>
                         <tr>
                             <th class="py-0">referencia:</th>
-                            <th id="referencia" class="py-0" colspan="3">Cilindro de Impresión y/o Troquelado:</th>
+                            <th id="referencia" class="py-0" colspan="3"></th>
                         </tr>
                         <tr>
                             <th class="py-0">Versión:</th>
-                            <td id="version" class="py-0">01</td>
+                            <td id="version" class="py-0"></td>
                             <th class="py-0">Forma:</th>
-                            <td id="forma" class="py-0">Rectangular</td>
+                            <td id="forma" class="py-0"></td>
                         </tr>
                         <tr>
                             <th class="py-0">Dimensión:</th>
-                            <td id="dimension" class="py-0">100,5X105,4</td>
+                            <td id="dimension" class="py-0"></td>
                             <th class="py-0">Codigo:</th>
-                            <td id="codigo" class="py-0">100X100-1011A00001</td>
+                            <td id="codigo" class="py-0"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -73,21 +73,21 @@ var vista_imagen = function name(data) {
                     <tbody>
                         <tr>
                             <th class="py-0">Cavidades:</th>
-                            <td id="cavidades" class="py-0">1</td>
-                            <th class="py-0" colspan="2">Cilindro de Impresión y/o Troquelado:</th>
+                            <td id="cavidades" class="py-0"></td>
+                            <th class="py-0" colspan="2"></th>
                         </tr>
                         <tr>
                             <th class="py-0">Repeticiones:</th>
-                            <td id="repeticiones" class="py-0">4</td>
+                            <td id="repeticiones" class="py-0"></td>
                             <th class="py-0">Dientes:</th>
-                            <td id="dientes" class="py-0">72</td>
+                            <td id="dientes" class="py-0"></td>
                         </tr>
                     </tbody>
                 </table>
             </div> 
             <div class="col-3 px-0">
                 <div class="text-center degradado_sidpa" style="border-radius: 0px 0px 0px 0px;">TINTAS</div>
-                <div class="row row-cols-2 py-2" id="colores_tintas">`;
+                <div class="row row-cols-2 py-2">`;
         if (data.nombre_color != '' && data.color_producto != '') {
                 var color = data.nombre_color.split(",");
                 var cod_color = data.color_producto.split(",");
@@ -115,12 +115,13 @@ var vista_imagen = function name(data) {
         }
         res += `<div class="col-4 ps-0 border-dark border-start">
                 <div class="text-center degradado_sidpa" style="border-radius: 0px 7px 0px 0px;">ACABADOS ETIQUETA</div>
-                <p id="acabados" class="my-0 mx-0 px-2" style="text-align: justify;">como podemos ver este texto deberia llegar a una longitud de hasta 100 caracteres para poder determinar si no se sale de lo demarcado</p>
+                <p id="acabados" class="my-0 mx-0 px-2" style="text-align: justify;"></p>
                 <div class="text-center degradado_sidpa" style="border-radius: 0px 0px 0px 0px;">OBSERVACIONES</div>
                 <p id="observaciones" class="my-0 mx-0 px-2" style="text-align: justify;"></p>
         </div>`;
         setTimeout(function () {
                 dibujo(data);
+                cargar_ficha(data);
         }, 1000);
         return res;
 }
@@ -160,4 +161,21 @@ var dibujo = function (data) {
         $('#cota1').empty().html(ancho_text);
         $('#cota2').css('height', alto_text);
         $('#cota2').empty().html(alto_text);
+}
+
+var cargar_ficha = function (data) {
+        var magnetico = parseFloat(data.magnetico);
+        var avance = parseFloat(data.avance);
+        var repeticiones = (PINONES * magnetico) / avance;
+        repeticiones = redondear(repeticiones, 0);
+        $('#dimension').empty().html(data.tamano);
+        $('#codigo').empty().html(data.codigo_producto);
+        $('#cavidades').empty().html(data.cav_montaje);
+        $('#acabados').empty().html(data.acabados_ficha);
+        $('#dientes').empty().html(data.magnetico);
+        $('#referencia').empty().html(data.descripcion_productos);
+        $('#repeticiones').empty().html(repeticiones);
+        $('#forma').empty().html(data.forma);
+        $('#version').empty().html(data.version_ft);
+        $('#observaciones').empty().html(data);
 }
