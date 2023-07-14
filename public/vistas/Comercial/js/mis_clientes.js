@@ -156,13 +156,14 @@ var tabla_ver_producto = function (data) {
                 <th>Precio Autorizado</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <br><br><br>
-</div>`;
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                </table>
+                <br><br><br>
+                </div>`;
+    // <th>Ficha Tecnica</th>
     return respu;
 }
 
@@ -206,7 +207,13 @@ var ver_productos_cliente = function (tbody, table) {
                         "defaultContent": "<center>\n\
                         <button type='button' class='btn btn-danger btn-sm eliminar_pro_cli'> <span class='fa fa-times'></span></button>\n\
                         <center>"
-                    }
+                    },
+                    // {
+                    //     data: "boton1", render: function (data, type, row) {
+                    //         boton = `<button class="btn btn-info ver_ficha" data_produ="${row.codigo_producto}" title="Ficha Tecnica"><i class="fas fa-eye"></i></button>`;
+                    //         return boton;
+                    //     }
+                    // }
                 ],
             });
             if (idx === -1) {
@@ -215,12 +222,33 @@ var ver_productos_cliente = function (tbody, table) {
             /*cargar funciones*/
             modificar_pro_cli(`#dt_ver_producto${data.id_cli_prov}`, tabla_ver_p);
             eliminar_pro_cli(`#dt_ver_producto${data.id_cli_prov}`, tabla_ver_p);
+            // ver_ficha(`#dt_ver_producto${data.id_cli_prov} tbody`, tabla_ver_p);
 
         }
     });
 }
-
-
+var ver_ficha = function (tbody, table) {
+    $(tbody).on('click', `tr button.ver_ficha`, function (e) {
+        var codigo = $(this).attr('data_produ');
+        var data = table.row($(this).parents("tr")).data();
+        var area = 2; //EL AREA 1 ES PRODUCCION Y EL 2 SERIAN ASESORES
+        data['area'] = area;
+        if (data.ficha_tecnica_produc != null) {
+            $('#ficha').modal('show');
+            $.post(`${PATH_NAME}/configuracion/vista_ficha_tec`,
+                {
+                    datos: data,
+                },
+                function (respu) {
+                    $('#ficha_tec').empty().html(respu);
+                });
+            $()
+        } else {
+            res = alertify.error('Este producto no posee ficha tecnica digital, solicite la ficha tecnica impresa para su uso.');
+            return;
+        }
+    })
+}
 
 var detailRows = [];
 
@@ -1205,7 +1233,16 @@ var carga_tabla_productos = function (id_cli_prov) {
                 { "data": "codigo_producto" },
                 { "data": "descripcion_productos" },
                 { "data": "cantidad_requerida" },
-                { "data": "ficha_tecnica" },
+                {
+                    "render": function (data, type, row) {
+                        if (row.ficha_tecnica_produc != null) {
+                            return row.ficha_tecnica_produc;
+                        } else {
+                            return row.ficha_tecnica;
+                        }
+                    }
+                },
+                // { "data": "ficha_tecnica" },
                 { "data": "nombre_r_embobinado" },
                 { "data": "nombre_core" },
                 { "data": "presentacion" },

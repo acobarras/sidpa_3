@@ -139,7 +139,7 @@ function format(d) {
                 <th>Core</th>
                 <th>Rollo X/paq</th>
                 <th>Sen/Emb</th>
-                <th>Opción</th>
+                <th>Opciones</th>
             </tr>	
         </thead>
         <tbody>
@@ -155,7 +155,6 @@ var consulta_seguimiento = function (tbody, table) {
     $('.ver_op').on('click', function () {
         var dato = $(this).attr('data-ver');
         var data_row = $(`#tabla_maquina_produccion${dato}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
-        console.log(data_row);
         var tr = $(this).closest('tr');
         var row = $(`#tabla_maquina_produccion${dato}`).DataTable().row(tr);
         var idx = $.inArray(tr.attr('id'), detailRows);
@@ -196,6 +195,7 @@ var consulta_seguimiento = function (tbody, table) {
                             if (data_row.estado_item_producir == 9 && row.id_estado_item_pedido == 10) {
                                 boton = `<button class="btn btn-primary btn-circle cambiar_estado_item" data-item="${row.id_pedido_item}" title="Listo"><i class="fa fa-clipboard-check"></i></button>`;
                             }
+                            boton = `<button class="btn btn-success ver_ficha" data_produ="${row.codigo}" title="Ficha Tecnica"><i class="fas fa-eye"></i></button>`;
                             return boton;
                         }
                     }
@@ -205,8 +205,39 @@ var consulta_seguimiento = function (tbody, table) {
                 detailRows.push(tr.attr('id'));
             }
             cambiar_estado_item(`#tabla-item-op${data_row.id_item_producir} tbody`, tabla_2);
+            ver_ficha(`#tabla-item-op${data_row.id_item_producir} tbody`, tabla_2);
         }
     });
+}
+
+var ver_ficha = function (tbody, table) {
+    $(tbody).on('click', `tr button.ver_ficha`, function (e) {
+        var codigo = $(this).attr('data_produ');
+        var data = table.row($(this).parents("tr")).data();
+        var observacion = data.observaciones_ft;
+        var area = 1; //EL AREA 1 ES PRODUCCION Y EL 2 SERIAN ASESORES
+        $.ajax({
+            url: `${PATH_NAME}/configuracion/consultar_cod_producto`,
+            type: 'POST',
+            data: { codigo, area, observacion },
+            success: function (res) {
+                if (res[0].ficha_tecnica_produc != null) {
+                    $('#ficha').modal('show');
+                    $.post(`${PATH_NAME}/configuracion/vista_ficha_tec`,
+                        {
+                            datos: res[0],
+                        },
+                        function (respu) {
+                            $('#ficha_tec').empty().html(respu);
+                        });
+                    $()
+                } else {
+                    res = alertify.error('Este producto no posee ficha tecnica digital, solicite la ficha tecnica impresa para su uso.');
+                    return;
+                }
+            }
+        });
+    })
 }
 
 var cambiar_estado_item = function (tbody, table) {

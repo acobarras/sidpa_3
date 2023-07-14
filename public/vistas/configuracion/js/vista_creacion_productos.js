@@ -27,6 +27,7 @@ var cargar_tabla_productos = function () {
             { "data": "nombre_articulo" },
             { "data": "tamano" },
             { "data": "descripcion_productos" },
+            { "data": "ficha_tecnica_produc" },
             {
                 "data": "estado_producto",
                 "searchable": false,

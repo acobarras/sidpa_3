@@ -63,6 +63,10 @@ class ProductoControlador extends GenericoControlador
         $forma = $this->FormaMaterialDAO->consultar_forma_material();
         foreach ($resultado as $value) {
             if ($value->id_tipo_articulo == 1) {
+                $fecha = $value->fecha_crea;
+                $nueva_fecha = date("d/m/Y", strtotime($fecha));
+                $value->fecha_crea = $nueva_fecha;
+                $value->observaciones_ft = '';
                 $forma_material = Validacion::DesgloceCodigo($value->codigo_producto, 1, 1);
                 foreach ($forma as $value_forma) {
                     if ($value_forma->id_forma == $forma_material) {
@@ -274,5 +278,38 @@ class ProductoControlador extends GenericoControlador
                 'data' => $data,
             ]
         );
+    }
+
+    public function consultar_cod_producto()
+    {
+        header('Content-Type:application/json');
+        $codigo = $_POST['codigo'];
+        $area = $_POST['area'];
+        $observaciones_ft = $_POST['observacion'];
+        $producto = $this->productosDAO->ConsultaProductoCodigo($codigo);
+        $forma = $this->FormaMaterialDAO->consultar_forma_material();
+        foreach ($producto as $value) {
+            if ($value->id_tipo_articulo == 1) {
+                $fecha = $value->fecha_crea;
+                $nueva_fecha = date("d/m/Y", strtotime($fecha));
+                $value->fecha_crea = $nueva_fecha;
+                $value->observaciones_ft = $observaciones_ft;
+                $forma_material = Validacion::DesgloceCodigo($value->codigo_producto, 1, 1);
+                foreach ($forma as $value_forma) {
+                    if ($value_forma->id_forma == $forma_material) {
+                        $value->forma = $value_forma->nombre_forma;
+                    }
+                }
+            } else {
+                $value->forma = '';
+            }
+        }
+        if ($area == 1) {
+            echo json_encode($producto);
+            return;
+        } else {
+            echo ('hola');
+        }
+        // print_r($producto);
     }
 }

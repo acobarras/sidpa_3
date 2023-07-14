@@ -1,6 +1,7 @@
 $(document).ready(function () {
         mostrar();
 });
+
 var mostrar = function () {
         var data = JSON.parse($('#data_producto').val());
         var imagenes = vista_imagen(data['datos']);
@@ -10,16 +11,14 @@ var mostrar = function () {
         }
 }
 
-
-
 var vista_imagen = function name(data) {
         var res = '';
         var contador = 4;
         res = `<div class="position-relative">
     <img src="${IMG}${PROYECTO}/PDF/ficha_tecnica/ficha_encabezado.png" width="100%" alt="">
-    <div class="position-absolute top-50 start-50" style="font-size: x-small;line-height: 0; margin-left: 20.5%; margin-top: -6px; color: #001689;">
-    <p>No: 004924</p>
-    <p>Fecha: 09-Jun-2023</p>
+    <div class="position-absolute top-50 start-50" style="font-size: 90%;;line-height: 0; margin-left: 20.5%; margin-top: -6px; color: #001689;">
+    <p>No: ${data.ficha_tecnica_produc}</p>
+    <p>Fecha: ${data.fecha_crea}</p>
     </div>
     </div>`;
 
@@ -74,7 +73,7 @@ var vista_imagen = function name(data) {
                         <tr>
                             <th class="py-0">Cavidades:</th>
                             <td id="cavidades" class="py-0"></td>
-                            <th class="py-0" colspan="2"></th>
+                            <th class="py-0" colspan="2">Cilindro de Impresión y/o Troquelado</th>
                         </tr>
                         <tr>
                             <th class="py-0">Repeticiones:</th>
@@ -86,7 +85,7 @@ var vista_imagen = function name(data) {
                 </table>
             </div> 
             <div class="col-3 px-0">
-                <div class="text-center degradado_sidpa" style="border-radius: 0px 0px 0px 0px;">TINTAS</div>
+                <div class="text-center degradado_sidpa" style="border-left: 1px solid white;border-right: 1px solid white;">TINTAS</div>
                 <div class="row row-cols-2 py-2">`;
         if (data.nombre_color != '' && data.color_producto != '') {
                 var color = data.nombre_color.split(",");
@@ -107,18 +106,23 @@ var vista_imagen = function name(data) {
         } else {
                 res += `<div class="col">
                                 <p class="my-0 mx-0 px-2">
-                                    <span class="ovalo_ficha_tec px-2" style="background:#ffffff;">&nbsp;</span>&nbsp;N/A
+                                    <span class="ovalo_ficha_tec px-2" style="background:#ffffff;">&nbsp;</span>&nbsp;Blanca
                                 </p>
                         </div>
                         </div>
                 </div>`;
         }
+        if (data.acabados_ficha == '') {
+                var diseno = "my-4 mx-0 px-2";
+        } else {
+                var diseno = "my-0 mx-0 px-2";
+        }
         res += `<div class="col-4 ps-0 border-dark border-start">
-                <div class="text-center degradado_sidpa" style="border-radius: 0px 7px 0px 0px;">ACABADOS ETIQUETA</div>
-                <p id="acabados" class="my-0 mx-0 px-2" style="text-align: justify;"></p>
-                <div class="text-center degradado_sidpa" style="border-radius: 0px 0px 0px 0px;">OBSERVACIONES</div>
-                <p id="observaciones" class="my-0 mx-0 px-2" style="text-align: justify;"></p>
-        </div>`;
+                        <div class="text-center degradado_sidpa" style="border-radius: 0px 7px 0px 0px;">ACABADOS ETIQUETA</div>
+                                <p id="acabados" class="${diseno}" style="text-align: justify;"></p>
+                        <div class="text-center degradado_sidpa" style="border-radius: 0px 0px 0px 0px;">OBSERVACIONES</div>
+                                <p id="observaciones_ft" class="my-0 mx-0 px-2" style="text-align: justify;color:red;font-weight: bold;"></p>
+                </div>`;
         setTimeout(function () {
                 dibujo(data);
                 cargar_ficha(data);
@@ -177,5 +181,5 @@ var cargar_ficha = function (data) {
         $('#repeticiones').empty().html(repeticiones);
         $('#forma').empty().html(data.forma);
         $('#version').empty().html(data.version_ft);
-        $('#observaciones').empty().html(data);
+        $('#observaciones_ft').empty().html(data.observaciones_ft);
 }

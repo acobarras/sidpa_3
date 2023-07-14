@@ -844,14 +844,14 @@
                             <label for="presentacion" class="col-form-label">Rollos ó Paquetes Por:</label>
                             <input class="form-control" type="text" name="presentacion" id="presentacion">
                         </div>
-                        <div class="form-group col-md-6">
+                        <!-- <div class="form-group col-md-6">
                             <label for="ficha_tecnica" class="col-form-label">Ficha Tecnica:</label>
                             <input class="form-control" type="text" name="ficha_tecnica" id="ficha_tecnica">
+                        </div> -->
+                        <div class="form-group col-md-6">
+                            <label for="cantidad_minima" class="col-form-label">Cantidad Cotizada:</label>
+                            <input class="form-control" type="number" name="cantidad_minima" id="cantidad_minima">
                         </div>
-                    </div>
-                    <div class="form-group ">
-                        <label for="cantidad_minima" class="col-form-label">Cantidad Cotizada:</label>
-                        <input class="form-control" type="number" name="cantidad_minima" id="cantidad_minima">
                     </div>
                     <div class="form-group ">
                         <label for="precio_venta" class="col-form-label">Precio Venta:(Ejemplo:[3,5] [1000] )</label>
@@ -956,6 +956,21 @@
                     <button type="submit" class="btn btn-primary" id="modificar_pro_client" disabled>Modificar</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<!-- MODAL FICHA TECNICA -->
+<div class="modal fade" id="ficha" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ficha_tecnica" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="ficha_tecnica">Ficha Tecnica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container" id="ficha_tec">
+                </div>
+            </div>
         </div>
     </div>
 </div>

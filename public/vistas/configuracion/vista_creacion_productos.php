@@ -25,6 +25,7 @@
                                 <th>Clase Artículo</th>
                                 <th>Tamaño</th>
                                 <th>Descripción Productos</th>
+                                <th>Ficha Tecnica</th>
                                 <th>Estado</th>
                                 <th>Opciónes</th>
                             </thead>

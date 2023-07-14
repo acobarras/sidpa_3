@@ -201,7 +201,7 @@ var generar_cambio_maquina_embo = function () {
 
 function format(d) {
     var respu = `
-    < div class="modal-header" >
+    <div class="modal-header">
         <h3 class="modal-title text-danger" style="text-align: center;" id="exampleModalLabel">ITEMS : <span style="color: #3932a9"></span></h3>
 	</div >
     <table class="table table-bordered table-responsive table-hover tabla_edita" cellspacing="0" width="100%" id="tabla-item-op${d}">
@@ -218,6 +218,7 @@ function format(d) {
                 <th>Core</th>
                 <th>Rollo X/paq</th>
                 <th>Sen/Emb</th>
+                <th>Opciones</th>
             </tr>	
         </thead>
         <tbody>
@@ -267,13 +268,50 @@ var consulta_seguimiento = function (tbody, table) {
                     { data: "nombre_core" },
                     { data: "cant_x", render: $.fn.dataTable.render.number('.', ',', 0, '') },
                     { data: "nombre_r_embobinado" },
+                    {
+                        data: "boton1", render: function (data, type, row) {
+                            boton = `<button class="btn btn-success ver_ficha" data_produ="${row.codigo}" title="Ficha Tecnica"><i class="fas fa-eye"></i></button>`;
+                            return boton;
+                        }
+                    }
                 ]
             });
             if (idx === -1) {
                 detailRows.push(tr.attr('id'));
             }
+            ver_ficha(`#tabla-item-op${data_row.id_maquina} tbody`, tabla_2);
         }
     });
+}
+
+var ver_ficha = function (tbody, table) {
+    $(tbody).on('click', `tr button.ver_ficha`, function (e) {
+        var codigo = $(this).attr('data_produ');
+        var data = table.row($(this).parents("tr")).data();
+        var observacion = data.observaciones_ft;
+        var area = 1; //EL AREA 1 ES PRODUCCION Y EL 2 SERIAN ASESORES
+        $.ajax({
+            url: `${PATH_NAME}/configuracion/consultar_cod_producto`,
+            type: 'POST',
+            data: { codigo, area, observacion },
+            success: function (res) {
+                if (res[0].ficha_tecnica_produc != null) {
+                    $('#ficha').modal('show');
+                    $.post(`${PATH_NAME}/configuracion/vista_ficha_tec`,
+                        {
+                            datos: res[0],
+                        },
+                        function (respu) {
+                            $('#ficha_tec').empty().html(respu);
+                        });
+                    $()
+                } else {
+                    res = alertify.error('Este producto no posee ficha tecnica digital, solicite la ficha tecnica impresa para su uso.');
+                    return;
+                }
+            }
+        });
+    })
 }
 
 var boton_inicio_produccion = function () {
@@ -621,7 +659,7 @@ var grabar_reporte_etiquetas = function () {
         var obj_inicial = $('#grabar_reporte_etiquetas').html();
         btn_procesando('grabar_reporte_etiquetas');
         data_reporte[0].datos_etiquetas_embo = envio_troquelador;
-        reportar_embobinado_etiquetas(data_envio, data_reporte, id_persona_sesion, data_maquina,obj_inicial);
+        reportar_embobinado_etiquetas(data_envio, data_reporte, id_persona_sesion, data_maquina, obj_inicial);
     });
 }
 

@@ -67,6 +67,22 @@
     </div>
 </div>
 
+<!-- MODAL FICHA TECNICA -->
+<div class="modal fade" id="ficha" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ficha_tecnica" aria-hidden="true">
+    <div class="modal-dialog modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="ficha_tecnica">Ficha Tecnica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container" id="ficha_tec">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal para Reasignar la maquina de Produccion -->
 
 <div class="modal fade" id="CambioMaquinaModal" aria-labelledby="CambioMaquinaModalLabel" aria-hidden="true">
@@ -300,7 +316,7 @@
         </table>
         <br>
         <div class="mb-3 text-center">
-            <button type="button" class="btn btn-primary" id="reportes_embobinado" value=""  data-bs-toggle="" data-bs-target="#DatosItemPModal">Grabar</button>
+            <button type="button" class="btn btn-primary" id="reportes_embobinado" value="" data-bs-toggle="" data-bs-target="#DatosItemPModal">Grabar</button>
         </div>
         <br>
     </div>
@@ -401,7 +417,7 @@
     </div>
 </div>
 
- <!-- Modal para los reportes del embobinado por operario de produccion -->
+<!-- Modal para los reportes del embobinado por operario de produccion -->
 
 <div class="modal fade" id="DatosItemPModal" aria-labelledby="DatosItemPModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
