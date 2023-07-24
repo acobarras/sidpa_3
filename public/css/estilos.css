@@ -378,3 +378,11 @@
         /* background: #5cb85c; */
         border: 1px solid black;
     }
+
+    #chatSidpa {
+        height: 497px;
+        z-index: 100;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        margin-right: 13px;
+    }

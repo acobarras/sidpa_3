@@ -39,7 +39,7 @@
 </head>
 
 <body>
-
+<?php include PUBLICO . '/vistas/inicio/chat_sidpa.php'; ?>
     <div>
         <input type="hidden" id="fecha_hoy" value="<?= date('Y-m-d'); ?>"><!-- Se usa este input para tener la fecha del dia actual -->
         <input type="hidden" id="hora_hoy" value="<?= date("H:i:s"); ?>"><!-- Se usa este input para tener la hora del dia actual -->
@@ -93,7 +93,7 @@
                 </ul>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-sm-block">
                     <li class="nav-item ms-3">
-                        
+
                     </li>
                 </ul>
                 <!-- Trm -->

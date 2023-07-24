@@ -1,7 +1,4 @@
 <?php
-// PROYECTO
-
-use Svg\Tag\Anchor;
 
 define('RUTA_PRINCIPAL', '/sidpa_3');
 define('MODO_PRUEBA', true);
@@ -13,6 +10,6 @@ define('CARPETA_IMG', 'public/img');
 define('CARPETA_CSS', 'public/css');
 define('PUBLICO', './public');
 define('ANO', date('Y')); //AÑO 
-// define('PROYECTO', '/acobarras');
+define('PROYECTO', '/acobarras');
 // define('PROYECTO', '/eticaribe');
-define('PROYECTO', '/eticomex');
+// define('PROYECTO', '/eticomex');
