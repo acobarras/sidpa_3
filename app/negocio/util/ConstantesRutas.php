@@ -1,7 +1,4 @@
 <?php
-// PROYECTO
-
-use Svg\Tag\Anchor;
 
 define('RUTA_PRINCIPAL', '/sidpa_3');
 define('MODO_PRUEBA', true);
