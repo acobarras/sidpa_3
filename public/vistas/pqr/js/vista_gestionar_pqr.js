@@ -389,14 +389,14 @@ var analisis_mercancia = function () {
         var data = $('#tabla_gestion_pqr').DataTable().row($(this).parents("tr")).data();
         console.log(data);
         window.showAlert = function () {
-            alertify.alert('Ejecucion de la Mercancia', 'La mercancia necesita de un reproceso.  <a href="javascript:showReproceso();" class="btn btn-success">Si</a>  <a href="javascript:showConfirm();" class="btn btn-danger">No</a>').set({
+            alertify.alert('Ejecucion de la Mercancia', 'La mercancia devuelta por el cliente necesita de un reproceso. (Si cambia la referencia selecione No)  <a href="javascript:showReproceso();" class="btn btn-success">Si</a>  <a href="javascript:showConfirm();" class="btn btn-danger">No</a>').set({
                 'label': 'Cancelar',
                 'transitionOff': true
             });
         }
         window.showConfirm = function () {
             alertify.alert().close();
-            alertify.confirm('Ejecucion de la Mercancia', 'La mercancia necesita ser producida de nuevo.',
+            alertify.confirm('Ejecucion de la Mercancia', 'La mercancía necesita ser producida de nuevo o se debe cambiar con producto en inventario.',
                 function () {
                     envio_analisis_mercancia(data, 1, 8, 72);
                 },
