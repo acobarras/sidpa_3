@@ -88,7 +88,7 @@ class ConsCotizacionDAO extends GenericoDAO
         $respu = 'PQR-' . $letra_mes . $num_pqr . '-' . $ano;
         $creado = $this->GestionPqrDAO->valida_numero_pqr($respu);
         $retorno = '';
-        if (!empty($creado)) {
+        if (empty($creado)) {
             $retorno = $respu;
             $edita_numero = ['numero_guardado' => $canbio_numero];
             $condicion = 'id_consecutivo = 14';

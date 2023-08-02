@@ -97,7 +97,7 @@ var obtener_data_editar_persona = function (tbody, table) {
             elegidos = data.comite.split(",");
         }
         rellenar_formulario(data);
-        $('#imagen_persona_modifi').html(`<div id="lolo"><img src="${IMG}/fotos_persona/${data.num_documento + '.jpg'}" width="170" height="250"></div>`);
+        $('#imagen_persona_modifi').html(`<div id="lolo"><img src="${IMG}${PROYECTO}/fotos_persona/${data.num_documento + '.jpg'}" width="170" height="250"></div>`);
         carga_archivos('foto_persona_modifi', 'imagen_persona_modifi');
         $('#comite_modifi').val(elegidos).trigger('change');
 

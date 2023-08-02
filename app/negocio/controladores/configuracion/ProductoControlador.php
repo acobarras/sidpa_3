@@ -304,12 +304,30 @@ class ProductoControlador extends GenericoControlador
                 $value->forma = '';
             }
         }
-        if ($area == 1) {
-            echo json_encode($producto);
-            return;
-        } else {
-            echo ('hola');
+        echo json_encode($producto);
+        return;
+    }
+    public function eliminar_imagen_ficha()
+    {
+        header('Content-Type:application/json');
+        $nombre = $_POST['nombre'];
+        $id_product = $_POST['id_producto'];
+        $imagenes = $this->productosDAO->consulta_fichas($id_product);
+        $array = explode(",", $imagenes[0]->img_ficha);
+        foreach ($array as $key => $value) {
+            if ($nombre == $value) {
+                $ubi = '/PDF/ficha_tecnica';
+                unset($array[$key]);
+                Archivo::eliminar_imagen($ubi, $nombre);
+            }
         }
-        // print_r($producto);
+        $data_imagen = implode(",", $array);
+        $edita = [
+            'img_ficha' => $data_imagen,
+        ];
+        $condicion = 'id_productos =' . $id_product;
+        $resultado = $this->productosDAO->editar($edita, $condicion);
+        echo json_encode($resultado);
+        return;
     }
 }

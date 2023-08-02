@@ -203,4 +203,13 @@ class productosDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function consulta_fichas($id_product)
+    {
+        $sql = "SELECT t1.img_ficha FROM productos t1
+            WHERE t1.id_productos=$id_product";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

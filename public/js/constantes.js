@@ -140,6 +140,15 @@ const btn_procesando = function (id_boton, obj_inicial, posicion = '') {
         $(`#${id_boton}`).html(obj_inicial);
     }
 }
+const btn_cargando = function (id_boton, obj_inicial, posicion = '') {
+    if (posicion == '') {
+        $(`#${id_boton}`).attr("disabled", true);
+        $(`#${id_boton}`).html(`<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>`);
+    } else {
+        $(`#${id_boton}`).attr("disabled", false);
+        $(`#${id_boton}`).html(obj_inicial);
+    }
+}
 const btn_procesando_tabla = function (id_boton, obj_inicial, posicion = '') {
     if (posicion == '') {
         $(`#${id_boton}`).attr("disabled", true);

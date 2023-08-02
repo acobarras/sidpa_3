@@ -5,16 +5,14 @@ $(document).ready(function () {
     elimina_espacio('codigo_producto', 'span_codigo_CE');
     cambiar_estado();
     obtener_data_editar();
-    costo_etiq();
     calculo_precios_tecno();
     crear_codigo_etiqueta();
     regresar_productos();
     agrega_edita_productos();
     ver_ficha();
+    costo_etiq();
     $('#agrega-tab').on('click', function () {
         $('#clase_articulo').change();
-        $('#codigo_producto').addClass('precio_etiq');
-        $('#avance').addClass('precio_etiq');
     });
 });
 
@@ -124,10 +122,9 @@ var regresar_productos = function () {
         $('#clase_articulo').val(2).change();
         $("#img_ficha").val('0');
         $('#crear_etiqueta').empty().html(`<i class="fa fa-plus-circle"></i> Crear Producto`);
-        $('#codigo_producto').removeClass('precio_etiq');
-        $('#avance').removeClass('precio_etiq');
         $('#ver_ficha').attr('data_produ', '');
         $('#ver_ficha').addClass('d-none');
+        $('#elimina_img').addClass('d-none');
         $('#ficha_tec').empty().html();
     });
 }
@@ -140,21 +137,82 @@ var obtener_data_editar = function () {
         $('#crear_etiqueta').empty().html(`<i class="fa fa-plus-circle"></i> Modificar Producto`);
         $('#clase_articulo').val(data.id_clase_articulo).change();
         $('label[for=clase_articulo]').empty().html('Producto A Modificar :');
-        $('#ver_ficha').removeClass('d-none');
-        $('#ver_ficha').attr('data_produ', JSON.stringify(data));
-        rellenarFormulario(data);
-        $('#codigo_producto').addClass('precio_etiq');
-        $('#avance').addClass('precio_etiq');
+        if (data.img_ficha != '' && data.img_ficha != null) {
+            cargar_ficha_elimina(data);
+        }
+        if (data.id_clase_articulo == 2) {
+            $('#ver_ficha').removeClass('d-none');
+            $('#elimina_img').removeClass('d-none');
+            $('#ver_ficha').attr('data_produ', JSON.stringify(data));
+        }
+        $.each(data, function (name, value) {
+            $(`#${name}`).val(value);
+        });
+        $('#agrega-tab').click();
         setTimeout(function () {
             $('#id_tipo_articulo').val(data.id_tipo_articulo).change();
         }, 1000);
-        $('#agrega-tab').click();
     });
+}
+var cargar_ficha_elimina = function (data) {
+    var array_ficha = [];
+    var html = '';
+    var conteo = 0;
+    if (data.img_ficha.search(',') != '') {
+        array_ficha = data.img_ficha.split(',');
+    } else {
+        array_ficha.push(data.img_ficha);
+    }
+    array_ficha.forEach(element => {
+        conteo = conteo + 1;
+        html += `<div class="row">
+                    <div class="col-10 text-start">
+                        <h3 id="elimina${conteo}">${element}</h3>
+                    </div>
+                    <div class="col-2 text-end">
+                        <h3><i style="color: red;" id="boton${conteo}" data-id="${conteo}" id-produc="${data.id_productos}" class="eliminar_imagen fas fa-trash"></i></h3>
+                    </div>
+                </div>
+                <hr>`;
+    });
+    $('#modal_elimina').html(html);
+    eliminar_imagen();
+};
+
+var eliminar_imagen = function () {
+    $('.eliminar_imagen').click(function (e) {
+        e.preventDefault();
+        var data_elimina = $(this).attr('data-id');
+        var obj_inicial = $(`#boton${data_elimina}`).html();
+        var id_producto = $(this).attr('id-produc');
+        var nombre = $(`#elimina${data_elimina}`).text();
+        btn_cargando(`boton${data_elimina}`);
+        $.ajax({
+            "url": `${PATH_NAME}/configuracion/eliminar_imagen_ficha`,
+            "type": 'POST',
+            "data": { id_producto, nombre },
+            "success": function (respuesta) {
+                if (respuesta == 1) {
+                    $("#tabla_productos").DataTable().ajax.reload(function () {
+                        alertify.success('Se elimino la imagen correctamente');
+                        $('#home-tab').click();
+                        $('#img_ficha_elimina').modal("hide");
+                        btn_cargando(`boton${data_elimina}`, obj_inicial, 1);
+                    });
+                } else {
+                    alertify.error('Algo paso');
+                }
+            }
+        });
+    });
+
 }
 
 var ver_ficha = function () {
     $('#ver_ficha').on('click', function () {
         var data = JSON.parse($('#ver_ficha').attr('data_produ'));
+        var area = 1;
+        data['area'] = area;
         $.post(`${PATH_NAME}/configuracion/vista_ficha_tec`,
             {
                 datos: data,
@@ -167,7 +225,8 @@ var ver_ficha = function () {
 }
 
 var costo_etiq = function () {
-    $('.precio_etiq').on('change', function () {
+    $('.precio_etiq').on('change', function (e) {
+        e.preventDefault();
         var clase_articulo = $('#clase_articulo').val();
         var codigo = $('#codigo_producto').val();
         var avance = $('#avance').val();
@@ -175,33 +234,29 @@ var costo_etiq = function () {
             avance = 0;
         }
         if (clase_articulo == 2) {
-            costo_etiqueta(codigo, avance);
-        }
-    });
-}
-
-var costo_etiqueta = function (codigo, avance) {
-    $.ajax({
-        "url": `${PATH_NAME}/configuracion/valida_precio_codigo`,
-        "type": 'POST',
-        "data": { codigo, avance },
-        "success": function (respu) {
-            if (respu.status == -1) {
-                $('#codigo_producto').focus();
-                alertify.error('No hay precio de materia prima para poder crear el codigo');
-            } else {
-                if (avance == 0) {
-                    $('#magnetico').val(respu.magnetico);
-                    $('#avance').val(respu.avance);
-                    $('#tamano').val(respu.tamano);
-                } else {
-                    $('#magnetico').val('');
+            $.ajax({
+                "url": `${PATH_NAME}/configuracion/valida_precio_codigo`,
+                "type": 'POST',
+                "data": { codigo, avance },
+                "success": function (respu) {
+                    if (respu.status == -1) {
+                        $('#codigo_producto').focus();
+                        alertify.error('No hay precio de materia prima para poder crear el codigo');
+                    } else {
+                        if (avance == 0) {
+                            $('#magnetico').val(respu.magnetico);
+                            $('#avance').val(respu.avance);
+                            $('#tamano').val(respu.tamano);
+                        } else {
+                            $('#magnetico').val('');
+                        }
+                        $('#costo').val(respu.costo);
+                        $('#precio1').val(respu.precio1);
+                        $('#precio2').val(respu.precio2);
+                        $('#precio3').val(respu.precio3);
+                    }
                 }
-                $('#costo').val(respu.costo);
-                $('#precio1').val(respu.precio1);
-                $('#precio2').val(respu.precio2);
-                $('#precio3').val(respu.precio3);
-            }
+            });
         }
     });
 }
@@ -234,44 +289,46 @@ var agrega_edita_productos = function () {
         var array_nombre_color = [];
         var exepcion;
         if (clase_articulo == 1) {
-            exepcion = ['id_productos', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'precio3', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]'];
+            exepcion = ['id_productos', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'precio3', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft'];
         }
         if (clase_articulo == 2 || clase_articulo == 0) {
-            exepcion = ['id_productos', 'avance', 'id_adh', 'consumo', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]'];
+            exepcion = ['id_productos', 'avance', 'id_adh', 'consumo', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft', 'img_ficha_1[]'];
         }
         if (clase_articulo == 3) {
-            exepcion = ['id_productos', 'avance', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]'];
+            exepcion = ['id_productos', 'avance', 'id_adh', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft'];
         }
         var form = $(this).serializeArray();
         var valida_form = validar_formulario(form, exepcion);
         if (valida_form) {
-            if (color_producto == '') {
-                alertify.error('Se requiere un color');
-                return;
+            if (clase_articulo == 2) {
+                // if (color_producto == '') {
+                //     alertify.error('Se requiere un color');
+                //     return;
+                // }
+                // if (nombre_color == '') {
+                //     alertify.error('Se requiere un nombre');
+                //     return;
+                // }
+                if (color_producto.search(',') != -1) {
+                    array_color = color_producto.split(',');
+                } else {
+                    array_color.push(color_producto);
+                }
+                if (nombre_color.search(',') != -1) {
+                    array_nombre_color = nombre_color.split(',');
+                } else {
+                    array_nombre_color.push(nombre_color);
+                }
+                if (array_color.length != array_nombre_color.length) {
+                    alertify.error('La cantidad de colores no corresponden a la cantidad de nombres');
+                    return;
+                }
             }
-            if (nombre_color == '') {
-                alertify.error('Se requiere un nombre');
-                return;
-            }
-            if (color_producto.search(',') != -1) {
-                array_color = color_producto.split(',');
-            } else {
-                array_color.push(color_producto);
-            }
-            if (nombre_color.search(',') != -1) {
-                array_nombre_color = nombre_color.split(',');
-            } else {
-                array_nombre_color.push(nombre_color);
-            }
-            if (array_color.length != array_nombre_color.length) {
-                alertify.error('La cantidad de colores no corresponden a la cantidad de nombres');
-                return;
-            }
-            if (clase_articulo == 2 && filename == '' && imagen_base == 0) {
-                alertify.error('Se requiere la imagen ficha tecnica para continuar');
-                return;
-            }
-            // btn_procesando('crear_etiqueta');
+            // if (clase_articulo == 2 && filename == '' && imagen_base == 0) {
+            //     alertify.error('Se requiere la imagen ficha tecnica para continuar');
+            //     return;
+            // }
+            btn_procesando('crear_etiqueta');
             $.ajax({
                 "url": `${PATH_NAME}/configuracion/insertar_producto`,
                 "type": 'POST',
@@ -281,11 +338,12 @@ var agrega_edita_productos = function () {
                 "contentType": false,
                 "success": function (respu) {
                     if (respu['status'] == true) {
-                        $("#tabla_productos").DataTable().ajax.reload();
-                        alertify.success(respu.msg);
-                        $('#home-tab').click();
+                        $("#tabla_productos").DataTable().ajax.reload(function () {
+                            alertify.success(respu.msg);
+                            $('#home-tab').click();
+                            btn_procesando('crear_etiqueta', obj_inicial, 1);
+                        });
                     }
-                    btn_procesando('crear_etiqueta', obj_inicial, 1);
                 }
             });
         }

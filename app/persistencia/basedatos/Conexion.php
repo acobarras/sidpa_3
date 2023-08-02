@@ -30,8 +30,8 @@ class Conexion
         }
         if (PROYECTO == '/eticaribe') {
             $host = 'eticaribe.com.co';
-            $db = 'eticarib_local';
-            $user = 'eticarib_root';
+            $db = 'sidpaco2_pruebas';
+            $user = 'sidpaco2_root';
             $pass = '@Eticaribe2022';
             $charset = 'utf8';
             $port = '3306';
@@ -61,14 +61,14 @@ class Conexion
             $port = '3306';
         }
         if (PROYECTO == '/eticaribe') {
-            $host = 'eticaribe.com.co';
-            $db = 'eticarib_local';
-            $user = 'eticarib_root';
+            $host = 'localhost';
+            $db = 'sidpaco2_sidpa';
+            $user = 'sidpaco2_root';
             $pass = '@Eticaribe2022';
             $charset = 'utf8';
             $port = '3306';
         }
-        if (PROYECTO == '/eticaribe') {
+        if (PROYECTO == '/eticomex') {
             $host = 'localhost';
             $db = 'wwetic_sidpa';
             $user = 'wwetic_root';
