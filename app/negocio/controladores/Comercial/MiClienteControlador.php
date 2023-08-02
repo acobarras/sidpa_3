@@ -17,6 +17,7 @@ use MiApp\persistencia\dao\ClaseArticuloDAO;
 use MiApp\negocio\util\Envio_Correo;
 use MiApp\persistencia\dao\UsuarioDAO;
 use MiApp\persistencia\dao\permisosDAO;
+use MiApp\persistencia\dao\FormaMaterialDAO;
 use MiApp\negocio\util\Validacion;
 
 
@@ -36,6 +37,7 @@ class MiClienteControlador extends GenericoControlador
     private $clase_articuloDAO;
     private $UsuarioDAO;
     private $permisosDAO;
+    private $FormaMaterialDAO;
 
 
     public function __construct(&$cnn)
@@ -56,6 +58,7 @@ class MiClienteControlador extends GenericoControlador
         $this->clase_articuloDAO = new ClaseArticuloDAO($cnn);
         $this->UsuarioDAO = new UsuarioDAO($cnn);
         $this->permisosDAO = new permisosDAO($cnn);
+        $this->FormaMaterialDAO = new FormaMaterialDAO($cnn);
     }
 
     /*  
@@ -203,8 +206,19 @@ class MiClienteControlador extends GenericoControlador
         }
         if ($existe_asesor || $_SESSION['usuario']->getId_roll() == 1 || $_SESSION['usuario']->getId_roll() == 8) {
             $productos = $this->cliente_productoDAO->consultar_productos_clientes_asesor();
+            $forma = $this->FormaMaterialDAO->consultar_forma_material();
             $tabla = [];
             foreach ($productos as $value) {
+                $forma_material = Validacion::DesgloceCodigo($value->codigo_producto, 1, 1);
+                if ($value->id_tipo_articulo == 1) {
+                    foreach ($forma as $value_forma) {
+                        if ($value_forma->id_forma == $forma_material) {
+                            $value->forma = $value_forma->nombre_forma;
+                        }
+                    }
+                } else {
+                    $value->forma = '';
+                }
                 $value->nom_mon_venta = TIPO_MONEDA[$value->moneda];
                 $value->nom_mon_autoriza = TIPO_MONEDA[$value->moneda_autoriza];
                 if ($value->permiso_product == 0) {
@@ -212,7 +226,6 @@ class MiClienteControlador extends GenericoControlador
                         $tabla[] = $value;
                     }
                 } else {
-                    // print_r($value);
                     $tabla[] = $value;
                 }
             }
@@ -473,7 +486,7 @@ class MiClienteControlador extends GenericoControlador
                 'datos_autoriza' => $datos_res
             ];
         } else {
-            if ($datos_producto[0]->ubi_troquel != 'EXTERNO') {
+            if ($datos_producto[0]->ubi_troquel != 'EXTERNO' && $datos_producto[0]->ubi_troquel != 'EXT') {
                 $codigo_producto = $datos_producto[0]->codigo_producto;
                 $datos_etiq = parent::precio_etiqueta($codigo_producto, $datos['cantidad_minima']);
                 $datos_etiq['moneda_autorizada'] = $datos['moneda'];

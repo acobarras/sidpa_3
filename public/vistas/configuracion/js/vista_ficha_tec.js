@@ -172,13 +172,19 @@ var cargar_ficha = function (data) {
         var avance = parseFloat(data.avance);
         var repeticiones = (PINONES * magnetico) / avance;
         repeticiones = redondear(repeticiones, 0);
+        if (data['area'] == 2) {
+                $('#cavidades').empty().html('N/A');
+                $('#dientes').empty().html('N/A');
+                $('#repeticiones').empty().html('N/A');
+        } else {
+                $('#cavidades').empty().html(data.cav_montaje);
+                $('#dientes').empty().html(data.magnetico);
+                $('#repeticiones').empty().html(repeticiones);
+        }
         $('#dimension').empty().html(data.tamano);
         $('#codigo').empty().html(data.codigo_producto);
-        $('#cavidades').empty().html(data.cav_montaje);
         $('#acabados').empty().html(data.acabados_ficha);
-        $('#dientes').empty().html(data.magnetico);
         $('#referencia').empty().html(data.descripcion_productos);
-        $('#repeticiones').empty().html(repeticiones);
         $('#forma').empty().html(data.forma);
         $('#version').empty().html(data.version_ft);
         $('#observaciones_ft').empty().html(data.observaciones_ft);

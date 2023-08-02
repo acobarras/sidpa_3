@@ -60,7 +60,7 @@
                             <div class="mb-3 col">
                                 <label for="codigo_producto" class="form-label">Código : </label>
                                 <div class="input-group" id="codigo_grupo">
-                                    <input autocomplete="off" type="text" class="form-control" name="codigo_producto" id="codigo_producto">
+                                    <input autocomplete="off" type="text" class="form-control precio_etiq" name="codigo_producto" id="codigo_producto">
                                     <span class="input-group-text" style="cursor: pointer;" id="crea_cod_etiq"><i class="fas fa-eye"></i></span>
                                 </div>
                                 <span class="text-danger" id="span_codigo_CE"></span>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="mb-3 col bobina tecnologia">
                                 <label for="avance" class="form-label">Avance</label>
-                                <input autocomplete="off" type="text" class="form-control" name="avance" id="avance" />
+                                <input autocomplete="off" type="text" class="form-control precio_etiq" name="avance" id="avance" />
                             </div>
                             <div class="mb-3 col bobina tecnologia">
                                 <label for="magnetico" class="form-label">Magnetico</label>
@@ -151,9 +151,12 @@
                                 <input autocomplete="off" type="text" class="form-control" name="ubica_ficha" id="ubica_ficha" />
                             </div>
                             <div class="mb-3 col bobina tecnologia">
-                                <label for="img_ficha_1" class="form-label">Imagen Ficha Tecnica</label>
-                                <input autocomplete="off" type="file" class="form-control" name="img_ficha_1[]" id="img_ficha_1" multiple />
-                                <input type="hidden" name="img_ficha" id="img_ficha" value="0">
+                                <label for="ubica_ficha" class="form-label">Ficha Tecnica</label>
+                                <div class="input-group">
+                                    <input autocomplete="off" type="file" class="form-control" name="img_ficha_1[]" id="img_ficha_1" multiple>
+                                    <span class="input-group-text d-none" id="elimina_img" data-bs-toggle="modal" data-bs-target="#img_ficha_elimina"><i class="fas fa-trash"></i></span>
+                                    <input type="hidden" name="img_ficha" id="img_ficha" value="0">
+                                </div>
                             </div>
                             <div class="mb-3 col bobina tecnologia">
                                 <label for="acabados_ficha" class="form-label">Acabados Ficha Tecnica</label>
@@ -192,6 +195,25 @@
         </div>
         <br>
         <br>
+    </div>
+</div>
+
+<!-- MODAL ELIMINAR IMAGENES -->
+
+<!-- Modal -->
+<div class="modal fade" id="img_ficha_elimina" tabindex="-1" aria-labelledby="img_ficha_eliminaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="img_ficha_eliminaLabel">Eliminar Imagenes Ficha Tecnica</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal_elimina">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
     </div>
 </div>
 

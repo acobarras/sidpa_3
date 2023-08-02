@@ -54,4 +54,11 @@ class Archivo
         unlink($ruta_imagen); //elimino el fichero
         return $base64;
     }
+    public static function eliminar_imagen($ubi, $name)
+    {
+        if (file_exists("./public/img" . PROYECTO  . $ubi . "/" . $name)) {
+            unlink("./public/img" . PROYECTO  . $ubi . "/" . $name);
+        }
+        return;
+    }
 }
