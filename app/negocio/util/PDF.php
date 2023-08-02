@@ -439,6 +439,12 @@ class PDF
         $margen = '';
         $saltopag = '';
         for ($i = 0; $i < count($items); $i++) {
+            print_r($items[$i]['ficha_tecnica_produc']);
+            if ($items[$i]['ficha_tecnica_produc'] == '') {
+                $ficha_tecnica = $items[$i]['ficha_tecnica'];
+            } else {
+                $ficha_tecnica = $items[$i]['ficha_tecnica_produc'];
+            }
             $metros_lineales = ($items[$i]['cant_op'] * $items[$i]['avance']) / ($items[$i]['cav_montaje'] * 1000);
             $metros_cuadrados = ($metros_lineales * $items[$i]['ancho_material']) / 1000;
             $html .= "  <tr class='text-center letra-10'>
@@ -447,7 +453,7 @@ class PDF
                             </td>
                             <td style='width: 5mm;'>" . $items[$i]['codigo'] . "</td>
                             <td style='width: 10mm;' >" . $items[$i]['descripcion_productos'] . "</td>
-                            <td style='width: 10mm;' >" . $items[$i]['ubi_troquel'] . "||" . $items[$i]['ficha_tecnica'] . "</td>
+                            <td style='width: 10mm;' >" . $items[$i]['ubi_troquel'] . "||" . $ficha_tecnica . "</td>
                             <td style='width: 10mm;' >" . number_format($items[$i]['cant_op'], 0, ',', '.') . "</td>
                             <td style='width: 10mm;' ><b>" . round($metros_lineales) . "</b></td>
                             <td style='width: 10mm;' ><b>" . number_format($metros_cuadrados, 2, ',', '.') . "</b></td>

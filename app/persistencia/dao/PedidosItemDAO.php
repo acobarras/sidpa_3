@@ -75,7 +75,7 @@ class PedidosItemDAO extends GenericoDAO
             t1.moneda, t1.v_unidad, t1.cant_bodega, t1.id_estado_item_pedido, t1.id_pedido, t1.fecha_compro_item, t1.id_maqui_embo, 
             t2.fecha_crea_p, t2.hora_crea, t2.fecha_compromiso, t2.num_pedido, t2.orden_compra, t2.porcentaje, t2.difer_mas, t2.difer_menos, 
             t2.difer_ext, t3.nombre_r_embobinado, t4.nombre_estado_item, t5.nombre_core, t6.descripcion_productos, t6.magnetico, 
-            t6.avance, t6.ancho_material, t6.ubi_troquel, t6.cav_montaje, t6.consumo, t7.nombre_articulo, t8.nombre_empresa, t8.forma_pago, t8.logo_etiqueta, 
+            t6.avance, t6.ancho_material, t6.ubi_troquel, t6.cav_montaje, t6.consumo,t6.ubica_ficha,t6.ficha_tecnica_produc, t7.nombre_articulo, t8.nombre_empresa, t8.forma_pago, t8.logo_etiqueta, 
             t9.nombres, t9.apellidos, t10.ficha_tecnica, t10.id_material, t10.id_clien_produc,t10.observaciones_ft,t2.fecha_cierre  
             FROM pedidos_item t1 
             INNER JOIN pedidos t2 ON t1.id_pedido = t2.id_pedido 

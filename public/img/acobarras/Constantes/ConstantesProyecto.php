@@ -1,7 +1,7 @@
 <?php
 // ACOBARRAS
     define('NOMBRE_EMPRESA', 'ACOBARRAS S.A.S.'); //COLOCAR EL NOMBRE EN MAYUSCULA
-    define('IMG_CORREO', 'https://www.acobarras.com/sidpa/public/img/principal/sidpa.gif'); //URL PARA OBTENER LAS IMAGENES PARA EL ENVIO DE CORREOS
+    define('IMG_CORREO', 'https://www.acobarras.com/sidpa/public/img/img_sidpa/sidpa.gif'); //URL PARA OBTENER LAS IMAGENES PARA EL ENVIO DE CORREOS
     define('FIRMA_PEDIDO', 'firma_pedido'); //CUANDO SE CREE LA FIRMA GUARDARLA CON ESTE NOMBRE DE ARCHIVO
     define('CORREO_SOPORTE_TEC', 'desarrollo@acobarras.com'); //CORREO DE SOPORTE TECNICO
     define('JEFE_SER_CLIENTE', 'PABLO ANDRES SUAREZ'); //NOMBRE DEL JEFE DE SERVICIO AL CLIENTE
