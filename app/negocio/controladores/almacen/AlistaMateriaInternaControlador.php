@@ -27,7 +27,7 @@ class AlistaMateriaInternaControlador extends GenericoControlador
     $consecutivo = $this->ConsCotizacionDAO->consultar_cons_especifico($id_memorando);
     $nuevo_cons['numero_guardado'] = $consecutivo[0]->numero_guardado + 1; // aumentamos el consecutivo en 1
     $condicion = 'id_consecutivo=' . $id_memorando;
-    // $this->ConsCotizacionDAO->editar($nuevo_cons, $condicion); // subimos el nuevo consecutivo
+    $this->ConsCotizacionDAO->editar($nuevo_cons, $condicion); // subimos el nuevo consecutivo
 
 
     foreach ($_POST['storage'] as $value) {

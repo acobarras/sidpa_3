@@ -193,15 +193,15 @@ var genera_documento = function () {
                 responseType: 'blob'
             },
             success: function (regreso) {
-                // btn_procesando('crea_salida_inv', obj_inicial, 1);
-                // localStorage.removeItem('items_memorando_entrega');
-                // location.reload();
-                // var a = document.createElement('a');
-                // var url = window.URL.createObjectURL(regreso);
-                // a.href = url;
-                // a.download = 'memorando_interno_entrega.pdf';
-                // a.click();
-                // window.URL.revokeObjectURL(url);
+                btn_procesando('crea_salida_inv', obj_inicial, 1);
+                localStorage.removeItem('items_memorando_entrega');
+                location.reload();
+                var a = document.createElement('a');
+                var url = window.URL.createObjectURL(regreso);
+                a.href = url;
+                a.download = 'memorando_interno_entrega.pdf';
+                a.click();
+                window.URL.revokeObjectURL(url);
             }
         });
     });
