@@ -194,8 +194,9 @@ class SoporteControlador extends GenericoControlador
         $agregar_diag = $this->SoporteTecnicoDAO->insertar($diagnostico);
         // EL ESTADO 76 ES PARA EL SEGUIMIENTO DE DIAGNOSTICO CREADO
         // SE AGREGA EL SEGUIMIENTO
+        $id_actividad = 75; //CREACION DE DIAGNOSTICO
         $observacion = 'CREACION DE DIAGNOSTICO';
-        $seguimiento = GenericoControlador::agrega_seguimiento_diag($agregar_diag['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+        $seguimiento = GenericoControlador::agrega_seguimiento_diag($agregar_diag['id'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
         return $agregar_diag;
     }
 
@@ -225,8 +226,9 @@ class SoporteControlador extends GenericoControlador
                 if (!empty($creadireccion['data'])) {
                     $id_direccion = $creadireccion['data']['id'];
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 76; //CREACION DE DIAGNOSTICO
                     $observacion = 'DIAGNOSTICO POR LABORATORIO';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -237,8 +239,9 @@ class SoporteControlador extends GenericoControlador
                     $datos_dir = json_decode($datos['direc_solicitud']);
                     $id_direccion = $datos_dir->id_direccion;
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 76; //CREACION DE DIAGNOSTICO
                     $observacion = 'DIAGNOSTICO POR LABORATORIO';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0,$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -257,8 +260,9 @@ class SoporteControlador extends GenericoControlador
                 if (!empty($creadireccion['data'])) {
                     $id_direccion = $creadireccion['data']['id'];
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 84; //DIAGNOSTICO REMOTO
                     $observacion = 'DIAGNOSTICO REMOTO';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0,$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -269,8 +273,9 @@ class SoporteControlador extends GenericoControlador
                     $datos_dir = json_decode($datos['direc_solicitud']);
                     $id_direccion = $datos_dir->id_direccion;
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 84; //DIAGNOSTICO REMOTO
                     $observacion = 'DIAGNOSTICO REMOTO';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0,$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -289,8 +294,9 @@ class SoporteControlador extends GenericoControlador
                 if (!empty($creadireccion['data'])) {
                     $id_direccion = $creadireccion['data']['id'];
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 86; //DIAGNOSTICO POR VISITA
                     $observacion = 'DIAGNOSTICO POR VISITA';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0,$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -301,8 +307,9 @@ class SoporteControlador extends GenericoControlador
                     $datos_dir = json_decode($datos['direc_solicitud']);
                     $id_direccion = $datos_dir->id_direccion;
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 86; //DIAGNOSTICO POR VISITA
                     $observacion = 'DIAGNOSTICO POR VISITA';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0,$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -322,8 +329,9 @@ class SoporteControlador extends GenericoControlador
                 if (!empty($creadireccion['data'])) {
                     $id_direccion = $creadireccion['data']['id'];
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 86; //DIAGNOSTICO POR VISITA
                     $observacion = 'DIAGNOSTICO POR VISITA';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -334,8 +342,9 @@ class SoporteControlador extends GenericoControlador
                     $datos_dir = json_decode($datos['direc_solicitud']);
                     $id_direccion = $datos_dir->id_direccion;
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 86; //DIAGNOSTICO POR VISITA
                     $observacion = 'DIAGNOSTICO POR VISITA';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -355,8 +364,9 @@ class SoporteControlador extends GenericoControlador
                 if (!empty($creadireccion['data'])) {
                     $id_direccion = $creadireccion['data']['id'];
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 86; //DIAGNOSTICO POR VISITA
                     $observacion = 'DIAGNOSTICO POR VISITA';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;
@@ -367,8 +377,9 @@ class SoporteControlador extends GenericoControlador
                     $datos_dir = json_decode($datos['direc_solicitud']);
                     $id_direccion = $datos_dir->id_direccion;
                     $creadiagno = SoporteControlador::agregar_diagnostico($id_cli_prov, $id_direccion, $datos, $visita_prese, $cobro_ser, $req_cotiza, $visita_laboratorio, $estado, $tipo_cobro);
+                    $id_actividad = 86; //DIAGNOSTICO POR VISITA
                     $observacion = 'DIAGNOSTICO POR VISITA';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($creadiagno['id'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 echo json_encode($creadiagno);
                 return;

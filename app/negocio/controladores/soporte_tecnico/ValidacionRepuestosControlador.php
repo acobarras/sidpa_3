@@ -64,8 +64,9 @@ class ValidacionRepuestosControlador extends GenericoControlador
         $editar = $this->SoporteItemDAO->editar($editar_item, $condicion_item);
 
         // SE REGISTRA EL SEGUIMIENTO
+        $id_actividad = 96; //REPUESTO COMPRADO Y PENDIENTE DE REPARACION
         $observacion = 'REPUESTO COMPRADO Y PENDIENTE DE REPARACION';
-        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
         if ($editar == 1) {
             $formulario_cotiza = [
@@ -95,8 +96,9 @@ class ValidacionRepuestosControlador extends GenericoControlador
             $items = $this->SoporteItemDAO->consultar_items_diag($datos['id_diagnostico'], $datos['item']);
 
             // SE REGISTRA EL SEGUIMIENTO
+            $id_actividad = 97; //DIAGNOSTICO CANCELADO Y DEVUELTO SIN REPARAR
             $observacion = 'DIAGNOSTICO CANCELADO Y DEVUELTO SIN REPARAR';
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
             foreach ($items as $value) {
                 $id_cotizacion = ($value->id_cotizacion);
@@ -157,8 +159,9 @@ class ValidacionRepuestosControlador extends GenericoControlador
                 $condicion = 'id_cotizacion =' . $id_cotizacion;
                 $modificacion = $this->CotizacionItemSoporteDAO->editar($formulario_cotiza, $condicion);
                 // SE REGISTRA EL SEGUIMIENTO
+                $id_actividad = 99; //REPUESTO EN COMPRAS
                 $observacion = 'REPUESTO ' . $data['codigo_producto'] . ' EN COMPRAS';
-                $seguimiento = GenericoControlador::agrega_seguimiento_diag($data['id_diagnostico'], $data['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+                $seguimiento = GenericoControlador::agrega_seguimiento_diag($data['id_diagnostico'], $data['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 $respu = $modificacion;
             } else {
                 $respu = -1;
@@ -215,8 +218,9 @@ class ValidacionRepuestosControlador extends GenericoControlador
                 $modificacion = $this->CotizacionItemSoporteDAO->editar($formulario_cotiza, $condicion);
 
                 // SE REGISTRA EL SEGUIMIENTO
-                $observacion = 'REPUESTO' . $data['codigo_producto'] . 'DESCONTADO DEL INVENTARIO';
-                $seguimiento = GenericoControlador::agrega_seguimiento_diag($data['id_diagnostico'], $data['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+                $id_actividad = 80; //REPUESTO DESCONTADO DEL INVENTARIO
+                $observacion = 'REPUESTO ' . $data['codigo_producto'] . ' DESCONTADO DEL INVENTARIO';
+                $seguimiento = GenericoControlador::agrega_seguimiento_diag($data['id_diagnostico'], $data['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
                 $datos_sopo = [
                     'nombre' => 'Miguel Aya',

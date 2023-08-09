@@ -24,16 +24,16 @@ var consultar_datos_aprobacion = function () {
                     if (row.estado_item == 10) {
                         return `
                                 <center>
-                                    <button type='button' class='btn btn-success btn-circle aprueba_cotiza'>
+                                    <button type='button' title='Aprobar cotización' class='btn btn-success btn-circle aprueba_cotiza'>
                                         <span class='fas fa-check'></span>
                                     </button>
-                                    <button type='button' class='btn btn-warning btn-circle recotizar'>
+                                    <button type='button' title='Recotizar' class='btn btn-warning btn-circle recotizar'>
                                         <span class="fas fa-sync-alt"></span>
                                     </button>
-                                    <button type='button' class='btn btn-danger btn-circle cancela_cotiza'>
+                                    <button type='button' title='Cancelar cotización' class='btn btn-danger btn-circle cancela_cotiza'>
                                         <span class='fas fa-ban'></span>
                                     </button>
-                                    <button type='button' class='btn btn-info btn-circle consultar_repuestos'>
+                                    <button type='button' title='Consultar repuestos' class='btn btn-info btn-circle consultar_repuestos'>
                                         <span class="fas fa-search"></span>
                                     </button>
                                 </center>`;
@@ -91,7 +91,7 @@ var aprobacion_cotiza = function (tbody, table) {
     var array_item = [];
     $(tbody).on("click", "button.cancela_cotiza", function () {
         array_item = table.row($(this).parents("tr")).data();
-        var estado_cotiza = 6;
+        var estado_cotiza = 7;
         var estado_item = 11;
         $.ajax({
             "url": `${PATH_NAME}/soporte_tecnico/cambiar_estado_cotiza`,
@@ -158,7 +158,7 @@ var aprobacion_cotiza = function (tbody, table) {
                         } else {
                             return `
                             <center> 
-                                <button type='button' class='btn btn-danger btn-circle recotizar'>
+                                <button type='button' title='Recotizar' class='btn btn-danger btn-circle recotizar'>
                                     <span class='fas fa-ban'></span>
                                 </button>
                             </center>`;

@@ -64,11 +64,13 @@ class LaboratorioControlador extends GenericoControlador
             if ($contador <= $numero) {
                 $contador = $contador + 1;
                 if ($_POST['estado'] == 1) {
+                    $id_actividad = 77;//INGRESO DE EQUIPOS LABORATORIO
                     $observacion = 'INGRESO DE EQUIPOS LABORATORIO';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos[0]['id_diagnostico'], $contador, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos[0]['id_diagnostico'], $contador, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 } else {
+                    $id_actividad = 89;//INGRESO DE EQUIPOS VISITA
                     $observacion = 'INGRESO DE EQUIPOS VISITA';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos[0]['id_diagnostico'], $contador, $observacion, $_SESSION['usuario']->getid_usuario());
+                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos[0]['id_diagnostico'], $contador, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 }
                 $formulario = [
                     'id_diagnostico' => $value['id_diagnostico'],

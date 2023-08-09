@@ -27,11 +27,11 @@ var carga_laboratorio = function () {
             { "data": "id_diagnostico" },
             { "data": "nombre_empresa" },
             { "data": "direccion" },
-            { "data": "nombre_estado_soporte" },
+            { "data": "nombre_estado_soporte" }, 
             {
                 "render": function (data, type, row) {
                     return `<center>
-                    <button type='button' id='boton${row.id_diagnostico}' class='agregar_item btn btn-info btn-circle'>
+                    <button type='button' id='boton${row.id_diagnostico}' title="Ingresar equipos" class='agregar_item btn btn-info btn-circle'>
                         <i class="fas fa-laptop-medical"></i>
                     </button>
                 <center>`
@@ -130,7 +130,7 @@ var cargar_tabla_item = function (consecutivo) {
             {
                 "defaultContent":
                     `<center>
-                    <button class="btn btn-danger btn-sm btn-circle elimina_item"><i class="fa fa-times"></i></button>
+                    <button title='Eliminar item' class="btn btn-danger btn-sm btn-circle elimina_item"><i class="fa fa-times"></i></button>
                 </center>`
             },
 
@@ -190,7 +190,8 @@ var enviar_items = function (consecutivo) {
                     var a = document.createElement('a');
                     var url = window.URL.createObjectURL(res);
                     a.href = url;
-                    a.download = 'DocumentoEquipos' + consecutivo + '.pdf';
+                    // a.download = 'DocumentoEquipos' + consecutivo + '.pdf'; esta es la remision de ingreso
+                    a.download = 'Remisión_' + consecutivo + '.pdf';
                     a.click();
                     window.URL.revokeObjectURL(url);
 

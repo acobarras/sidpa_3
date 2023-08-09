@@ -27,27 +27,27 @@ var consultar_repuestos = function () {
                     if (row.estado_cotizacion == 2) {
                         return `
                                 <center>
-                                    <button type='button' class='btn btn-success btn-circle aprueba_cotiza'>
+                                    <button type='button' title='Aprobar cotización' class='btn btn-success btn-circle aprueba_cotiza'>
                                         <span class='fas fa-check'></span>
                                     </button>
-                                    <button type='button' class='btn btn-danger btn-circle cancela_cotiza'>
+                                    <button type='button' title='Cancelar cotización' class='btn btn-danger btn-circle cancela_cotiza'>
                                         <span class='fas fa-ban'></span>
                                     </button>
                                 </center>`;
                     } if (row.estado_cotizacion == 3) {
                         return `
                                 <center>
-                                    <button type='button' class='btn btn-warning btn-circle validar_inv'">
+                                    <button type='button' title='Validar en inventario' class='btn btn-warning btn-circle validar_inv'">
                                         <span class='fas fa-swatchbook'></span>
                                     </button>
-                                    <button type='button' class='btn btn-danger btn-circle cancelar_diag'">
+                                    <button type='button' title='Cancelar diagnostico' class='btn btn-danger btn-circle cancelar_diag'">
                                         <span class='fas fa-ban'></span>
                                     </button>
                                 </center>`
                     } if (row.estado_cotizacion == 4) {
                         return `
                                 <center>
-                                    <button type='button' class='btn btn-info btn-circle compras'>
+                                    <button type='button' title='Compras' class='btn btn-info btn-circle compras'>
                                         <span class='fas fa-money-bill-alt'></span>
                                     </button>
                                 </center>`

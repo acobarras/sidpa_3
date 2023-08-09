@@ -374,3 +374,8 @@ define(
         7 => ['nombre' => 'CORTE Y PERFORACIÓN', 'nombre_corto' => 'CORT Y PERF']
     )
 );
+define(
+    'PERMISOS_SOPORTE',
+    array(
+    )
+);

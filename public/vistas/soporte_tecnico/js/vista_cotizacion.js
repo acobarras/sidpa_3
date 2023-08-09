@@ -29,39 +29,39 @@ var carga_cotizacion = function () {
                 "render": function (data, type, row) {
                     if (row.estado == 2) {
                         return `<center>
-                                <button type='button' id='cotiza${row.id_diagnostico}' class='btn btn-info btn-circle cotiza' data-bs-toggle='modal' data-bs-target='#cotiza'>
+                                <button type='button' title='Cotizar' id='cotiza${row.id_diagnostico}' class='btn btn-info btn-circle cotiza' data-bs-toggle='modal' data-bs-target='#cotiza'>
                                     <span class='fas fa-search'></span>
                                 </button>
                                 `
                     } if (row.estado == 3) {
                         return `<center>
-                                <button type='button' id='si_aprobo' class='btn btn-success btn-circle aprobacion'>
+                                <button type='button' title='Aprobar' id='si_aprobo' class='btn btn-success btn-circle aprobacion'>
                                     <span class='fas fa-check'></span>
                                 </button>
-                                <button type='button' id='no_aprobo' class='btn btn-danger btn-circle noaprobacion'>
+                                <button type='button' title='No aprobar' id='no_aprobo' class='btn btn-danger btn-circle noaprobacion'>
                                     <span class='fas fa-ban'></span>
                                 </button>
                                 <center>`
                     } if (row.estado == 4) {
                         return `<center>
-                                <button type='button' id='boton_agendar' class='btn btn-warning btn-circle agendar_visita' data-bs-toggle='modal' data-bs-target='#agendar_visita' >
+                                <button type='button' title='Agendar visita' id='boton_agendar' class='btn btn-warning btn-circle agendar_visita' data-bs-toggle='modal' data-bs-target='#agendar_visita' >
                                     <span class='fas fa-book-medical'></span>
                                 </button>
                                 <center>`
-                    } if (row.estado == 6 && row.id_roll == 1 || row.id_persona == 10) {
+                    } if (row.estado == 6 && row.boton == true) {
                         return `
                         <center>
-                            <button type='button' id='boton${row.id_diagnostico}' class='btn btn-secondary btn-circle reasignar' data-bs-toggle='modal' data-bs-target='#reagendar_visita'>
+                            <button type='button' title='Reasignar' id='boton${row.id_diagnostico}' class='btn btn-secondary btn-circle reasignar' data-bs-toggle='modal' data-bs-target='#reagendar_visita'>
                                 <span class='fas fa-calendar-alt'></span>
                             </button>
                         <center>`
                     } else {
                         return `
                         <center>
-                            <button type='button'class='btn btn-danger btn-circle reasignar'>
+                            <button type='button' title='Reasignar - Desactivado' class='btn btn-danger btn-circle reasignar'>
                                 <span class='fas fa-exclamation-triangle'></span>
                             </button>
-                            <h6>Sin acciones</h6>
+                            <h6> Sin acciones </h6>
                         <center>`
                     }
                 }

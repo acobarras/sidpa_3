@@ -91,15 +91,17 @@ class AprobacionControlador extends GenericoControlador
         $editar_item = [
             'estado' => $_POST['estado_item'],
         ];
-        $condicion_item = 'id_diagnostico_item=' . $datos['id_diagnostico_item'];
+        $condicion_item = 'id_diagnostico_item =' . $datos['id_diagnostico_item'];
         $editar = $this->SoporteItemDAO->editar($editar_item, $condicion_item);
 
-        if ($_POST['estado_cotiza'] == 6) {
+        if ($_POST['estado_cotiza'] == 6 || $_POST['estado_cotiza'] == 7) {
+            $id_actividad = 91;//COTIZACION DE REPUESTOS CANCELADA
             $observacion = 'COTIZACION DE REPUESTOS CANCELADA';
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
         } else {
+            $id_actividad = 79; //COTIZACION DE REPUESTOS ACEPTADA
             $observacion = 'COTIZACION DE REPUESTOS ACEPTADA';
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
         }
         if ($editar == 1) {
             foreach ($repuestos as $value) {

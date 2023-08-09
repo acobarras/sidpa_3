@@ -28,10 +28,10 @@ var consultar_datos_ejecucion = function () {
                         if (row.repuestos_listos == row.total_repuestos) {
                             botones = `
                                 <center>
-                                <button type='button' class='btn btn-secondary btn-circle asignar_tec' data-bs-toggle='modal' data-bs-target='#asignar_tec'>
+                                <button type='button' title='Asignar técnico' class='btn btn-secondary btn-circle asignar_tec' data-bs-toggle='modal' data-bs-target='#asignar_tec'>
                                     <span class="fas fa-user-plus"></span>
                                 </button>
-                                <button type='button' class='btn btn-info btn-circle consultar_repuestos'>
+                                <button type='button' title='Consultar repuestos' class='btn btn-info btn-circle consultar_repuestos'>
                                 <span class="fas fa-search"></span>
                                 </button>
                                 <center>`;
@@ -39,7 +39,7 @@ var consultar_datos_ejecucion = function () {
                         } else {
                             botones = `
                             <center>
-                                <button type='button' class='btn btn-info btn-circle consultar_repuestos'>
+                                <button type='button' title='Consultar repuestos' class='btn btn-info btn-circle consultar_repuestos'>
                                     <span class="fas fa-search"></span>
                                 </button>
                             <center>`;
@@ -49,13 +49,13 @@ var consultar_datos_ejecucion = function () {
                         if (row.id_usuario_reparacion != 0 && row.fecha_ejecucion != '0000-00-00') {
                             botones = `
                             <center>
-                                <button type='button' class='btn btn-success btn-circle ejecutado'>
+                                <button type='button' title='Ejecutar' class='btn btn-success btn-circle ejecutado'>
                                     <span class="fas fa-check"></span>
                                 </button>
-                                <button type='button' class='btn btn-danger btn-circle no_ejecutado'>
+                                <button type='button' title='No ejecutar' class='btn btn-danger btn-circle no_ejecutado'>
                                     <span class="fas fa-ban"></span>
                                 </button>
-                                <button type='button' class='btn btn-info btn-circle consultar_repuestos'>
+                                <button type='button' title='Consultar Repuestos' class='btn btn-info btn-circle consultar_repuestos'>
                                     <span class="fas fa-search"></span>
                                 </button>
                             <center>`;

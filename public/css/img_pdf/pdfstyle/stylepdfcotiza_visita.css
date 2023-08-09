@@ -1,10 +1,24 @@
+html{
+    font-family:sans-serif;
+    text-align:justify ;
+    font-size: 0.9rem;
+}
+table{
+    border: solid 1px black;
+}
+ul {
+    list-style:disc;
+}
+
 @page {
     margin: 0px 15px;
 }
 
 body {
-    margin-top: 48mm;
+    margin-top: 50mm;
     margin-bottom: 31mm;
+    margin-left: 1.3cm;
+    margin-right: 1.3cm;
 }
 
 #imgtitulo {
@@ -94,4 +108,26 @@ footer {
     z-index: 2;
     width: 95%;
     height: 5%;
+}
+th {
+    background-color: #252D5D;
+    color: white;
+}
+
+td {
+    font-size: 12px;
+}
+
+.sub_tabla th{
+    background-color: white;
+    color:#252D5D;
+}
+
+.sin_bordes th{
+    background-color: white;
+    color:black;
+}
+
+table.sin_bordes{
+    border: none;
 }

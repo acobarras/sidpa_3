@@ -52,7 +52,7 @@ class CotizacionControlador extends GenericoControlador
         foreach ($casos_cotiza as $value) {
             $forma_pago = FORMA_PAGO[$value->forma_pago];
             $value->nombre_pago = $forma_pago;
-        }
+        }     
         $arreglo = [
             'data' => $casos_cotiza,
         ];
@@ -156,8 +156,9 @@ class CotizacionControlador extends GenericoControlador
         $persona = $this->PersonaDAO->consultar_personas_id($form['persona_visita']);
 
         // SE REALIZA EL INGRESO DEL SEGUIMIENTO
+        $id_actividad = 87;//VISITA AGENDADA
         $observacion = 'VISITA AGENDADA ' . $persona[0]->nombres . ' ' . $persona[0]->apellidos . ' ' . $form['fecha_visita'];
-        $seguimiento = GenericoControlador::agrega_seguimiento_diag($id_diagnostico, 0, $observacion, $_SESSION['usuario']->getid_usuario());
+        $seguimiento = GenericoControlador::agrega_seguimiento_diag($id_diagnostico, 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
         // SE EDITA EL DIAGNOSTICO PARA COLOCAR LOS DATOS PUESTOS EN EL FORMULARIO Y SE CAMBIA A ESTADO 5
         $condicion = 'id_diagnostico =' . $id_diagnostico;
@@ -204,11 +205,13 @@ class CotizacionControlador extends GenericoControlador
             'estado' => $estado,
         ];
         if ($estado == 6) {
+            $id_actividad = 92;//REAGENDAMIENTO DE VISITA
             $observacion = 'REAGENDAMIENTO DE VISITA';
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
         } else {
+            $id_actividad = 88;//VISITA EN EJECUCIÓN
             $observacion = 'VISITA EN EJECUCIÓN';
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
         }
 
         $resultado = $this->SoporteTecnicoDAO->editar($formulario, $condicion);

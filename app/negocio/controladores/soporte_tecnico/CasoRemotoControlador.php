@@ -47,8 +47,9 @@ class CasoRemotoControlador extends GenericoControlador
         $resultado = $this->SoporteTecnicoDAO->editar($formulario, $condicion);
 
         // SE REGISTRA EL SEGUIMIENTO
+        $id_actividad = 85;//CIERRE DIAGNOSTICO POR CASO REMOTO
         $observacion = 'CIERRE DIAGNOSTICO POR CASO REMOTO';
-        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 0, $observacion, $_SESSION['usuario']->getid_usuario());
+        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 0, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
         if ($resultado == 1) {
             $respu = [

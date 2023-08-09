@@ -61,7 +61,7 @@ class CierreDiagControlador extends GenericoControlador
         header('Content-Type: application/json');
         $estado_item = '11,15,16';
         $datos_items = $this->SoporteItemDAO->consultar_aprobacion($estado_item, '');
-        $sentencia = 'AND t1.num_acta=0';
+        $sentencia = 'AND t1.num_acta = 0';
         foreach ($datos_items as $value) {
             $repuestos = $this->SoporteItemDAO->consultar_repuestos_item($value->id_diagnostico, $value->item, $sentencia);
             $value->repuestos = $repuestos;
@@ -70,6 +70,7 @@ class CierreDiagControlador extends GenericoControlador
         echo json_encode($res);
         return;
     }
+
     public function generar_acta()
     {
         header('Content-Type: application/json');
@@ -81,7 +82,7 @@ class CierreDiagControlador extends GenericoControlador
         $edita_acta = [
             'numero_guardado' => $nuevo_cons
         ];
-        $condicion_acta = 'id_consecutivo =17';
+        $condicion_acta = 'id_consecutivo = 17';
         $this->ConsCotizacionDAO->editar($edita_acta, $condicion_acta);
 
         // SI VIENE POR ESTADO 15 ES POR QUE LA EJECUCION DE LA REPARACION FUE EXITOSA, SI NO ES POR FALTA DE REPUESTOS O RECHAZO
@@ -96,7 +97,7 @@ class CierreDiagControlador extends GenericoControlador
             // SE REALIZA EL ACTA Y SE CIERRA EL CASO POR ESTA RAZON SE MODIFICAN LOS ESTADOS DE LA TABLA
             $estado_pdf = 2;
             $estado_item = 14;
-            $estado_cotiza = 8;
+            $estado_cotiza = 7;
             $respu = CierreDiagControlador::cambiar_estado_cierre($data, $estado_item, $estado_cotiza, $estado_pdf, $num_acta[0]->numero_guardado);
         }
         echo json_encode($respu);
@@ -168,8 +169,9 @@ class CierreDiagControlador extends GenericoControlador
         foreach ($data as $value) {
 
             // SE REGISTRA EL SEGUIMIENTO
-            $observacion = 'DIAGNOSTICO CERRADO CON NUMERO DE ACTA ENT' . $num_acta . ' Y PEDIDO NUM ' . $num_pedido;
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($value['id_diagnostico'], $value['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+            $id_actividad = 90;//DIAGNOSTICO CERRADO CON ACTA ENTREGA Y PEDIDO NUM 
+            $observacion = 'ACTA ENTREGA ' . $num_acta . ' Y PEDIDO NUM ' . $num_pedido;
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($value['id_diagnostico'], $value['item'],$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
             $id_diagnostico_item = ($value['id_diagnostico_item']);
             $formulario_item = [
@@ -182,7 +184,7 @@ class CierreDiagControlador extends GenericoControlador
                     $id_cotizacion = ($repuestos['id_cotizacion']);
                     $formulario_cotiza = [
                         'estado' => $estado_cotiza,
-                        'num_acta' => 'ENT' . $num_acta,
+                        'num_acta' => $num_acta,
                     ];
                     $condicion = 'id_cotizacion =' . $id_cotizacion;
                     $modificacion_cotiza = $this->CotizacionItemSoporteDAO->editar($formulario_cotiza, $condicion);
@@ -294,7 +296,7 @@ class CierreDiagControlador extends GenericoControlador
 
                 if ($crea_entregas_logostica != '') {
                     $res = [
-                        'num_acta' => 'ENT' . $num_acta,
+                        'num_acta' => $num_acta,
                         'num_pedido' => $num_pedido,
                     ];
                 }
@@ -315,8 +317,9 @@ class CierreDiagControlador extends GenericoControlador
             $modificacion = $this->SoporteItemDAO->editar($formulario_item, $condicion);
 
             // SE REGISTRA EL SEGUIMIENTO
-            $observacion = 'DIAGNOSTICO CERRADO CON NUMERO DE ACTA ENT' . $num_acta;
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($value['id_diagnostico'], $value['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+            $id_actividad = 83;//DIAGNOSTICO CERRADO CON ACTA ENTREGA          
+            $observacion = 'ACTA ENTREGA NUM-' . $num_acta;
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($value['id_diagnostico'], $value['item'],$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
             if ($modificacion == 1) {
                 if (isset($value['repuestos'])) {
@@ -324,7 +327,7 @@ class CierreDiagControlador extends GenericoControlador
                         $id_cotizacion = ($repuestos['id_cotizacion']);
                         $formulario_cotiza = [
                             'estado' => $estado_cotiza,
-                            'num_acta' => 'ENT' . $num_acta,
+                            'num_acta' => $num_acta,
                         ];
                         $condicion = 'id_cotizacion =' . $id_cotizacion;
                         $modificacion_cotiza = $this->CotizacionItemSoporteDAO->editar($formulario_cotiza, $condicion);
@@ -334,7 +337,7 @@ class CierreDiagControlador extends GenericoControlador
                     foreach ($consulta_cotiza as $value_cotiza) {
                         $formulario_cotiza = [
                             'estado' => $estado_cotiza,
-                            'num_acta' => 'ENT' . $num_acta,
+                            'num_acta' => $num_acta,
                         ];
                         $condicion = 'id_cotizacion =' . $value_cotiza->id_cotizacion;
                         $modificacion_cotiza = $this->CotizacionItemSoporteDAO->editar($formulario_cotiza, $condicion);
@@ -345,7 +348,7 @@ class CierreDiagControlador extends GenericoControlador
         $ConsultaUltimoRegistro = $this->trmDAO->ConsultaUltimoRegistro();
         $trm = $ConsultaUltimoRegistro[0]->valor_trm;
         $res = [
-            'num_acta' => 'ENT' . $num_acta,
+            'num_acta' =>  $num_acta,
             'num_pedido' => '',
         ];
         return $res;
@@ -359,6 +362,7 @@ class CierreDiagControlador extends GenericoControlador
         $respu = GenericoControlador::crear_acta_entrega($num_acta, $estado_pdf, '');
         return $respu;
     }
+
     public function generar_cotizacion()
     {
         // header('Content-Type: application/json');
@@ -367,7 +371,8 @@ class CierreDiagControlador extends GenericoControlador
         $consulta_cotizacion = $this->CotizacionItemSoporteDAO->consulta_cotiza($num_cotizacion, 1);
         $ConsultaUltimoRegistro = $this->trmDAO->ConsultaUltimoRegistro();
         $trm = $ConsultaUltimoRegistro[0]->valor_trm;
-        $sentencia = 'AND t1.num_acta=0';
+        //$sentencia = 'AND t1.num_acta = 0';// cuando se va a descargar las cotizaciones no se puede usar esto :( 
+        $sentencia = '';// se reemplaza con una sentencia vacia 
         if (!empty($consulta_cotizacion)) {
             foreach ($consulta_cotizacion as $value) {
                 if ($value->item != 0) {

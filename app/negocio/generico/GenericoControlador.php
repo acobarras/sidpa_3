@@ -416,12 +416,13 @@ abstract class GenericoControlador
         echo json_encode($respu);
         return;
     }
-    public function agrega_seguimiento_diag($diagnostico, $item, $observacion, $id_usuario)
+    
+    public function agrega_seguimiento_diag($diagnostico, $item, $id_actividad, $observacion, $id_usuario)
     {
         $formulario_seg = [
             'id_diagnostico' => $diagnostico,
             'item' => $item,
-            'id_area' => 6,
+            'id_actividad_area' => $id_actividad,
             'observacion' => $observacion,
             'id_usuario' => $id_usuario,
             'fecha_crea' => date('Y-m-d'),
