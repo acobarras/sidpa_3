@@ -19,47 +19,50 @@
                                     <div class="col-3">
                                         <label for="nit" class="col-form-label" style="font-family: 'gothic'; font-weight: bold;">Nit empresa</label>
                                         <div class="input-group mb-3">
-                                            <input type="number" class="form-control" name="nit" id="nit_empresa">
+                                            <input type="number" class="form-control" name="nit" id="nit">
                                         </div>
                                     </div>
                                     <div class="form-group col-3">
-                                        <label class="fw-bolder"> Nombre empresa :</label>
+                                        <label for="nombre_empresa" class="fw-bolder"> Nombre empresa :</label>
                                         <div class="datos_empresa">
                                             <span class="form-control span_nombre">N/A</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-2">
-                                        <label class="fw-bolder">Digito de verificacion:</label>
+                                        <label for="dig_verificacion" class="fw-bolder">Digito de verificacion:</label>
                                         <div class="dig_veri">
                                             <span class="form-control span_digito">N/A</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-4">
                                         <label class="fw-bolder"> Dirección pedido :</label>
-                                        <input class="form-control" name="direccion_soli" id="direccion_soli" style="display:none;">
-                                        <select class="form-control" name="direc_solicitud" id="direc_solicitud" style="width: 100%;"></select>
+                                        <input class="form-control direcciones" name="direccion_soli" data="input" id="direccion_soli" style="display:none;">
+                                        <select class="form-control direcciones" name="direc_solicitud" data="select" id="direc_solicitud" style="width: 100%;"></select>
                                     </div>
                                     <div class="mb-3" id="form_direccion">
                                         <div class="row mb-3">
                                             <div class="form-group col-4">
-                                                <label for="id_pais_soli" class="form-label">País : </label>
-                                                <select class="form-control select_2 select_activo" style="width: 100%;" name="id_pais" id="id_pais_soli" disabled>
+                                                <label for="id_pais" class="form-label">País : </label>
+                                                <select class="form-control select_2 select_activo" style="width: 100%;" name="id_pais" id="id_pais" disabled>
+                                                <option value="0" selected>Selecciona el país</option>
                                                     <?php foreach ($paises as $pais) { ?>
                                                         <option value="<?= $pais->id_pais ?>"><?= $pais->nombre ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
                                             <div class="form-group col-4">
-                                                <label for="id_departamento_soli" class="form-label">Departamento : </label>
-                                                <select class="form-control select_2 select_activo" style="width: 100%;" name="id_departamento" id="id_departamento_soli" disabled>
+                                                <label for="id_departamento" class="form-label">Departamento : </label>
+                                                <select class="form-control select_2 select_activo" style="width: 100%;" name="id_departamento" id="id_departamento" disabled>
+                                                <option value="0" selected>Selecciona el departamento</option>
                                                     <?php foreach ($departamento as $dep) { ?>
                                                         <option value="<?= $dep->id_departamento ?>"><?= $dep->nombre ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
                                             <div class="form-group col-4">
-                                                <label for="id_ciudad_soli" class="form-label">Ciudad : </label>
-                                                <select class="form-control select_2 select_activo" style="width: 100%;" name="id_ciudad" id="id_ciudad_soli" disabled>
+                                                <label for="id_ciudad" class="form-label">Ciudad : </label>
+                                                <select class="form-control select_2 select_activo" style="width: 100%;" name="id_ciudad" id="id_ciudad" disabled>
+                                                <option value="0" selected>Selecciona la ciudad</option>
                                                     <?php foreach ($ciud as $ciudad) { ?>
                                                         <option value="<?= $ciudad->id_ciudad ?>"><?= $ciudad->nombre ?></option>
                                                     <?php } ?>
@@ -68,40 +71,40 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="form-group col-4">
-                                                <label class="fw-bolder"> Teléfono :</label>
-                                                <input class="form-control input_activo" name="telefono" id="telefono_soli" readonly></input>
+                                                <label for="telefono" class="fw-bolder"> Teléfono :</label>
+                                                <input class="form-control input_activo" name="telefono" id="telefono" readonly></input>
                                             </div>
                                             <div class="form-group col-4">
-                                                <label class="fw-bolder"> Celular :</label>
-                                                <input class="form-control input_activo" name="celular" id="celular_soli" readonly></input>
+                                                <label for="celular" class="fw-bolder"> Celular :</label>
+                                                <input class="form-control input_activo" name="celular" id="celular" readonly></input>
                                             </div>
                                             <div class="form-group col-4">
-                                                <label class="fw-bolder"> Correo :</label>
-                                                <input class="form-control input_activo" name="email" id="correo_soli" readonly></input>
+                                                <label for="email" class="fw-bolder"> Correo :</label>
+                                                <input class="form-control input_activo" name="email" id="email" readonly></input>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="form-group col-4">
-                                                <label class="fw-bolder"> Contacto :</label>
-                                                <input class="form-control input_activo" name="contacto" id="contacto_soli" readonly></input>
+                                                <label for="contacto" class="fw-bolder"> Contacto :</label>
+                                                <input class="form-control input_activo" name="contacto" id="contacto" readonly></input>
                                             </div>
                                             <div class="form-group col-4">
-                                                <label class="fw-bolder"> Cargo :</label>
-                                                <input class="form-control input_activo" name="cargo" id="cargo_soli" readonly></input>
+                                                <label for="cargo" class="fw-bolder"> Cargo :</label>
+                                                <input class="form-control input_activo" name="cargo" id="cargo" readonly></input>
                                             </div>
                                             <div class="form-group col-4">
-                                                <label class="fw-bolder"> Horario :</label>
-                                                <input class="form-control input_activo" name="horario" id="horario_soli" readonly></input>
+                                                <label for="horario" class="fw-bolder"> Horario :</label>
+                                                <input class="form-control input_activo" name="horario" id="horario" readonly></input>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="form-group col-8">
-                                                <label class="fw-bolder"> Link google maps :</label>
-                                                <input class="form-control input_activo" name="link_maps" id="link_soli" readonly></input>
+                                                <label for="link_maps" class="fw-bolder"> Link google maps :</label>
+                                                <input class="form-control input_activo" name="link_maps" id="link_maps" readonly></input>
                                             </div>
                                             <div class="form-group col-4">
-                                                <label for="ruta_modifi" class="form-label">Ruta : </label>
-                                                <select class="form-control select_2 select_activo" style="width: 100%;" name="ruta" id="ruta_modifi" disabled>
+                                                <label for="ruta" class="form-label">Ruta : </label>
+                                                <select class="form-control select_2 select_activo" style="width: 100%;" name="ruta" id="ruta" disabled>
                                                     <?php foreach (RUTA_ENTREGA as $key => $ruta) { ?>
                                                         <option value="<?= $key ?>"><?= $ruta ?></option>
                                                     <?php } ?>

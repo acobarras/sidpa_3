@@ -73,8 +73,9 @@ class GestionarDiagnosticoControlador extends GenericoControlador
 
         if ($estado_cotizacion == 4) {
             for ($i = 0; $i < count($datos_diagnostico); $i++) {
+                $id_actividad = 93; // DEVUELVE SIN REPARAR
                 $observacion = 'DEVUELVE SIN REPARAR';
-                $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+                $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 $formulario = [
                     'id_diagnostico' => $datos_diagnostico[0]['id_diagnostico'],
                     'num_cotizacion' => 0,
@@ -106,8 +107,9 @@ class GestionarDiagnosticoControlador extends GenericoControlador
                 // SE REGISTRA EL SEGUIMIENTO 
                 for ($a = 0; $a < count($datos[$i]); $a++) {
                     if ($_POST['estado'] == 2) {
-                        $observacion = 'COTIZACION DE REPUESTOS' . $num_cotizacion[0]->numero_guardado;
-                        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+                        $id_actividad = 78; // COTIZACION DE REPUESTOS
+                        $observacion = 'COTIZACIÓN MA-' . $num_cotizacion[0]->numero_guardado. ' REPUESTO '. $a+1;
+                        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());// ESTE SEGUIMIENTO SE REALIZA POR REPUESTO ojo
                         $formulario = [
                             'id_diagnostico' => $datos_diagnostico[0]['id_diagnostico'],
                             'num_cotizacion' => $num_cotizacion[0]->numero_guardado,
@@ -122,8 +124,9 @@ class GestionarDiagnosticoControlador extends GenericoControlador
                             'hora_crea' => date('H:i:s'),
                         ];
                     } else {
+                        $id_actividad = 94; // COMODATO O GARANTIA
                         $observacion = 'COMODATO O GARANTIA';
-                        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+                        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                         $formulario = [
                             'id_diagnostico' => $datos_diagnostico[0]['id_diagnostico'],
                             'num_cotizacion' => 0,
@@ -142,11 +145,11 @@ class GestionarDiagnosticoControlador extends GenericoControlador
                 }
             }
         }
-        if ($agregar_item['status'] == 1 && $estado_cotizacion == 2) {
+        if ($agregar_item['status'] && $estado_cotizacion == 2) {
             header('Content-type: application/pdf');
             $crea_cotiza = GestionarDiagnosticoControlador::crear_cotizacion($num_cotizacion[0]->numero_guardado);
             $respu = $crea_cotiza;
-        } else if ($agregar_item['status'] == 1 && $estado_cotizacion == 4) {
+        } else if ($agregar_item['status'] && $estado_cotizacion == 4) {
             header('Content-type: application/json');
             $id_cotizacion = $agregar_item['id'];
             // SE EDITA LA TABLA DE COTIZACION PARA COLOCARLE EL NUM DE ACTA DE CIERRE
@@ -160,6 +163,7 @@ class GestionarDiagnosticoControlador extends GenericoControlador
                 'msg' => 'datos grabados'
             ];
         } else {
+
             header('Content-type: application/json');
             $respu = [
                 'status' => -2,
@@ -175,7 +179,7 @@ class GestionarDiagnosticoControlador extends GenericoControlador
         $consulta_cotizacion = $this->CotizacionItemSoporteDAO->consulta_cotiza($num_cotizacion, 1);
         $ConsultaUltimoRegistro = $this->trmDAO->ConsultaUltimoRegistro();
         $trm = $ConsultaUltimoRegistro[0]->valor_trm;
-        $sentencia = 'AND t1.num_acta=0';
+        $sentencia = 'AND t1.num_acta = 0';
         foreach ($consulta_cotizacion as $value) {
             $repuestos = $this->SoporteItemDAO->consultar_repuestos_item($value->id_diagnostico, $value->item, $sentencia);
             $value->repuestos = $repuestos;

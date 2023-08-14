@@ -93,8 +93,9 @@ class VisitasAgendadasControlador extends GenericoControlador
         $agregar_equipo = $this->SoporteItemDAO->insertar($formulario);
 
         // SE REALIZA EL INGRESO DEL SEGUIMIENTO
+        $id_actividad = 99; //INSTALACION DE EQUIPO NUEVO
         $observacion = 'INSTALACION DE EQUIPO NUEVO';
-        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 1, $observacion, $_SESSION['usuario']->getid_usuario());
+        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 1, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
         if ($agregar_equipo['status'] == 1) {
             $num_cotizacion = $this->ConsCotizacionDAO->consultar_cons_especifico(16);
@@ -136,8 +137,9 @@ class VisitasAgendadasControlador extends GenericoControlador
             $this->SoporteTecnicoDAO->editar($formulario_diag, $condicion_diag);
 
             // SE REGISTRA EL SEGUIMIENTO DE CIERRE
+            $id_actividad = 100; //CIERRE DIAGNOSTICO POR INSTALACION
             $observacion_cierre = 'CIERRE DIAGNOSTICO POR INSTALACION';
-            $seguimiento_cierre = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 1, $observacion_cierre, $_SESSION['usuario']->getid_usuario());
+            $seguimiento_cierre = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 1, $id_actividad, $observacion_cierre, $_SESSION['usuario']->getid_usuario());
             $numero_acta = 'ENT' . $num_acta[0]->numero_guardado;
             // SE GENERA EL ACTA DE ENTREGA
             $crea_acta_entrega = GenericoControlador::crear_acta_entrega($numero_acta, 1, $firma);

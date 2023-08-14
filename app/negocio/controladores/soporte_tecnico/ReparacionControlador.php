@@ -49,8 +49,9 @@ class ReparacionControlador extends GenericoControlador
         $persona = $this->PersonaDAO->consultar_personas_id($form['id_persona_reparacion']);
 
         // SE REALIZA EL INGRESO DEL SEGUIMIENTO
+        $id_actividad = 81; //TECNICO ASIGNADO
         $observacion = 'TÉCNICO ' . $persona[0]->nombres . ' ' . $persona[0]->apellidos . ' ASIGNADO PARA REPARACION';
-        $seguimiento = GenericoControlador::agrega_seguimiento_diag($data['id_diagnostico'], $data['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+        $seguimiento = GenericoControlador::agrega_seguimiento_diag($data['id_diagnostico'], $data['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
         $editar_item = [
             'id_persona_reparacion' => $form['id_persona_reparacion'],
@@ -99,11 +100,13 @@ class ReparacionControlador extends GenericoControlador
         $datos = $_POST['data'];
         // SE REALIZA EL INGRESO DEL SEGUIMIENTO
         if ($_POST['estado_item'] == 16) {
+            $id_actividad = 95; //TECNICO ASIGNADO
             $observacion = 'REPARACION NO EJECUTADA';
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
         } else {
+            $id_actividad = 82; //TECNICO ASIGNADO
             $observacion = 'REPARACION EJECUTADA';
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
         }
 
         $repuestos = $datos['repuestos'];

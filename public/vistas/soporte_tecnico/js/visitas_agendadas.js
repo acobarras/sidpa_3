@@ -4,7 +4,6 @@ $(document).ready(function () {
     cargar_item();
     mostrar_formulario();
     seleccionar_producto();
-    borrar_firma();
 });
 const IDPERSONA = $('#id_usuario').val();
 const ROLL = $('#roll_usuario').val();
@@ -27,19 +26,19 @@ var carga_visita_agendada = function () {
                 "render": function (data, type, row) {
                     if (row.estado == 5) {
                         return `<center>
-                                        <button type='button' class='btn btn-success btn-circle envio_agenda'>
+                                        <button type='button' title='Enviar agenda' class='btn btn-success btn-circle envio_agenda'>
                                         <span class='fas fa-check'></span>
                                         </button>
                                         <center>
                                         <center>
-                                        <button type='button' class='btn btn-danger btn-circle cancela_agenda'>
+                                        <button type='button' title='Cancelar agenda' class='btn btn-danger btn-circle cancela_agenda'>
                                         <span class='fas fa-ban'></span>
                                         </button>
                                         <center>`
                     } else {
                         // ESTADO 8->AGREGA INFORMACION DEL EQUIPO
                         return `<center>
-                    <button type='button' id='boton${row.id_diagnostico}' class='agregar_item btn btn-info btn-circle'>
+                    <button type='button' title='Agregar item' id='boton${row.id_diagnostico}' class='agregar_item btn btn-info btn-circle'>
                         <i class="fas fa-laptop-medical"></i>
                     </button>
                 <center>`
@@ -121,19 +120,7 @@ var agendamiento_visita = function (tbody, table) {
         }
     });
 }
-var borrar_firma = function () {
-    $('#borrar_firma').on('click', function () {
-        var firma_insta = document.getElementById('captura_firma');
-        var signaturePad = new SignaturePad(firma_insta, {
-            backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
-        });
-        var data_firma = signaturePad.toData();
-        if (data_firma) {
-            data_firma.pop(); // remove the last dot or line
-            signaturePad.fromData(data_firma);
-        }
-    });
-}
+
 var enviar_equipo = function (data, firma_insta, signaturePad) {
     $('#form_instalacion').submit(function (e) {
         e.preventDefault();
@@ -261,7 +248,7 @@ var cargar_tabla_item = function (consecutivo) {
             {
                 "defaultContent":
                     `<center>
-                    <button class="btn btn-danger btn-sm btn-circle elimina_item"><i class="fa fa-times"></i></button>
+                    <button title='Eliminar item' class="btn btn-danger btn-sm btn-circle elimina_item"><i class="fa fa-times"></i></button>
                 </center>`
             },
 
@@ -303,7 +290,7 @@ function enviar_items(consecutivo) {
     var signaturePad = new SignaturePad(canvas, {
         backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
     });
-    $('#borrar').on('click', function () {
+    $('#borrar_firma').on('click', function () {
         var data = signaturePad.toData();
         if (data) {
             data.pop(); // remove the last dot or line
@@ -315,10 +302,10 @@ function enviar_items(consecutivo) {
         var obj_inicial = $('#enviar_datos').html();
         var nota = $('#nota').val();
         var recibido = $('#recibido').val();
-        btn_procesando('enviar_datos');
         if (signaturePad.isEmpty()) {
-            return alert("Esta vacio el campo");
+            return alertify.error("Esta vacio el campo");
         } else {
+            btn_procesando('enviar_datos');
             var firma = captura_firma(canvas, signaturePad, 1);
             $.ajax({
                 "url": `${PATH_NAME}/soporte_tecnico/enviar_equipo_soporte`,
@@ -330,7 +317,6 @@ function enviar_items(consecutivo) {
                 success: function (res) {
                     localStorage.removeItem('item_diagnostico' + consecutivo);
                     alertify.success('Se han cargado exitosamente los equipos');
-
                     var a = document.createElement('a');
                     var url = window.URL.createObjectURL(res);
                     a.href = url;

@@ -120,6 +120,7 @@ var enviar_datos_acta = function (iva, estado) {
         "type": 'POST',
         "data": { data, iva, estado },
         success: function (res) {
+            console.log(res)
             var num_acta = res.num_acta;
             var num_pedido = res.num_pedido;
             if (estado == 1) {
@@ -144,7 +145,7 @@ var generar_pdf_acta = function (num_pedido, num_acta, estado_pdf) {
             var a = document.createElement('a');
             var url = window.URL.createObjectURL(respuesta);
             a.href = url;
-            a.download = 'ActaEntrega' + num_acta + '.pdf';
+            a.download = 'ActaEntrega-' + num_acta + '.pdf';
             a.click();
             window.URL.revokeObjectURL(url);
 

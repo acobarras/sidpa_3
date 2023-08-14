@@ -6,7 +6,7 @@ $(document).ready(function () {
 });
 // SE REALIZA UN BLUR CUANDO DIGITEN UN NUMERO DE NIT PARA CONSULTAR SI EXISTE INFORMACION DE LA EMPRESA DIGITADA
 var solicitud_soporte = function () {
-    $("#nit_empresa").on('blur', function (e) {
+    $("#nit").on('blur', function (e) {
         e.preventDefault();
         var form = $(this).serializeArray();
         var valida = validar_formulario(form);
@@ -19,7 +19,7 @@ var solicitud_soporte = function () {
                     // DEPENDIENDO LA RESPUESTA SE LE CARGA EL RESTO DE LA INFORMACION DE LA EMPRESA
                     if (res['data_empresa'] == '') {
                         $('.datos_empresa').html('<input class="form-control" name="nombre_empresa" id="nombre_empresa"></input>');
-                        $('.dig_veri').html('<input class="form-control" name="dig_verificacion" id="dig_veri"></input>');
+                        $('.dig_veri').html('<input class="form-control" name="dig_verificacion" id="dig_verificacion"></input>');
                         $('.span_nombre').css('display', 'none');
                         $('.span_digito').css('display', 'none');
                     } else {
@@ -69,27 +69,49 @@ var seleccion_checkbox = function () {
     $('.req_visita').click(function () {
         var valor = $(this).val();
         var form = $('#crea_solicitud_soporte').serializeArray();
-        if (valor == 1) {
-            $('#requiere_visita').css('display', 'none');
-            alertify.confirm('ALERTA SIDPA', '¿Esta seguro que no necesita una visita?', function () {
-                $.ajax({
-                    "url": `${PATH_NAME}/soporte_tecnico/agregar_datos`,
-                    "type": 'POST',
-                    "data": form,
-                    success: function (res) {
-                        if (res.status = 'true') {
-                            window.location.href = `${PATH_NAME}/laboratorio_soporte?id=${res.id}`;
-                            borrar_form();
-                        } else {
-                            alertify.error('algo a sucedido');
-                        }
-                    }
-                });
-            }, function () { alertify.error('Cancelado'); })
-                .set('labels', { ok: 'Si', cancel: 'No' });
+        console.log(form)
+        var activo_select = $('#direc_solicitud').css('display');
+        var direccion = $('#direc_solicitud').val();
+        var validar = false;
+        if (activo_select != 'none') {
+            if (direccion != 0 && direccion != null) {
+                validar = true;
+            } else {
+                $('#direc_solicitud').focus();
+                var invalido = `<div class="inval-campo text-danger fs-6"> *Este campo es obligatorio </div>`
+                $('#direc_solicitud').after(invalido);
+                setTimeout(function () {
+                    $(`.inval-campo`).fadeOut(1500);
+                }, 2000);
+            }
         } else {
-            $('#requiere_visita').css('display', 'block');
+            validar = validar_formulario(form);
         }
+
+        //validacion de id direccion para no perder consecutivos no se envien diagnosticos son direccion 
+        if (validar) {
+            if (valor == 1) {
+                $('#requiere_visita').css('display', 'none');
+                alertify.confirm('ALERTA SIDPA', '¿Esta seguro que no necesita una visita?', function () {
+                    $.ajax({
+                        "url": `${PATH_NAME}/soporte_tecnico/agregar_datos`,
+                        "type": 'POST',
+                        "data": form,
+                        success: function (res) {
+                            if (res.status = 'true') {
+                                window.location.href = `${PATH_NAME}/laboratorio_soporte?id=${res.id}`;
+                                borrar_form();
+                            } else {
+                                alertify.error('algo a sucedido');
+                            }
+                        }
+                    });
+                }, function () { alertify.error('Cancelado'); })
+                    .set('labels', { ok: 'Si', cancel: 'No' });
+            } else {
+                $('#requiere_visita').css('display', 'block');
+            }
+        } 
     });
     $('.visita_prese').click(function () {
         var valor = $(this).val();
@@ -188,17 +210,7 @@ var llenar_form_direc = function () {
     $("#direc_solicitud").on('change', function () {
         var elegido = JSON.parse($(this).val());
         if (elegido != '') {
-            $('#id_pais_soli').val(elegido.id_pais).change();
-            $('#id_departamento_soli').val(elegido.id_departamento).change();
-            $('#id_ciudad_soli').val(elegido.id_ciudad).change();
-            $('#telefono_soli').empty().val(elegido.telefono);
-            $('#celular_soli').empty().val(elegido.celular);
-            $('#correo_soli').empty().val(elegido.email);
-            $('#contacto_soli').empty().val(elegido.contacto);
-            $('#cargo_soli').empty().val(elegido.cargo);
-            $('#horario_soli').empty().val(elegido.horario);
-            $('#link_soli').empty().val(elegido.link_maps);
-            $('#ruta_modifi').val(elegido.ruta).change();
+            rellenarFormulario(elegido)
         }
     });
 }
@@ -212,6 +224,6 @@ var borrar_form = function () {
     $('#req_cotiza').css('display', 'none');
     $('.span_nombre').empty().html('N/A');
     $('.span_digito').empty().html('N/A');
-    $('#nit_empresa').val('').change();
+    $('#nit').val('').change();
     $('#direc_solicitud').val(0).change();
 }

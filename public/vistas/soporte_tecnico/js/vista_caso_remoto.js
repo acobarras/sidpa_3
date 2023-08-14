@@ -38,7 +38,7 @@ var carga_caso_remoto = function () {
                     {
                         "render": function (data, type, row) {
                             return `<center>
-                            <button type='button' id='boton${row.id_diagnostico}' class='btn btn-success btn-circle cerrar_diag' data-bs-toggle='modal' data-bs-target='#cierre_caso'>
+                            <button type='button' title='Cerrar diagnostico' id='boton${row.id_diagnostico}' class='btn btn-success btn-circle cerrar_diag' data-bs-toggle='modal' data-bs-target='#cierre_caso'>
                                 <span class='fas fa-search'></span>
                             </button>
                                         <center>`

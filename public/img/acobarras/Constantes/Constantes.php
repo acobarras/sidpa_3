@@ -383,3 +383,13 @@ define(
         7 => ['nombre' => 'CORTE Y PERFORACIÓN', 'nombre_corto' => 'CORT Y PERF']
     )
 );
+ 
+// ------------------ permisos de soporte ---------------------------------
+
+define(
+    'PERMISOS_SOPORTE',
+    array(
+        79 => 'JEFE SOPORTE',
+        90 => 'COORDINADOR SOPORTE',
+    )
+);

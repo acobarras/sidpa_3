@@ -984,182 +984,174 @@ class PDF
     }
 
     public static function crea_cotizacion_visita($fecha, $data_completa, $num_cotizacion, $estado, $trm, $firma)
-    {
-        if ($estado == 2) {
-            $conteo = 1;
+{
+    if ($estado == 2) {
+        $conteo = 1;
+    } else {
+        $conteo = count($data_completa);
+    }
+    $html = '
+    <html>
+        <head>
+            <meta charset="utf-8">
+            <title>PDF Cotización</title>
+            <link type="text/css" rel="stylesheet" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/stylepdfcotiza_visita.css">
+        </head>
+        <body>
+            <header>
+                <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/cabeza_cotiza_visita.jpg">
+                <br> 
+            </header>
+            <div class="img_vertical">
+                <img id="vertical" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/vertical_cotiza_visita.png">
+            </div>
+            <footer>
+                <img id="imgpie" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/pie_cotiza_visita.jpg">
+            </footer> 
+            <div class="titulo">
+                <h4 class="fecha">Fecha: ' . $fecha . '</h4>
+                <h5 class="numero">CONSECUTIVO ' . date("Y") . ': MA-' . $num_cotizacion . '</h5>
+            </div>
+            <div class="contenido">
+                Señores: <b>' . $data_completa[0]->nombre_empresa . '</b>
+                <br>
+                Atn: ' . $data_completa[0]->contacto . ' - ' . $data_completa[0]->cargo . '
+                <br>
+                Ciudad: ' . $data_completa[0]->nombre_ciudad .'
+                <br>
+                <p>Respetados Señores,</p>
+                <br>
+                Cordialmente estamos dando a conocer nuestra propuesta comercial, teniendo en cuenta sus
+                necesidades de identificación con tecnología de código de barras para el control y manejo de sus
+                productos e impresión de etiquetas adhesivas y no adhesivas en diferentes formas, tamaños y colores.
+                <p></p>
+                De antemano agradecemos su interés por tener en cuenta a ' . NOMBRE_EMPRESA . ', como la mejor
+                solución a sus necesidades y en donde encontrará múltiples ventajas en servicio, calidad y precio.
+                <p></p>
+                TECNOLOGÍA
+                    <p></p>
+                    ';
+    $total = 0;
+    $total_pesos = 0;
+    $total_dolares = 0;
+    $total_mano = 0;
+    $dolares_pesos = 0;
+    $lleva_conteo = 0;
+    for ($i = 0; $i < $conteo; $i++) {
+        $conteo_items = count($data_completa[$i]->repuestos);
+        if ($estado == 2 || $data_completa[$i]->item == 0) {
+            $equipo = 'Cotizacion Visita';
         } else {
-            $conteo = count($data_completa);
+            $equipo = $data_completa[$i]->equipo . ' - ' . 'N/S: ' . $data_completa[$i]->serial_equipo.' (Caso: '. $data_completa[$i]->num_consecutivo .' Item: '.$data_completa[$i]->item.')' ;
         }
-        $html = '
-        <html>
-            <head>
-                <meta charset="utf-8">
-                <title>PDF Cotizacion</title>
-                <link type="text/css" rel="stylesheet" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/stylepdfcotiza_visita.css">
-            </head>
-            <body>
-                <header>
-                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/cabeza_cotiza_visita.jpg">
-                    <br> 
-                </header>
-                <div class="img_vertical">
-                    <img id="vertical" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/vertical_cotiza_visita.png">
-                </div>
-                <footer>
-                    <img id="imgpie" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/pie_cotiza_visita.jpg">
-                </footer> 
-                <div class="titulo">
-                    <h4 class="fecha">Fecha: ' . $fecha . '</h4>
-                    <h5 class="numero">CONSECUTIVO ' . date("Y") . ': MA-' . $num_cotizacion . '</h5>
-                </div>
-                <div class="contenido">
-                    Señores: ' . $data_completa[0]->nombre_empresa . '
-                    <br>
-                    Atn: ' . $data_completa[0]->contacto . '-' . $data_completa[0]->cargo . '
-                    <br>
-                    Ciudad: ' . $data_completa[0]->nombre_ciudad . $data_completa[0]->nombre_departa . $data_completa[0]->nombre_pais . '
-                    <br>
-                    <p>Respetados Señores,</p>
-                    <br>
-                    Cordialmente estamos dando a conocer nuestra propuesta comercial, teniendo en cuenta sus
-                    necesidades de identificación con tecnología de código de barras para el control y manejo de sus
-                    productos e impresión de etiquetas adhesivas y no adhesivas en diferentes formas, tamaños y colores.
-                    <p></p>
-                    De antemano agradecemos su interés por tener en cuenta a' . NOMBRE_EMPRESA . ', como la mejor
-                    solución a sus necesidades y en donde encontrará múltiples ventajas en servicio, calidad y precio.
-                    <p></p>
-                    TECNOLOGÍA
-                     <p></p>
-                     ';
-        $total = 0;
-        $total_pesos = 0;
-        $total_dolares = 0;
-        $total_mano = 0;
-        $dolares_pesos = 0;
-        $lleva_conteo = 0;
-        for ($i = 0; $i < $conteo; $i++) {
-            $conteo_items = count($data_completa[$i]->repuestos);
-            if ($estado == 2 || $data_completa[$i]->item == 0) {
-                $equipo = 'Cotizacion Visita';
+        $html .= '<table align="center" border="1" width="100%" cellspacing="0">
+        // <thead>
+        //   <tr>
+        //     <th  colspan="4">' . $equipo . '</th>
+        //   </tr>
+        //   <tr class = "sub_tabla">
+        //     <th width="60%">Artículos</th>
+        //     <th width="10%">Moneda</th>
+        //     <th width="10%">Cantidad</th>
+        //     <th width="20%">V/r Unidad</th>
+        //   </tr>
+        // </thead>
+        // <tbody>';
+        for ($a = 0; $a < $conteo_items; $a++) {
+            $productos = $data_completa[$i]->repuestos[$a];
+            if ($data_completa[$i]->repuestos[$a]->moneda == 1) {
+                $moneda = 'Pesos';
+                $simbolo = '$';
+                $total_pesos = $total_pesos + $data_completa[$i]->repuestos[$a]->valor * $data_completa[$i]->repuestos[$a]->cantidad;
             } else {
-                $equipo = $data_completa[$i]->equipo . '<br>' . 'N/S: ' . $data_completa[$i]->serial_equipo;
+                $moneda = 'Dolar';
+                $simbolo = 'U$Dol ';
+                $total_dolares = $total_dolares + $data_completa[$i]->repuestos[$a]->valor;
             }
-            $html .= '<table align="center" border="1" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-                <th style="background: grey;" colspan="4">' . $equipo . '</th>
-              </tr>
-              <tr>
-                <th style="background: rgb(182, 175, 175);" width="60%">Artículos</th>
-                <th style="background: rgb(182, 175, 175);" width="10%">Moneda</th>
-                <th style="background: rgb(182, 175, 175);" width="10%">Cantidad</th>
-                <th style="background: rgb(182, 175, 175);" width="20%">V/r Unidad</th>
-              </tr>
-            </thead>
-            <tbody>';
-            for ($a = 0; $a < $conteo_items; $a++) {
-                $productos = $data_completa[$i]->repuestos[$a];
-                if ($data_completa[$i]->repuestos[$a]->moneda == 1) {
-                    $moneda = 'Pesos';
-                    $simbolo = '$';
-                } else {
-                    $moneda = 'Dolar';
-                    $simbolo = 'U$Dol ';
-                }
-                if ($data_completa[$i]->repuestos[$a]->moneda == 1) {
-                    $total_pesos = $total_pesos + $data_completa[$i]->repuestos[$a]->valor * $data_completa[$i]->repuestos[$a]->cantidad;
-                } else {
-                    $total_dolares = $total_dolares + $data_completa[$i]->repuestos[$a]->valor;
-                }
-                if ($productos->id_tipo_articulo == 14 || $productos->id_tipo_articulo == 12) {
-                    $total_mano = $total_mano + $data_completa[$i]->repuestos[$a]->valor;
-                }
-                $descripcion_productos = $productos->codigo_producto . ' ' . $productos->descripcion_productos;
-                if (strlen($descripcion_productos) >= 50) {
-                    $nombre1 = substr($descripcion_productos, 0, 50);
-                    $nombre2 = substr($descripcion_productos, 50, 80);
-                } else {
-                    $nombre1 = substr($descripcion_productos, 0, 50);
-                    $nombre2 = "";
-                }
-                $html .= '
-                        <tr>
-                            <td width="60%">' . $nombre1 . '<br>' . $nombre2 . '</td>
-                            <td width="10%" align="center">' . $moneda . '</td>
-                            <td width="10%" align="center">' . $data_completa[$i]->repuestos[$a]->cantidad . '</td>
-                            <td width="20%" align="center">' . $simbolo . ' ' . $data_completa[$i]->repuestos[$a]->valor . '</td>
-                        </tr>';
+            if ($productos->id_tipo_articulo == 14 || $productos->id_tipo_articulo == 12) {
+                $total_mano = $total_mano + $data_completa[$i]->repuestos[$a]->valor;
             }
-            $html .= '</tbody>
-                     </table>';
+            $descripcion_productos = $productos->codigo_producto . ' ' . $productos->descripcion_productos;
+            if (strlen($descripcion_productos) >= 50) {
+                $nombre1 = substr($descripcion_productos, 0, 50);
+                $nombre2 = substr($descripcion_productos, 50, 80);
+            } else {
+                $nombre1 = substr($descripcion_productos, 0, 50);
+                $nombre2 = "";
+            }
+            $html .= '
+                    <tr>
+                        <td width="60%">' . $nombre1 . '<br>' . $nombre2 . '</td>
+                        <td width="10%" align="center">' . $moneda . '</td>
+                        <td width="10%" align="center">' . $data_completa[$i]->repuestos[$a]->cantidad . '</td>
+                        <td width="20%" align="center">' . $simbolo . ' ' . number_format($data_completa[$i]->repuestos[$a]->valor , 2, ',', '.') . '</td>
+                    </tr>';
         }
-        $total_en_pesos = $total_pesos - $total_mano;
-        $dolares_pesos = $total_dolares * $trm;
-        $total = $total_en_pesos + $dolares_pesos + $total_mano;
-        $html .= '<br>
-                    <table align="center" border="1" width="100%" cellspacing="0">
-                        <tbody>
-                            <tr>
-                             <td style="width:20%; background: grey;" align="center">Valor TRM</td>
-                             <td style="width:20%; background: grey;" align="center">Repuestos en Dolares</td>
-                             <td style="width:20%; background: grey;" align="center">Repuestos en Pesos</td>
-                             <td style="width:20%; background: grey;" align="center">Total Mano de Obra</td>
-                             <td style="width:20%; background: grey;" align="center">Total Cotizacion</td>
-                            </tr>
-                            <tr>
-                             <td style="width:20%;" align="center">$' . number_format($trm, 2, ',', '.') . '</td>
-                             <td style="width:20%;" align="center">U$Dol ' . $total_dolares . '</td>
-                             <td style="width:20%;" align="center">$' . number_format($total_en_pesos, 2, ',', '.') . '</td>
-                             <td style="width:20%;" align="center">$' . number_format($total_mano, 2, ',', '.') . '</td>
-                             <td style="width:20%;" align="center">$' . number_format($total, 2, ',', '.') . '</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                     <br>
-                     NOTA:
-                     <br>
-                     <div style="margin: right 10mm;">
-                         - Se puede hacer la entrega con el 10% de más o de menos etiquetas
-                         <br>
-                         - Para el caso de los valores cotizados en dólares se tendrá en cuenta para la facturación la TRM
-                         de la fecha de la orden de compra.
-                         <br>
-                         - Favor generar dos órdenes de compra una para repuestos y otra para mano de obra; o dos
-                         líneas de descripción dentro de la misma orden de compra discriminando repuestos y mano de obra.
-                         <br>
-                         - Para el caso de reparaciones de board efectuadas en laboratorio y/o visitas sobre los equipos,
-                         estamos sujetos a las pruebas de funcionamiento durante la reparación y el periodo de garantía,
-                         de ser necesario el cambio de la parte se generará una nueva cotización.
-                     </div>
-                     <br>
-                     CONDICIONES COMERCIALES
-                     <br>
-                     PRECIOS NETOS MÁS 19% DE IVA
-                     <p></p>
-                     COMPROMISO DE ENTREGA:
-                     <div style="margin: right 10mm;">
-                         ETIQUETAS: De Cinco (5) días hábiles, fecha orden de compra y/o aprobación de artes.
-                         <br>
-                         TECNOLOGIA: De quince (15) a veinte (20) días hábiles, posteriores a recibir la orden de compra,
-                         dependiendo del inventario de stock y/o importación.
-                     </div>
-                     <p></p>
-                     FORMA DE PAGO: 30 días.
-                     <p></p>
-                     VALIDEZ DE LA OFERTA: 30 días.
-                     <p></p>
-                     GARANTIA: 3 meses.
-                     <p></p>
-                     Cordialmente,
-                     <br>
-                     ' . JEFE_SOPORTE . '
-                     <br>
-                     Jefe de Soporte Técnico
-                     <br>
-                     Tel. ' . TEL_EMPRESA . '
-                     <br>
-                     em@il:' . CORREO_SOPORTE_TEC . '
-                 </div>';
+        $html .= '</tbody>
+                    </table>';
+    }
+    $total_en_pesos = $total_pesos - $total_mano;
+    $dolares_pesos = $total_dolares * $trm;
+    $total = $total_en_pesos + $dolares_pesos + $total_mano;
+    $html .= '<br>
+                <table align="center" border="1" width="100%" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <th style="width:20%;" align="center">Valor TRM</th>
+                            <th style="width:20%;" align="center">Repuestos en Dolares</th>
+                            <th style="width:20%;" align="center">Repuestos en Pesos</th>
+                            <th style="width:20%;" align="center">Total Mano de Obra</th>
+                            <th style="width:20%;" align="center">Total Cotizacion</th>
+                        </tr>
+                        <tr>
+                            <td style="width:20%;" align="center">$' . number_format($trm, 2, ',', '.') . '</td>
+                            <td style="width:20%;" align="center">U$Dol ' . $total_dolares . '</td>
+                            <td style="width:20%;" align="center">$' . number_format($total_en_pesos, 2, ',', '.') . '</td>
+                            <td style="width:20%;" align="center">$' . number_format($total_mano, 2, ',', '.') . '</td>
+                            <td style="width:20%;" align="center">$' . number_format($total, 2, ',', '.') . '</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                    <b>NOTA:</b>
+                    <br>
+                    <div>
+                    <ul>
+                        <li>Se puede hacer la entrega con el 10% de más o de menos etiquetas</li>
+                        <li>Para el caso de los valores cotizados en dólares se tendrá en cuenta para la facturación la TRM de la fecha de la orden de compra.</li>
+                        <li>Favor generar dos órdenes de compra una para repuestos y otra para mano de obra; o dos líneas de descripción dentro de la misma orden de compra discriminando repuestos y mano de obra.</li>
+                        <li>Para el caso de reparaciones de board efectuadas en laboratorio y/o visitas sobre los equipos, estamos sujetos a las pruebas de funcionamiento durante la reparación y el periodo de garantía, de ser necesario el cambio de la parte se generará una nueva cotización.</li>
+                    </ul>
+                    </div>
+                    <br>
+                    <b>CONDICIONES COMERCIALES</b>
+                    <br>
+                    PRECIOS NETOS MÁS 19% DE IVA
+                    <p></p>
+                    <b>COMPROMISO DE ENTREGA:</b>
+                    <div>
+                        ETIQUETAS: De Cinco (5) días hábiles, fecha orden de compra y/o aprobación de artes.
+                        <br>
+                        TECNOLOGIA: De quince (15) a veinte (20) días hábiles, posteriores a recibir la orden de compra,
+                        dependiendo del inventario de stock y/o importación.
+                    </div>
+                    <p></p>
+                    <b>FORMA DE PAGO: </b>'.FORMA_PAGO[$data_completa[0]->forma_pago].' 
+                    <p></p>
+                    <b>VALIDEZ DE LA OFERTA:</b> 30 días.
+                    <p></p>
+                    <b>GARANTIA:</b> 3 meses.
+                    <p></p>
+                    Cordialmente,
+                    <br><br><br>
+                    <b>' . JEFE_SOPORTE . '</b>
+                    <br>
+                    Jefe de Soporte Técnico
+                    <br>
+                    Tel. ' . TEL_EMPRESA . '
+                    <br>
+                    em@il:' . CORREO_SOPORTE_TEC . '
+                </div>';
 
         $options = new Options();
         $options->set('enable_html5_parser', true);
@@ -1173,11 +1165,12 @@ class PDF
         $pdf = $dompdf->output(); // Obtener el PDF generado
         return $pdf;
     }
+   
     public static function acta_entrega_soporte($numero_acta, $data, $estado, $trm, $firma)
     {
         $conteo = count($data);
         $fecha = date('Y-m-d');
-        if ($estado == 2) {
+        if ($estado == 2 || $data[0]->estado_cotiza == 7) {
             $observacion = 'Los equipos mostrados a continuación se devuelven sin reparar y presentan daños en los siguientes repuestos:';
         } else {
             $observacion = '';
@@ -1205,9 +1198,9 @@ class PDF
                     <h5 class="numero">ENT: ' . $numero_acta . '</h5>
                 </div>
                 <div class="contenido">
-                    Señores:' . $data[0]->nombre_empresa . '
+                    Señores: <b>' . $data[0]->nombre_empresa . '</b>
                     <br>
-                    Atn: ' . $data[0]->contacto . $data[0]->cargo . '
+                    Atn: ' . $data[0]->contacto .' - '. $data[0]->cargo . '
                     <br>
                     Ciudad:' . $data[0]->nombre_ciudad . '
                     <br>
@@ -1222,17 +1215,21 @@ class PDF
         $dolares_pesos = 0;
         for ($i = 0; $i < $conteo; $i++) {
             $conteo_items = count($data[$i]->repuestos);
-            $equipo = $data[$i]->equipo . '<br>' . 'N/S: ' . $data[$i]->serial_equipo . '<br>' . $data[$i]->accesorios;
+            if ($firma != '' && $firma != 2) {
+                $equipo = $data[$i]->equipo . ' N/S: ' . $data[$i]->serial_equipo . ' Caso: '. $data[$i]->num_consecutivo. ' Item: '. $data[$i]->item;
+            }else{
+                $equipo = $data[$i]->equipo . ' N/S: ' . $data[$i]->serial_equipo . ' Caso: '. $data[$i]->num_consecutivo.' Item: '. $data[$i]->item .' <br> Accesorios ' . $data[$i]->accesorios;
+            }
             $html .= '<table align="center" border="1" width="100%" cellspacing="0">
                         <thead>
                           <tr>
-                            <th style="background: grey;" colspan="4">' . $equipo . '</th>
+                            <th colspan="4">' . $equipo . '</th>
                           </tr>
-                          <tr>
-                            <th style="background: rgb(182, 175, 175);" width="60%">Artículos</th>
-                            <th style="background: rgb(182, 175, 175);" width="10%">Moneda</th>
-                            <th style="background: rgb(182, 175, 175);" width="10%">Cantidad</th>
-                            <th style="background: rgb(182, 175, 175);" width="20%">V/r Unidad</th>
+                          <tr class = "sub_tabla">
+                            <th width="60%">Artículos</th>
+                            <th width="10%">Moneda</th>
+                            <th width="10%">Cantidad</th>
+                            <th width="20%">V/r Unidad</th>
                           </tr>
                         </thead>
                         <tbody>';
@@ -1261,7 +1258,7 @@ class PDF
                     $nombre1 = substr($descripcion_productos, 0, 50);
                     $nombre2 = "";
                 }
-                if ($estado == 2) {
+                if ($estado == 2 || $data[0]->estado_cotiza == 7 ) {
                     $valor = 0;
                 } else {
                     $valor = $repuestos->valor;
@@ -1277,7 +1274,7 @@ class PDF
             $html .= '</tbody>
                 </table>';
         }
-        if ($estado == 2) {
+        if ($estado == 2 || $data[0]->estado_cotiza == 7 ) {
             $total_en_pesos = 0;
             $total = 0;
             $total_dolares = 0;
@@ -1291,13 +1288,15 @@ class PDF
                 <br>
                     <table align="center" border="1" width="100%" cellspacing="0">
                        <tbody>
+                        <thead>
                             <tr>
-                                <td style="width:20%; background: grey;" align="center">Valor TRM</td>
-                                <td style="width:20%; background: grey;" align="center">Repuestos en Dolares</td>
-                                <td style="width:20%; background: grey;" align="center">Repuestos en Pesos</td>
-                                <td style="width:20%; background: grey;" align="center">Total Mano de Obra</td>
-                                <td style="width:20%; background: grey;" align="center">Total Orden</td>
+                                <th style="width:20%;" align="center">Valor TRM</th>
+                                <th style="width:20%;" align="center">Repuestos en Dolares</th>
+                                <th style="width:20%;" align="center">Repuestos en Pesos</th>
+                                <th style="width:20%;" align="center">Total Mano de Obra</th>
+                                <th style="width:20%;" align="center">Total Orden</th>
                             </tr>
+                        <thead>
                             <tr>
                                 <td style="width:20%;" align="center">$' . number_format($trm, 2, ',', '.') . '</td>
                                 <td style="width:20%;" align="center">U$Dol ' . $total_dolares . '</td>
@@ -1308,22 +1307,22 @@ class PDF
                         </tbody>
                     </table>
                     <br>
-                    NOTA:
-                    <br>
-                    <div style="margin: right 10mm;">
-                    - Los valores anteriores no incluyen el impuesto del IVA
-                    <br>
-                    - Esta revisión tiene garantía de 3 meses para los equipos facturados.
-                         <br>
-                    </div>
-                    <br>
+                    <b>NOTA:</b>
+                        <br>
+                        <div>
+                            <ul>
+                                <li>Los valores anteriores no incluyen el impuesto del IVA</li>
+                                <li>Esta revisión tiene garantía de 3 meses para los equipos facturados.</li>
+                            </ul>
+                        </div>
+                        <br>
                     <br>';
         if ($firma != '' && $firma != 2) {
             $html .= '
-                    <table width="100%">
+                    <table class="sin_bordes" width="100%">
                                 <tr>
                                     <th width="50%"></th>
-                                    <th width="50%">FIRMA</th>
+                                    <th width="50%">FIRMA CLIENTE</th>
                                 </tr>
                                 <tr>
                                     <td class="nombre_persona">
@@ -1347,7 +1346,7 @@ class PDF
         </body>
         </html>';
         } else {
-            $html .= '<table width="100%">
+            $html .= '<table class="sin_bordes" width="100%">
             <tr>
                 <th width="50%"></th>
             </tr>
@@ -1370,7 +1369,7 @@ class PDF
             </table>
         </div>
     </body>
-    </html';
+    </html>';
         }
         $options = new Options();
         $options->set('enable_html5_parser', true);
@@ -1384,6 +1383,7 @@ class PDF
         $pdf = $dompdf->output(); // Obtener el PDF generado
         return $pdf;
     }
+
     public static function crea_remision_equipos($datos, $estado, $nombre_usuario, $sede, $nota, $apellido_usuario, $firma, $recibido)
     {
         //Cuando los equipos vienen por laboratorio es estado 1 cuando es visita es estado 2

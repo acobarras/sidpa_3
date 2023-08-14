@@ -21,7 +21,7 @@ var consultar_datos_item = function () {
                     { "data": "nombre_empresa" },
                     { "data": "equipo" },
                     { "data": "serial_equipo" },
-                    { "data": "procedimiento" },
+                    { "data": "procedimiento" },//observaciones este no existe en soporte ingreso laboratorio 
                     { "data": "nombre_estado_soporte" },
                     {
                         "render": function (data, type, row) {
@@ -44,23 +44,25 @@ var validar_check = function () {
     $('#tb_gestion_diag tbody').on("click", "tr input.items_selec", function () {
         var data = $('#tb_gestion_diag').DataTable().row($(this).parents("tr")).data();
         var id_diagnostico = data['id_diagnostico'];
-        var cant = data['total_items'];
+        console.log(data);
         if ($(this).prop('checked') == true) {
             if (array_item.length == ['']) {
                 array_item.push(data);
             } else {
+                var agregar = false;
                 array_item.forEach(element => {
                     if (element.id_diagnostico == id_diagnostico) {
-                        if (array_item.length < cant) {
-                            array_item.push(data);
-                        }
-                    } else {
-                        $(this).prop('checked', false);
-                        alertify.error("Los items seleccionados no pertenecen al mismo diagnostico");
-                        return;
+                        agregar = true;
                     }
                 });
+                if (agregar) {
+                    array_item.push(data);
+                } else {
+                    $(this).prop('checked', false);
+                    alertify.error("Los items seleccionados no pertenecen al mismo diagnostico");
+                }
             }
+            
         } else {
             for (var i = 0; i < array_item.length; i++) {
                 if (array_item[i].item === data.item) {
@@ -158,7 +160,7 @@ var mostrar_formulario = function () {
                                         <input type="text" class="form-control bg-white" name="cantidad${element.item}" id="cantidad${element.item}">
                                     </div>
                                     <div class="col-md-3 col-sm-12">
-                                        <button class="btn btn-success agregar_producto" data-item_boton='${element.item}' data-id='${JSON.stringify(element)}' type="button">Agregar</button>
+                                        <button class="btn btn-success agregar_producto" title='Agregar producto' data-item_boton='${element.item}' data-id='${JSON.stringify(element)}' type="button">Agregar</button>
                                     </div>
                                 </div>
                             </form>
@@ -258,7 +260,7 @@ var cargar_tabla = function (datos) {
                 {
                     "defaultContent":
                         `<center>
-                            <button class="btn btn-danger btn-sm btn-circle elimina_item"><i class="fa fa-times"></i></button>
+                            <button title='Eliminar item' class="btn btn-danger btn-sm btn-circle elimina_item"><i class="fa fa-times"></i></button>
                         </center>`
                 },
 
@@ -353,7 +355,7 @@ var enviar_ajax = function (boton_procesando, estado, array_storage) {
                     var a = document.createElement('a');
                     var url = window.URL.createObjectURL(res);
                     a.href = url;
-                    a.download = 'Cotizacion' + datos[0]['id_diagnostico'] + '.pdf';
+                    a.download = 'Cotización-' + datos[0]['num_consecutivo'] + '.pdf';
                     a.click();
                     window.URL.revokeObjectURL(url);
                     window.location.href = `${PATH_NAME}/vista_aprobacion`;

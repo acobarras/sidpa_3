@@ -17,21 +17,21 @@ class CotizacionItemSoporteDAO extends GenericoDAO
     {
         if ($estado == 1) {
             $tabla = ',t9.*';
-            $condicion = 'INNER JOIN diagnostico_item t9 ON t9.id_diagnostico=t2.id_diagnostico';
+            $condicion = 'INNER JOIN diagnostico_item t9 ON t9.item = t1.item AND t9.id_diagnostico = t1.id_diagnostico';
         } else {
             $tabla = '';
             $condicion = '';
         }
-        $sql = "SELECT t1.*,t2.num_consecutivo,t3.nombre_empresa,t5.contacto,t5.cargo,t6.nombre AS nombre_pais,t7.nombre AS nombre_departa,t8.nombre AS nombre_ciudad $tabla
+        $sql = "SELECT t1.*,t2.num_consecutivo,t3.nombre_empresa,t5.contacto,t5.cargo,t6.nombre AS nombre_pais,t7.nombre AS nombre_departa,t8.nombre AS nombre_ciudad, t3.forma_pago $tabla
         FROM cotizacion_item_soporte t1
-        INNER JOIN diagnostico_soporte_tecnico t2 ON t1.id_diagnostico=t2.id_diagnostico 
-        INNER JOIN cliente_proveedor t3 ON t3.id_cli_prov=t2.id_cli_prov 
-        INNER JOIN direccion t5 ON t5.id_direccion=t2.id_direccion 
-        INNER JOIN pais t6 ON t5.id_pais= t6.id_pais 
-        INNER JOIN departamento t7 ON t7.id_departamento=t5.id_departamento 
-        INNER JOIN ciudad t8 ON t8.id_ciudad =t5.id_ciudad 
+        INNER JOIN diagnostico_soporte_tecnico t2 ON t1.id_diagnostico= t2.id_diagnostico 
+        INNER JOIN cliente_proveedor t3 ON t3.id_cli_prov = t2.id_cli_prov 
+        INNER JOIN direccion t5 ON t5.id_direccion = t2.id_direccion 
+        INNER JOIN pais t6 ON t5.id_pais = t6.id_pais 
+        INNER JOIN departamento t7 ON t7.id_departamento = t5.id_departamento 
+        INNER JOIN ciudad t8 ON t8.id_ciudad = t5.id_ciudad 
         $condicion
-        WHERE t1.num_cotizacion=$num_cotizacion GROUP BY t1.item";
+        WHERE t1.num_cotizacion = $num_cotizacion GROUP BY t1.item";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
@@ -43,7 +43,7 @@ class CotizacionItemSoporteDAO extends GenericoDAO
         $sql = "SELECT t1.id_diagnostico,t1.item,t1.num_consecutivo,t1.equipo,t1.serial_equipo,t1.procedimiento,t1.accesorios
         FROM diagnostico_item t1 
         INNER JOIN cotizacion_item_soporte t2 ON t2.id_diagnostico=t1.id_diagnostico
-        WHERE t1.item=$item AND t1.item=t2.item GROUP BY t1.item";
+        WHERE t1.item = $item AND t1.item = t2.item GROUP BY t1.item";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
