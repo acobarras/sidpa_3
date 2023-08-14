@@ -439,7 +439,6 @@ class PDF
         $margen = '';
         $saltopag = '';
         for ($i = 0; $i < count($items); $i++) {
-            print_r($items[$i]['ficha_tecnica_produc']);
             if ($items[$i]['ficha_tecnica_produc'] == '') {
                 $ficha_tecnica = $items[$i]['ficha_tecnica'];
             } else {
