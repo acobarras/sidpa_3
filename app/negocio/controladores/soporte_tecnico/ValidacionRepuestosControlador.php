@@ -159,7 +159,7 @@ class ValidacionRepuestosControlador extends GenericoControlador
                 $condicion = 'id_cotizacion =' . $id_cotizacion;
                 $modificacion = $this->CotizacionItemSoporteDAO->editar($formulario_cotiza, $condicion);
                 // SE REGISTRA EL SEGUIMIENTO
-                $id_actividad = 99; //REPUESTO EN COMPRAS
+                $id_actividad = 98; //REPUESTO EN COMPRAS
                 $observacion = 'REPUESTO ' . $data['codigo_producto'] . ' EN COMPRAS';
                 $seguimiento = GenericoControlador::agrega_seguimiento_diag($data['id_diagnostico'], $data['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
                 $respu = $modificacion;

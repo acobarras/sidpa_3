@@ -266,7 +266,7 @@
                             <label>Requiere Iva :</label>
                             Si <input type="radio" name="iva" id="iva_si" value="1">
                             <span style="padding-left: 5px"></span>
-                            No <input type="radio" name="iva" id="iva_no" value="0">
+                            No <input type="radio" name="iva" id="iva_no" value="2">
                         </div>
                     </div>
                     <div class="mb-3">

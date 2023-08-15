@@ -24,6 +24,7 @@
                                                 <td>Equipo</td>
                                                 <td>Serial</td>
                                                 <td>Procedimiento</td>
+                                                <td>Observaciones y accesorios</td>
                                                 <td>Estado Diagnostico</td>
                                                 <td></td>
                                             </tr>

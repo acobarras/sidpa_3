@@ -524,6 +524,7 @@ var consulta_diag = function () {
                         "data": res['data'],
                         "columns": [
                             { "data": "id_diagnostico" },
+                            { "data": "fecha_crea" },
                             { "data": "num_consecutivo" },
                             { "data": "item_segui" },
                             { "data": "nombre_empresa" },

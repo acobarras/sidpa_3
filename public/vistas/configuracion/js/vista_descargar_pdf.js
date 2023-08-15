@@ -143,7 +143,7 @@ var acta_entrega = function () {
                 var a = document.createElement('a');
                 var url = window.URL.createObjectURL(regreso);
                 a.href = url;
-                a.download = 'acta' + num_acta + '.pdf';
+                a.download = 'Acta_ENT-' + num_acta + '.pdf';
                 a.click();
                 window.URL.revokeObjectURL(url);
                 $('.boton_acta').addClass('fa fa-download');
@@ -183,7 +183,7 @@ var cotizacion = function () {
                 var a = document.createElement('a');
                 var url = window.URL.createObjectURL(response);
                 a.href = url;
-                a.download = 'Cotizacion' + num_cotiza + '.pdf';
+                a.download = 'Cotizacion_MA-' + num_cotiza + '.pdf';
                 a.click();
                 window.URL.revokeObjectURL(url);
                 $('.boton_cotiza').addClass('fa fa-download');

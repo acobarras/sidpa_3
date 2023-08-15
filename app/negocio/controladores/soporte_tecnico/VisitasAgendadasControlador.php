@@ -67,7 +67,8 @@ class VisitasAgendadasControlador extends GenericoControlador
     public function generar_instalacion()
     {
         header('Content-type: application/pdf');
-        $form = Validacion::Decodifica($_POST['form']);
+        //$form = Validacion::Decodifica($_POST['form']);
+        $form = $_POST['form'];
         $firma = $_POST['firma'];
         $datos = $_POST['data'];
         // SE REGISTRA EL EQUIPO EN LA BASE DE DATOS 
@@ -78,8 +79,8 @@ class VisitasAgendadasControlador extends GenericoControlador
             'sede' => 1,
             'fecha_ingreso' => date('Y-m-d'),
             'id_cli_prov' => $datos['id_cli_prov'],
-            'equipo' => $form['equipo'],
-            'serial_equipo' => $form['serial'],
+            'equipo' => $form[0]['value'],//modelo de equipo
+            'serial_equipo' => $form[1]["value"],// numero de serie
             'procedimiento' => 'INSTALACION DE EQUIPO',
             'accesorios' => null,
             'firma_cli' => $firma,
@@ -98,32 +99,24 @@ class VisitasAgendadasControlador extends GenericoControlador
         $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 1, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
         if ($agregar_equipo['status'] == 1) {
-            $num_cotizacion = $this->ConsCotizacionDAO->consultar_cons_especifico(16);
-            $nuevo_cons = $num_cotizacion[0]->numero_guardado + 1;
-            $consecutivo_cotiza = [
-                'numero_guardado' => $nuevo_cons
-            ];
-            $condicion_produc = 'id_consecutivo =16';
-            $this->ConsCotizacionDAO->editar($consecutivo_cotiza, $condicion_produc);
-
             $num_acta = $this->ConsCotizacionDAO->consultar_cons_especifico(17);
             $nuevo_cons = $num_acta[0]->numero_guardado + 1;
             $edita_acta = [
                 'numero_guardado' => $nuevo_cons
             ];
-            $condicion_acta = 'id_consecutivo =17';
+            $condicion_acta = 'id_consecutivo = 17';
             $this->ConsCotizacionDAO->editar($edita_acta, $condicion_acta);
 
             // SE REGISTRA LA COTIZACION DEL REPUESTO
             $formulario_producto = [
                 'id_diagnostico' => $datos['id_diagnostico'],
-                'num_cotizacion' => $num_cotizacion[0]->numero_guardado,
-                'num_acta' => 'ENT' . $num_acta[0]->numero_guardado,
+                'num_cotizacion' => '',
+                'num_acta' => $num_acta[0]->numero_guardado,
                 'item' => 1,
                 'moneda' => 1,
                 'valor' => 0,
                 'cantidad' => 1,
-                'id_producto' => $form['codigo_producto'],
+                'id_producto' => $form[2]["value"],//codigo del producto
                 'estado' => 8,
                 'fecha_crea' => date('Y-m-d'),
                 'hora_crea' => date('H:i:s'),
@@ -140,7 +133,7 @@ class VisitasAgendadasControlador extends GenericoControlador
             $id_actividad = 100; //CIERRE DIAGNOSTICO POR INSTALACION
             $observacion_cierre = 'CIERRE DIAGNOSTICO POR INSTALACION';
             $seguimiento_cierre = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 1, $id_actividad, $observacion_cierre, $_SESSION['usuario']->getid_usuario());
-            $numero_acta = 'ENT' . $num_acta[0]->numero_guardado;
+            $numero_acta = $num_acta[0]->numero_guardado;
             // SE GENERA EL ACTA DE ENTREGA
             $crea_acta_entrega = GenericoControlador::crear_acta_entrega($numero_acta, 1, $firma);
         }

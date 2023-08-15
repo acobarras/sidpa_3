@@ -22,6 +22,7 @@ var consultar_datos_item = function () {
                     { "data": "equipo" },
                     { "data": "serial_equipo" },
                     { "data": "procedimiento" },//observaciones este no existe en soporte ingreso laboratorio 
+                    { "data": "accesorios"},
                     { "data": "nombre_estado_soporte" },
                     {
                         "render": function (data, type, row) {
@@ -76,6 +77,7 @@ var validar_check = function () {
 var cotizar = function () {
     $('#cotizar_repu').on("click", function () {
         var cant_item_array = array_item.length;
+        console.log(array_item)
         if (cant_item_array === 0) {
             alertify.error('Debe seleccionar un item para realizar la cotización');
             return;
@@ -136,46 +138,50 @@ var mostrar_formulario = function () {
         var tabla = `tabla_productos${element.item}`;
         vista /*html*/ += `
                         <div class="col-md-12">
-                            <form id="formulario_articulo${element.item}">
-                                <div class="col-md-12" id="titulo_articulo">
-                                    <h2>Articulo ${element.item}<span style="color: red;" id="nombre_articulo"> ${element.equipo}<span style="color:#302b63"> S/N: ${element.serial_equipo}</span></span></h2>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3 col-sm-12">
-                                        <label for="producto${element.item}" class="form-label">Producto:</label>
-                                        <select class="form-select select_2 productos_tecno${element.item}" id="productos${element.item}" name="producto${element.item}">
-                                        </select>
+                            <div class="alert alert-primary" role="alert">
+                                <p class="mb-0" ><b>Observaciones y accesorios: </b>${element.accesorios}<br>
+                                <b>Procedimiento: </b>${element.procedimiento}</p>
+                            </div>
+                                <form id="formulario_articulo${element.item}">
+                                    <div class="col-md-12" id="titulo_articulo">
+                                        <h2>Articulo ${element.item}<span style="color: red;" id="nombre_articulo"> ${element.equipo}<span style="color:#302b63"> S/N: ${element.serial_equipo}</span></span></h2>
                                     </div>
-                                    <div class="col-md-2 col-sm-12">
-                                        <label class="form-label" for="moneda${element.item}">Moneda:</label>
-                                        <select class="form-select" name="moneda${element.item}" data-item="${element.item}" id="moneda${element.item}">
-                                        </select>
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12">
+                                            <label for="producto${element.item}" class="form-label">Producto:</label>
+                                            <select class="form-select select_2 productos_tecno${element.item}" id="productos${element.item}" name="producto${element.item}">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <label class="form-label" for="moneda${element.item}">Moneda:</label>
+                                            <select class="form-select" name="moneda${element.item}" data-item="${element.item}" id="moneda${element.item}">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <label class="form-label" for="precio${element.item}">Precio:</label>
+                                            <input type="text" class="form-control bg-white" name="precio${element.item}" id="precio${element.item}">
+                                        </div>
+                                        <div class="col-md-1 col-sm-12">
+                                            <label class="form-label" for="cantidad${element.item}">Cantidad:</label>
+                                            <input type="text" class="form-control bg-white" name="cantidad${element.item}" id="cantidad${element.item}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <button class="btn btn-success agregar_producto" title='Agregar producto' data-item_boton='${element.item}' data-id='${JSON.stringify(element)}' type="button">Agregar</button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2 col-sm-12">
-                                        <label class="form-label" for="precio${element.item}">Precio:</label>
-                                        <input type="text" class="form-control bg-white" name="precio${element.item}" id="precio${element.item}">
-                                    </div>
-                                    <div class="col-md-1 col-sm-12">
-                                        <label class="form-label" for="cantidad${element.item}">Cantidad:</label>
-                                        <input type="text" class="form-control bg-white" name="cantidad${element.item}" id="cantidad${element.item}">
-                                    </div>
-                                    <div class="col-md-3 col-sm-12">
-                                        <button class="btn btn-success agregar_producto" title='Agregar producto' data-item_boton='${element.item}' data-id='${JSON.stringify(element)}' type="button">Agregar</button>
-                                    </div>
-                                </div>
-                            </form>
-                            <table id="${tabla}" style="background: white; width: 100%;" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg">
-                                <thead style="background:#0d1b50;color:white">
-                                    <tr>
-                                        <th>Producto</th>
-                                        <th>Cantidad</th>
-                                        <th>Moneda</th>
-                                        <th>Precio</th>
-                                        <th>Opción</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                                </form>
+                                <table id="${tabla}" style="background: white; width: 100%;" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg">
+                                    <thead style="background:#0d1b50;color:white">
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Moneda</th>
+                                            <th>Precio</th>
+                                            <th>Opción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                         </div>`;
     }
     $('#formulario_articulos').empty().html(vista);

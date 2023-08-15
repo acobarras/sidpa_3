@@ -139,7 +139,7 @@
                                     <div class="wrapper">
                                         <canvas id="capturafirmacliente" class="signature-pad" width="400" height="200"></canvas>
                                     </div>
-                                    <button class="btn btn-primary col-6" id="borrar_firma">borrar Firma</button>
+                                    <button class="btn btn-primary col-6 borrar_firma" >borrar Firma</button>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -180,7 +180,8 @@
                                 <div class="row">
                                     <div class="mb-3 col-6">
                                         <label for="codigo_producto" class="form-label">Codigo Producto</label>
-                                        <select class="form-select" aria-label="Default select example" id="producto_cotiza" name="codigo_producto">
+                                        <select class="form-select" aria-label="Default select example" id="codigo_producto" name="codigo_producto">
+
                                         </select>
                                     </div>
                                 </div>
@@ -188,7 +189,7 @@
                                     <div class="wrapper">
                                         <canvas id="captura_firma" class="signature-pad" width="400" height="200"></canvas>
                                     </div>
-                                    <button class="btn btn-primary col-6" id="borrar_firma">borrar Firma</button>
+                                    <button type="button" class="btn btn-primary col-6 borrar_firma" >borrar Firma</button>
                                 </div>
                             </div>
                             <div class="modal-footer">

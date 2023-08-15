@@ -80,12 +80,7 @@ var agendamiento_visita = function (tbody, table) {
             }
             alertify.confirm('ALERTA SIDPA', '¿Es instalacion de un equipo de venta comercial?', function () {
                 $("#modal_instalacion").modal("show");
-                var firma_insta = document.getElementById('captura_firma');
-                var signaturePad = new SignaturePad(firma_insta, {
-                    backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
-                });
-                enviar_equipo(data_envio, firma_insta, signaturePad);
-                // insertar los datos en la base de datos en las tablas de item y cotizacion para despues poderlas enlazar con la informacion del acta 
+                enviar_equipo(data_envio);
             }, function () {
                 $.ajax({
                     url: `${PATH_NAME}/soporte_tecnico/agendamiento`,
@@ -121,16 +116,27 @@ var agendamiento_visita = function (tbody, table) {
     });
 }
 
-var enviar_equipo = function (data, firma_insta, signaturePad) {
+var enviar_equipo = function (data) {
+    var firma_insta = document.getElementById('captura_firma');
+    var signaturePad = new SignaturePad(firma_insta, {
+        backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
+    });
+    $('.borrar_firma').on('click', function () {
+        var data = signaturePad.toData();
+        if (data) {
+            data.pop(); // remove the last dot or line
+            signaturePad.fromData(data);
+        }
+    });
     $('#form_instalacion').submit(function (e) {
         e.preventDefault();
         if (signaturePad.isEmpty()) {
-            return alert("Esta vacio el campo");
+            return alertify.error("Ingrese la firma");
         } else {
             var firma_fin = captura_firma(firma_insta, signaturePad, 1);
+            var form = $(this).serializeArray();
+            var validar = validar_formulario(form);
         }
-        var form = $(this).serialize();
-        var validar = validar_formulario(form);
         if (validar) {
             var envio = {
                 'form': form,
@@ -283,6 +289,8 @@ var elimina_items = function (consecutivo) {
     });
 };
 
+
+
 function enviar_items(consecutivo) {
     var canvas = document.getElementById('capturafirmacliente');
     var estado = 2;
@@ -290,13 +298,14 @@ function enviar_items(consecutivo) {
     var signaturePad = new SignaturePad(canvas, {
         backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
     });
-    $('#borrar_firma').on('click', function () {
+    $('.borrar_firma').on('click', function () {
         var data = signaturePad.toData();
         if (data) {
             data.pop(); // remove the last dot or line
             signaturePad.fromData(data);
         }
     });
+
     $('#enviar_datos').on('click', function () {
         var nuevo_storage = JSON.parse(localStorage.getItem('item_diagnostico' + consecutivo));
         var obj_inicial = $('#enviar_datos').html();
@@ -338,12 +347,12 @@ var seleccionar_producto = function () {
         "url": `${PATH_NAME}/soporte_tecnico/producto_serman`,
         "type": 'POST',
         success: function (res) {
-            var producto = "<option val='0'>Elija Una Producto</option>";
+            var producto = "<option value ='0'>Elija Una Producto</option>";
             res.forEach(element => {
                 producto +=/*html*/
                     ` <option value='${JSON.stringify(element.id_productos)}'>${element.codigo_producto}</option>`;
             });
-            $('#producto_cotiza').html(producto);
+            $('#codigo_producto').html(producto);
         }
     })
 }

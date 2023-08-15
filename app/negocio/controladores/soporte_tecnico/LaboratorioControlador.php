@@ -104,13 +104,28 @@ class LaboratorioControlador extends GenericoControlador
         }
         return $respu;
     }
+    
     public function impresion_etiqueta_equipo()
     {
         header('Content-Type: application/json');
         $consecutivo = $_POST['consecutivo'];
         $datos = $_POST['datos'];
-        $empresa = $datos[0]['nombre_empresa'];
-        $fecha = $datos[0]['fecha_ingreso'];
+        if ($datos === "consultar" ) {
+            $datos = $this->SoporteTecnicoDAO->reimpresion_etiquetas($consecutivo);
+            if ($datos === []) {
+                $item = 0;
+                $empresa = '';
+                $fecha = '';
+            }else{
+                $empresa = $datos[0]->nombre_empresa;
+                $fecha = $datos[0]->fecha_crea;
+                $item = $datos[0]->cantidad_item;
+            }
+        }else{
+            $empresa = $datos[0]['nombre_empresa'];
+            $fecha = $datos[0]['fecha_ingreso'];
+            $item = count($datos);
+        }
         if (strlen($empresa) > 23) {
             $nombre1 = substr($empresa, 0, 21);
             $nombre2 = substr($empresa, 22, 45);
@@ -118,40 +133,34 @@ class LaboratorioControlador extends GenericoControlador
             $nombre1 = substr($empresa, 0, 45);
             $nombre2 = "";
         }
-        $item = count($datos);
+
         $respu = [];
         for ($i = 1; $i <= $item; $i++) {
             $prueba =
-                "^XA" .
-                "^PW831" .
-                "^LL0200" .
-                "^LS0" .
-                "^FT26,31^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
-                "^FT185,32^A0N,23,24^FH\^FD" . $consecutivo . "-" . $i . "^FS" .
-                "^FT26,62^A0N,20,19^FH\^FDPROPIEDAD DEL CLIENTE^FS" .
-                "^FO26,73^GB234,98,4^FS" .
-                "^FT34,143^A0N,17,19^FH\^FD" . $nombre2 . "^FS" .
-                "^FT34,113^A0N,17,19^FH\^FD" . $nombre1 . "^FS" .
-                "^FT74,193^A0N,20,19^FH\^FDFECHA:^FS" .
-                "^FT137,192^A0N,20,19^FH\^FD" . $fecha . "^FS" .
+                "^XA".
+                "^FT38,24^A0N,23,24^FH\^FD".NOMBRE_EMPRESA."^FS".
+                "^FT79,53^A0N,23,24^FH\^FD".$consecutivo. "|"  .$i. "^FS".
+                "^FT20,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS".
+                "^FT12,152^A0N,25,24^FH\^FD" .$nombre2. "^FS".
+                "^FT12,120^A0N,25,24^FH\^FD" .$nombre1. "^FS".
+                "^FO3,91^GB249,72,4^FS".
+                "^FT1,191^A0N,28,28^FH\^FDFecha: " .$fecha. "^FS".
 
-                "^FT298,31^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
-                "^FT457,32^A0N,23,24^FH\^FD" . $consecutivo . "-" . $i . "^FS" .
-                "^FT298,62^A0N,20,19^FH\^FDPROPIEDAD DEL CLIENTE^FS" .
-                "^FO298,73^GB234,98,4^FS" .
-                "^FT306,143^A0N,17,19^FH\^FD" . $nombre2 . "^FS" .
-                "^FT306,113^A0N,17,19^FH\^FD" . $nombre1 . "^FS" .
-                "^FT346,193^A0N,20,19^FH\^FDFECHA:^FS" .
-                "^FT409,192^A0N,20,19^FH\^FD" . $fecha . "^FS" .
+                "^FT318,24^A0N,23,24^FH\^FD" .NOMBRE_EMPRESA. "^FS".
+                "^FT359,53^A0N,23,24^FH\^FD" .$consecutivo. "|" .$i. "^FS".
+                "^FT300,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS".
+                "^FT292,152^A0N,25,24^FH\^FD" .$nombre2. "^FS".
+                "^FT292,120^A0N,25,24^FH\^FD".$nombre1."^FS".
+                "^FO283,91^GB249,72,4^FS".
+                "^FT281,191^A0N,28,28^FH\^FDFecha: " .$fecha. "^FS".
 
-                "^FT569,31^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
-                "^FT728,32^A0N,23,24^FH\^FD" . $consecutivo . "-" . $i . "^FS" .
-                "^FT569,62^A0N,20,19^FH\^FDPROPIEDAD DEL CLIENTE^FS" .
-                "^FO569,73^GB234,98,4^FS" .
-                "^FT577,143^A0N,17,19^FH\^FD" . $nombre2 . "^FS" .
-                "^FT577,113^A0N,17,19^FH\^FD" . $nombre1 . "^FS" .
-                "^FT617,193^A0N,20,19^FH\^FDFECHA:^FS" .
-                "^FT680,192^A0N,20,19^FH\^FD" . $fecha . "^FS" .
+                "^FT597,24^A0N,23,24^FH\^FD" .NOMBRE_EMPRESA. "^FS".
+                "^FT638,53^A0N,23,24^FH\^FD" .$consecutivo. "|" .$i. "^FS".
+                "^FT579,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS".
+                "^FT571,152^A0N,25,24^FH\^FD" .$nombre2. "^FS".
+                "^FT571,120^A0N,25,24^FH\^FD".$nombre1."^FS".
+                "^FO562,91^GB249,72,4^FS".
+                "^FT560,191^A0N,28,28^FH\^FDFecha: " .$fecha. "^FS".
                 "^PQ1,0,1,Y^XZ";
             array_push($respu, $prueba);
         }

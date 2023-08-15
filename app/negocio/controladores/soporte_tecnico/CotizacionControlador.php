@@ -52,6 +52,7 @@ class CotizacionControlador extends GenericoControlador
         foreach ($casos_cotiza as $value) {
             $forma_pago = FORMA_PAGO[$value->forma_pago];
             $value->nombre_pago = $forma_pago;
+            $value->boton = (array_key_exists($id_usuario, PERMISOS_SOPORTE) || $_SESSION['usuario']->getid_roll() === 1);// evitamos un if, ya que es una expresion booleana
         }     
         $arreglo = [
             'data' => $casos_cotiza,

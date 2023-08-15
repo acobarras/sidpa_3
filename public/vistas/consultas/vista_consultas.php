@@ -300,6 +300,7 @@
                                 <thead style="background:#0d1b50;color:white;">
                                     <tr>
                                         <th>Id Diagnostico</th>
+                                        <th>Fecha seguimiento</th>
                                         <th>Num Consecutivo</th>
                                         <th>Item</th>
                                         <th>Empresa</th>
