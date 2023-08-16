@@ -364,6 +364,7 @@ class PortafolioControlador extends GenericoControlador
                 'estado_portafolio' => 4, //estado del array globlal "anulada"
                 'usuario_anula' => $_SESSION['usuario']->getId_usuario(),
                 'fecha_anula' => date('Y-m-d h:i:s'),
+                'fecha_pago' => 'null',
             ];
             $condicion = 'num_factura =' . $_POST['num_factura_anula'];
             $data = $this->PortafolioDAO->editar($datos, $condicion);
