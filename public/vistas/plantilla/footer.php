@@ -34,6 +34,7 @@
 <script src="<?= CARPETA_LIBRERIAS ?>/js_color/jscolor.js"></script>
 <!-- Plugin alertify -->
 <script src="<?= CARPETA_LIBRERIAS ?>/alertify/alertify.min.js"></script>
+<!-- <script src="<?= CARPETA_LIBRERIAS ?>/notifyMe/notifyMe.min.js"></script> -->
 <!-- Plugin select2 -->
 <script src="<?= CARPETA_LIBRERIAS ?>/select2/dist/js/select2.min.js"></script>
 <!-- datepicker -->
@@ -55,6 +56,10 @@
 <script src="<?= CARPETA_IMG . PROYECTO ?>/Constantes/ConstantesRuta.js"></script>
 <script src="<?= PUBLICO ?>/js/constantes.js"></script>
 <script src="./public/vistas/inicio/js/menu.js"></script>
+<?php if (isset($_SESSION['usuario'])) { ?>
+    <script src="<?= PUBLICO ?>/js/fancywebsocket.js"></script>
+    <script src="./public/vistas/inicio/js/chat_sidpa.js"></script>
+<?php } ?>
 
 
 

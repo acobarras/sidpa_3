@@ -19,6 +19,7 @@
     <!-- Theme CSS - Includes Alertify -->
     <link href="<?= CARPETA_LIBRERIAS ?>/alertify/css/alertify.min.css" rel="stylesheet">
     <link href="<?= CARPETA_LIBRERIAS ?>/alertify/css/themes/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= CARPETA_LIBRERIAS ?>/notifyMe/notifyMe.min.css" rel="stylesheet">
     <!-- Theme CSS - Includes DataTables -->
     <link href="<?= CARPETA_LIBRERIAS ?>/DataTables/css/datatables.min.css" rel="stylesheet">
 
@@ -39,12 +40,15 @@
 </head>
 
 <body>
-<?php include PUBLICO . '/vistas/inicio/chat_sidpa.php'; ?>
     <div>
         <input type="hidden" id="fecha_hoy" value="<?= date('Y-m-d'); ?>"><!-- Se usa este input para tener la fecha del dia actual -->
         <input type="hidden" id="hora_hoy" value="<?= date("H:i:s"); ?>"><!-- Se usa este input para tener la hora del dia actual -->
+        <input type="hidden" id="host_port" value="<?= HOST . ':' . PORT ?>"><!-- Se usa este input para tener la hora del dia actual -->
         <?php
         if (isset($_SESSION['usuario'])) { ?>
+            <input type="hidden" id="sesion" value="<?= $_SESSION['usuario']->getId_usuario() ?>"><!-- Se usa este input para tener la hora del dia actual -->
+            <div id="vista_chat_sidpa"></div>
+            <?php // include PUBLICO . '/vistas/inicio/chat_sidpa.php'; ?>
             <?php if ($_SESSION['usuario']->getTipo_clave() == 1) { ?>
                 <!-- Modal -->
                 <div class="modal fade" id="cambioClave" tabindex="-1" aria-labelledby="cambioClaveLabel" aria-hidden="true">
