@@ -100,7 +100,6 @@ var consulta_autorizaciones = function () {
 var consulta_pendientes = function () {
     var formulario =[];
     formulario.push({ name: 'consulta', value: 3 }); // se maneja asi para que todos queden con la misma estructura
-
     var table = $('#tb_consolidado').DataTable({
         "ajax": {
             "url":`${PATH_NAME}/soporte_tecnico/consultas_reporte`,
@@ -122,7 +121,6 @@ var consulta_comisiones = function () {
         e.preventDefault();
         var formulario = $('#form_comisiones').serializeArray();
         var valida = validar_formulario(formulario);
-        console.log(formulario);
         if (valida) {
             var table = $('#tb_comisiones').DataTable({
                 "ajax": {
@@ -138,6 +136,7 @@ var consulta_comisiones = function () {
                     className: 'btn btn-success',
                 }],     
                 "columns": [
+                    { "data": "fecha_crea" },
                     { "data": "nombre_empresa" },
                     { "data": "num_consecutivo" },
                     { "data": "equipo" },

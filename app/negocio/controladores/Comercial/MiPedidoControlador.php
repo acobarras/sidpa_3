@@ -319,7 +319,11 @@ class MiPedidoControlador extends GenericoControlador
                         }
 
                         $value->fecha_compro_item = '';
-                        $this->descuento_inventario($value); //para tb entrada_tecnologia estado_inv 3 y descontar
+                        // Modificación más reciente de impresión variable no descuenta de inventario cuando es impresión variable 
+                        if ( $value->id_estado_item_pedido != 6) {
+                            $this->descuento_inventario($value); //para tb entrada_tecnologia estado_inv 3 y descontar
+                        }
+
                         $this->crea_items_pedido($value); //para tb_ pedidos item estado 2
                         $correo = false;
                     } else { // si es tecnologia

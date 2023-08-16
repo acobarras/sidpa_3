@@ -38,12 +38,12 @@ class CotizacionItemSoporteDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function consulta_item_cotiza($item)
+    public function consulta_item_cotiza($item,$id_diagnostico)
     {
         $sql = "SELECT t1.id_diagnostico,t1.item,t1.num_consecutivo,t1.equipo,t1.serial_equipo,t1.procedimiento,t1.accesorios
         FROM diagnostico_item t1 
         INNER JOIN cotizacion_item_soporte t2 ON t2.id_diagnostico=t1.id_diagnostico
-        WHERE t1.item = $item AND t1.item = t2.item GROUP BY t1.item";
+        WHERE t1.item = $item AND t1.item = t2.item AND t1.id_diagnostico = $id_diagnostico";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);

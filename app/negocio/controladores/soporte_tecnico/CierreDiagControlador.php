@@ -376,7 +376,7 @@ class CierreDiagControlador extends GenericoControlador
         if (!empty($consulta_cotizacion)) {
             foreach ($consulta_cotizacion as $value) {
                 if ($value->item != 0) {
-                    $consulta_item = $this->CotizacionItemSoporteDAO->consulta_item_cotiza($value->item);
+                    $consulta_item = $this->CotizacionItemSoporteDAO->consulta_item_cotiza($value->item, $value->id_diagnostico);
                     foreach ($consulta_item as $item) {
                         $value->equipo = $item->equipo;
                         $value->serial_equipo = $item->serial_equipo;

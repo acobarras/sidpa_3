@@ -147,6 +147,7 @@
                             <table style="background: white; margin-left: 0px;" id="tb_comisiones"  class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
                                 <thead style="background:#0d1b50;color:white">
                                     <tr>
+                                        <th>Fecha</th>
                                         <th>Nombre Empresa</th>
                                         <th>Diagnostico</th>
                                         <th>Modelo</th>
