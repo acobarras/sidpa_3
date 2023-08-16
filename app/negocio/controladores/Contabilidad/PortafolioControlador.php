@@ -227,6 +227,9 @@ class PortafolioControlador extends GenericoControlador
         $iva = 0;
         $total_etiquetas = $_POST['total_etiquetas'];
         $total_cintas = $_POST['total_cintas'];
+        if ($_POST['empresa'] == 3) {
+            $_POST['empresa'] = 1;
+        }
         if (!empty($factura_portafolio)) {
             foreach (ESTADO_PORTAFOLIO as $key => $value) {
                 if ($factura_portafolio[0]->estado_portafolio == $key) {
@@ -646,7 +649,7 @@ class PortafolioControlador extends GenericoControlador
         }
         echo json_encode($data);
     }
- public function vista_ingreso_trm()
+    public function vista_ingreso_trm()
     {
         parent::cabecera();
         $this->view(

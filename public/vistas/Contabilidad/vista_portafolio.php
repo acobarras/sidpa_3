@@ -62,11 +62,9 @@
                                             <select class="form-select select_2" class="form-control select_2" style="width: 100%;" name="empresa" id="empresa_modifi">
                                                 <?php
                                                 foreach (PERTENECE as $key => $value) {
-                                                    if ($key != 3) {
-                                                        if ($key != 0) { ?>
-                                                            <option value="<?= $key ?>"><?= $value ?></option>
+                                                    if ($key != 0) { ?>
+                                                        <option value="<?= $key ?>"><?= $value ?></option>
                                                 <?php }
-                                                    }
                                                 }
                                                 ?>
                                             </select>
