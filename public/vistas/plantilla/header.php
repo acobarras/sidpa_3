@@ -44,7 +44,7 @@
         <input type="hidden" id="fecha_hoy" value="<?= date('Y-m-d'); ?>"><!-- Se usa este input para tener la fecha del dia actual -->
         <input type="hidden" id="hora_hoy" value="<?= date("H:i:s"); ?>"><!-- Se usa este input para tener la hora del dia actual -->
         <!-- Se usa este input para tener la hora del dia actual -->
-        <!-- <input type="hidden" id="host_port" value="<?= HOST . ':' . PORT ?>"> -->
+        <input type="hidden" id="host_port" value="<?= HOST . ':' . PORT ?>">
         <?php
         if (isset($_SESSION['usuario'])) { ?>
             <input type="hidden" id="sesion" value="<?= $_SESSION['usuario']->getId_usuario() ?>"><!-- Se usa este input para tener la hora del dia actual -->

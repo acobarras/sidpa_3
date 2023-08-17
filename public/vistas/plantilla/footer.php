@@ -57,7 +57,7 @@
 <script src="<?= PUBLICO ?>/js/constantes.js"></script>
 <script src="./public/vistas/inicio/js/menu.js"></script>
 <?php if (isset($_SESSION['usuario'])) { ?>
-    <script src="<?= PUBLICO ?>/js/fancywebsocket.js"></script>
+    <!-- <script src="<?= PUBLICO ?>/js/fancywebsocket.js"></script> -->
     <script src="./public/vistas/inicio/js/chat_sidpa.js"></script>
 <?php } ?>
 
