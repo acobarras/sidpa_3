@@ -639,12 +639,13 @@ class PortafolioControlador extends GenericoControlador
                 'status' => -1
             ];
         } else {
-
             $datos = [
-                'estado_portafolio' => 2, //estado del array globlal ""
                 'usu_reci_doc' => $_SESSION['usuario']->getId_usuario(),
                 'fecha_reci_doc' => $_POST['fecha_recibe'],
             ];
+            if ($factura_portafolio[0]->estado_portafolio != 3) {
+                $datos = ['estado_portafolio' => 2,];
+            }
             $condicion = 'num_factura =' . $_POST['num_factura'];
             $data = $this->PortafolioDAO->editar($datos, $condicion);
         }

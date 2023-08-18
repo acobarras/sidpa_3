@@ -18,7 +18,8 @@
                                 <label for="asesor">Asesor Comercial</label>
                                 <select class="form-control select_2" name="asesor" id="asesor">
                                     <option value="0"></option>
-                                    <option value="cambio">Cambio Consulta</option>
+                                    <option value="cambio">Consulta Mensual</option>
+                                    <option value="sin_pago">Consulta sin Pago</option>
                                     <?php foreach ($asesores as $asesor) { ?>
                                         <option value="<?= $asesor->id_usuario ?>"><?= $asesor->nombre ?> <?= $asesor->apellido ?></option>
                                     <?php } ?>
