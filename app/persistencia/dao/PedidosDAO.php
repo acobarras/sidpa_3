@@ -52,7 +52,7 @@ class PedidosDAO extends GenericoDAO
         $sql = "SELECT t2.fecha_compromiso, t2.num_pedido, t2.observaciones, t1.item, t1.codigo, t1.id_pedido_item, t1.cant_bodega, t1.cant_op, t3.magnetico, 
                 t3.descripcion_productos, t8.id_ruta_embobinado, t8.nombre_r_embobinado, t2.porcentaje, t2.difer_mas, t2.difer_menos, t2.difer_ext, 
                 t4.nombre_empresa, t5.id_core, t6.nombre_core, t3.ubi_troquel, t3.cav_montaje, t3.ancho_material, t3.avance, t1.Cant_solicitada, 
-                t1.cant_x, t5.id_material, t1.id_estado_item_pedido, t7.nombre_estado_item,t2.fecha_cierre  
+                t1.cant_x, t5.id_material, t1.id_estado_item_pedido, t7.nombre_estado_item,t2.fecha_cierre,t5.observaciones_ft  
             FROM pedidos_item t1
             INNER JOIN pedidos t2 ON t1.id_pedido = t2.id_pedido
             INNER JOIN productos t3 ON t1.codigo = t3.codigo_producto

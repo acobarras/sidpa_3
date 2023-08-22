@@ -44,12 +44,10 @@ class PrecioMateriaPrimaControlador extends GenericoControlador
         $datos = $_POST;
         $id_precio = $datos['id_precio'];
         unset($datos['id_precio']);
-        $valida =$this->PrecioMateriaPrimaDAO->valida_precio($datos['id_tipo_material'], $datos['id_adhesivo']);
+        $valida = $this->PrecioMateriaPrimaDAO->valida_precio($datos['id_tipo_material'], $datos['id_adhesivo']);
         if ($id_precio == 0 && empty($valida)) {
-            // Insertar una persona
             $respu = $this->PrecioMateriaPrimaDAO->insertar($datos);
         } else {
-            // Editar una Persona
             if ($valida[0]->id_precio == $id_precio) {
                 $condicion = 'id_precio =' . $id_precio;
                 $edita = $this->PrecioMateriaPrimaDAO->editar($datos, $condicion);
@@ -74,6 +72,9 @@ class PrecioMateriaPrimaControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $resultado = $this->PrecioMateriaPrimaDAO->consultar_precio_materia_prima();
+        foreach ($resultado as $value) {
+            $value->nombre_moneda = TIPO_MONEDA[$value->moneda];
+        }
         $arreglo["data"] = $resultado;
         echo json_encode($arreglo);
     }

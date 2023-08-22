@@ -20,8 +20,9 @@ var cargar_tabla_precios_materia_prima = function () {
             { "data": "id_precio" },
             { "data": "nombre_material" },
             { "data": "nombre_adh" },
+            { "data": "nombre_moneda" },
             { "data": "valor_material", render: $.fn.dataTable.render.number('.', ',', 2, '$') },
-            { "defaultContent": '<button type="button" class="btn btn-primary editar_registro"><i class="fa fa-edit"></i></button>',"className": "text-center" }
+            { "defaultContent": '<button type="button" class="btn btn-primary editar_registro"><i class="fa fa-edit"></i></button>', "className": "text-center" }
 
         ],
     });
@@ -30,7 +31,6 @@ var cargar_tabla_precios_materia_prima = function () {
 var precio_editar = function () {
     $("#tabla_precio_materia_prima tbody").on("click", "button.editar_registro", function () {
         var data = $("#tabla_precio_materia_prima").DataTable().row($(this).parents("tr")).data();
-        console.log(data);
         rellenarFormulario(data);
         $('#nuevo_precio-tab').tab('show');
         $('#nuevo_precio-tab').empty().html('Editar Precio Material');
@@ -61,7 +61,7 @@ var agregar_precio = function () {
         if (id_precio != 0) {
             ecepcion = ['id_precio'];
         }
-        valida = validar_formulario(form,ecepcion);
+        valida = validar_formulario(form, ecepcion);
         if (valida) {
             btn_procesando('boton-enviar');
             $.ajax({
