@@ -19,9 +19,9 @@
     <!-- Theme CSS - Includes Alertify -->
     <link href="<?= CARPETA_LIBRERIAS ?>/alertify/css/alertify.min.css" rel="stylesheet">
     <link href="<?= CARPETA_LIBRERIAS ?>/alertify/css/themes/bootstrap.min.css" rel="stylesheet">
-    <link href="<?= CARPETA_LIBRERIAS ?>/notifyMe/notifyMe.min.css" rel="stylesheet">
     <!-- Theme CSS - Includes DataTables -->
     <link href="<?= CARPETA_LIBRERIAS ?>/DataTables/css/datatables.min.css" rel="stylesheet">
+    <link href="<?= CARPETA_LIBRERIAS ?>/FixedHeader-3.4.0/css/fixedHeader.dataTables.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Theme CSS - Includes Select2 -->
     <link href="<?= CARPETA_LIBRERIAS ?>/select2/dist/css/select2.min.css" rel="stylesheet">

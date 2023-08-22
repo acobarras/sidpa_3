@@ -41,6 +41,7 @@
 <script src="<?= CARPETA_LIBRERIAS ?>/jquery-iu/js/jquery-ui.js"></script>
 <!-- Plugin dataTables -->
 <script src="<?= CARPETA_LIBRERIAS ?>/DataTables/js/datatables.min.js"></script>
+<script src="<?= CARPETA_LIBRERIAS ?>/FixedHeader-3.4.0/js/dataTables.fixedHeader.min.js"></script>
 <script src="<?= CARPETA_LIBRERIAS ?>/moment/moment.min.js"></script>
 <script src="<?= CARPETA_LIBRERIAS ?>/printArea/jquery.PrintArea.js"></script>
 <!-- chart js graficos en la pagina -->
@@ -58,7 +59,7 @@
 <script src="./public/vistas/inicio/js/menu.js"></script>
 <?php if (isset($_SESSION['usuario'])) { ?>
     <!-- <script src="<?= PUBLICO ?>/js/fancywebsocket.js"></script> -->
-    <script src="./public/vistas/inicio/js/chat_sidpa.js"></script>
+    <!-- <script src="./public/vistas/inicio/js/chat_sidpa.js"></script> -->
 <?php } ?>
 
 
