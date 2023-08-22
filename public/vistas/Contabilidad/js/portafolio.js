@@ -60,7 +60,7 @@ var valida_factura = function () {
                         $("#total_m_prima_iva_modifi").attr('disabled', true);
                         $("#total_factura_modifi").attr('readonly', true);
                         total_factura();
-                        res.id_cli_prov=1931;
+                        res.id_cli_prov = 1931;
                         if (res.id_cli_prov == ID_CLI_PROV_PQR || res.id_cli_prov == ID_CLI_PROV_NO_PRODUCIR) {
                             $("#nit_modifi").attr('disabled', false);
                             crea_factura_nueva();
@@ -285,6 +285,20 @@ var envio_factura = function () {
 }
 
 var tb_acobarras_sas = function () {
+    //Creamos una fila en el head de la tabla y lo clonamos para cada columna
+    $('#tabla-acobarras-sas thead tr').clone(true).appendTo('#tabla-acobarras-sas thead');
+    $('#tabla-acobarras-sas thead tr:eq(1) th').each(function (i) {
+        var title = $(this).text(); //es el nombre de la columna
+        $(this).html('<input type="text" placeholder="Search...' + title + '" />');
+        $('input', this).on('keyup change', function () {
+            if (tb_acobarras_sas.column(i).search() !== this.value) {
+                tb_acobarras_sas
+                    .column(i)
+                    .search(this.value)
+                    .draw();
+            }
+        });
+    });
     var tb_acobarras_sas = $('#tabla-acobarras-sas').DataTable({
         "ajax": `${PATH_NAME}/contabilidad/consulta_acobarras_sas`,
         dom: 'Bflrtip',
@@ -331,7 +345,22 @@ var tb_acobarras_sas = function () {
         ],
     });
 }
+
 var tb_acobarras_col = function () {
+    //Creamos una fila en el head de la tabla y lo clonamos para cada columna
+    $('#tabla-acobarras-col thead tr').clone(true).appendTo('#tabla-acobarras-col thead');
+    $('#tabla-acobarras-col thead tr:eq(1) th').each(function (i) {
+        var title = $(this).text(); //es el nombre de la columna
+        $(this).html('<input type="text" placeholder="Search...' + title + '" />');
+        $('input', this).on('keyup change', function () {
+            if (tb_acobarras_col.column(i).search() !== this.value) {
+                tb_acobarras_col
+                    .column(i)
+                    .search(this.value)
+                    .draw();
+            }
+        });
+    });
     var tb_acobarras_col = $('#tabla-acobarras-col').DataTable({
         "ajax": `${PATH_NAME}/contabilidad/consulta_acobarras_col`,
         dom: 'Bflrtip',
