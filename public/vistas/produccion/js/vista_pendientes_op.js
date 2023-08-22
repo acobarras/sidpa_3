@@ -48,14 +48,50 @@ var listar_items_op = function () {
             },
             {
                 "orderable": false,
-                "defaultContent": `<div class="select_acob text-center">
-                                     <button class="btn btn-info btn-sm observaciones_ver"  style="margin-top: 5px;" data-bs-toggle="modal" data-bs-target="#observaciones_Modal"><i class="fa fa-search"></i></button>
-                                    </div>`
+                render: function (data, type, row) {
+                    return `<div class="select_acob text-center">
+                                         <button class="btn btn-info btn-sm observaciones_ver"  style="margin-top: 5px;" data-bs-toggle="modal" data-bs-target="#observaciones_Modal"><i class="fa fa-search"></i></button>
+                                         <button class="btn btn-success btn-sm ver_ficha" data_produ="${row.codigo}" title="Ficha Tecnica"><i class="fas fa-eye"></i></button>
+                                         </div>
+                                        `
+                }
             }
         ],
     });
     agrupar_items(table);
     observaciones_ver('#tabla_pendientes_op tbody', table);
+    ver_ficha(`#tabla_pendientes_op tbody`, table);
+
+}
+
+var ver_ficha = function (tbody, table) {
+    $(tbody).on('click', `tr button.ver_ficha`, function (e) {
+        var codigo = $(this).attr('data_produ');
+        var data = table.row($(this).parents("tr")).data();
+        var observacion = data.observaciones_ft;
+        var area = 1; //EL AREA 1 ES PRODUCCION Y EL 2 SERIAN ASESORES
+        $.ajax({
+            url: `${PATH_NAME}/configuracion/consultar_cod_producto`,
+            type: 'POST',
+            data: { codigo, area, observacion },
+            success: function (res) {
+                if (res[0].ficha_tecnica_produc != null) {
+                    $('#ficha').modal('show');
+                    $.post(`${PATH_NAME}/configuracion/vista_ficha_tec`,
+                        {
+                            datos: res[0],
+                        },
+                        function (respu) {
+                            $('#ficha_tec').empty().html(respu);
+                        });
+                    $()
+                } else {
+                    res = alertify.error('Este producto no posee ficha tecnica digital, solicite la ficha tecnica impresa para su uso.');
+                    return;
+                }
+            }
+        });
+    })
 }
 
 var observaciones_ver = function (tbody, table) {

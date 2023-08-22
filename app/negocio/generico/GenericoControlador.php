@@ -230,8 +230,14 @@ abstract class GenericoControlador
         }
         // TRAEMOS EL PRECIO DE LA MATERIA PRIMA DE LA BASE DE DATOS 
         $datos_materia_prima = $this->PrecioMateriaPrimaDAO->valida_precio($material, $adh);
-        $valor_material = $datos_materia_prima[0]->valor_material;
-
+        $ConsultaUltimoRegistro = $this->trmDAO->ConsultaUltimoRegistro();
+        $trm = $ConsultaUltimoRegistro[0]->valor_trm;
+        if ($datos_materia_prima[0]->moneda == 2) {
+            $valor = $datos_materia_prima[0]->valor_material;
+            $valor_material = $valor * $trm;
+        } else {
+            $valor_material = $datos_materia_prima[0]->valor_material;
+        }
         if ($estcalor == 1) {
             $cinta_calor = VALORES_COTIZADOR['cinta_calor']; //1143;
             if (empty($valor_material)) {
@@ -416,7 +422,7 @@ abstract class GenericoControlador
         echo json_encode($respu);
         return;
     }
-    
+
     public function agrega_seguimiento_diag($diagnostico, $item, $id_actividad, $observacion, $id_usuario)
     {
         $formulario_seg = [

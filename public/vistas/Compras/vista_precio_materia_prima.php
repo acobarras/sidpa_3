@@ -21,6 +21,7 @@
                         <th>#</th>
                         <th>Tipo Material</th>
                         <th>Adhesivo</th>
+                        <th>Moneda</th>
                         <th>Valor Material</th>
                         <th>Opción</th>
                      </tr>
@@ -52,6 +53,14 @@
                         <?php foreach ($adhesivo as $value) { ?>
                            <option value="<?= $value->id_adh ?>"><?= $value->nombre_adh ?></option>
                         <?php } ?>
+                     </select>
+                  </div>
+                  <div class="mb-3">
+                     <label for="moneda" class="form-label">Moneda Material: </label>
+                     <select class="form-control select_2" style="width: 100%;" id="moneda" name="moneda">
+                        <option value="0">Elija una opción</option>
+                        <option value="1">Pesos</option>
+                        <option value="2">Dolar</option>
                      </select>
                   </div>
                   <div class="mb-3">
