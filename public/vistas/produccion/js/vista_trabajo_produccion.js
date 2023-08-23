@@ -193,9 +193,9 @@ var consulta_seguimiento = function (tbody, table) {
                         data: "boton1", render: function (data, type, row) {
                             boton = '';
                             if (data_row.estado_item_producir == 9 && row.id_estado_item_pedido == 10) {
-                                boton = `<button class="btn btn-primary btn-circle cambiar_estado_item" data-item="${row.id_pedido_item}" title="Listo"><i class="fa fa-clipboard-check"></i></button>`;
+                                boton += `<button class="btn btn-primary btn-circle cambiar_estado_item" data-item="${row.id_pedido_item}" title="Listo"><i class="fa fa-clipboard-check"></i></button>`;
                             }
-                            boton = `<button class="btn btn-success ver_ficha" data_produ="${row.codigo}" title="Ficha Tecnica"><i class="fas fa-eye"></i></button>`;
+                            boton += `<button class="btn btn-success ver_ficha" data_produ="${row.codigo}" title="Ficha Tecnica"><i class="fas fa-eye"></i></button>`;
                             return boton;
                         }
                     }

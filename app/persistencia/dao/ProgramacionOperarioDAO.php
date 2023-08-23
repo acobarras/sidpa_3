@@ -122,4 +122,20 @@ class ProgramacionOperarioDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function horas_productividad($id_persona,$fecha)
+    {
+        $sql = "SELECT SUM(turno_hora)as total_horas FROM `programacion_operario` WHERE id_persona=$id_persona AND fecha_program LIKE '%".$fecha."%'";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    public function detalle_horas_productividad($id_persona,$fecha)
+    {
+        $sql = "SELECT * FROM `programacion_operario` WHERE id_persona=$id_persona AND fecha_program LIKE '%".$fecha."%'";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

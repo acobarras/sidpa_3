@@ -108,4 +108,12 @@ class PersonaDAO extends GenericoDAO
         }
         return $comite;
     }
+    function personal_produccion()
+    {
+        $sql = "SELECT * FROM persona WHERE tipo = 3 AND estado = 1 AND id_jefe_imediato=" . ID_JEFE_PRODUCCION;
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
