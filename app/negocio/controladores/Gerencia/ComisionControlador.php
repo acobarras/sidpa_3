@@ -45,15 +45,17 @@ class ComisionControlador extends GenericoControlador
         $asesor = $_POST['asesor'];
         $id_persona_asesor = '';
         if ($asesor == 'sin_pago') {
-            $condicion = ' t1.estado_portafolio in(1,2)';
+            $condicion = 'WHERE t1.estado_portafolio in(1,2)';
         } elseif ($asesor == 'cambio') {
             $fecha_inicial = $_POST['fecha_inicial'];
             $fecha_fin = $_POST['fecha_fin'];
-            $condicion = "t1.fecha_factura >= '$fecha_inicial' AND t1.fecha_factura <= '$fecha_fin'";
-        } else {
+            $condicion = "WHERE t1.fecha_factura >= '$fecha_inicial' AND t1.fecha_factura <= '$fecha_fin'";
+        }elseif ($asesor == 0 ){
+            $condicion = '';
+        }else{
             $id_persona = $this->UsuarioDAO->consultarIdPersona($asesor);
             $id_persona_asesor = $id_persona[0]->id_persona;
-            $condicion = 't1.asesor = ' . $id_persona_asesor;
+            $condicion = ' WHERE t1.asesor = ' . $id_persona_asesor;
         }
         $data = $this->PortafolioDAO->Consultaportafolio($condicion);
         foreach ($data as $value) {
