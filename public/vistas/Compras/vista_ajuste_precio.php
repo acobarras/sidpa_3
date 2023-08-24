@@ -78,6 +78,11 @@
                                 </tr>
                             </thead>
                         </table>
+                        <br>
+                        <center>
+                            <button type="button" class="btn btn-info" id="modificar_precios"><i class="fas fa-check"></i> Modificar</button>
+                        </center>
+                        <br>
                     </div>
                     <br>
                 </div>
@@ -145,25 +150,14 @@
                 <div class="img_modal mx-2 ">
                     <p> </p>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <h5 clas s="modal-title" id="ReporteItemsModalLabel">Modifica precio</h5>
-                    </div>
-                    <div class="col">
-                        <label for=""> Código:</label>
-                        <span class="codigo_productoD"> </span>
-                    </div>
-                    <div class="col">
-                        <label for=""> Descripción:</label>
-                        <span class="descripcion_productosD"> </span>
-                    </div>
+                <div>
+                    <h5 clas s="modal-title" id="ReporteItemsModalLabel">Modifica precio</h5>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="form_modifica_producto">
-                    <input type="hidden" name="id_clien_produc" id="id_clien_produc">
-
+                    <!-- <input type="hidden" name="id_clien_produc" id="id_clien_produc"> -->
                     <div>
                         <label for="moneda_autoriza">Moneda Autoriza</label>
                         <select class="form-select" name="moneda_autoriza" id="id_moneda_autoriza">
@@ -180,7 +174,7 @@
                         <label for="cantidad_minima">Cantidad Minima</label>
                         <input type="text" class="form-control" name="cantidad_minima" id="id_cantidad_minima">
                     </div>
-                    <div>
+                    <div id="div_material_modifi" style="display: block;">
                         <label for="id_material"><strong>Material </strong></label>
                         <select class="form-control select_2" id="id_id_material" name="id_material" style="width: 100%">
                             <option value="0">Elija una opcción</option>

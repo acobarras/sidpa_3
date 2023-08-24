@@ -86,9 +86,12 @@ class AjustePrecioControlador extends GenericoControlador
     public function modificar_producto()
     {
         header('Content-Type: application/json');
-        $condicion = 'id_clien_produc=' . $_POST['id_clien_produc'];
-        unset( $_POST['id_clien_produc']);
-        $respuesta = $this->cliente_productoDAO->editar($_POST, $condicion);
+        $datos_modifi = $_POST['datos_modifi'];
+        $form = Validacion::Decodifica($_POST['form']);
+        foreach ($datos_modifi as $value) {
+            $condicion = 'id_clien_produc=' . $value['id_clien_produc'];
+            $respuesta = $this->cliente_productoDAO->editar($form, $condicion);
+        }
         $respu = [];
         if (!empty($respuesta)) {
             $respu = [

@@ -6,6 +6,7 @@ $(document).ready(function () {
     modificar_precio();
     selecciona_items_autorizar();
     enviar_items_autorizar();
+    carga_modificar_precio();
 });
 
 var listar_items = function () {
@@ -85,16 +86,17 @@ var selecciona_items_autorizar = function () {
             } else {
                 var agrega = false;
                 datos.forEach(element => {
-                    if (element.id_clase_articulo == data.id_clase_articulo) {
+                    if (element.tamano == data.tamano && element.id_clase_articulo == data.id_clase_articulo) {
                         agrega = true;
                     } else {
                         agrega = false;
                         $(this).prop('checked', false);
-                        alertify.error("Solo se pueden agrupar por la misma clase de articulo.");
                     }
                 });
                 if (agrega) {
                     datos.push(data);
+                } else {
+                    alertify.error("Solo se pueden agrupar por el mismo tamaño y clase de articulo.");
                 }
             }
         } else {
@@ -113,9 +115,9 @@ var enviar_items_autorizar = function () {
             alertify.error("Debe elegir algun item para continuar.");
         } else {
             if (datos[0].id_clase_articulo == 3) {
-                $("#div_material_ajuste").css('display','none')
-            }else{
-                $("#div_material_ajuste").css('display','block')
+                $("#div_material_ajuste").css('display', 'none')
+            } else {
+                $("#div_material_ajuste").css('display', 'block')
             }
             $("#AsignaPrecioModal").modal("show");
         }
@@ -128,7 +130,7 @@ var asigna_precios = function () {
         var form = $(this).serializeArray();
         var form1 = $(this).serialize();
         var exepccion = '';
-        if (datos[0].id_clase_articulo ==3) {
+        if (datos[0].id_clase_articulo == 3) {
             exepccion = ['id_material'];
         }
         var valida = validar_formulario(form, exepccion);
@@ -204,29 +206,85 @@ var busca_productos_asesor = function () {
                     }
                 },
                 {
-                    "orderable": false,
-                    "defaultContent": `<button class="btn btn-primary modificar_por_asesor"><i class="fa fa-edit"></i></button>`
+                    "data": "checkbox", render: (data, type, row) => {
+                        return `<div class="select_acob text-center">
+                        <input class="agrega_item" type="checkbox" name="precio_autoriza${row.id_clien_produc}" value="${row.id_clien_produc}"/>
+                    </div>`;
+                    }
                 }
+                // {
+                //     "orderable": false,
+                //     "defaultContent": `<button class="btn btn-primary modificar_por_asesor"><i class="fa fa-edit"></i></button>`
+                // }
             ],
         });
-        carga_modificar_precio();
+        selecciona_items_modifica();
     });
 }
+
+var datos_modifi = [];
+
+var selecciona_items_modifica = function () {
+    $('#dt_tabla_productos tbody').on("click", "input.agrega_item", function () {
+        var data = $("#dt_tabla_productos").DataTable().row($(this).parents("tr")).data();
+        console.log(data);
+        if ($(this).prop('checked') == true) {
+            if (datos_modifi.length === 0) {
+                datos_modifi.push(data);
+            } else {
+                var agrega = false;
+                datos_modifi.forEach(element => {
+                    if (element.tamano == data.tamano && element.id_material == data.id_material) {
+                        agrega = true;
+                    } else {
+                        agrega = false;
+                        $(this).prop('checked', false);
+                    }
+                });
+                if (agrega) {
+                    datos_modifi.push(data);
+                } else {
+                    alertify.error("Solo se pueden agrupar por el misma tamaño y material.");
+                }
+            }
+        } else {
+            for (var i = 0; i < datos_modifi.length; i++) {
+                if (datos_modifi[i].id_clien_produc === data.id_clien_produc) {
+                    datos_modifi.splice(i, 1);
+                }
+            }
+        }
+    });
+};
+
 
 var carga_modificar_precio = function () {
-    $('#dt_tabla_productos tbody').on("click", "button.modificar_por_asesor", function () {
-        var data = $('#dt_tabla_productos').DataTable().row($(this).parents("tr")).data();
-
-        $("#modificaPrecioModal").modal("show");
-        $(".codigo_productoD").empty().html(data.codigo_producto);
-        $(".descripcion_productosD").empty().html(data.descripcion_productos);
-        $("#id_moneda_autoriza").val(data.moneda_autoriza);
-        $("#id_cantidad_minima").val(data.cantidad_minima);
-        $("#id_precio_autorizado").val(data.precio_autorizado);
-        $("#id_clien_produc").val(data.id_clien_produc);
-        $("#id_id_material").val(data.id_material).trigger('change');
+    $("#modificar_precios").on('click', function () {
+        if (datos_modifi.length === 0) {
+            alertify.error("Debe elegir algun item para continuar.");
+        } else {
+            if (datos_modifi[0].id_clase_articulo == 3) {
+                $("#div_material_modifi").css('display', 'none')
+            } else {
+                $("#div_material_modifi").css('display', 'block')
+            }
+            $("#modificaPrecioModal").modal("show");
+        }
     });
+    // $('#dt_tabla_productos tbody').on("click", "button.modificar_precios", function () {
+    //     var data = $('#dt_tabla_productos').DataTable().row($(this).parents("tr")).data();
+
+    //     $("#modificaPrecioModal").modal("show");
+    //     $(".codigo_productoD").empty().html(data.codigo_producto);
+    //     $(".descripcion_productosD").empty().html(data.descripcion_productos);
+    //     $("#id_moneda_autoriza").val(data.moneda_autoriza);
+    //     $("#id_cantidad_minima").val(data.cantidad_minima);
+    //     $("#id_precio_autorizado").val(data.precio_autorizado);
+    //     $("#id_clien_produc").val(data.id_clien_produc);
+    //     $("#id_id_material").val(data.id_material).trigger('change');
+    // });
 }
+
 var modificar_precio = function () {
     $("#form_modifica_producto").on('submit', function (e) {
         e.preventDefault();
@@ -234,12 +292,13 @@ var modificar_precio = function () {
         var exepccion = ['id_material'];
         var valida = validar_formulario(form, exepccion);
         if (valida) {
+            form = $(this).serialize();
             var obj_inicial = $(`#btn_modifica_precio`).html();
             btn_procesando(`btn_modifica_precio`);
             $.ajax({
                 url: `${PATH_NAME}/compras/modificar_producto`,
                 type: "POST",
-                data: form,
+                data: { datos_modifi, form },
                 success: function (res) {
                     if (res.state == 1) {
                         $("#dt_tabla_productos").DataTable().ajax.reload(function () {
