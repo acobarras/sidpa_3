@@ -71,7 +71,8 @@ class cliente_productoDAO extends GenericoDAO
 
     public function consultar_items_sin_precio()
     {
-        $sql = "SELECT *,t7.id_clase_articulo FROM cliente_producto AS t1
+        $sql = "SELECT *, SUBSTRING_INDEX(t2.codigo_producto,'-' , 1) AS tamano, t7.id_clase_articulo 
+            FROM cliente_producto AS t1
             INNER JOIN productos AS t2 ON t1.id_producto = t2.id_productos
             INNER JOIN cliente_proveedor AS t3 ON t1.id_cli_prov = t3.id_cli_prov
             INNER JOIN usuarios AS t4 ON t4.id_usuario = t1.id_usuario
@@ -96,12 +97,14 @@ class cliente_productoDAO extends GenericoDAO
     }
     public function consultar_productos_asesor()
     {
-        $sql = "SELECT t1.*,t2.codigo_producto,t2.descripcion_productos,t3.nombre_empresa,t4.nombre,t4.apellido,t5.nombre_core FROM cliente_producto AS t1 
-        INNER JOIN productos AS t2 ON t1.id_producto = t2.id_productos
+        $sql = "SELECT t1.*,t2.codigo_producto,SUBSTRING_INDEX(t2.codigo_producto,'-' , 1) AS tamano, t2.descripcion_productos,t3.nombre_empresa,t4.nombre,t4.apellido,t5.nombre_core, t6.id_clase_articulo 
+            FROM cliente_producto AS t1 
+            INNER JOIN productos AS t2 ON t1.id_producto = t2.id_productos
             INNER JOIN cliente_proveedor AS t3 ON t1.id_cli_prov = t3.id_cli_prov
-                INNER JOIN usuarios AS t4 ON t4.id_usuario = t1.id_usuario
+            INNER JOIN usuarios AS t4 ON t4.id_usuario = t1.id_usuario
             INNER JOIN core AS t5 ON t1.id_core = t5.id_core
-            	WHERE t1.id_usuario =" . $_REQUEST['id'] . " AND t1.estado_client_produc = 1";
+            INNER JOIN tipo_articulo as t6 on  t2.id_tipo_articulo= t6.id_tipo_articulo
+            WHERE t1.id_usuario =" . $_REQUEST['id'] . " AND t1.estado_client_produc = 1";
 
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
