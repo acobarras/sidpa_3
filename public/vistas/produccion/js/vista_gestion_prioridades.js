@@ -66,7 +66,7 @@ var cerrar_prioridad = function (tbody, table) {
             data: { form },
             success: function (res) {
                 if (res.status == 1) {
-                    alertify.success(msg);
+                    alertify.success(res.msg);
                     btn_procesando('enviar_prioridad', obj_inicial, 1);
                     location.reload();
                 }
