@@ -144,8 +144,16 @@ class UsuarioDAO extends GenericoDAO
 
     public function usuarios_activos()
     {
-        $sql = "SELECT *, (SELECT COUNT(t2.mensaje) FROM mensajes_chat t2 WHERE t2.id_contacto = ".$_SESSION['usuario']->getId_usuario()." AND t2.id_usuario = t1.id_usuario AND t2.estado = 1) AS msg_pend FROM usuarios t1 WHERE t1.estado_usu != 0 AND t1.id_usuario != ".$_SESSION['usuario']->getId_usuario();
+        $sql = "SELECT *, (SELECT COUNT(t2.mensaje) FROM mensajes_chat t2 WHERE t2.id_contacto = " . $_SESSION['usuario']->getId_usuario() . " AND t2.id_usuario = t1.id_usuario AND t2.estado = 1) AS msg_pend FROM usuarios t1 WHERE t1.estado_usu != 0 AND t1.id_usuario != " . $_SESSION['usuario']->getId_usuario();
         // $sql = "SELECT * FROM usuarios WHERE estado_usu != 0 AND id_usuario != " . $_SESSION['usuario']->getId_usuario();
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    public function consultar_coordinadores()
+    {
+        $sql = "SELECT * FROM `usuarios` WHERE id_roll=12 AND estado_usu=1";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
