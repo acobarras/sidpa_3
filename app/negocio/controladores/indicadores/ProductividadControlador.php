@@ -36,12 +36,14 @@ class ProductividadControlador extends GenericoControlador
     {
         header("Content-type: application/json; charset=utf-8");
         $data_operario = $this->PersonaDAO->personal_produccion();
-        $fecha = $_POST['mes'];
+        $fecha_desde = $_POST['fecha_desde'];
+        $fecha_hasta = $_POST['fecha_hasta'];
         foreach ($data_operario as $value) {
-            $metros = $this->DesperdicioOpDAO->metros_lineales_productividad($value->id_persona, $fecha);
-            $horas = $this->ProgramacionOperarioDAO->horas_productividad($value->id_persona, $fecha);
+            $metros = $this->DesperdicioOpDAO->metros_lineales_productividad($value->id_persona, $fecha_desde, $fecha_hasta);
+            $horas = $this->ProgramacionOperarioDAO->horas_productividad($value->id_persona, $fecha_desde, $fecha_hasta);
             $value->total_ml = 0;
-            $value->mes_consulta = $fecha;
+            $value->fecha_desde = $fecha_desde;
+            $value->fecha_hasta = $fecha_hasta;
             $value->total_horas = 0;
             if ($horas[0]->total_horas != '') {
                 $value->total_horas = $horas[0]->total_horas;
@@ -57,8 +59,9 @@ class ProductividadControlador extends GenericoControlador
     {
         header("Content-type: application/json; charset=utf-8");
         $id_persona = $_POST['data']['id_persona'];
-        $fecha = $_POST['data']['mes_consulta'];
-        $detalle = $this->DesperdicioOpDAO->detalles_productividad($id_persona, $fecha);
+        $fecha_desde = $_POST['data']['fecha_desde'];
+        $fecha_hasta = $_POST['data']['fecha_hasta'];
+        $detalle = $this->DesperdicioOpDAO->detalles_productividad($id_persona, $fecha_desde, $fecha_hasta);
         echo json_encode($detalle);
         return;
     }

@@ -64,7 +64,7 @@ class ProgramacionOperarioDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function ConsultaOperarioMaquina($fecha_desde,$fecha_hasta)
+    public function ConsultaOperarioMaquina($fecha_desde, $fecha_hasta)
     {
         $sql = "SELECT t1.id_persona, t1.id_maquina, t2.nombres, t2.apellidos, t3.nombre_maquina 
             FROM programacion_operario t1
@@ -76,10 +76,9 @@ class ProgramacionOperarioDAO extends GenericoDAO
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
-
     }
-    
-    public function ConsultaHoras($fecha_desde,$fecha_hasta,$id_persona,$id_maquina)
+
+    public function ConsultaHoras($fecha_desde, $fecha_hasta, $id_persona, $id_maquina)
     {
         $sql = "SELECT SUM(turno_hora) AS total_horas FROM programacion_operario 
             WHERE fecha_program >= '$fecha_desde' AND fecha_program <= '$fecha_hasta' 
@@ -88,10 +87,9 @@ class ProgramacionOperarioDAO extends GenericoDAO
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
-
     }
 
-    public function HorasRangoTotal($fecha_desde,$fecha_hasta)
+    public function HorasRangoTotal($fecha_desde, $fecha_hasta)
     {
         $sql = "SELECT SUM(turno_hora) horas_total 
             FROM programacion_operario 
@@ -99,10 +97,10 @@ class ProgramacionOperarioDAO extends GenericoDAO
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
-        return $resultado;    
+        return $resultado;
     }
-    
-    public function HorasMaquinaTotal($fecha_desde,$fecha_hasta,$id_maquina)
+
+    public function HorasMaquinaTotal($fecha_desde, $fecha_hasta, $id_maquina)
     {
         $sql = "SELECT t1.*, t2.nombres, t2.apellidos 
             FROM programacion_operario t1 
@@ -111,10 +109,10 @@ class ProgramacionOperarioDAO extends GenericoDAO
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
-        return $resultado;    
+        return $resultado;
     }
 
-    public function ConsultaPersonaFecha($id_persona,$fecha_program)
+    public function ConsultaPersonaFecha($id_persona, $fecha_program)
     {
         $sql = "SELECT * FROM programacion_operario WHERE id_persona = $id_persona AND fecha_program = '$fecha_program'";
         $sentencia = $this->cnn->prepare($sql);
@@ -122,17 +120,18 @@ class ProgramacionOperarioDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
-    public function horas_productividad($id_persona,$fecha)
+    public function horas_productividad($id_persona, $fecha_desde, $fecha_hasta)
     {
-        $sql = "SELECT SUM(turno_hora)as total_horas FROM `programacion_operario` WHERE id_persona=$id_persona AND fecha_program LIKE '%".$fecha."%'";
+        $sql = "SELECT SUM(turno_hora)as total_horas FROM `programacion_operario` 
+        WHERE id_persona=$id_persona AND fecha_program >='$fecha_desde' AND fecha_program<='$fecha_hasta'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
-    public function detalle_horas_productividad($id_persona,$fecha)
+    public function detalle_horas_productividad($id_persona, $fecha)
     {
-        $sql = "SELECT * FROM `programacion_operario` WHERE id_persona=$id_persona AND fecha_program LIKE '%".$fecha."%'";
+        $sql = "SELECT * FROM `programacion_operario` WHERE id_persona=$id_persona AND fecha_program LIKE '%" . $fecha . "%'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);

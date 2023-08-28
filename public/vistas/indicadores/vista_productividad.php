@@ -14,13 +14,16 @@
                             <br>
                             <form id="cons_productividad">
                                 <div class="row g-3 align-items-center">
-                                    <div class="col-3"></div>
-                                    <div class="col-1">
-                                        <label for="fecha_mes" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Mes Consulta</label>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="input-group mb-3">
-                                            <input type="month" class="form-control" id="fecha_mes" name="fecha_mes">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label for="fecha_desde" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Fecha Desde</label>
+                                            <input type="date" class="form-control" id="fecha_desde" name="fecha_desde">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="fecha_hasta" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Fecha Hasta</label>
+                                            <input type="date" class="form-control" id="fecha_hasta" name="fecha_hasta">
+                                        </div>
+                                        <div class="col-4 mt-4">
                                             <button type="submit" class="btn btn-success col-3" id="buscar_productividad">Buscar <i class="fas fa-search"></i></button>
                                         </div>
                                     </div>
@@ -31,7 +34,7 @@
                                     <tr>
                                         <th>Empleado</th>
                                         <th>Ml Total del Mes</th>
-                                        <th>Horas Total del Mes</th>
+                                        <th>Horas Total Programadas del Mes</th>
                                         <th>Opcion</th>
                                     </tr>
                                 </thead>

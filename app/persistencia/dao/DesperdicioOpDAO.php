@@ -113,22 +113,23 @@ class DesperdicioOpDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function metros_lineales_productividad($id_persona, $fecha)
+    public function metros_lineales_productividad($id_persona, $fecha_desde, $fecha_hasta)
     {
-        $sql = "SELECT SUM(ml_empleado)as total_ml FROM `desperdicio_op` WHERE id_persona=$id_persona AND fecha_crea LIKE'%" . $fecha . "%'";
+        $sql = "SELECT SUM(ml_empleado)as total_ml FROM `desperdicio_op` 
+        WHERE id_persona=$id_persona AND SUBSTRING_INDEX(fecha_crea,' ',1) >='$fecha_desde' AND SUBSTRING_INDEX(fecha_crea,' ',1)<='$fecha_hasta'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
-    public function detalles_productividad($id_persona, $fecha)
+    public function detalles_productividad($id_persona, $fecha_desde, $fecha_hasta)
     {
         $sql = "SELECT t1.*,t2.nombre_maquina,t2.tipo_maquina,t3.turno_hora,t3.horario_turno, DAY(t1.fecha_crea) AS dia,SUM(t1.ml_empleado) AS total_dia,t4.nombres,t4.apellidos 
         FROM desperdicio_op t1 
         INNER JOIN maquinas t2 ON t1.maquina=t2.id_maquina 
         LEFT JOIN programacion_operario t3 ON SUBSTRING_INDEX(t1.fecha_crea,' ',1)=t3.fecha_program AND t1.id_persona=t3.id_persona
         INNER JOIN persona t4 ON t4.id_persona=t1.id_persona
-        WHERE t1.id_persona=$id_persona AND t1.fecha_crea LIKE'%" . $fecha . "%' 
+        WHERE t1.id_persona=$id_persona AND SUBSTRING_INDEX(t1.fecha_crea,' ',1) >='$fecha_desde' AND SUBSTRING_INDEX(t1.fecha_crea,' ',1)<='$fecha_hasta'
         GROUP BY dia,t1.maquina";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();

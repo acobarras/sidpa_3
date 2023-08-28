@@ -10,11 +10,12 @@ var consulta_product = function () {
         var validar = validar_formulario(form);
         btn_procesando(`buscar_productividad`);
         if (validar) {
-            var mes = $('#fecha_mes').val();
+            var fecha_hasta = $('#fecha_hasta').val();
+            var fecha_desde = $('#fecha_desde').val();
             $.ajax({
                 url: `${PATH_NAME}/consulta_productividad`,
                 type: 'POST',
-                data: { mes },
+                data: { fecha_hasta, fecha_desde },
                 success: function (res) {
                     btn_procesando(`buscar_productividad`, obj_inicial, 1);
                     var tabla = $(`#tabla_productividad`).DataTable({
@@ -101,7 +102,7 @@ function detalle_productividad(data) {
                         <th class="col-4">Empleado</th>
                         <th class="col-3">Maquina</th>
                         <th class="col-1">dia del mes</th>
-                        <th class="col-1">horas Turno</th>
+                        <th class="col-1">horas Turno Laboradas</th>
                         <th class="col-3">total Ml</th>
                     </tr>
                 </thead>
