@@ -111,7 +111,7 @@ class GestionarPqrControlador extends GenericoControlador
                 $fecha = new \DateTime();
                 $fecha->modify('last day of this month');
                 $ultimo_dia = $fecha->format('Y-m-d');
-                $observacion = 'Este pedido pertenece a la reclamación No ' . $data['num_pqr'] . ' Al momento de facturar preguntar al área encargada que tramite se debe hacer con este pedido';
+                $observacion = 'Este pedido pertenece a la reclamación No ' . $data['num_pqr'] . ' Al momento de facturar preguntar al área encargada que tramite se debe hacer con este pedido' . ', ' . $_POST['observacion'];
                 $total_etiq = $data['cantidad_reclama'] * $data['datos_producto'][0]['precio_venta'];
                 if ($data['datos_producto'][0]['moneda'] == 2) {
                     $total_etiq = $data['cantidad_reclama'] * ($data['datos_producto'][0]['precio_venta'] * $data['datos_item'][0]['trm']);
@@ -141,6 +141,10 @@ class GestionarPqrControlador extends GenericoControlador
                 ];
                 $id_pedido = $this->PedidosDAO->insertar($crea_pedido);
                 // Insertamos el item del pedido
+                $estado_item_pedido = 2;
+                if ($data['datos_producto'][0]['id_clase_articulo'] != 2) {
+                    $estado_item_pedido = 5;
+                }
                 $crea_items_pedido = array(
                     'id_pedido' => $id_pedido['id'],
                     'item' => 1,
@@ -157,7 +161,7 @@ class GestionarPqrControlador extends GenericoControlador
                     'v_unidad' => $data['datos_producto'][0]['precio_venta'],
                     'total' => $total_etiq,
                     'orden_compra' => null,
-                    'id_estado_item_pedido' => 2,
+                    'id_estado_item_pedido' => $estado_item_pedido,
                     'id_usuario' => $_SESSION['usuario']->getid_usuario(),
                     'fecha_crea' => date('Y-m-d'),
                 );

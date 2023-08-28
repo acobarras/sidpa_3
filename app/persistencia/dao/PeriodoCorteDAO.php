@@ -1,4 +1,5 @@
 <?php
+
 namespace MiApp\persistencia\dao;
 
 use MiApp\persistencia\generico\GenericoDAO;
@@ -19,7 +20,7 @@ class PeriodoCorteDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
-    
+
     public function ConsultaPeriodoId($id_periodo)
     {
         $sql = "SELECT * FROM periodo_corte WHERE id = $id_periodo";
@@ -28,6 +29,12 @@ class PeriodoCorteDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
-
-    
+    public function valida_fecha_corte($mes, $ano, $corte)
+    {
+        $sql = "SELECT * FROM `periodo_corte` WHERE mes='$mes' AND ano='$ano'";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

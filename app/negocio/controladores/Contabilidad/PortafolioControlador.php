@@ -10,6 +10,7 @@ use MiApp\persistencia\dao\UsuarioDAO;
 use MiApp\persistencia\dao\clientes_proveedorDAO;
 use MiApp\persistencia\dao\PortafolioDAO;
 use MiApp\persistencia\dao\PedidosDAO;
+use MiApp\persistencia\dao\PeriodoCorteDAO;
 
 
 
@@ -21,6 +22,7 @@ class PortafolioControlador extends GenericoControlador
     private $clientes_proveedorDAO;
     private $PortafolioDAO;
     private $pedidosDAO;
+    private $PeriodoCorteDAO;
 
 
 
@@ -35,6 +37,7 @@ class PortafolioControlador extends GenericoControlador
         $this->clientes_proveedorDAO = new clientes_proveedorDAO($cnn);
         $this->PortafolioDAO = new PortafolioDAO($cnn);
         $this->pedidosDAO = new PedidosDAO($cnn);
+        $this->PeriodoCorteDAO = new PeriodoCorteDAO($cnn);
     }
 
     public function portafolio()
@@ -669,5 +672,49 @@ class PortafolioControlador extends GenericoControlador
         ];
         $res = $this->trmDAO->insertar($datos);
         echo json_encode($res);
+    }
+    public function vista_fecha_corte()
+    {
+        parent::cabecera();
+        $this->view(
+            'Contabilidad/vista_fecha_corte'
+        );
+    }
+    public function consulta_fecha_corte()
+    {
+        header('Content-Type:cation/json');
+        $datos = $this->PeriodoCorteDAO->ConsultaPeriodoCorte();
+        $res['data'] = $datos;
+        echo json_encode($res);
+        return;
+    }
+    public function enviar_fecha_corte()
+    {
+        header('Content-Type:cation/json');
+        $id_corte = $_POST['id'];
+        // Creacion fecha
+        if ($id_corte == 0) {
+            $form = $_POST['form'];
+            $form = Validacion::Decodifica($form);
+            $datos = $this->PeriodoCorteDAO->valida_fecha_corte($form['mes'], $form['ano'], $form['corte']);
+            if (empty($datos)) {
+                $res = $this->PeriodoCorteDAO->insertar($form);
+            } else {
+                $res = [
+                    'status' => -1,
+                    'msg' => 'Esta fecha ya se encuentra creada',
+                ];
+            }
+            // Modificar fecha
+        } else {
+            $form = $_POST['form'];
+            $datos = [
+                'corte' => $_POST['valor'],
+            ];
+            $condicion = 'id =' . $form['id'];
+            $res = $this->PeriodoCorteDAO->editar($datos, $condicion);
+        }
+        echo json_encode($res);
+        return;
     }
 }

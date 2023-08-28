@@ -16,6 +16,7 @@ $(document).ready(function () {
     CKEDITOR.replace(`observaciones`, { toolbar: 'mybar' });
     cambiar_cantidad_reclamacion();
     envio_observacion();
+    observacion();
 });
 
 CKEDITOR.config.toolbar_mybar = [
@@ -103,7 +104,6 @@ var cambiar_cantidad_reclamacion = function () {
 
             }
             alertify.confirm('ALERTA SIDPA', '¿Esta seguro que quiere cambiar la cantidad de la reclamacion?', function () {
-                console.log(data);
                 $.ajax({
                     "url": `${PATH_NAME}/pqr/cambiar_cantidad_reclamacion`,
                     "type": 'POST',
@@ -387,7 +387,6 @@ var envio_visita_tecnica = function (data, estado, id_actividad_area) {
 var analisis_mercancia = function () {
     $('#tabla_gestion_pqr tbody').on('click', 'button.analisis_mercancia', function () {
         var data = $('#tabla_gestion_pqr').DataTable().row($(this).parents("tr")).data();
-        console.log(data);
         window.showAlert = function () {
             alertify.alert('Ejecucion de la Mercancia', 'La mercancia devuelta por el cliente necesita de un reproceso. (Si cambia la referencia selecione No)  <a href="javascript:showReproceso();" class="btn btn-success">Si</a>  <a href="javascript:showConfirm();" class="btn btn-danger">No</a>').set({
                 'label': 'Cancelar',
@@ -398,7 +397,9 @@ var analisis_mercancia = function () {
             alertify.alert().close();
             alertify.confirm('Ejecucion de la Mercancia', 'La mercancía necesita ser producida de nuevo o se debe cambiar con producto en inventario.',
                 function () {
-                    envio_analisis_mercancia(data, 1, 8, 72);
+                    $('#modal_observacion').modal('show');
+                    $('#observacion_pedido').attr('data_pqr', JSON.stringify(data));
+
                 },
                 function () {
                     envio_visita_tecnica(data, 10, 69);
@@ -416,11 +417,19 @@ var analisis_mercancia = function () {
     });
 }
 
-var envio_analisis_mercancia = function (data, repro_produc, estado, id_actividad_area) {
+var observacion = function () {
+    $('#enviar_observacion').on('click', function () {
+        var observacion = $('#observacion_pedido').val();
+        var data = JSON.parse($('#observacion_pedido').attr('data_pqr'));
+        envio_analisis_mercancia(data, 1, 8, 72, observacion);
+    })
+}
+
+var envio_analisis_mercancia = function (data, repro_produc, estado, id_actividad_area, observacion = '') {
     $.ajax({
         type: "POST",
         url: `${PATH_NAME}/pqr/analisis_mercancia`,
-        data: { data, repro_produc, estado, id_actividad_area },
+        data: { data, repro_produc, estado, id_actividad_area, observacion },
         success: function (res) {
             if (res.status == 1) {
                 consultar_pqr();
