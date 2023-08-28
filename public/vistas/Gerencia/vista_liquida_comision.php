@@ -72,6 +72,12 @@
                                         <th>Dias Credito</th>
                                     </tr>
                                 </thead>
+                                <tfoot>
+                                    <tr class="text-danger table-secondary">
+                                        <th colspan="3" style="text-align:right">Total portafolio:</th>
+                                        <th colspan="2"></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

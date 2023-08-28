@@ -17,7 +17,7 @@ function consulta() {
 
 //------------------------------------------------- tabla vencidas ------------------------------------------
 function consulta_carteraVencidas(data) {
-    var table = $('#tb_cartera_vencida').DataTable({    
+    var table = $('#tb_cartera_vencida').DataTable({
         data: data,
         dom: 'Bflrtip',
         buttons: [{
@@ -25,17 +25,17 @@ function consulta_carteraVencidas(data) {
             text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
             tittleAttr: ' Exportar a exel',
             className: 'btn btn-success',
-        }],  
+        }],
         "columns": [
-           { "data": "id_cli_prov" },
-           { "data": "nit" },
-           { "data": "nombre_empresa" },
-           { "data": "dias_credito" },
-           { "data": "dias_mora" },
-           { "data": "cantidad_facturas" },
-           { "data": "factura_masantigua" },
-           { "data": "total_facturas", render: $.fn.dataTable.render.number(',', '.', 2, '$ ')},
-           {
+            { "data": "id_cli_prov" },
+            { "data": "nit" },
+            { "data": "nombre_empresa" },
+            { "data": "dias_credito" },
+            { "data": "dias_mora" },
+            { "data": "cantidad_facturas" },
+            { "data": "factura_masantigua" },
+            { "data": "total_facturas", render: $.fn.dataTable.render.number(',', '.', 2, '$ ') },
+            {
                 "render": function (data, type, row) {
                     botones = `
                     <center>
@@ -55,14 +55,14 @@ function consulta_carteraVencidas(data) {
 
             });
             // Update footer
-            $(api.column(3).footer()).html($.fn.dataTable.render.number('.', ',', 2, '$ ').display(Total));
+            $(api.column(3).footer()).html($.fn.dataTable.render.number(',', '.', 2, '$ ').display(Total));
         },
     })
-detalle_facturas('#tb_cartera_vencida', table, 'vencida')
+    detalle_facturas('#tb_cartera_vencida', table, 'vencida')
 }
 
 // -------------------------------------------- facturas por vencer tabla---------------------
-function consulta_cartera(data){
+function consulta_cartera(data) {
     var table = $('#tb_otra_cartera').DataTable({
         data: data,
         dom: 'Bflrtip',
@@ -71,7 +71,7 @@ function consulta_cartera(data){
             text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
             tittleAttr: ' Exportar a exel',
             className: 'btn btn-success',
-        }],     
+        }],
         "columns": [
             { "data": "id_cli_prov" },
             { "data": "nit" },
@@ -79,18 +79,18 @@ function consulta_cartera(data){
             { "data": "dias_credito" },
             { "data": "cantidad_facturas" },
             { "data": "factura_masantigua" },
-            { "data": "total_facturas", render: $.fn.dataTable.render.number(',', '.', 2, '$ ')},
+            { "data": "total_facturas", render: $.fn.dataTable.render.number(',', '.', 2, '$ ') },
             {
-                 "render": function (data, type, row) {
-                     botones = `
+                "render": function (data, type, row) {
+                    botones = `
                      <center>
                          <button type='button' title='Consultar facturas' class='btn btn-info btn-circle consultar_facturas'>
                              <span class="fas fa-search"></span>
                          </button>
                      <center>`;
-                     return botones;
-                 }
-             }
+                    return botones;
+                }
+            }
         ],
         footerCallback: function (row, data, start, end, display) {
             var api = this.api();
@@ -100,18 +100,18 @@ function consulta_cartera(data){
 
             });
             // Update footer
-            $(api.column(3).footer()).html($.fn.dataTable.render.number('.', ',', 2, '$ ').display(Total));
+            $(api.column(3).footer()).html($.fn.dataTable.render.number(',', '.', 2, '$ ').display(Total));
         },
     })
-detalle_facturas('#tb_otra_cartera', table, 'novencida')
+    detalle_facturas('#tb_otra_cartera', table, 'novencida')
 }
 
 //-------------------------------------------------------------- detalle facturas -------------------------------------------------------------
 function detalle_facturas(tbody, table, tipo) {
-    $(tbody).on('click','tr button.consultar_facturas', function () {
+    $(tbody).on('click', 'tr button.consultar_facturas', function () {
         var tr = $(this).closest('tr');
         var row = table.row(tr);
-        var id = $.inArray(tr.attr('id'),detaConsulta);
+        var id = $.inArray(tr.attr('id'), detaConsulta);
         if (row.child.isShown()) {
             tr.removeClass('details');
             row.child.hide();
@@ -123,39 +123,39 @@ function detalle_facturas(tbody, table, tipo) {
             row.child(tabla_detallesFactura(data)).show();
             var tabla = $(`#tb_factura_cliente${data.id_cli_prov}_${data.tipo}`).DataTable({
                 ajax: {
-                        "url": `${PATH_NAME}/comercial/consulta_detallada_facturas`,
-                        "type": "POST",
-                        "data": data,
-                    },
-                    dom: 'Bflrtip',
-                    buttons: [{
-                        extend: 'excelHtml5',
-                        text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
-                        tittleAttr: ' Exportar a exel',
-                        className: 'btn btn-success',
-                    }],
-                    "columns": [
-                        { "data": "nit" },
-                        { "data": "nombre_empresa" },
-                        { "data": "num_factura" },
-                        { "data": "total_factura", render: $.fn.dataTable.render.number('.', ',', 2, '$ ') },
-                        { "data": "fecha_factura" },
-                        { "data": "fecha_vencimiento" },
-                        {
-                            "data": "dias_mora",
-                            "render": function (data, type, row) {
-                                if (row.dias_mora > 0) {
-                                    return row.dias_mora;
-                                } else {
-                                    return 0;
-                                }
+                    "url": `${PATH_NAME}/comercial/consulta_detallada_facturas`,
+                    "type": "POST",
+                    "data": data,
+                },
+                dom: 'Bflrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
+                    tittleAttr: ' Exportar a exel',
+                    className: 'btn btn-success',
+                }],
+                "columns": [
+                    { "data": "nit" },
+                    { "data": "nombre_empresa" },
+                    { "data": "num_factura" },
+                    { "data": "total_factura", render: $.fn.dataTable.render.number(',', '.', 2, '$ ') },
+                    { "data": "fecha_factura" },
+                    { "data": "fecha_vencimiento" },
+                    {
+                        "data": "dias_mora",
+                        "render": function (data, type, row) {
+                            if (row.dias_mora > 0) {
+                                return row.dias_mora;
+                            } else {
+                                return 0;
                             }
-                        },
-                    ]
+                        }
+                    },
+                ]
             })
             if (id === -1) {
-                    detaConsulta.push(tr.attr('id'));
-                }
+                detaConsulta.push(tr.attr('id'));
+            }
         }
     })
     // // // On each draw, loop over the `detailRows` array and show any child rows
@@ -166,9 +166,9 @@ function detalle_facturas(tbody, table, tipo) {
     });
 }
 // // ------------------------------------------------- Cargar tabla detalles de facturas -----------------------------------------------------
-function tabla_detallesFactura(data) { 
+function tabla_detallesFactura(data) {
     var respuesta = /*html*/
-    `<br>
+        `<br>
     <div class="container-fluid borde_per" style="width:95%; background: white;">
         <br>
         <h5 class="sub_titulo_ubicacion text-center">Detalle facturas</h5><hr>

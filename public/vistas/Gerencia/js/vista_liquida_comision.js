@@ -88,13 +88,23 @@ var cargar_tabla = function (data) {
                     if (row.iva == 1) {
                         iva = (row.total_factura / 119) * 19;
                     }
-                    return $.fn.dataTable.render.number('.', ',', 2, '$ ').display(iva);
+                    return $.fn.dataTable.render.number(',', '.', 2, '$ ').display(iva);
                 }
             },
             { "data": "total_factura", render: $.fn.dataTable.render.number(',', '.', 2, '$ ') },
             { "data": "nombre_estado" },
             { "data": "dias_dados" },
         ],
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var Total = 0;
+            data.forEach(element => {
+                Total += parseFloat(element.total_factura);
+
+            });
+            // Update footer
+            $(api.column(3).footer()).html($.fn.dataTable.render.number(',', '.', 2, '$ ').display(Total));
+        },
     });
 }
 

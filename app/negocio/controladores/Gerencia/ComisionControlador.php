@@ -50,12 +50,22 @@ class ComisionControlador extends GenericoControlador
             $fecha_inicial = $_POST['fecha_inicial'];
             $fecha_fin = $_POST['fecha_fin'];
             $condicion = "WHERE t1.fecha_factura >= '$fecha_inicial' AND t1.fecha_factura <= '$fecha_fin'";
-        }elseif ($asesor == 0 ){
+        } elseif ($asesor == 0) {
             $condicion = '';
-        }else{
+        } else {
             $id_persona = $this->UsuarioDAO->consultarIdPersona($asesor);
+            $periodo_fin = $this->PeriodoCorteDAO->ConsultaPeriodoId($_POST['periodo']);
+            if ($_POST['periodo'] == 1) {
+                $periodo_ini = '2022-01-01';
+            } else {
+                $id_periodo_in = $_POST['periodo'] - 1;
+                $periodo_inicial = $this->PeriodoCorteDAO->ConsultaPeriodoId($id_periodo_in);
+                $periodo_ini = $periodo_inicial[0]->corte;
+            }
+            $fecha_inicial = $periodo_ini;
+            $fecha_fin = $periodo_fin[0]->corte;
             $id_persona_asesor = $id_persona[0]->id_persona;
-            $condicion = ' WHERE t1.asesor = ' . $id_persona_asesor;
+            $condicion = "WHERE t1.fecha_factura >= '" . $fecha_inicial . "' AND t1.fecha_factura <= '" . $fecha_fin . "' AND t1.asesor =" . $id_persona_asesor;
         }
         $data = $this->PortafolioDAO->Consultaportafolio($condicion);
         foreach ($data as $value) {
