@@ -259,10 +259,12 @@ var consecutivo_documento = function (empresa) {
             var option = '';
             var prefijo = res[0].prefijo;
             if (res[0].id_consecutivo == 8) {
-                option = `<option value="8">Factura</option>
+                option = `<option value="0" selected>Seleccione tipo de documento</option>
+                <option value="8">Factura</option>
                 <option value="11">Remisión</option>`;
             } else {
-                option = `<option value="9">Factura</option>
+                option = `<option value="0" selected>Seleccione tipo de documento</option>
+                <option value="9">Factura</option>
                 <option value="12">Remisión</option>`;
             }
             option += `<option value="6" ${eleg}>Cuentas de Cobro</option>`;
@@ -325,48 +327,54 @@ var descarga_pedido = function () {
 
 var lista_de_empaque = function () {
     $('#genera_lista_de_empaque').on('click', function () {
-        var obj_inicial = $('#genera_lista_de_empaque').html();
-        var num_pedido = $('.boton-x').attr('formulario');
-        var pertenece = $('#pertenece').val();
-        var tipo_documento = $('#remision_factura').val();
-        var numero_factura_consulta = $('#numero_factura_consulta').val();
-        var data = $("#tabla_items_pedido").DataTable().rows().data();
-        var dato_tabla = $("#tabla_items_pedido").DataTable().rows().nodes();
-        var mensaje = '';
-        var data_envio = [];
-        var storage = JSON.parse(localStorage.getItem('items_factura' + num_pedido));
-        // return;
-        $.each(dato_tabla, function (index, value) {
-            var p = $(this).find('input:checkbox').val();
-            var estado_radio = RadioElegido(`id_pedido_item${p}`);
-            if (estado_radio == 'ninguno') {
-            } else {
-                data_envio.push(data[index]);
+        if ($('#remision_factura').val() == 0) {
+            alertify.error('Selecciona el tipo de documento');
+            $('#remision_factura').focus();
+            return
+        }else{
+            var obj_inicial = $('#genera_lista_de_empaque').html();
+            var num_pedido = $('.boton-x').attr('formulario');
+            var pertenece = $('#pertenece').val();
+            var tipo_documento = $('#remision_factura').val();
+            var numero_factura_consulta = $('#numero_factura_consulta').val();
+            var data = $("#tabla_items_pedido").DataTable().rows().data();
+            var dato_tabla = $("#tabla_items_pedido").DataTable().rows().nodes();
+            var mensaje = '';
+            var data_envio = [];
+            var storage = JSON.parse(localStorage.getItem('items_factura' + num_pedido));
+            // return;
+            $.each(dato_tabla, function (index, value) {
+                var p = $(this).find('input:checkbox').val();
+                var estado_radio = RadioElegido(`id_pedido_item${p}`);
+                if (estado_radio == 'ninguno') {
+                } else {
+                    data_envio.push(data[index]);
+                }
+            });
+            if (mensaje == '' && data_envio == '') {
+                mensaje = 'Se debe elegir un item para poder continuar.';
+                alertify.error(mensaje);
+                return;
             }
-        });
-        if (mensaje == '' && data_envio == '') {
-            mensaje = 'Se debe elegir un item para poder continuar.';
-            alertify.error(mensaje);
-            return;
-        }
-        var envio = {
-            'items': data_envio,
-            'num_pedido': num_pedido,
-            'tipo_documento': tipo_documento,
-            'numero_factura_consulta': numero_factura_consulta
-        };
-        if (tipo_documento == 6) {
-            alertify.confirm('Continuar proceso', '¿Esta seguro que desea continuar con la generación de una cuenta de cobro?',
-                function () {
-                    btn_procesando('genera_lista_de_empaque');
-                    envio_datos_documento(envio, obj_inicial);
-                },
-                function () {
-                    alertify.error('Operación Cancelada');
-                });
-        } else {
-            btn_procesando('genera_lista_de_empaque');
-            envio_datos_documento(envio, obj_inicial, storage);
+            var envio = {
+                'items': data_envio,
+                'num_pedido': num_pedido,
+                'tipo_documento': tipo_documento,
+                'numero_factura_consulta': numero_factura_consulta
+            };
+            if (tipo_documento == 6) {
+                alertify.confirm('Continuar proceso', '¿Esta seguro que desea continuar con la generación de una cuenta de cobro?',
+                    function () {
+                        btn_procesando('genera_lista_de_empaque');
+                        envio_datos_documento(envio, obj_inicial);
+                    },
+                    function () {
+                        alertify.error('Operación Cancelada');
+                    });
+            } else {
+                btn_procesando('genera_lista_de_empaque');
+                envio_datos_documento(envio, obj_inicial, storage);
+            }
         }
     });
 }
