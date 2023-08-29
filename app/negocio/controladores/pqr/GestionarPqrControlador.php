@@ -16,6 +16,8 @@ use MiApp\persistencia\dao\EntregasLogisticaDAO;
 
 use MiApp\negocio\util\Validacion;
 use MiApp\negocio\util\PDF;
+use MiApp\negocio\util\Envio_Correo;
+
 
 class GestionarPqrControlador extends GenericoControlador
 {
@@ -57,7 +59,17 @@ class GestionarPqrControlador extends GenericoControlador
     {
         header('Content-Type: application/json'); //convierte a json
         $data = $_POST['data'];
+        $data_product = $data['datos_producto'];
+        $data_direc = $data['datos_direccion'];
         $estado = $_POST['estado'];
+        if ($estado == 5) {
+            $num_pqr = $data['num_pqr'];
+            $codigo_produc = $data_product[0]['codigo_producto'] . ' ' . $data_product[0]['descripcion_productos'];
+            $empresa = $data_direc[0]['nombre_empresa'];
+            $direccion = $data_direc[0]['direccion'] . ' ' . $data_direc[0]['nombre_ciudad'] . ' ,' . $data_direc[0]['nombre_departamento'];
+            $correo = CORREO_LOSGISTICA;
+            $correo_envio = Envio_Correo::correo_solicitud_logistica($num_pqr, $codigo_produc, $empresa, $direccion, $correo);
+        }
         $id_actividad_area = $_POST['id_actividad_area'];
         $edita_gestion_pqr = [
             'estado' => $estado
