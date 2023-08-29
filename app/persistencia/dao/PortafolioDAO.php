@@ -64,8 +64,9 @@ class PortafolioDAO extends GenericoDAO
 
     public function consulta_cartera($id_persona, $condicion) {
         $id_rol= $_SESSION['usuario']->getId_roll();
+        $id_usu = $_SESSION['usuario']->getId_usuario();
         $asesor = 'AND asesor ='. $id_persona;
-        if ($id_rol == 1) {
+        if ($id_rol == 1 || $id_usu == ID_COMISIONES_CARTERA ) {
             $asesor = '';
         }
         $sql = "SELECT t2.nit, t2.nombre_empresa,

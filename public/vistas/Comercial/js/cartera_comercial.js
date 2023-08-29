@@ -55,7 +55,7 @@ function consulta_carteraVencidas(data) {
 
             });
             // Update footer
-            $(api.column(3).footer()).html($.fn.dataTable.render.number(',', '.', 2, '$ ').display(Total));
+            $(api.column(3).footer()).html($.fn.dataTable.render.number('.', ',', 2, '$ ').display(Total));
         },
     })
     detalle_facturas('#tb_cartera_vencida', table, 'vencida')
@@ -100,7 +100,7 @@ function consulta_cartera(data) {
 
             });
             // Update footer
-            $(api.column(3).footer()).html($.fn.dataTable.render.number(',', '.', 2, '$ ').display(Total));
+            $(api.column(3).footer()).html($.fn.dataTable.render.number('.', ',', 2, '$ ').display(Total));
         },
     })
     detalle_facturas('#tb_otra_cartera', table, 'novencida')
@@ -138,19 +138,11 @@ function detalle_facturas(tbody, table, tipo) {
                     { "data": "nit" },
                     { "data": "nombre_empresa" },
                     { "data": "num_factura" },
-                    { "data": "total_factura", render: $.fn.dataTable.render.number(',', '.', 2, '$ ') },
+                    { "data": "total_factura", render: $.fn.dataTable.render.number('.', ',', 2, '$ ') },
                     { "data": "fecha_factura" },
                     { "data": "fecha_vencimiento" },
-                    {
-                        "data": "dias_mora",
-                        "render": function (data, type, row) {
-                            if (row.dias_mora > 0) {
-                                return row.dias_mora;
-                            } else {
-                                return 0;
-                            }
-                        },
-                    }],
+                    { "data": "dias_mora" }
+                    ],
                     footerCallback: function (row, data, start, end, display) {
                         var api = this.api();
                         var Total = 0;
