@@ -19,3 +19,4 @@ define('TEL_EMPRESA', '3847979'); //TELEFONO DE LA EMPRESA
 define('HOST', '192.168.2.33'); //HOST DE LA EMPRESA
 define('PORT', '8081'); //PUERTO DE LA EMPRESA
 define('ID_JEFE_PRODUCCION', '8'); //Id Jefe Produccion
+define('CORREO_LOSGISTICA', 'anderson.franco@acobarras.com'); //Correo Logistica

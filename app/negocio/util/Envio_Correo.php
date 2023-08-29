@@ -535,6 +535,35 @@ class Envio_Correo
         return self::php_miler($html, $remite, $subject, $correo);
     }
 
+    public static function correo_solicitud_logistica($num_pqr, $codigo_produc, $empresa, $direccion, $correo)
+    {
+        $body = "<div>
+        Buen día,
+        <br><br>
+        Reciba un cordial saludo. Por medio de la presente, se solicita realizar la recolección de los siguientes productos:" . $codigo_produc . "
+        Estos artículos corresponden a la <b>" . $num_pqr . "</b>, del cliente <b>" . $empresa . "</b> cuya ubicación es <b>" . $direccion . "</b>
+        <br><br>
+        Agradecemos de antemano su diligencia en este asunto.
+        <br><br>
+        Gracias por su atención.
+        <br><br>
+        ";
+        $body .= "<br>
+        Cordialmente,
+        <br><br>
+        Equipo de servicio al cliente.
+        <br>
+     " . CORREO_SERV_CLIENTE . "
+      <br>
+      Tel.: " . TEL_EMPRESA . "
+      <br><br>
+      ******ESTE CORREO ES AUTOMÁTICO, FAVOR NO RESPONDER ******
+    </div>";
+        //----------------------------------------------------------------------
+        $subject = "Notificación para recolección de material PQR " . $num_pqr;
+        $remite = '' . NOMBRE_EMPRESA . ' servicio al cliente';
+        return self::php_miler($body, $remite, $subject, $correo, $correo2 = '');
+    }
     public static function pruebas()
     {
         $correo = 'mateorozotorres0420028@gmail.com';
