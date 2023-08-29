@@ -18,20 +18,25 @@
                     <div class="tab-pane fade show active" id="valida_factura" role="tabpanel" aria-labelledby="valida_factura-tab">
                         <div class="container-fluid">
                             <br>
-                            <form id="consulta_factura">
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-3"></div>
-                                    <div class="col-1">
-                                        <label for="num_factura" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Núm. Factura</label>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" name="num_factura">
-                                            <button type="submit" class="btn btn-success col-3">Buscar <i class="fas fa-search"></i></button>
+                            <div class="row align-items-center">
+                                <div class="col-5 mb-3">
+                                    <label for="lectura_factura" style="font-family: 'gothic'; font-weight:bold;"class="col-form-label">Lectura codigo QR factura: </label>
+                                    <input class="form-control" type="text" name="lectura_factura" id="lectura_factura">
+                                </div>
+                                <form id="consulta_factura" class="col-5">
+                                    <div class="align-items-center">
+                                        <div >
+                                            <label for="num_factura" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Núm. Factura</label>
+                                        </div>
+                                        <div >
+                                            <div class="input-group mb-3">
+                                                <input type="text" id="inputnum_factura" class="form-control" name="num_factura">
+                                                <button type="submit" id="boton_buscar" class="btn btn-success ">Buscar <i class="fas fa-search"></i></button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                             <br>
                             <div class="recuadro collapse consulta_factura_tg">
                                 <div class="container-fluid">

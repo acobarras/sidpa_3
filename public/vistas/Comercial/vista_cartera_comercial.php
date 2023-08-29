@@ -24,7 +24,7 @@
                                                     <th>id</th>
                                                     <th>Nit</th>
                                                     <th class="col-3">Empresa</th>
-                                                    <th>Dias Credito</th>
+                                                    <th>Días crédito</th>
                                                     <th>Mayor día mora</th>
                                                     <th>Cantidad de facturas</th>
                                                     <th>Fecha  vencimiento /factura mas antigua</th>
@@ -60,7 +60,7 @@
                                             <th>id</th>
                                             <th>Nit</th>
                                             <th class="col-3">Empresa</th>
-                                            <th>Dias Credito</th>
+                                            <th>Días crédito</th>
                                             <th>Cantidad de facturas</th>
                                             <th>Fecha factura próxima a vencer</th>
                                             <th>Total Facturado</th>
