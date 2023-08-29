@@ -67,8 +67,11 @@ class GestionarPqrControlador extends GenericoControlador
             $codigo_produc = $data_product[0]['codigo_producto'] . ' ' . $data_product[0]['descripcion_productos'];
             $empresa = $data_direc[0]['nombre_empresa'];
             $direccion = $data_direc[0]['direccion'] . ' ' . $data_direc[0]['nombre_ciudad'] . ' ,' . $data_direc[0]['nombre_departamento'];
+            $cantidad = $data['cantidad_reclama'];
+            $contacto = $data_direc[0]['contacto'] . ' ' . $data_direc[0]['cargo'];
+            $telefono = $data_direc[0]['celular'];
             $correo = CORREO_LOSGISTICA;
-            $correo_envio = Envio_Correo::correo_solicitud_logistica($num_pqr, $codigo_produc, $empresa, $direccion, $correo);
+            $correo_envio = Envio_Correo::correo_solicitud_logistica($num_pqr, $codigo_produc, $empresa, $direccion, $cantidad, $contacto, $telefono, $correo);
         }
         $id_actividad_area = $_POST['id_actividad_area'];
         $edita_gestion_pqr = [

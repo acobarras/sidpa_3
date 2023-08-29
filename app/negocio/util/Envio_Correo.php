@@ -535,13 +535,19 @@ class Envio_Correo
         return self::php_miler($html, $remite, $subject, $correo);
     }
 
-    public static function correo_solicitud_logistica($num_pqr, $codigo_produc, $empresa, $direccion, $correo)
+    public static function correo_solicitud_logistica($num_pqr, $codigo_produc, $empresa, $direccion, $cantidad, $contacto, $telefono, $correo)
     {
         $body = "<div>
         Buen día,
         <br><br>
-        Reciba un cordial saludo. Por medio de la presente, se solicita realizar la recolección de los siguientes productos:" . $codigo_produc . "
-        Estos artículos corresponden a la <b>" . $num_pqr . "</b>, del cliente <b>" . $empresa . "</b> cuya ubicación es <b>" . $direccion . "</b>
+        Reciba un cordial saludo. Por medio de la presente, se solicita realizar la recolección del siguiente producto: " . $codigo_produc . ", por la cantidad de " . $cantidad . ".
+        Estos artículos corresponden a la <b>" . $num_pqr . "</b>, del cliente <b>" . $empresa . "</b> Cuya ubicación es <b>" . $direccion . "</b>
+        <br><br>
+        <b style='color:red'>Solicitar al area de servicio al cliente la fecha de recolección de la mercancia.</b>
+        <br><br>
+        <b>Contacto:</b>
+        <br>" . $contacto . "
+        <br>" . $telefono . "
         <br><br>
         Agradecemos de antemano su diligencia en este asunto.
         <br><br>
