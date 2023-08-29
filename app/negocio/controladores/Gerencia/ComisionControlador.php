@@ -65,7 +65,7 @@ class ComisionControlador extends GenericoControlador
             $fecha_inicial = $periodo_ini;
             $fecha_fin = $periodo_fin[0]->corte;
             $id_persona_asesor = $id_persona[0]->id_persona;
-            $condicion = "WHERE t1.fecha_factura >= '" . $fecha_inicial . "' AND t1.fecha_factura <= '" . $fecha_fin . "' AND t1.asesor =" . $id_persona_asesor;
+            $condicion = "WHERE t1.fecha_pago >= '" . $fecha_inicial . "' AND t1.fecha_pago <= '" . $fecha_fin . "' AND t1.asesor =" . $id_persona_asesor;
         }
         $data = $this->PortafolioDAO->Consultaportafolio($condicion);
         foreach ($data as $value) {
