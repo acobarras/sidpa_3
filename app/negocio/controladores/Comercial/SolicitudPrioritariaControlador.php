@@ -24,4 +24,11 @@ class SolicitudPrioritariaControlador extends GenericoControlador
             'Comercial/vista_solicitud_prioritaria'
         );
     }
+    public function enviar_solicitud_prioritaria()
+    {
+        header('Content-Type:application/json');
+        $formulario = Validacion::Decodifica($_POST['form']);
+        print_r($_POST);
+        print_r($formulario);
+    }
 }
