@@ -34,7 +34,7 @@ function consulta_carteraVencidas(data) {
            { "data": "dias_mora" },
            { "data": "cantidad_facturas" },
            { "data": "factura_masantigua" },
-           { "data": "total_facturas", render: $.fn.dataTable.render.number(',', '.', 2, '$ ')},
+           { "data": "total_facturas", render: $.fn.dataTable.render.number('.', ',', 2, '$ ')},
            {
                 "render": function (data, type, row) {
                     botones = `
@@ -79,7 +79,7 @@ function consulta_cartera(data){
             { "data": "dias_credito" },
             { "data": "cantidad_facturas" },
             { "data": "factura_masantigua" },
-            { "data": "total_facturas", render: $.fn.dataTable.render.number(',', '.', 2, '$ ')},
+            { "data": "total_facturas", render: $.fn.dataTable.render.number('.', ',', 2, '$ ')},
             {
                  "render": function (data, type, row) {
                      botones = `
@@ -151,7 +151,17 @@ function detalle_facturas(tbody, table, tipo) {
                                 }
                             }
                         },
-                    ]
+                    ],
+                    footerCallback: function (row, data, start, end, display) {
+                        var api = this.api();
+                        var Total = 0;
+                        data.forEach(element => {
+                            Total += parseFloat(element.total_factura);
+            
+                        });
+                        // Update footer
+                        $(api.column(3).footer()).html($.fn.dataTable.render.number('.', ',', 2, '$ ').display(Total));
+                    }
             })
             if (id === -1) {
                     detaConsulta.push(tr.attr('id'));
@@ -188,6 +198,12 @@ function tabla_detallesFactura(data) {
                 </thead>
                 <tbody>
                 </tbody>
+                <tfoot>
+                    <tr class="table-secondary">
+                        <th colspan="3" style="text-align:right">Total Facturas:</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </tfoot>
             </table>
             <br>
         </div><br>

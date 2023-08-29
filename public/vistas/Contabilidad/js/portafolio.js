@@ -12,10 +12,45 @@ $(document).ready(function () {
     envio_factura();
     tb_acobarras_sas();
     tb_acobarras_col();
+    lectura_factura();
 });
 function sumarDias(fecha, dias) {
     fecha.setDate(fecha.getDate() + dias);
     return fecha;
+}
+
+var data = new Object;
+
+function lectura_factura() {
+    $("#lectura_factura").blur(function (e) {
+        e.preventDefault();
+        var documento = $('#lectura_factura').val();
+        if ( documento != '') {
+            // reemplazamos y descomponemos el string
+            documento = documento.replace(/(=)|(NumFac)|(FecFac)|(HorFac)|(NitFac)|(DocAdq)|(ValFac)|(ValIva)|(ValOtroIm)|(ValTolFac)|(CUFE)/g, (e)=>{
+                if(e=="="){return ":";};
+                if(e=="NumFac"){return "NumFac";};
+                if(e=="FecFac"){return ",FecFac";};
+                if(e=="HorFac"){return ",HorFac";};
+                if(e=="NitFac"){return ",NitFac";};
+                if(e=="DocAdq"){return ",DocAdq";};
+                if(e=="ValFac"){return ",ValFac";};
+                if(e=="ValIva"){return ",ValIva";};
+                if(e=="ValOtroIm"){return ",ValOtroIm";};
+                if(e=="ValTolFac"){return ",ValTolFac";};
+                if(e=="CUFE"){return ",CUFE";};
+            } )
+            var documento1 = documento.split(',');
+            // convertimos a un objeto 
+            documento1.forEach(element => {
+                var datos = element.split(':');
+                data[datos[0]]= datos[1].trim();
+            });
+            // quitamos las letras del numero de factura 
+            data.NumFac = data.NumFac.replace(/[^0-9]+/g, "")
+            $('#inputnum_factura').val(data.NumFac)
+        }
+    });
 }
 
 var valida_factura = function () {
@@ -69,12 +104,15 @@ var valida_factura = function () {
                         if (!$(".consulta_factura_tg").is(":visible")) { // valida si el formulario esta abierto
                             $(".consulta_factura_tg").toggle(500);
                         }
+
                         limpiar_formulario('formulario', 'input'); //limpia formulario
                         limpiar_formulario('formulario', 'select'); //limpia formulario
                         alertify.confirm('Alerta Sidpa', 'Esta factura no Existe. ¿Decea crearla?', function () { // advierte que no existe factura
                             $('#iva').prop('checked', true);
                             $("#crea").empty().html('Crea '); // llena contenido del id
                             $("#nit_modifi").attr('disabled', false);
+                            $("#nit_modifi").val(data.DocAdq);
+                            $("#nit_modifi").focus();
                             $("#nombre_empresa_modifi").attr('disabled', true);
                             $("#dias_dados_modifi").attr('readonly', true);
                             $("#fecha_vencimiento_modifi").attr('readonly', true);
@@ -260,26 +298,40 @@ var envio_factura = function () {
         var valida = validar_formulario(form, exception);
         if (valida) {
             var obj_inicial = $(`#acepta_factu`).html();
-            btn_procesando(`acepta_factu`);
-            $.ajax({
-                url: `${PATH_NAME}/contabilidad/envio_factura`,
-                type: "POST",
-                data: form,
-                success: function (res) {
-                    btn_procesando(`acepta_factu`, obj_inicial, 1);
-                    if (res.status == -1) { //status -1 ya se relaciono esta factura
-                        alertify.error(res.msg);
-                    } else {
-                        alertify.success("Factura relacionada correctamente.");
-                        if ($(".consulta_factura_tg").is(":visible")) { // valida si el formulario esta abierto
-                            $(".consulta_factura_tg").toggle(500);
+            btn_procesando(`acepta_factu`); 
+            var diferencia = Math.abs(data.ValTolFac-form[16].value);
+            if (Object.keys(data).length === 0) {
+                alertify.error('¡Por favor lea el código QR de la factura!');
+                btn_procesando(`acepta_factu`, obj_inicial, 1);
+            } else if (data.NumFac != form[0].value) {
+                alertify.error('¡El número de factura no corresponde con el leído en la factura!');
+                btn_procesando(`acepta_factu`, obj_inicial, 1);
+            } else if (data.DocAdq != form[2].value) {
+                alertify.error('¡El NIT del cliente no corresponde con el leído en la factura!');
+                btn_procesando(`acepta_factu`, obj_inicial, 1);
+            } else if (diferencia > 1) {
+                alertify.error('¡El total de la factura no corresponde con el valor leído en la factura!');
+                btn_procesando(`acepta_factu`, obj_inicial, 1);
+            }else{
+                $.ajax({
+                    url: `${PATH_NAME}/contabilidad/envio_factura`,
+                    type: "POST",
+                    data: form,
+                    success: function (res) {
+                        btn_procesando(`acepta_factu`, obj_inicial, 1);
+                        if (res.status == -1) { //status -1 ya se relaciono esta factura
+                            alertify.error(res.msg);
+                        } else {
+                            alertify.success("Factura relacionada correctamente.");
+                            if ($(".consulta_factura_tg").is(":visible")) { // valida si el formulario esta abierto
+                                $(".consulta_factura_tg").toggle(500);
+                            }
+                            $("#tabla-acobarras-sas").DataTable().ajax.reload();
+                            $("#tabla-acobarras-col").DataTable().ajax.reload();
                         }
-                        $("#tabla-acobarras-sas").DataTable().ajax.reload();
-                        $("#tabla-acobarras-col").DataTable().ajax.reload();
-
                     }
-                }
-            });
+                });
+            }
         }
     });
 }
