@@ -20,8 +20,7 @@
                             <br>
                             <div class="row align-items-center">
                                 <div class="col-5 mb-3">
-                                    <label for="lectura_factura" style="font-family: 'gothic'; font-weight:bold;"class="col-form-label">Lectura codigo QR factura: </label>
-                                    <input class="form-control" type="text" name="lectura_factura" id="lectura_factura">
+                                <label for="lectura_factura" style="font-family: 'gothic'; font-weight:bold;"class="col-form-label">Lectura código QR factura: </label>                                    <input class="form-control" type="text" name="lectura_factura" id="lectura_factura">
                                 </div>
                                 <form id="consulta_factura" class="col-5">
                                     <div class="align-items-center">

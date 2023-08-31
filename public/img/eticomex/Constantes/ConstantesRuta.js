@@ -10,3 +10,4 @@ const FAC_ESP = `ETICOMEX ESPECIAL`; // constante factura empresa
 const CORREO_TALENTO = `diego.wilches@acobarras.com`; // constante correo de talento humano
 const ID_CLI_PROV_PQR = 1931;
 const ID_CLI_PROV_NO_PRODUCIR = 2441;
+const FAC_ELECTRONICA = 0; // 1 para realizar el ingreso de portafolio con lector; 0 ingreso manual
