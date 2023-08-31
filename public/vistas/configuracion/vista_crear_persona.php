@@ -126,11 +126,20 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <div class="mb-3 col-6">
+                            <div class="mb-3 col-4">
                                 <label for="celular" class="form-label">Celular : </label>
                                 <input type="text" class="form-control" name="celular" id="celular">
                             </div>
-                            <div class="mb-3 col-6">
+                            <div class="mb-3 col-4">
+                                <label for="id_area_trabajo" class="form-label">Area : </label>
+                                <select class="form-control select_2" style="width: 100%;" name="id_area_trabajo" id="id_area_trabajo">
+                                    <option value="0"></option>
+                                    <?php foreach ($area as $areas) { ?>
+                                        <option value="<?= $areas->id_area_trabajo ?>"><?= $areas->nombre_area_trabajo ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-4">
                                 <label for="tipo" class="form-label">Tipo Usuario : </label>
                                 <select class="form-control tipo_usuario" style="width: 100%;" name="tipo" id="tipo">
                                     <?php foreach (TIPO_USUARIO as $key => $tipo) { ?>
@@ -299,6 +308,15 @@
                     </div>
                 </div>
                 <div class="mb-3 row">
+                    <div class="mb-3 col-6">
+                        <label for="id_area_trabajo_modifi" class="form-label">Area : </label>
+                        <select class="form-control select_2" style="width: 100%;" name="id_area_trabajo" id="id_area_trabajo_modifi">
+                            <option value="0"></option>
+                            <?php foreach ($area as $areas) { ?>
+                                <option value="<?= $areas->id_area_trabajo ?>"><?= $areas->nombre_area_trabajo ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
                     <div class="mb-3 col-6">
                         <label for="comite_modifi" class="form-label">Comite : </label>
                         <select class="form-control select_2" multiple="multiple" style="width: 100%;" name="comite[]" id="comite_modifi">

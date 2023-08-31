@@ -9,6 +9,7 @@ use MiApp\persistencia\dao\PaisDAO;
 use MiApp\persistencia\dao\DepartamentoDAO;
 use MiApp\persistencia\dao\TipoDocumentoDAO;
 use MiApp\persistencia\dao\PersonaDAO;
+use MiApp\persistencia\dao\AreaTrabajoDAO;
 
 
 class PersonaControlador extends GenericoControlador
@@ -19,6 +20,7 @@ class PersonaControlador extends GenericoControlador
     private $DepartamentoDAO;
     private $TipoDocumentoDAO;
     private $PersonaDAO;
+    private $AreaTrabajoDAO;
 
     public function __construct(&$cnn)
     {
@@ -30,6 +32,7 @@ class PersonaControlador extends GenericoControlador
         $this->DepartamentoDAO = new DepartamentoDAO($cnn);
         $this->TipoDocumentoDAO = new TipoDocumentoDAO($cnn);
         $this->PersonaDAO = new PersonaDAO($cnn);
+        $this->AreaTrabajoDAO = new AreaTrabajoDAO($cnn);
     }
 
     public function vista_persona()
@@ -49,6 +52,7 @@ class PersonaControlador extends GenericoControlador
                 "tipo_documento" => $this->TipoDocumentoDAO->consultar_tipo_documento(),
                 "persona" => $this->PersonaDAO->consultar_personas(),
                 "jefeImediato" => $this->PersonaDAO->jefe_imediato(),
+                "area" => $this->AreaTrabajoDAO->consultar_area_sistema(),
                 "lista" => $arreglo,
             ]
         );

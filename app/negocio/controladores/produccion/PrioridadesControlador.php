@@ -147,7 +147,7 @@ class PrioridadesControlador extends GenericoControlador
         $id_usuario = $_SESSION['usuario']->getId_usuario();
         $id_roll = $_SESSION['usuario']->getId_roll();
         $condicion = 'WHERE t1.estado in(' . $estado . ')';
-        if ($id_roll != 1) {
+        if ($id_roll != 1 && $id_roll != 12 && $id_roll != 9) {
             $condicion = "WHERE t1.coordinadores LIKE'%" . $id_usuario . "%'AND t1.estado in(1,2)";
         }
         $datos = $this->PrioridadesDAO->consulta_prioridad($condicion);

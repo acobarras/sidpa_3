@@ -22,4 +22,12 @@ class AreaTrabajoDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function consultar_area_sistema()
+    {
+        $sql = "SELECT * FROM area_trabajo WHERE estado_area_trabajo=2";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
