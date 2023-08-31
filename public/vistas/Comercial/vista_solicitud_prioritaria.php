@@ -15,26 +15,38 @@
                                 <h3>Formulario Creacion Prioridad</h3>
                             </div>
                             <form id="form_prioridad">
-                                <div class="mx-3 row">
-                                    <div class="col-3">
-                                        <label for="proceso" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Proceso</label>
-                                        <select class="form-control select_2" name="proceso" id="proceso">
-                                            <option value="0">Elija un proceso</option>
-                                            <option value="1">Desarrollo</option>
+                                <div class="mx-3 row m-auto justify-content-center">
+                                    <div class="col-5">
+                                        <label for="area" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Proceso</label>
+                                        <select class="form-control select_2" multiple name="area" id="area">
+                                            <option value="0">Elija un area</option>
+                                            <?php foreach ($area as $areas) { ?>
+                                                <option value="<?= $areas->id_area_trabajo ?>"><?= $areas->nombre_area_trabajo ?></option>
+                                            <?php } ?>
                                         </select>
                                     </div>
-                                    <div class="col-3">
-                                        <label for="pedido" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Pedido</label>
-                                        <input type="text" class="form-control" id="pedido" name="pedido">
-                                    </div>
-                                    <div class="col-3">
-                                        <label for="item" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Pedido Item</label>
-                                        <select class="form-control select_2" id="item" name="item">
+                                    <div class="col-5">
+                                        <label for="actividad" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Actividad</label>
+                                        <select class="form-control select_2" name="actividad" id="actividad">
+                                            <option value="0" selected>Pedido</option>
+                                            <option value="1">Otros</option>
                                         </select>
                                     </div>
-                                    <div class="col-3">
-                                        <label for="cliente" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Cliente</label>
-                                        <input type="text" disabled class="form-control" id="cliente" name="cliente">
+                                    <div id="form_pedido" class="row m-auto justify-content-center">
+                                        <div class="col-4">
+                                            <label for="pedido" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Pedido</label>
+                                            <input type="text" class="form-control" id="pedido" name="pedido">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="item" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Pedido Item</label>
+                                            <select class="form-control select_2" id="item" name="item">
+                                                <option value="0">Completo</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="cliente" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Cliente</label>
+                                            <input type="text" readonly class="form-control" id="cliente" name="cliente">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mx-3 row">

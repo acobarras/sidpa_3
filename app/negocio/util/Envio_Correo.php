@@ -224,7 +224,7 @@ class Envio_Correo
             </html>';
         $remite = 'Confirmación de pedido para ' . $data[0]->nombre_empresa . ' Sidpa';
         $subject = 'Se ha creado un nuevo pedido para ' . $data[0]->nombre_empresa;
-        $cliente = 'mateorozotorres0420028@gmail.com';
+        // $cliente = 'mateorozotorres0420028@gmail.com';
         return self::php_miler($html, $remite, $subject, $cliente);
     }
     public static function correo_confimacion_pedido_asesor($data, $user, $asesor, $items)

@@ -81,11 +81,18 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <div class="mb-3 col-6">
+                            <div class="mb-3 col-4">
+                                <label for="res_prioridad" class="form-label">Responde Prioridades : </label>
+                                <select class="form-control select_2" style="width: 100%;" name="res_prioridad" id="res_prioridad">
+                                    <option value="0">No</option>
+                                    <option value="1">Si</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-4">
                                 <label for="ruta_foto" class="form-label">Foto : </label>
                                 <input type="file" class="form-control" name="ruta_foto" id="ruta_foto" />
                             </div>
-                            <div class="mb-3 col-6">
+                            <div class="mb-3 col-4">
                                 <label for="fecha_caduca" class="form-label">Fecha Fin : </label>
                                 <input type="text" class="form-control datepicker" name="fecha_caduca" id="fecha_caduca" />
                             </div>
@@ -223,6 +230,13 @@
                         <?php foreach ($r as $roll) { ?>
                             <option value="<?= $roll->id_roll ?>"><?= $roll->nombre_roll ?></option>
                         <?php } ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="res_prioridad_modifi" class="form-label">Responde Prioridades : </label>
+                    <select class="form-control select_2" style="width: 100%;" name="res_prioridad" id="res_prioridad_modifi">
+                        <option value="0">No</option>
+                        <option value="1">Si</option>
                     </select>
                 </div>
                 <div class="mb-3">
