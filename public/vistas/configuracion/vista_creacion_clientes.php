@@ -23,6 +23,7 @@
                                 <th>#</th>
                                 <th>Nit Empresa</th>
                                 <th>Razón Social</th>
+                                <th>Asesores</th>
                                 <th>Estado</th>
                                 <th>Opción</th>
                                 <th>Opción</th>
@@ -31,6 +32,7 @@
                         </table>
                     </div>
                 </div>
+                <input id="datos_usuarios" type="hidden" value='<?=json_encode($usuarios)?>'>
                 <!-- segundo link -->
                 <div class="tab-pane fade" id="first" role="tabpanel" aria-labelledby="first-tab">
                     <br>

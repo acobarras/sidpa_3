@@ -11,8 +11,26 @@ $(document).ready(function () {
     solo_numeros('cupo_cliente');
     solo_numeros('dias_max_mora');
     solo_numeros('dias_max_mora_modifi');
-
+    datos_usu();
 });
+
+// datos de asesores en vista principal
+var datos_usuarios = [];
+var datos_usu = function () {
+    datos_usuarios = JSON.parse($('#datos_usuarios').val());
+}
+var vista_asesores_tb = function (id_asesores='') {
+    id_asesores = id_asesores.split(',');
+    nombres_asesor = '';
+    id_asesores.forEach(id => {
+        datos_usuarios.forEach(datos => {
+            if (id == datos.id_persona) {
+               nombres_asesor += datos.nombre + ' ' + datos.apellido + '<br> ';
+            }
+        });
+    });
+    return nombres_asesor;
+}
 
 var cliente = function () {
     $(".tipo_cli_prov1").on('click', function () {
@@ -36,6 +54,17 @@ var cargar_tabla_clientes = function () {
             { "data": "id_cli_prov" },
             { "data": "nit" },
             { "data": "nombre_empresa" },
+            { 
+                "data": "id_usuarios_asesor",
+                render : function (data, type, row) {
+                    if (row.id_usuarios_asesor != null) {
+                        return vista_asesores_tb(row.id_usuarios_asesor);
+                    }else{
+                        return '<p></p>'
+                    }
+                    
+                }
+            },
             {
                 "data": "estado_cli_prov",
                 "searchable": false,

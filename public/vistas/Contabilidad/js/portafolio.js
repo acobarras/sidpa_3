@@ -16,7 +16,7 @@ $(document).ready(function () {
     lectura_factura();
 });
 var data = new Object;
-var usuario = new Object;
+var usuario_rol = '';
 
 function sumarDias(fecha, dias) {
     fecha.setDate(fecha.getDate() + dias);
@@ -24,11 +24,7 @@ function sumarDias(fecha, dias) {
 }
 
 function usuario_cookie() {
-    //validacion del rol por las cookie
-    var cookie = decodeURIComponent(document.cookie);
-    cookie = cookie.split(';');
-    cookie = cookie[0].split('=');
-    usuario = JSON.parse(cookie[1]);
+    usuario_rol = $('#rol').val();
 }
 
 
@@ -318,7 +314,7 @@ var envio_factura = function () {
                 else if (element.name == "total_factura") { total_factura = element.value }
                 else if (element.name == "nit") { nit = element.value };
             });
-            if (usuario.id_roll == 1 || FAC_ELECTRONICA == 0) {// los administradores pueden ingresar manualmente y los proyectos que no tienen facturación electronica
+            if (usuario_rol == 1 || FAC_ELECTRONICA == 0) {// los administradores pueden ingresar manualmente y los proyectos que no tienen facturación electronica
                 envio_factura_ajax(form, obj_inicial);
             } else {
                 var diferencia = Math.abs(data.ValTolFac - total_factura);
