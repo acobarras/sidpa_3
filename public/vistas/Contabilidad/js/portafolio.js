@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    usuario_cookie();
     valida_factura();
     select_2();
     var d = new Date();
@@ -14,37 +15,47 @@ $(document).ready(function () {
     tb_acobarras_col();
     lectura_factura();
 });
+var data = new Object;
+var usuario = new Object;
+
 function sumarDias(fecha, dias) {
     fecha.setDate(fecha.getDate() + dias);
     return fecha;
 }
 
-var data = new Object;
+function usuario_cookie() {
+    //validacion del rol por las cookie
+    var cookie = decodeURIComponent(document.cookie);
+    cookie = cookie.split(';');
+    cookie = cookie[0].split('=');
+    usuario = JSON.parse(cookie[1]);
+}
+
 
 function lectura_factura() {
     $("#lectura_factura").blur(function (e) {
         e.preventDefault();
         var documento = $('#lectura_factura').val();
-        if ( documento != '') {
+        if (documento != '') {
             // reemplazamos y descomponemos el string
-            documento = documento.replace(/(=)|(NumFac)|(FecFac)|(HorFac)|(NitFac)|(DocAdq)|(ValFac)|(ValIva)|(ValOtroIm)|(ValTolFac)|(CUFE)/g, (e)=>{
-                if(e=="="){return ":";};
-                if(e=="NumFac"){return "NumFac";};
-                if(e=="FecFac"){return ",FecFac";};
-                if(e=="HorFac"){return ",HorFac";};
-                if(e=="NitFac"){return ",NitFac";};
-                if(e=="DocAdq"){return ",DocAdq";};
-                if(e=="ValFac"){return ",ValFac";};
-                if(e=="ValIva"){return ",ValIva";};
-                if(e=="ValOtroIm"){return ",ValOtroIm";};
-                if(e=="ValTolFac"){return ",ValTolFac";};
-                if(e=="CUFE"){return ",CUFE";};
-            } )
+            documento = documento.replace(/(=)|(NumFac)|(FecFac)|(HorFac)|(NitFac)|(DocAdq)|(ValFac)|(ValIva)|(ValOtroIm)|(ValTolFac)|(CUFE)/g, (e) => {
+                if (e == "=") { return ":"; };
+                if (e == "NumFac") { return "NumFac"; };
+                if (e == "FecFac") { return ",FecFac"; };
+                if (e == "HorFac") { return ",HorFac"; };
+                if (e == "NitFac") { return ",NitFac"; };
+                if (e == "DocAdq") { return ",DocAdq"; };
+                if (e == "ValFac") { return ",ValFac"; };
+                if (e == "ValIva") { return ",ValIva"; };
+                if (e == "ValOtroIm") { return ",ValOtroIm"; };
+                if (e == "ValTolFac") { return ",ValTolFac"; };
+                if (e == "CUFE") { return ",CUFE"; };
+            })
             var documento1 = documento.split(',');
             // convertimos a un objeto 
             documento1.forEach(element => {
                 var datos = element.split(':');
-                data[datos[0]]= datos[1].trim();
+                data[datos[0]] = datos[1].trim();
             });
             // quitamos las letras del numero de factura 
             data.NumFac = data.NumFac.replace(/[^0-9]+/g, "")
@@ -280,7 +291,6 @@ var crea_factura_nueva = function () {
                 consulta_asesores(res.id_usuarios_asesor, 0, 'id_usuarios_asesor');
                 rellenar_formulario(res); // llena los datos del formulario
                 fecha_factura(); //funcion de cambio de fecha 
-
             }
         });
 
@@ -298,39 +308,56 @@ var envio_factura = function () {
         var valida = validar_formulario(form, exception);
         if (valida) {
             var obj_inicial = $(`#acepta_factu`).html();
-            btn_procesando(`acepta_factu`); 
-            var diferencia = Math.abs(data.ValTolFac-form[16].value);
-            if (Object.keys(data).length === 0) {
-                alertify.error('¡Por favor lea el código QR de la factura!');
-                btn_procesando(`acepta_factu`, obj_inicial, 1);
-            } else if (data.NumFac != form[0].value) {
-                alertify.error('¡El número de factura no corresponde con el leído en la factura!');
-                btn_procesando(`acepta_factu`, obj_inicial, 1);
-            } else if (data.DocAdq != form[2].value) {
-                alertify.error('¡El NIT del cliente no corresponde con el leído en la factura!');
-                btn_procesando(`acepta_factu`, obj_inicial, 1);
-            } else if (diferencia > 1) {
-                alertify.error('¡El total de la factura no corresponde con el valor leído en la factura!');
-                btn_procesando(`acepta_factu`, obj_inicial, 1);
-            }else{
-                $.ajax({
-                    url: `${PATH_NAME}/contabilidad/envio_factura`,
-                    type: "POST",
-                    data: form,
-                    success: function (res) {
-                        btn_procesando(`acepta_factu`, obj_inicial, 1);
-                        if (res.status == -1) { //status -1 ya se relaciono esta factura
-                            alertify.error(res.msg);
-                        } else {
-                            alertify.success("Factura relacionada correctamente.");
-                            if ($(".consulta_factura_tg").is(":visible")) { // valida si el formulario esta abierto
-                                $(".consulta_factura_tg").toggle(500);
-                            }
-                            $("#tabla-acobarras-sas").DataTable().ajax.reload();
-                            $("#tabla-acobarras-col").DataTable().ajax.reload();
-                        }
-                    }
-                });
+            btn_procesando(`acepta_factu`);
+            // Datos validación de codigo Qr - variables
+            var numero_factura = ''
+            var total_factura = ''
+            var nit = ''
+            form.forEach(element => {
+                if (element.name == "num_factura") { numero_factura = element.value }
+                else if (element.name == "total_factura") { total_factura = element.value }
+                else if (element.name == "nit") { nit = element.value };
+            });
+            if (usuario.id_roll == 1 || FAC_ELECTRONICA == 0) {// los administradores pueden ingresar manualmente y los proyectos que no tienen facturación electronica
+                envio_factura_ajax(form, obj_inicial);
+            } else {
+                var diferencia = Math.abs(data.ValTolFac - total_factura);
+                if (Object.keys(data).length === 0) {
+                    alertify.error('¡Por favor lea el código QR de la factura!');
+                    btn_procesando(`acepta_factu`, obj_inicial, 1);
+                } else if (data.NumFac != numero_factura) {
+                    alertify.error('¡El número de factura no corresponde con el leído en la factura!');
+                    btn_procesando(`acepta_factu`, obj_inicial, 1);
+                } else if (data.DocAdq != nit) {
+                    alertify.error('¡El NIT del cliente no corresponde con el leído en la factura!');
+                    btn_procesando(`acepta_factu`, obj_inicial, 1);
+                } else if (diferencia > 1) {
+                    alertify.error('¡El total de la factura no corresponde con el valor leído en la factura!');
+                    btn_procesando(`acepta_factu`, obj_inicial, 1);
+                } else {
+                    envio_factura_ajax(form, obj_inicial);
+                }
+            }
+        }
+    });
+}
+
+var envio_factura_ajax = function (form, obj_inicial) {
+    $.ajax({
+        url: `${PATH_NAME}/contabilidad/envio_factura`,
+        type: "POST",
+        data: form,
+        success: function (res) {
+            btn_procesando(`acepta_factu`, obj_inicial, 1);
+            if (res.status == -1) { //status -1 ya se relaciono esta factura
+                alertify.error(res.msg);
+            } else {
+                alertify.success("Factura relacionada correctamente.");
+                if ($(".consulta_factura_tg").is(":visible")) { // valida si el formulario esta abierto
+                    $(".consulta_factura_tg").toggle(500);
+                }
+                $("#tabla-acobarras-sas").DataTable().ajax.reload();
+                $("#tabla-acobarras-col").DataTable().ajax.reload();
             }
         }
     });
