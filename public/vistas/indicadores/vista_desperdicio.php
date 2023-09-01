@@ -14,6 +14,9 @@
                 <li class="nav-item">
                     <a class="nav-link" id="consulta_embo-tab" data-bs-toggle="tab" href="#consulta_embo" role="tab" aria-controls="consulta_embo" aria-selected="false">Consultas Indicadores embobinado</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="participacion-tab" data-bs-toggle="tab" href="#participacion" role="tab" aria-controls="participacion" aria-selected="false">Participacion O.P.</a>
+                </li>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <!-- primer link -->
@@ -251,6 +254,50 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Quinto link -->
+                <div class="tab-pane fade" id="participacion" role="tabpanel" aria-labelledby="participacion-tab">
+                    <div class="container">
+                        <div class="recuadro p-4">
+                            <div class="mb-3 text-center">
+                                <h3>Participaciones O.P.</h3>
+                            </div>
+                            <form id="form_op">
+                                <div class="row">
+                                    <div class="col-6 justify-content-center m-auto">
+                                        <label for="num_op" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Orden Producción:</label>
+                                        <input type="text" class="form-control" id="num_op" name="num_op">
+                                    </div>
+                                    <div class="mt-4 col-6">
+                                        <button class="btn btn-success" type="submit" id="enviar_op">
+                                            <i class="fa fa-plus-circle"></i> Enviar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <br>
+                            <div class="panel-body">
+                                <table id="tabla_participaciones" class="table table-bordered table-hover table-responsive-lg table-responsive-md" cellspacing="0" width="100%">
+                                    <thead style="background: #002b5f;color: white">
+                                        <tr>
+                                            <th>N°Producción</th>
+                                            <th>Cant O.P</th>
+                                            <th>Operario</th>
+                                            <th>Tamaño Etiqueta</th>
+                                            <th>Material</th>
+                                            <th>Ancho</th>
+                                            <th>Ml Usados</th>
+                                            <th>Cantidad Etiquetas</th>
+                                            <th>Precio Material</th>
+                                            <th>Precio O.P Desperdicio</th>
+                                            <th>Etq Producción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

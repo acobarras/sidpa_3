@@ -112,4 +112,17 @@ class ItemProducirDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function participa_op($num_op)
+    {
+        $sql = "SELECT  t1.id_item_producir,t1.num_produccion,t1.cant_op,t1.precio_material,t1.tamanio_etiq,t1.ancho_op,t1.material,t1.material_solicitado,t2.ancho,t2.ml_usados,t2.id_persona,t3.cantidad_etiquetas,t3.id_operario_troquela,t3.id_persona AS id_embobina,t4.nombres,t4.apellidos 
+        FROM item_producir t1        
+        INNER JOIN metros_lineales t2 ON t2.id_item_producir=t1.id_item_producir
+        INNER JOIN desperdicio_op t3 ON t3.num_produccion=t1.num_produccion AND t3.id_operario_troquela=t2.id_persona
+        INNER JOIN persona t4 ON t4.id_persona=t3.id_operario_troquela
+        WHERE t1.num_produccion=$num_op AND t2.ml_usados!=0.00";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

@@ -11,6 +11,7 @@ $(document).ready(function () {
     cambio_etiquetas_reportadas();
     consulta_fechas_op();
     consulta_fechas_embobinado();
+    consulta_participacion();
 });
 
 var myChart;
@@ -503,3 +504,46 @@ var cambio_etiquetas_reportadas = function () {
     });
 }
 
+var consulta_participacion = function () {
+    $('#form_op').submit(function (e) {
+        e.preventDefault();
+        var form = $(this).serializeArray;
+        var validar = validar_formulario(form);
+        if (validar) {
+            form = $(this).serialize();
+            $.ajax({
+                url: `${PATH_NAME}/consulta_participacion`,
+                type: 'POST',
+                data: form,
+                success: function (res) {
+                    $('#tabla_participaciones').DataTable({
+                        "data": res,
+                        "dom": "Bfrtip",
+                        "buttons": [
+                            "excel"
+                        ],
+                        columns: [
+                            { "data": "num_produccion" },
+                            { "data": "cant_op" },
+                            {
+                                "data": "nombres",
+                                render: function (data, type, row) {
+                                    return `${row.nombres}` + ' ' + `${row.item}`;
+                                }
+                            },
+                            { "data": "tamanio_etiq" },
+                            { "data": "material" },
+                            { "data": "ancho" },
+                            { "data": "ml_usados" },
+                            { "data": "cantidad_etiquetas" },
+                            { "data": "precio_material", render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                            { "data": "precio_mp_desperdicio", render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                            { "data": "total_op", render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                        ],
+                    });
+                    limpiar_formulario('form_op', 'input');
+                }
+            });
+        }
+    })
+}

@@ -315,4 +315,34 @@ class DesperdicioControlador extends GenericoControlador
         echo json_encode($respu);
         return;
     }
+
+    public function consulta_participacion()
+    {
+        header("Content-type: application/json; charset=utf-8");
+        $consulta_op = $this->ItemProducirDAO->participa_op($_POST['num_op']);
+        $m2_entregados = 0;
+        foreach ($consulta_op as $value) {
+            $valor_item = $this->PedidosItemDAO->ValorItemVentaOp($value->num_produccion);
+            $avance = $this->PedidosItemDAO->AvanceOp($value->num_produccion);
+            $q_etiq = $this->DesperdicioOpDAO->consultar_entrega_etiq($value->num_produccion);
+            $porciones = explode("X", $value->tamanio_etiq);
+            $ancho = Validacion::ReemplazaCaracter($porciones[0], ',', '.');
+            $ancho = ($ancho + GAP_LATERAL) / 1000;
+            $alto = $avance[0]->avance / 1000;
+            $m2_etiquetas = $ancho * $alto;
+            $m2_total_etiq = $m2_etiquetas * $value->cantidad_etiquetas;
+            $suma = $value->ml_usados * ($value->ancho / 1000);
+
+            $m2_entregados =  $suma;
+            $m2_utilizados = $m2_entregados;
+            $m2_desperdicio = $m2_utilizados - $m2_total_etiq;
+            $precio_mp_desperdicio = $m2_desperdicio * $value->precio_material;
+            $total_op = $valor_item[0]->v_unidad_min * $value->cantidad_etiquetas;
+            $value->precio_mp_desperdicio = $precio_mp_desperdicio;
+            $value->total_op = $total_op;
+        }
+        echo json_encode($consulta_op);
+        return;
+        print_r($consulta_op);
+    }
 }
