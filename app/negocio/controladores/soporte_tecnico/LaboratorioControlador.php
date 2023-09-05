@@ -33,7 +33,7 @@ class LaboratorioControlador extends GenericoControlador
     public function carga_laboratorio()
     {
         header('Content-Type: application/json');
-        $estado = 7;
+        $estado = 7; // agregar equipos laboratorio
         $laboratorio = $this->SoporteTecnicoDAO->datos_laboratorio($estado);
         $res['data'] =  $laboratorio;
         echo json_encode($res);
@@ -47,7 +47,7 @@ class LaboratorioControlador extends GenericoControlador
         $sede = $_POST['sede'];
         $nota = $_POST['nota'];
         $recibido = $_POST['recibido'];
-        $estado_diagnostico = 9;
+        $estado_diagnostico = 9; // pendiente cotizar
         $condicion = 'id_diagnostico =' . $datos[0]['id_diagnostico'];
         $formulario = [
             'estado' => $estado_diagnostico,
@@ -86,7 +86,7 @@ class LaboratorioControlador extends GenericoControlador
                     'id_persona_reparacion' => 0,
                     'fecha_ejecucion' => '0000-00-00',
                     'id_persona_recibe' => $_SESSION['usuario']->getid_usuario(),
-                    'estado' => 1,
+                    'estado' => 9,// cambio de 1 a 9 pendiente cotización
                     'firma_cli' => $imagen,
                     'fecha_crea' => date('Y-m-d'),
                     'hora_crea' => date('H:i:s'),

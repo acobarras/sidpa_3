@@ -22,7 +22,7 @@ var consultar_datos_item = function () {
                     { "data": "equipo" },
                     { "data": "serial_equipo" },
                     { "data": "procedimiento" },//observaciones este no existe en soporte ingreso laboratorio 
-                    { "data": "accesorios"},
+                    { "data": "accesorios" },
                     { "data": "nombre_estado_soporte" },
                     {
                         "render": function (data, type, row) {
@@ -45,7 +45,6 @@ var validar_check = function () {
     $('#tb_gestion_diag tbody').on("click", "tr input.items_selec", function () {
         var data = $('#tb_gestion_diag').DataTable().row($(this).parents("tr")).data();
         var id_diagnostico = data['id_diagnostico'];
-        console.log(data);
         if ($(this).prop('checked') == true) {
             if (array_item.length == ['']) {
                 array_item.push(data);
@@ -63,7 +62,7 @@ var validar_check = function () {
                     alertify.error("Los items seleccionados no pertenecen al mismo diagnostico");
                 }
             }
-            
+
         } else {
             for (var i = 0; i < array_item.length; i++) {
                 if (array_item[i].item === data.item) {
@@ -77,7 +76,6 @@ var validar_check = function () {
 var cotizar = function () {
     $('#cotizar_repu').on("click", function () {
         var cant_item_array = array_item.length;
-        console.log(array_item)
         if (cant_item_array === 0) {
             alertify.error('Debe seleccionar un item para realizar la cotización');
             return;
@@ -85,7 +83,7 @@ var cotizar = function () {
             var resta = array_item[0].total_items - cant_item_array;
             var numero = array_item[0].total_items - resta;
             if (cant_item_array < array_item[0].total_items) {
-                alertify.confirm(`ALERTA SIDPA`, `¿Esta seguro que quiere realizar la cotizacion a ${numero} equipo de un total de ${array_item[0].total_items} equipos del diagnostico?`, function () {
+                alertify.confirm(`ALERTA SIDPA`, `¿Esta seguro que quiere realizar la cotización a ${numero} equipo de un total de ${array_item[0].total_items} equipos del diagnostico?`, function () {
                     mostrar_formulario();
                 }, function () { alertify.error('Cancelado') })
                     .set('labels', { ok: 'Si', cancel: 'No' });
@@ -159,11 +157,11 @@ var mostrar_formulario = function () {
                                         </div>
                                         <div class="col-md-2 col-sm-12">
                                             <label class="form-label" for="precio${element.item}">Precio:</label>
-                                            <input type="text" class="form-control bg-white" name="precio${element.item}" id="precio${element.item}">
+                                            <input type="number" class="form-control bg-white" name="precio${element.item}" id="precio${element.item}">
                                         </div>
                                         <div class="col-md-1 col-sm-12">
                                             <label class="form-label" for="cantidad${element.item}">Cantidad:</label>
-                                            <input type="text" class="form-control bg-white" name="cantidad${element.item}" id="cantidad${element.item}">
+                                            <input type="number" class="form-control bg-white" name="cantidad${element.item}" id="cantidad${element.item}">
                                         </div>
                                         <div class="col-md-3 col-sm-12">
                                             <button class="btn btn-success agregar_producto" title='Agregar producto' data-item_boton='${element.item}' data-id='${JSON.stringify(element)}' type="button">Agregar</button>
@@ -201,9 +199,11 @@ var cargar_datos_tabla = function () {
         var cantidad = $(`#cantidad${item}`).val();
         var producto = JSON.parse($(`.productos_tecno${item}`).val());
         var form = $(`#formulario_articulo${item}`).serializeArray();
-        var valida = validar_formulario(form);
+        var exepcion = [`precio${item}`];
+        var valida = validar_formulario(form, exepcion);
         var tabla_global = localStorage.getItem('articulo' + datos['id_diagnostico'] + '-' + item);
         var array_productos = [];
+        if (valor == '') { valor = 0 };
         if (valida) {
             var envio = {
                 'moneda': moneda,
@@ -211,9 +211,8 @@ var cargar_datos_tabla = function () {
                 'cantidad': cantidad,
                 'producto': producto,
                 'item': item,
-                'producto': producto,
             };
-            if (tabla_global == null && Array.isArray(tabla_global) == false) {
+            if ((tabla_global == null || tabla_global == '[]') && Array.isArray(tabla_global) == false) {
                 array_productos.push(envio);
                 localStorage.setItem('articulo' + datos['id_diagnostico'] + '-' + item, JSON.stringify(array_productos));
             } else {
@@ -304,92 +303,89 @@ var elimina_items = function (tbody, table, datos) {
 };
 var enviar_items_cotizacion = function () {
     $('.enviar_cotizacion').on("click", function () {
+        var estado = '';
         var data = array_item;
         var valor_boton = $(this).val();
         var array_storage = [];
         for (let i = 0; i < data.length; i++) {
             const element = data[i];
             var storage = JSON.parse(localStorage.getItem('articulo' + element.id_diagnostico + '-' + element.item));
-            array_storage.push(storage);
+            if (storage != null) { array_storage.push(storage); }
         }
-        if (valor_boton == 1) {
-            var estado = 2
-            var boton_procesando = 'enviar_cotizacion';
-            enviar_ajax(boton_procesando, estado, array_storage);
+        if (array_storage.length == 0 || (array_storage.length == 1 && array_storage[0].length == 0)) {// sin repuestos
+            alertify.error('Debe agregar repuestos para continuar');
+            return;
         } else {
-            alertify.confirm(`ALERTA SIDPA`, `¿Es un comodato o una garantia?`, function () {
-                if (array_storage == [] || array_storage[0] == null) {
-                    alertify.error('Debe agregar repuestos para continuar');
-                    return;
-                } else {
-                    var estado = 3;
-                    var boton_procesando = 'continuar_diag';
-                    enviar_ajax(boton_procesando, estado, array_storage);
-                }
-            }, function () {
-                var estado = 4;
-                var boton_procesando = 'continuar_diag';
+            if (valor_boton == 1) {//cotizar
+                var boton_procesando = 'enviar_cotizacion';
+                estado = 2 // generar un PDF y queda en espera de aprobacion
                 enviar_ajax(boton_procesando, estado, array_storage);
-            })
-                .set('labels', { ok: 'Si', cancel: 'No' });
+            } else {//no cotizar
+                var boton_procesando = 'continuar_diag';
+                alertify.confirm(`ALERTA SIDPA`, `¿Es un comodato o una garantia?`, function () {// si es comodato
+                    estado = 3;// validacion piezas 
+                    enviar_ajax(boton_procesando, estado, array_storage);
+                }, function () {//no es comodato
+                    estado = 7;// Devuelve sin reparar
+                    enviar_ajax(boton_procesando, estado, array_storage);
+                }).set({
+                    'labels': { ok: 'Si', cancel: 'No' },
+                    'invokeOnCloseOff': true
+                });
+            }
         }
     })
 }
 
 var enviar_ajax = function (boton_procesando, estado, array_storage) {
-    if (array_storage[0] == null && estado == 2) {
-        alertify.error('Debe seleccionar un repuesto para realizar la cotización');
-        return;
-    } else {
-        var datos = array_item;
-        var obj_inicial = $(`#${boton_procesando}`).html();
-        btn_procesando(`${boton_procesando}`);
-        if (estado === 2) {
-            $.ajax({
-                "url": `${PATH_NAME}/soporte_tecnico/enviar_items_cotizacion`,
-                "type": 'POST',
-                "data": { estado, datos, array_storage },
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function (res) {
-                    for (let i = 0; i < datos.length; i++) {
-                        const element1 = datos[i];
-                        localStorage.removeItem('articulo' + element1.id_diagnostico + '-' + element1.item);
-                    }
-                    btn_procesando(`${boton_procesando}`, obj_inicial, 1);
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(res);
-                    a.href = url;
-                    a.download = 'Cotización-' + datos[0]['num_consecutivo'] + '.pdf';
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    window.location.href = `${PATH_NAME}/vista_aprobacion`;
+    var datos = array_item;
+    var obj_inicial = $(`#${boton_procesando}`).html();
+    btn_procesando(`${boton_procesando}`);
+    if (estado === 2) {
+        $.ajax({
+            "url": `${PATH_NAME}/soporte_tecnico/enviar_items_cotizacion`,
+            "type": 'POST',
+            "data": { estado, datos, array_storage },
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (res) {
+                for (let i = 0; i < datos.length; i++) {
+                    const element1 = datos[i];
+                    localStorage.removeItem('articulo' + element1.id_diagnostico + '-' + element1.item);
                 }
-            });
-        }
-        else {
-            $.ajax({
-                "url": `${PATH_NAME}/soporte_tecnico/enviar_items_cotizacion`,
-                "type": 'POST',
-                "data": { estado, datos, array_storage },
-                success: function (res) {
-                    if (res.status == -1) {
-                        alertify.success(res.msg);
-                        window.location.href = `${PATH_NAME}/vista_cierre_diag`;
+                btn_procesando(`${boton_procesando}`, obj_inicial, 1);
+                var a = document.createElement('a');
+                var url = window.URL.createObjectURL(res);
+                a.href = url;
+                a.download = 'Cotización-' + datos[0]['num_consecutivo'] + '.pdf';
+                a.click();
+                window.URL.revokeObjectURL(url);
+                window.location.href = `${PATH_NAME}/vista_aprobacion`;
+            }
+        });
+    }
+    else {
+        $.ajax({
+            "url": `${PATH_NAME}/soporte_tecnico/enviar_items_cotizacion`,
+            "type": 'POST',
+            "data": { estado, datos, array_storage },
+            success: function (res) {
+                for (let i = 0; i < datos.length; i++) {
+                    const element2 = datos[i];
+                    localStorage.removeItem('articulo' + element2.id_diagnostico + '-' + element2.item);
+                }
+                if (res.status == -1) {//DSR
+                    alertify.success(res.msg);
+                    window.location.href = `${PATH_NAME}/vista_cierre_diag`;
 
-                    } if (res.status == -2) {
-                        btn_procesando(`${boton_procesando}`, obj_inicial, 1);
-                        window.location.href = `${PATH_NAME}/vista_aprobacion`;
-                    }
-                    else {
-                        for (let i = 0; i < datos.length; i++) {
-                            const element2 = datos[i];
-                            localStorage.removeItem('articulo' + element2.id_diagnostico + '-' + element2.item);
-                        }
-                    }
+                }else if (res.status == -2) { // COMODATO
+                    btn_procesando(`${boton_procesando}`, obj_inicial, 1);
+                    window.location.href = `${PATH_NAME}/validacion_repuestos`;
                 }
-            });
-        }
+
+                
+            }
+        });
     }
 }

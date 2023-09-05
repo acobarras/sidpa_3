@@ -53,13 +53,17 @@
                                         <div class="mb-3">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <div class="mb-3 col-6">
+                                                    <div class="mb-3 col-4">
                                                         <label for="codigo_producto" class="form-label">Codigo Producto</label>
                                                         <select class="form-select" aria-label="Default select example" id="producto_cotiza" name="codigo_producto">
                                                         </select>
                                                     </div>
-                                                    <div class="mb-3 col-6">
-                                                        <label for="valor_cotiza_visita" class="form-label">Valor Visita</label>
+                                                    <div class="mb-3 col-4">
+                                                        <label for="cantidad_cotiza_visita" class="form-label">Cantidad</label>
+                                                        <input type="number" class="form-control" id="cantidad_cotiza_visita" name="cantidad_cotiza_visita">
+                                                    </div>
+                                                    <div class="mb-3 col-4">
+                                                        <label for="valor_cotiza_visita" class="form-label">Valor Unidad visita</label>
                                                         <input type="number" class="form-control" id="valor_cotiza_visita" name="valor_cotiza_visita">
                                                     </div>
                                                 </div>

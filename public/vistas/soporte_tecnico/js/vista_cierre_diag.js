@@ -9,7 +9,6 @@ var consultar_datos_item = function () {
             var table = $("#tabla_cierre_diag").DataTable({
                 "data": res['data'],
                 "columns": [
-
                     {
                         "render": function (data, type, row) {
                             return `${row.id_diagnostico}-${row.item}`
@@ -24,13 +23,11 @@ var consultar_datos_item = function () {
                     { "data": "nombre_estado_soporte" },
                     {
                         "render": function (data, type, row) {
-                            if (row.estado_item == 11 || row.estado_item == 15 || row.estado_item == 16) {
-                                return `<center>
+                            return `<center>
                             <div class="select_acob text-center">
                             <input type="checkbox" class="items_selec" id="diagnostico${row.id_diagnostico}" name='diagnostico${row.id_diagnostico}' value="${row.item}">
                             </div>
                             <center>`;
-                            }
                         }
                     }
                 ]
@@ -84,64 +81,61 @@ var generar_acta = function () {
             alertify.error('Debe seleccionar un item para realizar el acta');
             return;
         } else {
-            if (array_item[0].estado_item == 15) {
+            if (array_item[0].estado_item == 15) {//15-Reparación Efectuada  
                 alertify.confirm(`ALERTA SIDPA`, `¿Requiere Factura?`,
-                    function () {
-                        alertify.alert('ALERTA SIDPA', '¿Factura con IVA?"<a href="javascript:showConfirm(1);" class="btn btn-success">Si</a>  <a href="javascript:showConfirm(2);" class="btn btn-danger">No</a></div>',
+                    function () {// si requiere factura 
+                        alertify.alert('ALERTA SIDPA', '</div><label for="observaciones"><b>Observaciones Pedido:</b></label><br> <textarea name="observaciones" id="observaciones" class="col-10" rows="10"></textarea><br><br>¿Factura con IVA?" <a href="javascript:showConfirm(1);" class="btn btn-success">Si</a>  <a href="javascript:showConfirm(2);" class="btn btn-danger">No</a>',
                             function () {
                             }).set({
                                 'label': 'Cancelar',
                                 'transitionOff': true
                             });
                         window.showConfirm = function (vista) {
-                            if (vista == 1) {
+                            if (vista == 1) {// con iva
                                 var iva = 1;
-                                enviar_datos_acta(iva, 1);
-                            } else {
+                            } else {//sin iva
                                 var iva = 2;
-                                enviar_datos_acta(iva, 2);
                             }
+                            var observaciones = $('#observaciones').val();
+                            enviar_datos_acta(iva, 1, observaciones);
                         }
-                    }, function () {
-                        enviar_datos_acta(2, 2);
-                    })
-                    .set('labels', { ok: 'Si', cancel: 'No' });
-            } else {
+                    }, function () {// no requiere factura
+                        return;
+                    }).set({
+                        'labels': { ok: 'Si', cancel: 'Cancelar' },
+                    });
+            } else if (array_item[0].estado_item == 16 || array_item[0].estado_item == 11) { //16-reparación fallida 11-cotización cancelada
                 enviar_datos_acta(2, 2);
+            } else {//17-comodato garantía
+                enviar_datos_acta(2, 3);
             }
         }
     })
 }
 // La variable estado es para saber si toca crear un pedido o no 
-var enviar_datos_acta = function (iva, estado) {
+var enviar_datos_acta = function (iva, estado, observaciones = '') {// estos estado estado para el pedido (1-acta y pedido)(2-actaDSR y cambio estados)(3-acta y cambio estados)
     var data = array_item;
     $.ajax({
         "url": `${PATH_NAME}/soporte_tecnico/generar_acta`,
         "type": 'POST',
-        "data": { data, iva, estado },
+        "data": { data, iva, estado, observaciones},
         success: function (res) {
-            console.log(res)
             var num_acta = res.num_acta;
             var num_pedido = res.num_pedido;
-            if (estado == 1) {
-                generar_pdf_acta(num_pedido, num_acta, 1);
-            } else {
-                generar_pdf_acta(num_pedido, num_acta, 2)
-            }
+            generar_pdf_acta(num_pedido, num_acta);
         }
     });
 }
 
-var generar_pdf_acta = function (num_pedido, num_acta, estado_pdf) {
+var generar_pdf_acta = function (num_pedido, num_acta) {// estos estados son del acta toca mirarlos
     $.ajax({
         "url": `${PATH_NAME}/soporte_tecnico/generar_pdf_acta`,
         "type": 'POST',
-        "data": { num_acta, estado_pdf },
+        "data": { num_acta},
         xhrFields: {
             responseType: 'blob'
         },
         success: function (respuesta) {
-
             var a = document.createElement('a');
             var url = window.URL.createObjectURL(respuesta);
             a.href = url;
@@ -150,7 +144,7 @@ var generar_pdf_acta = function (num_pedido, num_acta, estado_pdf) {
             window.URL.revokeObjectURL(url);
 
             alertify.success('Cierre exitoso');
-            if (num_pedido != '' && estado_pdf != 2) {
+            if (num_pedido != '') {
                 alertify.alert()
                     .setting({
                         'label': 'Cerrar',

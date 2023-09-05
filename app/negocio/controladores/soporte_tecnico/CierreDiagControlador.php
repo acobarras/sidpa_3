@@ -59,7 +59,7 @@ class CierreDiagControlador extends GenericoControlador
     public function consultar_datos_cierre()
     {
         header('Content-Type: application/json');
-        $estado_item = '11,15,16';
+        $estado_item = '11,15,16,17';
         $datos_items = $this->SoporteItemDAO->consultar_aprobacion($estado_item, '');
         $sentencia = 'AND t1.num_acta = 0';
         foreach ($datos_items as $value) {
@@ -71,40 +71,46 @@ class CierreDiagControlador extends GenericoControlador
         return;
     }
 
-    public function generar_acta()
-    {
+    public function generar_acta() {
         header('Content-Type: application/json');
         // SE ADELANTA EL CONSECUTIVO DEL NUMERO DE ACTA
+        $observaciones = $_POST['observaciones'];
         $data = $_POST['data'];
         $estado_genera_pedido = $_POST['estado'];
         $num_acta = $this->ConsCotizacionDAO->consultar_cons_especifico(17);
         $nuevo_cons = $num_acta[0]->numero_guardado + 1;
+        $estado_item = 14;
         $edita_acta = [
-            'numero_guardado' => $nuevo_cons
-        ];
-        $condicion_acta = 'id_consecutivo = 17';
-        $this->ConsCotizacionDAO->editar($edita_acta, $condicion_acta);
-
-        // SI VIENE POR ESTADO 15 ES POR QUE LA EJECUCION DE LA REPARACION FUE EXITOSA, SI NO ES POR FALTA DE REPUESTOS O RECHAZO
-        if ($estado_genera_pedido == 1) {
-            // SE REALIZA EL EACTA Y SE CREA EL PEDIDO
-            $iva = $_POST['iva'];
-            $estado_pdf = 1;
-            $estado_item = 14;
-            $estado_cotiza = 8;
-            $respu = CierreDiagControlador::crear_pedido_soporte($data, $estado_pdf, $estado_item, $estado_cotiza, $num_acta[0]->numero_guardado, $iva);
-        } else {
-            // SE REALIZA EL ACTA Y SE CIERRA EL CASO POR ESTA RAZON SE MODIFICAN LOS ESTADOS DE LA TABLA
-            $estado_pdf = 2;
-            $estado_item = 14;
-            $estado_cotiza = 7;
-            $respu = CierreDiagControlador::cambiar_estado_cierre($data, $estado_item, $estado_cotiza, $estado_pdf, $num_acta[0]->numero_guardado);
+                'numero_guardado' => $nuevo_cons
+            ];
+            $condicion_acta = 'id_consecutivo = 17';
+            $this->ConsCotizacionDAO->editar($edita_acta, $condicion_acta);    
+        switch ($estado_genera_pedido) {
+            case '1': //(1-acta y pedido)
+                $iva = $_POST['iva'];
+                $estado_cotiza = 8;
+                $respu = CierreDiagControlador::crear_pedido_soporte($data, $estado_item, $estado_cotiza, $num_acta[0]->numero_guardado, $iva, $observaciones);
+                break;
+            case '2'://(2-actaDSR y cambio estados)
+                $estado_cotiza = 7;
+                $respu = CierreDiagControlador::cambiar_estado_cierre($data, $estado_item, $estado_cotiza, $num_acta[0]->numero_guardado);
+                break;
+            case '3'://(3-acta y cambio estados)
+                $estado_cotiza = 8; // FIN DE PROCESO
+                $respu = CierreDiagControlador::cambiar_estado_cierre($data, $estado_item, $estado_cotiza, $num_acta[0]->numero_guardado);
+                break;
+            default: 
+                $respu = [
+                    'status' => -1,
+                    'msg' => 'Error de estados'
+                ];
+                break;
         }
         echo json_encode($respu);
         return;
     }
 
-    public function crear_pedido_soporte($data, $estado_pdf, $estado_item, $estado_cotiza, $num_acta, $iva)
+    public function crear_pedido_soporte($data, $estado_item, $estado_cotiza, $num_acta, $iva, $observaciones ='')
     {
         header('Content-Type: application/json');
         // SE IDENTIFICA A QUE EMPRESA PERTENECE EL CLIENTE
@@ -142,20 +148,25 @@ class CierreDiagControlador extends GenericoControlador
             'id_dire_radic' => $datos_diag[0]->id_direccion,
             'fecha_compromiso' => date('Y-m-d'),
             'fecha_cierre' => date('Y-m-d'),
+            'porcentaje' => 0,
+            'difer_mas' => 0,
+            'difer_menos' => 0,
+            'difer_ext' => 1,
             'iva' => $iva, //PREGUNTAR CUANDO EL IVA VENGA EN 1,2
-            'observaciones' => 'Este N° de pedido pertenece al diagnostico soporte N°' . $data[0]['num_consecutivo'] . '. Por favor solicitar al area de soporte los respectivos documentos.',
+            'observaciones' => 'Este N° de pedido pertenece al diagnostico soporte N°' . $data[0]['num_consecutivo'] . '. Por favor solicitar al area de soporte los respectivos documentos. '.$observaciones,
             'total_etiq' => 0,
             'total_tec' => $total_tecn,
             'id_estado_pedido' => 4,
             'id_usuario' => 79,
             'fecha_crea_p' => date('Y-m-d'),
             'hora_crea' => date('h:i:s'),
-
         ];
         $respu = $this->PedidosDAO->insertar($data_pedido); // inserta los datos a la tabla pedidos
         $parametro = 't1.id_pedido = ' . $respu['id'];
         $cons_pedido = $this->PedidosDAO->consulta_pedidos($parametro); //consultamos la tabla pedido
-
+        $id_pedido = $respu['id'];
+        $actividad_area = $this->ActividadAreaDAO->consultar_id_actividad_area(75);
+        
         $crea_items_pedido = [];
         $crea_seguimiento_items = [];
         $crea_control_facturas = [];
@@ -164,23 +175,22 @@ class CierreDiagControlador extends GenericoControlador
         // SE OBTIENE LA TRM DEL DIA
         $ConsultaUltimoRegistro = $this->trmDAO->ConsultaUltimoRegistro();
         $trm = $ConsultaUltimoRegistro[0]->valor_trm;
-
         // SE RECORRE LA DATA PARA REALIZAR EL CAMBIO DE ESTADO DEL DIAGNOSTICO
-        foreach ($data as $value) {
+        foreach ($data as $val) {
 
             // SE REGISTRA EL SEGUIMIENTO
-            $id_actividad = 90;//DIAGNOSTICO CERRADO CON ACTA ENTREGA Y PEDIDO NUM 
+            $id_actividad = 90; //DIAGNOSTICO CERRADO CON ACTA ENTREGA Y PEDIDO NUM 
             $observacion = 'ACTA ENTREGA ' . $num_acta . ' Y PEDIDO NUM ' . $num_pedido;
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($value['id_diagnostico'], $value['item'],$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($val['id_diagnostico'], $val['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
-            $id_diagnostico_item = ($value['id_diagnostico_item']);
+            $id_diagnostico_item = ($val['id_diagnostico_item']);
             $formulario_item = [
                 'estado' => $estado_item,
             ];
             $condicion = 'id_diagnostico_item =' . $id_diagnostico_item;
             $modificacion = $this->SoporteItemDAO->editar($formulario_item, $condicion);
             if ($modificacion == 1) {
-                foreach ($value['repuestos'] as  $repuestos) {
+                foreach ($val['repuestos'] as  $repuestos) {
                     $id_cotizacion = ($repuestos['id_cotizacion']);
                     $formulario_cotiza = [
                         'estado' => $estado_cotiza,
@@ -190,23 +200,18 @@ class CierreDiagControlador extends GenericoControlador
                     $modificacion_cotiza = $this->CotizacionItemSoporteDAO->editar($formulario_cotiza, $condicion);
                 }
             }
-        }
-
-        foreach ($data as $val) {
-            foreach ($val['repuestos'] as $product) {
+            foreach ($val['repuestos'] as  $product) {
                 $product['num_pedido'] = $num_pedido; //asignamos a cada producto el numero de pedido asignado
-                $product['id_pedido'] = $respu['id']; //asignamos a cada producto el numero de pedido asignado.
+                //$product['id_pedido'] = $id_pedido; //asignamos a cada producto el numero de pedido asignado.
                 $product['fecha_crea_p'] = date('Y-m-d'); //asignamos a cada producto la fecha del pedido.
                 $product['fecha_compro_pedido'] = date('Y-m-d');
                 $total_item = floatval($product['valor']) * floatval($product['cantidad']);
-
+    
                 if ($product['moneda'] == 2) {
                     $total_item = (floatval($product['valor']) * floatval($trm)) * floatval($product['cantidad']);
                 }
-
-                //SE REALIZA LA CONSULTA DEL PRODUCTO DEL CLIENTE SI NO EXISTE SE CREA 
+                // SE REALIZA LA CONSULTA DEL PRODUCTO DEL CLIENTE SI NO EXISTE SE CREA 
                 $consultar_cliente_produc = $this->cliente_productoDAO->consultar_produc_cli($data[0]['id_cli_prov'], $product['id_producto']);
-                $id_cliente_producto = '';
                 if ($consultar_cliente_produc == []) {
                     $crear_cliente_produc = [
                         'id_cli_prov' => $data[0]['id_cli_prov'],
@@ -228,13 +233,13 @@ class CierreDiagControlador extends GenericoControlador
                     ];
                     $cliente_producto = $this->cliente_productoDAO->insertar($crear_cliente_produc);
                     $id_cliente_producto = $cliente_producto['id'];
-                } else {
+                }   else {
                     $cliente_producto = $consultar_cliente_produc;
                     $id_cliente_producto = $cliente_producto[0]->id_clien_produc;
                 }
                 // SE REGISTRA EN LA BASE DE DATOS EN LA TABLA PEDIDO ITEM
-                $crea_items_pedido[] = array(
-                    'id_pedido' => $product['id_pedido'],
+                $crea_items_pedido = [
+                    'id_pedido' =>  $id_pedido,
                     'item' => $val['item'],
                     'id_clien_produc' => $id_cliente_producto,
                     'codigo' => $product['codigo_producto'],
@@ -253,11 +258,10 @@ class CierreDiagControlador extends GenericoControlador
                     'id_estado_item_pedido' => 17,
                     'id_usuario' => 79, //id usuario de soporte
                     'fecha_crea' => date('Y-m-d'),
-                );
-
+                ];
+                $respu = $this->PedidosItemDAO->insertar($crea_items_pedido);
                 // SE REGISTRA LA ACTIVIDAD DE AREA PARA DESPUES PODER CONSULTARLA
-                $actividad_area = $this->ActividadAreaDAO->consultar_id_actividad_area(75);
-                $crea_seguimiento_items[] = array(
+                $crea_seguimiento_items = [
                     'id_persona' => 202,
                     'id_area' => $actividad_area[0]->id_area_trabajo,
                     'id_actividad' => $actividad_area[0]->id_actividad_area,
@@ -268,44 +272,30 @@ class CierreDiagControlador extends GenericoControlador
                     'id_usuario' => 10,
                     'fecha_crea' =>  date('Y-m-d'),
                     'hora_crea' =>  date('H:i:s'),
-                );
-                foreach ($crea_seguimiento_items as $items) {
-                    $this->SeguimientoOpDAO->insertar($items);
-                }
-
-                foreach ($crea_items_pedido as $items) {
-                    $respu = $this->PedidosItemDAO->insertar($items);
-                    $items['id_pedido_item'] = $respu['id'];
-                    $crea_items_pedido = $items; // inserta los items en pedidos item
-
-
-                    $crea_entregas_logostica[] = array(
-                        'id_pedido_item' =>  $crea_items_pedido['id_pedido_item'],
-                        'cantidad_factura' => $crea_items_pedido['Cant_solicitada'],
-                        'id_usuario' => 79,
-                        'id_factura' => 0,
-                        'estado' => 1,
-                        'fecha_crea' =>  date('Y-m-d'),
-                        'hora_crea' => date('H:i:s'),
-                    );
-                }
-
-                foreach ($crea_entregas_logostica as $items) {
-                    $this->EntregasLogisticaDAO->insertar($items);
-                }
-
-                if ($crea_entregas_logostica != '') {
-                    $res = [
-                        'num_acta' => $num_acta,
-                        'num_pedido' => $num_pedido,
-                    ];
-                }
-                return $res;
+                ];
+                $seguimientoOP= $this->SeguimientoOpDAO->insertar($crea_seguimiento_items);
+                $crea_entregas_logostica =[
+                    'id_pedido_item' =>  $respu['id'],
+                    'cantidad_factura' => $crea_items_pedido['Cant_solicitada'],
+                    'id_usuario' => 79,
+                    'id_factura' => 0,
+                    'estado' => 1,
+                    'fecha_crea' =>  date('Y-m-d'),
+                    'hora_crea' => date('H:i:s'),
+                ];
+                $entregas_log = $this->EntregasLogisticaDAO->insertar($crea_entregas_logostica);
             }
         }
+        if ($crea_entregas_logostica != '') {
+            $res = [
+                'num_acta' => $num_acta,
+                'num_pedido' => $num_pedido,
+            ];
+        }
+        return $res;
     }
 
-    public function cambiar_estado_cierre($data, $estado_item, $estado_cotiza, $estado_pdf, $num_acta)
+    public function cambiar_estado_cierre($data, $estado_item, $estado_cotiza, $num_acta)
     {
         header('Content-Type: application/json');
         foreach ($data as $value) {
@@ -314,12 +304,12 @@ class CierreDiagControlador extends GenericoControlador
                 'estado' => $estado_item,
             ];
             $condicion = 'id_diagnostico_item =' . $id_diagnostico_item;
-            $modificacion = $this->SoporteItemDAO->editar($formulario_item, $condicion);
+            $modificacion = $this->SoporteItemDAO->editar($formulario_item, $condicion);//diagnostico_item
 
             // SE REGISTRA EL SEGUIMIENTO
-            $id_actividad = 83;//DIAGNOSTICO CERRADO CON ACTA ENTREGA          
+            $id_actividad = 83; //DIAGNOSTICO CERRADO CON ACTA ENTREGA          
             $observacion = 'ACTA ENTREGA NUM-' . $num_acta;
-            $seguimiento = GenericoControlador::agrega_seguimiento_diag($value['id_diagnostico'], $value['item'],$id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($value['id_diagnostico'], $value['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
 
             if ($modificacion == 1) {
                 if (isset($value['repuestos'])) {
@@ -358,8 +348,7 @@ class CierreDiagControlador extends GenericoControlador
     {
         // header('Content-Type: application/json');
         $num_acta = $_POST['num_acta'];
-        $estado_pdf = $_POST['estado_pdf'];
-        $respu = GenericoControlador::crear_acta_entrega($num_acta, $estado_pdf, '');
+        $respu = GenericoControlador::crear_acta_entrega($num_acta, '');
         return $respu;
     }
 
@@ -372,7 +361,7 @@ class CierreDiagControlador extends GenericoControlador
         $ConsultaUltimoRegistro = $this->trmDAO->ConsultaUltimoRegistro();
         $trm = $ConsultaUltimoRegistro[0]->valor_trm;
         //$sentencia = 'AND t1.num_acta = 0';// cuando se va a descargar las cotizaciones no se puede usar esto :( 
-        $sentencia = '';// se reemplaza con una sentencia vacia 
+        $sentencia = ''; // se reemplaza con una sentencia vacia 
         if (!empty($consulta_cotizacion)) {
             foreach ($consulta_cotizacion as $value) {
                 if ($value->item != 0) {

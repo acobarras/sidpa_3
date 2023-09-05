@@ -66,7 +66,7 @@
                         </div>
                         <div class="text-center">
                             <button class="col-2 btn btn-success enviar_cotizacion" value="1" id="enviar_cotizacion">Enviar Cotización</button>
-                            <button class="col-2 btn btn-info enviar_cotizacion" value="2" id="continuar_diag" type="button">Continuar</button>
+                            <button class="col-2 btn btn-info enviar_cotizacion" value="2" id="continuar_diag" type="button">No cotizar</button>
                         </div>
                     </div>
                 </div>

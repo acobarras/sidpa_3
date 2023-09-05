@@ -69,7 +69,6 @@ var seleccion_checkbox = function () {
     $('.req_visita').click(function () {
         var valor = $(this).val();
         var form = $('#crea_solicitud_soporte').serializeArray();
-        console.log(form)
         var activo_select = $('#direc_solicitud').css('display');
         var direccion = $('#direc_solicitud').val();
         var validar = false;

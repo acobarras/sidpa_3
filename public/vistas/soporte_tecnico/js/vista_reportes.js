@@ -105,7 +105,14 @@ var consulta_pendientes = function () {
             "url":`${PATH_NAME}/soporte_tecnico/consultas_reporte`,
             "type": "POST",
             "data": {formulario},
-        },        
+        },
+        dom: 'Bflrtip',
+        buttons: [{
+            extend: 'excelHtml5',
+            text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
+            tittleAttr: ' Exportar a exel',
+            className: 'btn btn-success',
+        }],         
         "columns": [
             { "data": "num_consecutivo" },
             { "data": "fecha_crea" },
@@ -141,7 +148,15 @@ var consulta_comisiones = function () {
                     { "data": "num_consecutivo" },
                     { "data": "equipo" },
                     { "data": "serial_equipo" },
-                    { "data": "procedimiento" },
+                    { 
+                        "data": "procedimiento",render: function (data, type, row) {
+                            if (row.id_actividad_area == 84) {
+                                return row.cierre_diag_remoto;
+                            }else{
+                                return row.procedimiento;
+                            }
+                        }
+                    },
                     { "data": "accesorios" },
                     { "data": "tipo_impacto", render: function (data, type, row) {
                         switch (row.id_actividad_area) {

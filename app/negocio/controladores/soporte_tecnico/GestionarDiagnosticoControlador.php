@@ -41,7 +41,7 @@ class GestionarDiagnosticoControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $estado = 9;
-        $estado_item = 1;
+        $estado_item = 9; // se cambia de 1 a 9 pendiente cotizacion// de deben cambiar de 1 a 9
         $datos_items = $this->SoporteItemDAO->consultar_item($estado, $estado_item);
         foreach ($datos_items as $value) {
             $cantidad_items = $this->SoporteItemDAO->cantidad_items($value->id_diagnostico, $value->num_consecutivo);
@@ -57,122 +57,106 @@ class GestionarDiagnosticoControlador extends GenericoControlador
         $datos_items = $this->SoporteItemDAO->consultar_tecno();
         echo json_encode($datos_items);
     }
+
     public function enviar_items_cotizacion()
     {
-        // header('Content-type: application/pdf');
-        $datos = $_POST['array_storage'];
-        $datos_diagnostico = $_POST['datos'];
-        $estado_cotizacion = $_POST['estado'];
-        $num_cotizacion = $this->ConsCotizacionDAO->consultar_cons_especifico(16);
-        $nuevo_cons = $num_cotizacion[0]->numero_guardado + 1;
-        $edita_consecutivo = [
-            'numero_guardado' => $nuevo_cons
-        ];
-        $condicion = 'id_consecutivo =16';
-        $this->ConsCotizacionDAO->editar($edita_consecutivo, $condicion);
-
-        if ($estado_cotizacion == 4) {
-            for ($i = 0; $i < count($datos_diagnostico); $i++) {
+        $datos = $_POST['array_storage']; // trae los item cotizacion
+        $datos_diagnostico = $_POST['datos']; // trae los item equipos
+        $estado_cotizacion = $_POST['estado']; //estado del switch
+        if ($estado_cotizacion == 2) { // aumento consecutivo cotizacion solo caso 2 cuando se cotiza
+            $num_cotizacion = $this->ConsCotizacionDAO->consultar_cons_especifico(16);
+            $nuevo_cons = $num_cotizacion[0]->numero_guardado + 1;
+            $edita_consecutivo = [
+                'numero_guardado' => $nuevo_cons
+            ];
+            $condicion = 'id_consecutivo = 16';
+            $this->ConsCotizacionDAO->editar($edita_consecutivo, $condicion);
+        }
+        for ($i = 0; $i < count($datos_diagnostico); $i++) { // for de item-equipo
+            $item_repuestos = [
+                'id_diagnostico' => $datos_diagnostico[0]['id_diagnostico'],
+                'num_acta' => 0,
+                'item' => $datos_diagnostico[$i]['item'],
+                'fecha_crea' => date('Y-m-d'),
+                'hora_crea' => date('H:i:s'),
+            ];
+            if ($estado_cotizacion == 2) { // cotizar
+                $id_actividad = 78; // COTIZACION DE REPUESTOS
+                $observacion = 'COTIZACIÓN MA-' . $num_cotizacion[0]->numero_guardado;
+                $estado_itemequipo['estado'] = 10;
+                for ($a = 0; $a < count($datos[$i]); $a++) { // for de item-repuestos
+                    $item_repuestos['num_cotizacion'] = $num_cotizacion[0]->numero_guardado;
+                    $item_repuestos['moneda'] = $datos[$i][$a]['moneda'];
+                    $item_repuestos['valor'] = $datos[$i][$a]['valor'];
+                    $item_repuestos['cantidad'] = $datos[$i][$a]['cantidad'];
+                    $item_repuestos['id_producto'] = $datos[$i][$a]['producto']['id_productos'];
+                    $item_repuestos['estado'] = 2;// en espera de aprobacion
+                    $agregar_repuestos = $this->CotizacionItemSoporteDAO->insertar($item_repuestos);
+                };
+            } elseif ($estado_cotizacion == 7) { // DSR
                 $id_actividad = 93; // DEVUELVE SIN REPARAR
                 $observacion = 'DEVUELVE SIN REPARAR';
-                $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
-                $formulario = [
-                    'id_diagnostico' => $datos_diagnostico[0]['id_diagnostico'],
-                    'num_cotizacion' => 0,
-                    'num_acta' => 0,
-                    'item' => $datos_diagnostico[$i]['item'],
-                    'moneda' => 0,
-                    'valor' => 0,
-                    'cantidad' => 0,
-                    'id_producto' => 0,
-                    'estado' => 7, //devuelve sin reparar 
-                    'fecha_crea' => date('Y-m-d'),
-                    'hora_crea' => date('H:i:s'),
-                ];
-                $agregar_item = $this->CotizacionItemSoporteDAO->insertar($formulario);
-                $formulario_edita = [
-                    'estado' =>  16,
-                ];
-                $condicion_diag = 'id_diagnostico =' .  $datos_diagnostico[0]['id_diagnostico'] . ' AND ' . 'item=' . $datos_diagnostico[$i]['item'];
-                $editar_item = $this->SoporteItemDAO->editar($formulario_edita, $condicion_diag);
+                $estado_itemequipo['estado'] = 16;
+                for ($a = 0; $a < count($datos[$i]); $a++) { // for de item-repuestos
+                    $item_repuestos['num_cotizacion'] = 0;
+                    $item_repuestos['moneda'] = $datos[$i][$a]['moneda'];
+                    $item_repuestos['valor'] = $datos[$i][$a]['valor'];
+                    $item_repuestos['cantidad'] = $datos[$i][$a]['cantidad'];
+                    $item_repuestos['id_producto'] = $datos[$i][$a]['producto']['id_productos'];
+                    $item_repuestos['estado'] = 7; // devuelve sin reparar   
+                    $agregar_repuestos = $this->CotizacionItemSoporteDAO->insertar($item_repuestos);
+                };
+            } else { // COMODATO
+                $id_actividad = 94; // COMODATO O GARANTIA
+                $observacion = 'COMODATO O GARANTIA';
+                $estado_itemequipo['estado'] = 12;
+                $estado_diagnostico['estado'] = 17;
+                for ($a = 0; $a < count($datos[$i]); $a++) { // for de item-repuestos
+                    $item_repuestos['num_cotizacion'] = 0;
+                    $item_repuestos['moneda'] = $datos[$i][$a]['moneda'];
+                    $item_repuestos['valor'] = $datos[$i][$a]['valor'];
+                    $item_repuestos['cantidad'] = $datos[$i][$a]['cantidad'];
+                    $item_repuestos['id_producto'] = $datos[$i][$a]['producto']['id_productos'];
+                    $item_repuestos['estado'] = 3; // 'Validación Piezas Inventario    
+                    $agregar_repuestos = $this->CotizacionItemSoporteDAO->insertar($item_repuestos);
+                };
+                $condiciondiag = 'id_diagnostico =' .  $datos_diagnostico[0]['id_diagnostico'];
+                $editar_diagnostico = $this->SoporteTecnicoDAO->editar($estado_diagnostico,$condiciondiag);
             }
-        } else {
-            for ($i = 0; $i < count($datos); $i++) {
-                $id_diagnostico_item = ($datos_diagnostico[$i]['id_diagnostico_item']);
-                $formulario_cotiza = [
-                    'estado' => 10,
-                ];
-                $condicion = 'id_diagnostico_item =' . $id_diagnostico_item;
-                $this->SoporteItemDAO->editar($formulario_cotiza, $condicion);
-                // SE REGISTRA EL SEGUIMIENTO 
-                for ($a = 0; $a < count($datos[$i]); $a++) {
-                    if ($_POST['estado'] == 2) {
-                        $id_actividad = 78; // COTIZACION DE REPUESTOS
-                        $observacion = 'COTIZACIÓN MA-' . $num_cotizacion[0]->numero_guardado. ' REPUESTO '. $a+1;
-                        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());// ESTE SEGUIMIENTO SE REALIZA POR REPUESTO ojo
-                        $formulario = [
-                            'id_diagnostico' => $datos_diagnostico[0]['id_diagnostico'],
-                            'num_cotizacion' => $num_cotizacion[0]->numero_guardado,
-                            'num_acta' => 0,
-                            'item' => $datos_diagnostico[$i]['item'],
-                            'moneda' => $datos[$i][$a]['moneda'],
-                            'valor' => $datos[$i][$a]['valor'],
-                            'cantidad' => $datos[$i][$a]['cantidad'],
-                            'id_producto' => $datos[$i][$a]['producto']['id_productos'],
-                            'estado' => $estado_cotizacion,
-                            'fecha_crea' => date('Y-m-d'),
-                            'hora_crea' => date('H:i:s'),
-                        ];
-                    } else {
-                        $id_actividad = 94; // COMODATO O GARANTIA
-                        $observacion = 'COMODATO O GARANTIA';
-                        $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
-                        $formulario = [
-                            'id_diagnostico' => $datos_diagnostico[0]['id_diagnostico'],
-                            'num_cotizacion' => 0,
-                            'num_acta' => 0,
-                            'item' => $datos_diagnostico[$i]['item'],
-                            'moneda' => $datos[$i][$a]['moneda'],
-                            'valor' => $datos[$i][$a]['valor'],
-                            'cantidad' => $datos[$i][$a]['cantidad'],
-                            'id_producto' => $datos[$i][$a]['producto']['id_productos'],
-                            'estado' => $estado_cotizacion,
-                            'fecha_crea' => date('Y-m-d'),
-                            'hora_crea' => date('H:i:s'),
-                        ];
-                    }
-                    $agregar_item = $this->CotizacionItemSoporteDAO->insertar($formulario);
-                }
-            }
+            // SEGUIMIENTO
+            $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos_diagnostico[0]['id_diagnostico'], $datos_diagnostico[$i]['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
+            // EDITAR estado-item equipos 
+            $condicion_diag = 'id_diagnostico =' .  $datos_diagnostico[0]['id_diagnostico'] . ' AND ' . 'item=' . $datos_diagnostico[$i]['item'];
+            $editar_item = $this->SoporteItemDAO->editar($estado_itemequipo, $condicion_diag);  
         }
-        if ($agregar_item['status'] && $estado_cotizacion == 2) {
+        //=========================== RESPUESTA CONTROLADOR ======================================
+        if ($agregar_repuestos['status'] && $estado_cotizacion == 2) {
             header('Content-type: application/pdf');
             $crea_cotiza = GestionarDiagnosticoControlador::crear_cotizacion($num_cotizacion[0]->numero_guardado);
             $respu = $crea_cotiza;
-        } else if ($agregar_item['status'] && $estado_cotizacion == 4) {
+        }elseif ($agregar_repuestos['status'] && $estado_cotizacion == 7) {
             header('Content-type: application/json');
-            $id_cotizacion = $agregar_item['id'];
-            // SE EDITA LA TABLA DE COTIZACION PARA COLOCARLE EL NUM DE ACTA DE CIERRE
-            $formulario_edita_cotiza = [
-                'estado' =>  14,
-            ];
-            $condicion_diag = 'id_cotizacion =' . $id_cotizacion;
-            $editar_cotiza = $this->CotizacionItemSoporteDAO->editar($formulario_edita_cotiza, $condicion_diag);
             $respu = [
                 'status' => -1,
                 'msg' => 'datos grabados'
             ];
-        } else {
-
+        }elseif ($agregar_repuestos['status'] && $estado_cotizacion == 3){
             header('Content-type: application/json');
             $respu = [
                 'status' => -2,
                 'msg' => 'datos grabados'
             ];
+        }else{
+            header('Content-type: application/json');
+            $respu = [
+                'status' => -3,
+                'msg' => 'ocurrio un error'
+            ];
         }
         echo json_encode($respu);
         return;
     }
+
 
     public function crear_cotizacion($num_cotizacion)
     {

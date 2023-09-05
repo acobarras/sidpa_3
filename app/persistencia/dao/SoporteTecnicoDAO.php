@@ -169,7 +169,7 @@ class SoporteTecnicoDAO extends GenericoDAO
 
     public function consulta_reportecomisiones($id_tecnico, $mes, $year)
     {
-        $sql = "SELECT t1.id_usuario, t1.id_actividad_area, t1.fecha_crea,t1.id_seguimiento, t1.observacion, t4.nombre_empresa, t4.nit, t2.*
+        $sql = "SELECT t1.id_usuario, t1.id_actividad_area, t1.fecha_crea,t1.id_seguimiento, t1.observacion, t4.nombre_empresa, t4.nit, t2.*, t3.*
         FROM seguimiento_diag_soporte t1
         LEFT JOIN diagnostico_item t2 ON t1.id_diagnostico = t2.id_diagnostico AND t1.item = t2.item
         INNER JOIN diagnostico_soporte_tecnico t3 ON t1.id_diagnostico = t3.id_diagnostico

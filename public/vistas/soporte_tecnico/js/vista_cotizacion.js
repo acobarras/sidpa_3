@@ -79,7 +79,7 @@ var seleccionar_producto = function () {
         "url": `${PATH_NAME}/soporte_tecnico/producto_serman`,
         "type": 'POST',
         success: function (res) {
-            var producto = "<option val='0'>Elija Una Producto</option>";
+            var producto = "<option value ='0'>Elija Una Producto</option>";
             res.forEach(element => {
                 producto +=/*html*/
                     ` <option value='${JSON.stringify(element.id_productos)}'>${element.codigo_producto}</option>`;
@@ -130,12 +130,13 @@ var enviar_cotizacion = function (tbody, table) {
     $(tbody).on("click", "button.cotiza", function () {
         var datos_tabla = table.row($(this).parents("tr")).data();
         $('#enviar_cotiza').on('click', function () {
-            var form = $('#form_cotizar').serialize();
+            var form = $('#form_cotizar').serializeArray();
             var valida = validar_formulario(form);
             var envio = {
                 'datos': datos_tabla,
-                'form': form,
+                'form': $('#form_cotizar').serialize(),
             }
+            console.log(form);
             if (valida) {
                 alertify.confirm('ALERTA SIDPA', '¿Esta seguro que desea continuar con el valor digitado?', function () {
                     $.ajax({

@@ -393,7 +393,7 @@ abstract class GenericoControlador
         }
     }
 
-    public function crear_acta_entrega($num_acta, $estado, $firma)
+    public function crear_acta_entrega($num_acta, $firma)
     {
         $num_acta = $num_acta;
         $consulta_datos = $this->CotizacionItemSoporteDAO->consulta_acta_entrega($num_acta);
@@ -414,7 +414,7 @@ abstract class GenericoControlador
                 $value->repuestos = $repuestos;
             }
             $fecha = date('Y-m-d');
-            $respu = PDF::acta_entrega_soporte($num_acta, $consulta_datos, $estado, $trm, $firma);
+            $respu = PDF::acta_entrega_soporte($num_acta, $consulta_datos, $trm, $firma);
         } else {
             header('Content-Type: application/json');
             $respu = ['status' => -1];

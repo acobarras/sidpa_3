@@ -87,7 +87,7 @@ class VisitasAgendadasControlador extends GenericoControlador
             'id_persona_reparacion' => 0,
             'fecha_ejecucion' => '0000-00-00',
             'id_persona_recibe' => $_SESSION['usuario']->getid_usuario(),
-            'estado' => 2, //se envia en estado 2 para que no aparezca en el modulo de gestion diagnostico
+            'estado' => 14, //se envia cirre de diagnostico 
             'fecha_crea' => date('Y-m-d'),
             'hora_crea' => date('H:i:s'),
         ];
@@ -135,7 +135,7 @@ class VisitasAgendadasControlador extends GenericoControlador
             $seguimiento_cierre = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], 1, $id_actividad, $observacion_cierre, $_SESSION['usuario']->getid_usuario());
             $numero_acta = $num_acta[0]->numero_guardado;
             // SE GENERA EL ACTA DE ENTREGA
-            $crea_acta_entrega = GenericoControlador::crear_acta_entrega($numero_acta, 1, $firma);
+            $crea_acta_entrega = GenericoControlador::crear_acta_entrega($numero_acta,$firma);
         }
     }
 }

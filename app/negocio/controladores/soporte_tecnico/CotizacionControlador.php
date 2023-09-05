@@ -92,7 +92,7 @@ class CotizacionControlador extends GenericoControlador
             'item' => 0,
             'moneda' => 1,
             'valor' => $form['valor_cotiza_visita'],
-            'cantidad' => 1,
+            'cantidad' => $form['cantidad_cotiza_visita'],
             'id_producto' => $form['codigo_producto'],
             'estado' => 8,
             'fecha_crea' => date('Y-m-d'),

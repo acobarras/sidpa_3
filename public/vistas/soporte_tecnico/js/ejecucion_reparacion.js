@@ -24,7 +24,7 @@ var consultar_datos_ejecucion = function () {
             { "data": "nombre_estado_soporte" },
             {
                 "render": function (data, type, row) {
-                    if (row.estado_item == 12) {
+                    if (row.estado_item == 12) {//item estado Cotización aceptada
                         if (row.repuestos_listos == row.total_repuestos) {
                             botones = `
                                 <center>
@@ -45,7 +45,7 @@ var consultar_datos_ejecucion = function () {
                             <center>`;
                             return botones;
                         }
-                    } if (row.estado_item == 13) {
+                    } if (row.estado_item == 13) {//item estado ejecución de reparación
                         if (row.id_usuario_reparacion != 0 && row.fecha_ejecucion != '0000-00-00') {
                             botones = `
                             <center>
@@ -70,7 +70,7 @@ var consultar_datos_ejecucion = function () {
     asignar_tecnico('#tabla_ejecucion tbody', table);
 }
 
-var datos_repuestos = function (tbody, table) {
+var datos_repuestos = function (tbody, table) {// consulta datos de repuestos 
     $(tbody).on("click", "button.consultar_repuestos", function () {
         var data = table.row($(this).parents("tr")).data();
         $('#principal_reparacion').css('display', 'none');
@@ -95,7 +95,7 @@ var boton_regresar = function () {
     });
 }
 
-var personal_soporte = function () {
+var personal_soporte = function () {// carga las personas de soporte del modal
     $.ajax({
         "url": `${PATH_NAME}/soporte_tecnico/personal_soporte`,
         "type": 'POST',
@@ -144,12 +144,14 @@ var asignar_tecnico = function (tbody, table) {
         })
     });
 }
+
 var reparacion_ejecutada = function () {
     $('#tabla_ejecucion tbody').on("click", "button.ejecutado", function (e) {
         e.preventDefault();
         var data = $('#tabla_ejecucion').DataTable().row($(this).parents("tr")).data();
-        var estado_cotiza = 8; //Estado de fin de proceso de los repuestos
         var estado_item = 15; // Reparacion Exitosa
+        if (data.estado_diagnostico == 17) { estado_item = 17; }
+        var estado_cotiza = 8; //Estado de fin de proceso de los repuestos
         $.ajax({
             "url": `${PATH_NAME}/soporte_tecnico/reparacion_ejecutada`,
             "type": 'POST',
@@ -165,6 +167,7 @@ var reparacion_ejecutada = function () {
         });
     });
 }
+
 var no_ejecutado = function () {
     $('#tabla_ejecucion tbody').on("click", "button.no_ejecutado", function (e) {
         e.preventDefault();

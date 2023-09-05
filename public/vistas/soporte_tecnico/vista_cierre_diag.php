@@ -32,6 +32,7 @@
                                     </table>
                                 </div>
                             </div>
+                            
                             <div class="text-center">
                                 <button class=" col-4 btn btn-info" id="generar_acta" type="button">Generar Acta</button>
                             </div>

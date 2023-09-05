@@ -43,8 +43,9 @@ class SoporteItemDAO extends GenericoDAO
 
     public function consultar_aprobacion($estado_item, $sentencia)
     {
-        $sql = "SELECT t1.*, estado AS estado_item,t2.nombre_empresa,t3.nombre_estado_soporte 
+        $sql = "SELECT t1.*, t1.estado AS estado_item,t2.nombre_empresa,t3.nombre_estado_soporte, t4.estado AS estado_diagnostico
         FROM diagnostico_item t1 
+        INNER JOIN diagnostico_soporte_tecnico t4 ON t1.id_diagnostico = t4.id_diagnostico
         INNER JOIN cliente_proveedor t2 ON t2.id_cli_prov=t1.id_cli_prov 
         INNER JOIN estado_soporte t3 ON t1.estado=t3.id_estado_soporte WHERE t1.estado in($estado_item) $sentencia";
         $sentencia = $this->cnn->prepare($sql);

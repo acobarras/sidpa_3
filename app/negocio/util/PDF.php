@@ -1166,11 +1166,11 @@ class PDF
         return $pdf;
     }
 
-    public static function acta_entrega_soporte($numero_acta, $data, $estado, $trm, $firma)
+    public static function acta_entrega_soporte($numero_acta, $data, $trm, $firma)
     {
         $conteo = count($data);
         $fecha = date('Y-m-d');
-        if ($estado == 2 || $data[0]->estado_cotiza == 7) {
+        if ($data[0]->estado_cotiza == 7) {
             $observacion = 'Los equipos mostrados a continuación se devuelven sin reparar y presentan daños en los siguientes repuestos:';
         } else {
             $observacion = '';
@@ -1258,7 +1258,7 @@ class PDF
                     $nombre1 = substr($descripcion_productos, 0, 50);
                     $nombre2 = "";
                 }
-                if ($estado == 2 || $data[0]->estado_cotiza == 7) {
+                if ($data[0]->estado_cotiza == 7) {
                     $valor = 0;
                 } else {
                     $valor = $repuestos->valor;
@@ -1274,7 +1274,7 @@ class PDF
             $html .= '</tbody>
                 </table>';
         }
-        if ($estado == 2 || $data[0]->estado_cotiza == 7) {
+        if ($data[0]->estado_cotiza == 7) {
             $total_en_pesos = 0;
             $total = 0;
             $total_dolares = 0;
