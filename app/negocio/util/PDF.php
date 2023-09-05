@@ -984,13 +984,13 @@ class PDF
     }
 
     public static function crea_cotizacion_visita($fecha, $data_completa, $num_cotizacion, $estado, $trm, $firma)
-{
-    if ($estado == 2) {
-        $conteo = 1;
-    } else {
-        $conteo = count($data_completa);
-    }
-    $html = '
+    {
+        if ($estado == 2) {
+            $conteo = 1;
+        } else {
+            $conteo = count($data_completa);
+        }
+        $html = '
     <html>
         <head>
             <meta charset="utf-8">
@@ -1017,7 +1017,7 @@ class PDF
                 <br>
                 Atn: ' . $data_completa[0]->contacto . ' - ' . $data_completa[0]->cargo . '
                 <br>
-                Ciudad: ' . $data_completa[0]->nombre_ciudad .'
+                Ciudad: ' . $data_completa[0]->nombre_ciudad . '
                 <br>
                 <p>Respetados Señores,</p>
                 <br>
@@ -1031,20 +1031,20 @@ class PDF
                 TECNOLOGÍA
                     <p></p>
                     ';
-    $total = 0;
-    $total_pesos = 0;
-    $total_dolares = 0;
-    $total_mano = 0;
-    $dolares_pesos = 0;
-    $lleva_conteo = 0;
-    for ($i = 0; $i < $conteo; $i++) {
-        $conteo_items = count($data_completa[$i]->repuestos);
-        if ($estado == 2 || $data_completa[$i]->item == 0) {
-            $equipo = 'Cotizacion Visita';
-        } else {
-            $equipo = $data_completa[$i]->equipo . ' - ' . 'N/S: ' . $data_completa[$i]->serial_equipo.' (Caso: '. $data_completa[$i]->num_consecutivo .' Item: '.$data_completa[$i]->item.')' ;
-        }
-        $html .= '<table align="center" border="1" width="100%" cellspacing="0">
+        $total = 0;
+        $total_pesos = 0;
+        $total_dolares = 0;
+        $total_mano = 0;
+        $dolares_pesos = 0;
+        $lleva_conteo = 0;
+        for ($i = 0; $i < $conteo; $i++) {
+            $conteo_items = count($data_completa[$i]->repuestos);
+            if ($estado == 2 || $data_completa[$i]->item == 0) {
+                $equipo = 'Cotizacion Visita';
+            } else {
+                $equipo = $data_completa[$i]->equipo . ' - ' . 'N/S: ' . $data_completa[$i]->serial_equipo . ' (Caso: ' . $data_completa[$i]->num_consecutivo . ' Item: ' . $data_completa[$i]->item . ')';
+            }
+            $html .= '<table align="center" border="1" width="100%" cellspacing="0">
         // <thead>
         //   <tr>
         //     <th  colspan="4">' . $equipo . '</th>
@@ -1057,43 +1057,43 @@ class PDF
         //   </tr>
         // </thead>
         // <tbody>';
-        for ($a = 0; $a < $conteo_items; $a++) {
-            $productos = $data_completa[$i]->repuestos[$a];
-            if ($data_completa[$i]->repuestos[$a]->moneda == 1) {
-                $moneda = 'Pesos';
-                $simbolo = '$';
-                $total_pesos = $total_pesos + $data_completa[$i]->repuestos[$a]->valor * $data_completa[$i]->repuestos[$a]->cantidad;
-            } else {
-                $moneda = 'Dolar';
-                $simbolo = 'U$Dol ';
-                $total_dolares = $total_dolares + $data_completa[$i]->repuestos[$a]->valor;
-            }
-            if ($productos->id_tipo_articulo == 14 || $productos->id_tipo_articulo == 12) {
-                $total_mano = $total_mano + $data_completa[$i]->repuestos[$a]->valor;
-            }
-            $descripcion_productos = $productos->codigo_producto . ' ' . $productos->descripcion_productos;
-            if (strlen($descripcion_productos) >= 50) {
-                $nombre1 = substr($descripcion_productos, 0, 50);
-                $nombre2 = substr($descripcion_productos, 50, 80);
-            } else {
-                $nombre1 = substr($descripcion_productos, 0, 50);
-                $nombre2 = "";
-            }
-            $html .= '
+            for ($a = 0; $a < $conteo_items; $a++) {
+                $productos = $data_completa[$i]->repuestos[$a];
+                if ($data_completa[$i]->repuestos[$a]->moneda == 1) {
+                    $moneda = 'Pesos';
+                    $simbolo = '$';
+                    $total_pesos = $total_pesos + $data_completa[$i]->repuestos[$a]->valor * $data_completa[$i]->repuestos[$a]->cantidad;
+                } else {
+                    $moneda = 'Dolar';
+                    $simbolo = 'U$Dol ';
+                    $total_dolares = $total_dolares + $data_completa[$i]->repuestos[$a]->valor;
+                }
+                if ($productos->id_tipo_articulo == 14 || $productos->id_tipo_articulo == 12) {
+                    $total_mano = $total_mano + $data_completa[$i]->repuestos[$a]->valor;
+                }
+                $descripcion_productos = $productos->codigo_producto . ' ' . $productos->descripcion_productos;
+                if (strlen($descripcion_productos) >= 50) {
+                    $nombre1 = substr($descripcion_productos, 0, 50);
+                    $nombre2 = substr($descripcion_productos, 50, 80);
+                } else {
+                    $nombre1 = substr($descripcion_productos, 0, 50);
+                    $nombre2 = "";
+                }
+                $html .= '
                     <tr>
                         <td width="60%">' . $nombre1 . '<br>' . $nombre2 . '</td>
                         <td width="10%" align="center">' . $moneda . '</td>
                         <td width="10%" align="center">' . $data_completa[$i]->repuestos[$a]->cantidad . '</td>
-                        <td width="20%" align="center">' . $simbolo . ' ' . number_format($data_completa[$i]->repuestos[$a]->valor , 2, ',', '.') . '</td>
+                        <td width="20%" align="center">' . $simbolo . ' ' . number_format($data_completa[$i]->repuestos[$a]->valor, 2, ',', '.') . '</td>
                     </tr>';
-        }
-        $html .= '</tbody>
+            }
+            $html .= '</tbody>
                     </table>';
-    }
-    $total_en_pesos = $total_pesos - $total_mano;
-    $dolares_pesos = $total_dolares * $trm;
-    $total = $total_en_pesos + $dolares_pesos + $total_mano;
-    $html .= '<br>
+        }
+        $total_en_pesos = $total_pesos - $total_mano;
+        $dolares_pesos = $total_dolares * $trm;
+        $total = $total_en_pesos + $dolares_pesos + $total_mano;
+        $html .= '<br>
                 <table align="center" border="1" width="100%" cellspacing="0">
                     <tbody>
                         <tr>
@@ -1136,7 +1136,7 @@ class PDF
                         dependiendo del inventario de stock y/o importación.
                     </div>
                     <p></p>
-                    <b>FORMA DE PAGO: </b>'.FORMA_PAGO[$data_completa[0]->forma_pago].' 
+                    <b>FORMA DE PAGO: </b>' . FORMA_PAGO[$data_completa[0]->forma_pago] . ' 
                     <p></p>
                     <b>VALIDEZ DE LA OFERTA:</b> 30 días.
                     <p></p>
@@ -1165,7 +1165,7 @@ class PDF
         $pdf = $dompdf->output(); // Obtener el PDF generado
         return $pdf;
     }
-   
+
     public static function acta_entrega_soporte($numero_acta, $data, $estado, $trm, $firma)
     {
         $conteo = count($data);
@@ -1200,7 +1200,7 @@ class PDF
                 <div class="contenido">
                     Señores: <b>' . $data[0]->nombre_empresa . '</b>
                     <br>
-                    Atn: ' . $data[0]->contacto .' - '. $data[0]->cargo . '
+                    Atn: ' . $data[0]->contacto . ' - ' . $data[0]->cargo . '
                     <br>
                     Ciudad:' . $data[0]->nombre_ciudad . '
                     <br>
@@ -1216,9 +1216,9 @@ class PDF
         for ($i = 0; $i < $conteo; $i++) {
             $conteo_items = count($data[$i]->repuestos);
             if ($firma != '' && $firma != 2) {
-                $equipo = $data[$i]->equipo . ' N/S: ' . $data[$i]->serial_equipo . ' Caso: '. $data[$i]->num_consecutivo. ' Item: '. $data[$i]->item;
-            }else{
-                $equipo = $data[$i]->equipo . ' N/S: ' . $data[$i]->serial_equipo . ' Caso: '. $data[$i]->num_consecutivo.' Item: '. $data[$i]->item .' <br> Accesorios ' . $data[$i]->accesorios;
+                $equipo = $data[$i]->equipo . ' N/S: ' . $data[$i]->serial_equipo . ' Caso: ' . $data[$i]->num_consecutivo . ' Item: ' . $data[$i]->item;
+            } else {
+                $equipo = $data[$i]->equipo . ' N/S: ' . $data[$i]->serial_equipo . ' Caso: ' . $data[$i]->num_consecutivo . ' Item: ' . $data[$i]->item . ' <br> Accesorios ' . $data[$i]->accesorios;
             }
             $html .= '<table align="center" border="1" width="100%" cellspacing="0">
                         <thead>
@@ -1258,7 +1258,7 @@ class PDF
                     $nombre1 = substr($descripcion_productos, 0, 50);
                     $nombre2 = "";
                 }
-                if ($estado == 2 || $data[0]->estado_cotiza == 7 ) {
+                if ($estado == 2 || $data[0]->estado_cotiza == 7) {
                     $valor = 0;
                 } else {
                     $valor = $repuestos->valor;
@@ -1274,7 +1274,7 @@ class PDF
             $html .= '</tbody>
                 </table>';
         }
-        if ($estado == 2 || $data[0]->estado_cotiza == 7 ) {
+        if ($estado == 2 || $data[0]->estado_cotiza == 7) {
             $total_en_pesos = 0;
             $total = 0;
             $total_dolares = 0;
@@ -1494,6 +1494,249 @@ class PDF
         }
         $html .= '
                     </div>
+                </div>
+            </body>
+        </html>';
+
+        $options = new Options();
+        $options->set('enable_html5_parser', true);
+        $options->set('isHtml5ParserEnabled', true);
+        $options->setIsRemoteEnabled(true);
+        $options->set('chroot', PUBLICO);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html, 'UTF-8');
+        $dompdf->setPaper('letter', 'portrait');
+        $dompdf->render();
+        $dompdf->stream();
+        $pdf = $dompdf->output(); // Obtener el PDF generado
+        return $pdf;
+    }
+
+    public static function certificado_producto($datos,$fecha,$num_certificado,$vencimiento)
+    {
+        $cabeza = "/certificado_analisis";
+        $html = '
+        <html>
+            <head>
+                <title>Certificado Productos</title>
+                <link rel="stylesheet" type="text/css" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/style_certificados.css" />
+            </head>
+            <body>
+                <header>
+                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf' . $cabeza . '.jpg">
+                </header>
+                <div class="titulo" style="font-size: small;">
+                    <p style="line-height:0"><b>Fecha emisión: </b>'.$fecha.'</p>
+                    <p style="line-height:0"><b>Orden de compra N°: </b>'.$datos[0]['orden_compra'].'</p>
+                    <p style="line-height:0"><b>Certificado de Análisis N°: </b>'.$num_certificado.'</p>
+                    <p style="line-height:0"><b>Nombre Cliente: </b>'.$datos[0]['nombre_empresa'].'</p>
+                </div>
+                <div class="contenido">
+                    <div class="primera_parte">
+                        <table style="font-size: x-small;">
+                        <thead>
+                            <tr>
+                                <th style="width: 20mm">CÓD. PRODUCTO</th>
+                                <th style="width: 138mm">REFERENCIA</th>
+                                <th style="width: 10mm">CANTIDAD</th>
+                                <th style="width: 15mm">LOTE</th>
+                            </tr>';
+                            foreach ($datos as $value) {
+                            $html .= '<tr>
+                                <td>'.$value['codigo'].'</td>
+                                <td>'.$value['descripcion_productos'].'</td>
+                                <td style="text-align: center;">'.$value['Cant_solicitada'].'</td>
+                                <td style="text-align: center;">'.$value['n_produccion'].'</td>	
+                            </tr>';
+                            }
+                        $html .= '</thead>
+                        </table>
+                        <table style="font-size: x-small;">
+                        <tbody>
+                            <tr>
+                                <th rowspan="2" style="width: 130mm">CERTIFICADO DE ANÁLISIS</th>
+                                <th colspan="2" style="width: 70mm">REFERENCIA</th>
+                            </tr>
+                            <tr>
+                                <th>SI</th>
+                                <th>NO</th>
+                            </tr>
+                            <tr>
+                                <td>Falta de registro</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Color diferente al especificado</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Textos embotados por falla en Inspección</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Textos Incompletos por falla de Impresión</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Impresión diferente</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Ausencia de impresión</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Variaciones de forma y/o tamaño</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Variaciones de tono</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Sangrado del adhesivo</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Troquel descentrado</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Terminaciones o acabados erróneos</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Diferencia en las cavidades requeridas</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Gap lateral fuera de parámetros</td>
+                                <td></td>
+                                <td style="text-align: center;">X</td>
+                            </tr>
+                            <tr>
+                                <td>Vence</td>
+                                <td colspan="2" style="text-align: center;">'.$vencimiento.'</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                    <ol start="1" style="font-size: small;">
+                        <li>No retire los rollos del empaque original hasta el momento en que los va a imprimir, esto en razón a que los cambios de humedad relativa pueden ocasionar perdida o incremento de tensión, deterioro en el core interno y hasta pérdida de la alineación.</li>
+                        <li>Almacenar en un lugar seco y fresco, mantener el material alejado de fuentes de calor e ignición o la luz directa del sol.</li>
+                        <li>Almacenar y procesar el material bajo condiciones estables de humedad y temperatura. Las condiciones ideales son 23 ± 2 ºC y humedad relativa entre 50 y 55 %.</li>
+                        <li>Cuando use parcialmente un rollo, regrese el sobrante a su empaque original.</li>
+                        <li>Apilar en columnas independientes, los rollos de diferente diámetro exterior.</li>
+                        <li>Apoyar los rollos sobre superficies planas, en pilas no mayores a 40 cm de altura.</li>
+                        <li>No apoyar los rollos de costado (el eje del core debe quedar perpendicular respecto a la superficie), así se evitará su deformación. </li>
+                    </ol>
+                </div>
+            </body>
+        </html>';
+
+        $options = new Options();
+        $options->set('enable_html5_parser', true);
+        $options->set('isHtml5ParserEnabled', true);
+        $options->setIsRemoteEnabled(true);
+        $options->set('chroot', PUBLICO);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html, 'UTF-8');
+        $dompdf->setPaper('letter', 'portrait');
+        $dompdf->render();
+        $dompdf->stream();
+        $pdf = $dompdf->output(); // Obtener el PDF generado
+        return $pdf;
+    }
+    
+    public static function certificado_cintas($datos,$fecha,$num_certificado,$vencimiento)
+    {
+        $cabeza = "/certificado_analisis";
+        $html = '
+        <html>
+            <head>
+                <title>Certificado Productos</title>
+                <link rel="stylesheet" type="text/css" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/style_certificados.css" />
+            </head>
+            <body>
+                <header>
+                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf' . $cabeza . '.jpg">
+                </header>
+                <div class="titulo" style="font-size: small;">
+                    <p style="line-height:0"><b>Fecha emisión: </b>'.$fecha.'</p>
+                    <p style="line-height:0"><b>Orden de compra N°: </b>'.$datos[0]['orden_compra'].'</p>
+                    <p style="line-height:0"><b>Certificado de Análisis N°: </b>'.$num_certificado.'</p>
+                    <p style="line-height:0"><b>Nombre Cliente: </b>'.$datos[0]['nombre_empresa'].'</p>
+                </div>
+                <div class="contenido">
+                    <div class="primera_parte">
+                        <table style="font-size: x-small;">
+                        <thead>
+                            <tr>
+                                <th style="width: 20mm">CÓD. PRODUCTO</th>
+                                <th style="width: 138mm">REFERENCIA</th>
+                                <th style="width: 10mm">CANTIDAD</th>
+                                <th style="width: 15mm">LOTE</th>
+                            </tr>';
+                            foreach ($datos as $value) {
+                            $html .= '<tr>
+                                <td>'.$value['codigo'].'</td>
+                                <td>'.$value['descripcion_productos'].'</td>
+                                <td style="text-align: center;">'.$value['Cant_solicitada'].'</td>
+                                <td style="text-align: center;">'.$value['n_produccion'].'</td>	
+                            </tr>';
+                            }
+                        $html .= '</thead>
+                        </table>
+                        <table style="font-size: x-small;">
+                        <tbody>
+                            <tr>
+                                <th style="width: 126mm">CERTIFICADO DE ANÁLISIS</th>
+                                <th style="width: 70mm">REFERENCIA</th>
+                            </tr>
+                            <tr>
+                                <td>Base de la película</td>
+                                <td style="text-align: center;">Poliéster</td>
+                            </tr>
+                            <tr>
+                                <td>Calibre Base de la película</td>
+                                <td style="text-align: center;">4.5 micras (µm)</td>
+                            </tr>
+                            <tr>
+                                <td>Calibre Total</td>
+                                <td style="text-align: center;">6.5 micras (µm) ± 10%</td>
+                            </tr>
+                            <tr>
+                                <td>Capacidades de escaneo</td>
+                                <td style="text-align: center;">IR Y LUZ VISIBLE</td>
+                            </tr>
+                            <tr>
+                                <td>Vence</td>
+                                <td style="text-align: center;">'.$vencimiento.'</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                    <ol start="1" style="font-size: small;">
+                        <li>No retire los rollos del empaque original hasta el momento de uso, esto en razón a que los cambios de humedad relativa pueden ocasionar perdida o incremento de tensión, deterioro en el core interno y hasta pérdida de la alineación.</li>
+                        <li>Almacenar en un lugar seco y fresco, mantener el material alejado de fuentes de calor e ignición o la luz directa del sol.</li>
+                        <li>Almacenar y procesar el material bajo condiciones estables de humedad y temperatura. Las condiciones ideales son 22 ± 2 ºC y humedad relativa entre 50 y 55 %.</li>
+                        <li>Cuando use parcialmente un rollo, regrese el sobrante a su empaque original.</li>
+                        <li>Apilar en columnas independientes, los rollos de diferente diámetro exterior.</li>
+                        <li>Apoyar los rollos sobre superficies planas, en pilas no mayores a 30 cm de altura.</li>
+                        <li>No apoyar los rollos de costado (el eje del core debe quedar perpendicular respecto a la superficie), así se evitará su deformación. </li>
+                    </ol>
                 </div>
             </body>
         </html>';
