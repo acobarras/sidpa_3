@@ -271,18 +271,6 @@ var carga_modificar_precio = function () {
             $("#modificaPrecioModal").modal("show");
         }
     });
-    // $('#dt_tabla_productos tbody').on("click", "button.modificar_precios", function () {
-    //     var data = $('#dt_tabla_productos').DataTable().row($(this).parents("tr")).data();
-
-    //     $("#modificaPrecioModal").modal("show");
-    //     $(".codigo_productoD").empty().html(data.codigo_producto);
-    //     $(".descripcion_productosD").empty().html(data.descripcion_productos);
-    //     $("#id_moneda_autoriza").val(data.moneda_autoriza);
-    //     $("#id_cantidad_minima").val(data.cantidad_minima);
-    //     $("#id_precio_autorizado").val(data.precio_autorizado);
-    //     $("#id_clien_produc").val(data.id_clien_produc);
-    //     $("#id_id_material").val(data.id_material).trigger('change');
-    // });
 }
 
 var modificar_precio = function () {
@@ -313,8 +301,8 @@ var modificar_precio = function () {
                             btn_procesando(`btn_modifica_precio`, obj_inicial, 1);
                             alertify.error(res.msg);
                         });
-
                     }
+                    datos_modifi = [];
                 }
             });
         }

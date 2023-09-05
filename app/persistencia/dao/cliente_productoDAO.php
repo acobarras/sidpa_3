@@ -46,10 +46,11 @@ class cliente_productoDAO extends GenericoDAO
     }
     public function cliente_producto_id($data)
     {
-        $sql = "SELECT t1.*, t2.codigo_producto, t2.descripcion_productos, t2.ubi_troquel, t3.nombre_empresa 
+        $sql = "SELECT t1.*, t2.codigo_producto, t2.descripcion_productos, t2.ubi_troquel, t3.nombre_empresa, t4.id_clase_articulo
             FROM cliente_producto AS t1
             INNER JOIN productos AS t2 ON t1.id_producto=t2.id_productos
             INNER JOIN cliente_proveedor AS t3 ON t1.id_cli_prov=t3.id_cli_prov
+            INNER JOIN tipo_articulo AS t4 ON t2.id_tipo_articulo = t4.id_tipo_articulo
             WHERE t1.id_clien_produc=" . $data;
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();

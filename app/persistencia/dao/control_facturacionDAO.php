@@ -37,7 +37,7 @@ class control_facturacionDAO extends GenericoDAO
 
     public function consulta_lista_empaque($num_lista_empaque)
     {
-        $sql = "SELECT t1.*, t2.fecha_factura, t2.id_entrega, t2.cantidad_factura, t2.tipo_documento AS tipo_documento_letra, t2.estado AS estado_entrega_logistica, t2.fact_por, t3.*, t4.num_pedido, t4.parcial, t4.porcentaje, t4.difer_mas, t4.difer_menos, t4.difer_ext, t4.orden_compra, t4.iva, t4.observaciones, t4.id_dire_entre, t5.nit, t5.dig_verificacion, t5.nombre_empresa, t5.forma_pago, t5.dias_dados, t5.id_cli_prov
+        $sql = "SELECT t1.*, t2.fecha_factura, t2.id_entrega, t2.cantidad_factura, t2.tipo_documento AS tipo_documento_letra, t2.estado AS estado_entrega_logistica, t2.fact_por, t2.num_certificado, t2.lote_usado, t2.vencimiento, t3.*, t4.num_pedido, t4.parcial, t4.porcentaje, t4.difer_mas, t4.difer_menos, t4.difer_ext, t4.orden_compra, t4.iva, t4.observaciones, t4.id_dire_entre, t5.nit, t5.dig_verificacion, t5.nombre_empresa, t5.forma_pago, t5.dias_dados, t5.id_cli_prov
             FROM control_facturas t1 
             INNER JOIN entregas_logistica t2 ON t1.id_control_factura = t2.id_factura
             INNER JOIN pedidos_item t3 ON t2.id_pedido_item = t3.id_pedido_item

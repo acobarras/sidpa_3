@@ -26,8 +26,8 @@ class PedidosItemDAO extends GenericoDAO
 
     public function ConsultaIdPedido($id_pedido)
     {
-        $sql = "SELECT t1.*, t2.cav_montaje, t2.descripcion_productos, t3.ficha_tecnica, t3.id_material, t3.id_clien_produc, t4.nombre_r_embobinado, 
-        t5.nombre_core, t6.nombre_estado_item,t8.nombre_empresa,t8.logo_etiqueta,t7.id_dire_entre,t7.id_cli_prov,t9.ruta
+        $sql = "SELECT t1.*, t2.cav_montaje, t2.descripcion_productos, t2.tamano, t3.ficha_tecnica, t3.id_material, t3.id_clien_produc, t4.nombre_r_embobinado, 
+        t5.nombre_core, t6.nombre_estado_item,t8.nombre_empresa,t8.logo_etiqueta,t7.id_dire_entre,t7.id_cli_prov,t9.ruta, t10.id_clase_articulo
             FROM pedidos_item t1
             INNER JOIN productos t2 ON t1.codigo = t2.codigo_producto
             INNER JOIN cliente_producto t3 ON t1.id_clien_produc = t3.id_clien_produc
@@ -37,6 +37,7 @@ class PedidosItemDAO extends GenericoDAO
             INNER JOIN pedidos t7 ON t1.id_pedido = t7.id_pedido 
             INNER JOIN cliente_proveedor t8 ON t7.id_cli_prov=t8.id_cli_prov
             INNER JOIN direccion t9 ON t7.id_dire_entre = t9.id_direccion
+            INNER JOIN tipo_articulo t10 ON t2.id_tipo_articulo = t10.id_tipo_articulo
             WHERE t1.id_pedido = '$id_pedido' ORDER BY t1.item ASC";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
