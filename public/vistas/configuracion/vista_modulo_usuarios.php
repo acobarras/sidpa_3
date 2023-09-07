@@ -81,13 +81,7 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <div class="mb-3 col-4">
-                                <label for="res_prioridad" class="form-label">Responde Prioridades : </label>
-                                <select class="form-control select_2" style="width: 100%;" name="res_prioridad" id="res_prioridad">
-                                    <option value="0">No</option>
-                                    <option value="1">Si</option>
-                                </select>
-                            </div>
+                            <input type="hidden" value="0" name="res_prioridad" id="res_prioridad">
                             <div class="mb-3 col-4">
                                 <label for="ruta_foto" class="form-label">Foto : </label>
                                 <input type="file" class="form-control" name="ruta_foto" id="ruta_foto" />

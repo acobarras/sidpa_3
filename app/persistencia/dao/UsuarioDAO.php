@@ -159,4 +159,14 @@ class UsuarioDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function validar_personas_responde($id_area_trabajo)
+    {
+        $sql = "SELECT t1.cant_personas_res,(SELECT COUNT(t1.id_persona) FROM persona t1 LEFT JOIN usuarios t2 ON t1.id_persona=t2.id_persona 
+        WHERE t1.id_area_trabajo=8 AND t2.res_prioridad=1) AS cant_per_asig 
+        FROM area_trabajo t1 WHERE id_area_trabajo=$id_area_trabajo";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

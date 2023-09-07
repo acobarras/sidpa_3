@@ -13,6 +13,7 @@ $(document).ready(function () {
     boton_regresar();
     cargar_permisos();
     add_permiso("#tabla_modulo tbody");
+    cambio_per_respuesta();
 });
 
 var listar_usuarios = function () {
@@ -53,7 +54,7 @@ var listar_usuarios = function () {
                              </div>`;
 
                             } else {
-                               return `<button type='button' class='btn btn-success btn-sm permisos'>
+                                return `<button type='button' class='btn btn-success btn-sm permisos'>
                                 <span class='fa fa-folder-open'></span>
                             </button>`;
                             }
@@ -128,6 +129,7 @@ var obtener_data_editar_usuario = function (tbody, table) {
     $("#tabla_usuarios tbody").on("click", "button.modificar_info", function () {
         $('#pasword').val('');
         var data = $('#tabla_usuarios').DataTable().row($(this).parents("tr")).data();
+        $('#res_prioridad_modifi').attr('data', JSON.stringify(data));
         rellenar_formulario(data);
         $('#modificar_usuario').attr('data-id', data.id_usuario);
         $('#ruta_foto').empty().html(`<img width="100px" src="${PATH_NAME}/public/img/foto_usuarios/${data.ruta_foto}" />`);
@@ -163,7 +165,8 @@ var crear_usuario = function () {
     $('#form_crear_usuario').submit(function (e) {
         e.preventDefault();
         var form = $(this).serializeArray();
-        valida = validar_formulario(form);
+        var excepcion = ['res_prioridad'];
+        valida = validar_formulario(form, excepcion);
         if (valida) {
             // btn_procesando('crear_persona');
             form = document.getElementById('form_crear_usuario');
@@ -286,14 +289,14 @@ var cargar_permisos = function () {
                 },
             ],
         });
-        
+
     });
 }
 
 var add_permiso = function (tbody, table) {
     $(tbody).on("change", "select.permiso_autorizado", function (e) {
         e.preventDefault();// Detiene la recarga
-        var data = $('#tabla_modulo').DataTable().row($(this).parents("tr")).data();        
+        var data = $('#tabla_modulo').DataTable().row($(this).parents("tr")).data();
         var id_usuario = $('.link_carga').attr('data-usuario');
         var elegido = $(this).val();
         if (elegido != 0) {
@@ -323,3 +326,31 @@ var add_permiso = function (tbody, table) {
     });
 }
 
+var cambio_per_respuesta = function () {
+    $('#res_prioridad_modifi').on("blur", function (e) {
+        e.preventDefault();
+        $('#modificar_usuario').addClass('d-none');
+        var data = JSON.parse($('#res_prioridad_modifi').attr('data'));
+        var valor = $(this).val();
+        var id_usuario = data.id_usuario;
+        var id_persona = data.id_persona;
+        var id_area_trabajo = data.id_area_trabajo;
+        $.ajax({
+            url: `${PATH_NAME}/valida_per_respuesta`,
+            type: 'POST',
+            data: { id_usuario, valor, id_persona, id_area_trabajo },
+            success: function (res) {
+                if (res != true) {
+                    alertify.error(res.msg);
+                    $('#modificar_usuario').removeClass('d-none');
+                    $('#res_prioridad_modifi').val(0);
+                    return;
+                } else {
+                    alertify.success('permiso asignado');
+                    $('#modificar_usuario').removeClass('d-none');
+
+                }
+            }
+        });
+    });
+}

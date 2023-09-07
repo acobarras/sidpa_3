@@ -10,6 +10,7 @@
                     <a class="nav-link " id="movimientos_pedido-tab" data-bs-toggle="tab" href="#movimientos_pedido" role="tab" aria-controls="movimientos_pedido" aria-selected="true">Movimientos Pedido</a>
                     <a class="nav-link " id="consulta_pqr-tab" data-bs-toggle="tab" href="#consulta_pqr" role="tab" aria-controls="movimientos_pedido" aria-selected="true">Consulta PQR</a>
                     <a class="nav-link " id="consulta_diag-tab" data-bs-toggle="tab" href="#consulta_diag" role="tab" aria-controls="consulta_diag" aria-selected="true">Consulta Diag. Soporte</a>
+                    <a class="nav-link " id="consulta_prioridad-tab" data-bs-toggle="tab" href="#consulta_prioridad" role="tab" aria-controls="consulta_prioridad" aria-selected="true">Consulta N° Prioridad</a>
                 </div>
             </nav>
             <div class="tab-content" id="myTabContent">
@@ -313,6 +314,47 @@
                             </table>
                         </div>
                         <br>
+                    </div>
+                </div>
+                <!-- octavo link -->
+                <div class="tab-pane fade show" id="consulta_prioridad" role="tabpanel" aria-labelledby="consulta_prioridad-tab">
+                    <br>
+                    <div class="container-fluid recuadro">
+                        <div class="container mt-3 mb-3">
+                            <div class="px-2 py-2 col-lg-12">
+                                <form id="form_prioridad">
+                                    <div class="row container-fluid">
+                                        <div class="form-group col-12 col-md-5">
+                                            <label for="fecha_desde">Fecha desde</label>
+                                            <input class="form-control" type="date" name="fecha_desde" id="fecha_desde">
+                                            <p class="help-block"></p>
+                                        </div>
+                                        <div class="form-group col-12 col-md-5">
+                                            <label for="fecha_hasta">Fecha Hasta</label>
+                                            <input class="form-control" type="date" name="fecha_hasta" id="fecha_hasta">
+                                            <p class="help-block"></p>
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <br>
+                                            <button type="submit" class="btn btn-primary">Consultar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col-lg-12">
+                            <table id="tabla_prioridades" style="background: white;" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
+                                <thead style="background:#0d1b50;color:white">
+                                    <tr>
+                                        <th>N° Prioridad</th>
+                                        <th>Prioridad</th>
+                                        <th>Respuestas</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

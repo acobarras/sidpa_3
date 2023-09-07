@@ -16,6 +16,7 @@ use MiApp\persistencia\dao\TintasDAO;
 use MiApp\persistencia\dao\CotizacionItemSoporteDAO;
 use MiApp\persistencia\dao\SeguimientoDiagSoporteDAO;
 use MiApp\persistencia\dao\SoporteItemDAO;
+use MiApp\persistencia\dao\PrioridadesComercialDAO;
 use MiApp\negocio\util\Validacion;
 use MiApp\negocio\util\PDF;
 
@@ -39,6 +40,7 @@ abstract class GenericoControlador
     private $permisosDAO;
     private $SoporteItemDAO;
     private $SeguimientoDiagSoporteDAO;
+    private $PrioridadesComercialDAO;
 
     public function __construct(&$cnn)
     {
@@ -59,6 +61,7 @@ abstract class GenericoControlador
         $this->CotizacionItemSoporteDAO = new CotizacionItemSoporteDAO($cnn);
         $this->SoporteItemDAO = new SoporteItemDAO($cnn);
         $this->SeguimientoDiagSoporteDAO = new SeguimientoDiagSoporteDAO($cnn);
+        $this->PrioridadesComercialDAO = new PrioridadesComercialDAO($cnn);
     }
     /**
      * Función protected para redireccionar al usuario al inicio de sesión
@@ -89,7 +92,21 @@ abstract class GenericoControlador
         $id = $usuario->getId_persona();
         $parametro = 'inicio';
         $todas_hojas = array();
-
+        $consulta_prioridades = $this->PrioridadesComercialDAO->consultar_prioridades();
+        $datos_prioridad = [];
+        $muestra = false;
+        if (!empty($consulta_prioridades)) {
+            foreach ($consulta_prioridades as $value) {
+                $id = explode(",", $value->id_user_recibe);
+                if (in_array($usuario->getId_usuario(), $id)) {
+                    $consulta_mensajes = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $usuario->getId_usuario());
+                    if (empty($consulta_mensajes)) {
+                        array_push($datos_prioridad, $value);
+                        $muestra = true;
+                    }
+                }
+            }
+        }
         $dias_festivos = $this->dias_festivosDAO->consultar_dias_festivos();
         $disableddates = '';
         for ($i = 0; $i < count($dias_festivos); $i++) {
@@ -119,7 +136,9 @@ abstract class GenericoControlador
                     "modulo_hojas" => $modulo->Consultar_modulo_hojas($parametro),
                     "id" => $id,
                     "dia_festivo" => $dia_festivo,
-                    "trm" => $this->trmDAO->ConsultaUltimoRegistro()
+                    "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
+                    "consulta_prioridades" => $datos_prioridad,
+                    "modal" => $muestra,
                 ]
             );
         } else {
@@ -136,7 +155,9 @@ abstract class GenericoControlador
                     "modulo" => $modulo,
                     "id" => $id,
                     "dia_festivos" => $dia_festivo,
-                    "trm" => $this->trmDAO->ConsultaUltimoRegistro()
+                    "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
+                    "consulta_prioridades" => $datos_prioridad,
+                    "modal" => $muestra,
                 ]
             );
         }

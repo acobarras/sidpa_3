@@ -226,4 +226,31 @@ class UsuarioControlador extends GenericoControlador
     echo json_encode($respu);
     return;
   }
+  public function valida_per_respuesta()
+  {
+    header('Content-Type: application/json');
+    if ($_POST['valor'] == 1) {
+      $permiso_existe = $this->usuarioDAO->validar_personas_responde($_POST['id_area_trabajo']);
+      if ($permiso_existe[0]->cant_per_asig >= $permiso_existe[0]->cant_personas_res) {
+        $respu = [
+          'status' => -1,
+          'msg' => 'La cantidad de personas que pueden responder, ya se encuentran asignadas',
+        ];
+      } else {
+        $form = [
+          'res_prioridad' => $_POST['valor'],
+        ];
+        $condicion = 'id_usuario =' . $_POST['id_usuario'];
+        $respu = $this->usuarioDAO->editar($form, $condicion);
+      }
+    } else {
+      $form = [
+        'res_prioridad' => $_POST['valor'],
+      ];
+      $condicion = 'id_usuario =' . $_POST['id_usuario'];
+      $respu = $this->usuarioDAO->editar($form, $condicion);
+    }
+    echo json_encode($respu);
+    return;
+  }
 }

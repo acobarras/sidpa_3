@@ -7,6 +7,7 @@ $(document).ready(function () {
     select_2();
     consulta_pqr();
     consulta_diag();
+    consulta_prioridad();
     CKEDITOR.replace('observacion', { toolbar: 'mybar' });
 });
 // ---------------------------------------------------------INICIO CONSULTAS POR NUMERO DE PEDIDO-------------------------------------------------------------------------------
@@ -542,6 +543,48 @@ var consulta_diag = function () {
                             { "data": "procedimiento" },
                             { "data": "observacion" },
                         ]
+                    });
+                }
+            });
+        }
+    });
+}
+
+var consulta_prioridad = function () {
+    $('#form_prioridad').submit(function (e) {
+        e.preventDefault();
+        var form1 = $(this).serializeArray();
+        var valida = validar_formulario(form1);
+        if (valida) {
+            var form = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                data: { form },
+                url: `${PATH_NAME}/consultar_prioridades`,
+                success: function (response) {
+                    var table = $('#tabla_prioridades').DataTable({
+                        data: response,
+                        dom: 'Bflrtip',
+                        buttons: [{
+                            extend: 'excelHtml5',
+                            text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
+                            tittleAttr: ' Exportar a exel',
+                            className: 'btn btn-success',
+                        }],
+                        "columns": [
+                            { "data": "id_prioridad" },
+                            { "data": "prioridad" },
+                            { "data": "respuestas" },
+                            {
+                                "data": "estado", render: function (data, type, row) {
+                                    if (row.estado == 1) {
+                                        return '<h6 style="color:green">Abierto</h6>';
+                                    } else {
+                                        return '<h6 style="color:red">Cerrado</h6>';
+                                    }
+                                }
+                            },
+                        ],
                     });
                 }
             });

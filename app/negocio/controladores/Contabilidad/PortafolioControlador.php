@@ -647,7 +647,7 @@ class PortafolioControlador extends GenericoControlador
                 'fecha_reci_doc' => $_POST['fecha_recibe'],
             ];
             if ($factura_portafolio[0]->estado_portafolio != 3) {
-                $datos = ['estado_portafolio' => 2,];
+                $datos['estado_portafolio'] = 2;
             }
             $condicion = 'num_factura =' . $_POST['num_factura'];
             $data = $this->PortafolioDAO->editar($datos, $condicion);

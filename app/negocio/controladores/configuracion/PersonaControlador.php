@@ -52,7 +52,7 @@ class PersonaControlador extends GenericoControlador
                 "tipo_documento" => $this->TipoDocumentoDAO->consultar_tipo_documento(),
                 "persona" => $this->PersonaDAO->consultar_personas(),
                 "jefeImediato" => $this->PersonaDAO->jefe_imediato(),
-                "area" => $this->AreaTrabajoDAO->consultar_area_sistema(),
+                "area" => $this->AreaTrabajoDAO->consultar_areas(),
                 "lista" => $arreglo,
             ]
         );
