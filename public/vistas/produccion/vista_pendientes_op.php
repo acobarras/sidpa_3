@@ -25,6 +25,7 @@
                                     <td>Cantidad </td>
                                     <td>Pedido-Item</td>
                                     <td>Código</td>
+                                    <td>Troquel</td>
                                     <td>Magnetico</td>
                                     <td>Tintas</td>
                                     <td>Descripción</td>

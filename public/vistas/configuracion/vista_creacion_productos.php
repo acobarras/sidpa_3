@@ -86,6 +86,13 @@
                                 <textarea class="form-control" rows="2" cols="30" name="descripcion_productos" id="descripcion_productos"></textarea>
                             </div>
                             <div class="mb-3 col bobina tecnologia">
+                                <label for="troquel" class="form-label">Troquel : </label>
+                                <select class="form-control select_2" style="width: 100%;" id="troquel" name="troquel">
+                                    <option value="1">Si</option>
+                                    <option value="2">No</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col bobina tecnologia">
                                 <label for="ubi_troquel" class="form-label">Ubicación Troquel : </label>
                                 <input autocomplete="off" type="text" class="form-control" name="ubi_troquel" id="ubi_troquel" />
                             </div>

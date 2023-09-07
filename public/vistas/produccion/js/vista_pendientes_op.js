@@ -29,6 +29,15 @@ var listar_items_op = function () {
                 }
             },
             { "data": "codigo" },
+            {
+                "data": "troquel", render: function (data, type, row) {
+                    if (row.troquel == 1) {
+                        return `<h5 style="color:green;">SI</h5>`
+                    } else {
+                        return `<h5 style="color:red;">NO</h5>`
+                    }
+                }
+            },
             { "data": "magnetico" },
             { "data": "tintas" },
             { "data": "descripcion_productos" },
