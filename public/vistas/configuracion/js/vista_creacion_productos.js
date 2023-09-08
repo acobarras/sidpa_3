@@ -82,6 +82,7 @@ var producto_crea = function () {
             $('#crea_cod_etiq').addClass('d-none');
             $('.especial').removeClass('d-none');
             $('#codigo_grupo').removeClass('input-group');
+            $('#muestra_garantia').addClass('d-none');
         }
         if (producto_crea == 3) {
             id_clase_articulo = 3;
@@ -89,6 +90,7 @@ var producto_crea = function () {
             $('.tecnologia').addClass('d-none');
             $('.especial').addClass('d-none');
             $('#crea_cod_etiq').addClass('d-none');
+            $('#muestra_garantia').removeClass('d-none');
             $('#codigo_grupo').removeClass('input-group');
         }
         if (producto_crea == 2 || producto_crea == 0) {
@@ -99,6 +101,7 @@ var producto_crea = function () {
             $('#codigo_grupo').addClass('input-group');
             $('.etiqueta').addClass('d-none');
             $('.especial').addClass('d-none');
+            $('#muestra_garantia').addClass('d-none');
         }
         var item = '<option value="0"></option>';
         data_tipo_articulo.forEach(element => {
@@ -289,10 +292,10 @@ var agrega_edita_productos = function () {
         var array_nombre_color = [];
         var exepcion;
         if (clase_articulo == 1) {
-            exepcion = ['id_productos', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'precio3', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft'];
+            exepcion = ['id_productos', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'precio3', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft', 'garantia'];
         }
         if (clase_articulo == 2 || clase_articulo == 0) {
-            exepcion = ['id_productos', 'avance', 'id_adh', 'consumo', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft', 'img_ficha_1[]'];
+            exepcion = ['id_productos', 'avance', 'id_adh', 'consumo', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft', 'img_ficha_1[]', 'garantia'];
         }
         if (clase_articulo == 3) {
             exepcion = ['id_productos', 'avance', 'id_adh', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft'];

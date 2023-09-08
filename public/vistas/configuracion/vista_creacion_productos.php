@@ -77,6 +77,10 @@
                                     } ?>
                                 </select>
                             </div>
+                            <div class="mb-3 col d-none" id="muestra_garantia">
+                                <label for="garantia" class="form-label">Garantia :<span style="color:red">Colocar la cantidad de meses en numero: Ej:12</span> </label>
+                                <input autocomplete="off" value="0" type="number" class="form-control" name="garantia" id="garantia">
+                            </div>
                             <div class="mb-3 col bobina tecnologia">
                                 <label for="tamano" class="form-label">Tamaño : </label>
                                 <input autocomplete="off" type="text" class="form-control" name="tamano" id="tamano">
