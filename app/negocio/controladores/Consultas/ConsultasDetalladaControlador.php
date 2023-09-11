@@ -32,11 +32,17 @@ class ConsultasDetalladaControlador extends GenericoControlador
     public function vista_consulta_detallada()
     {
         parent::cabecera();
-
+        
+        if ($_SESSION['usuario']->getId_roll() == 1) {
+            $cliente = $this->clientes_proveedorDAO->consultar_clientes();
+        }else{
+            $cliente = $this->clientes_proveedorDAO->consultar_clientes_asesor($_SESSION['usuario']->getId_persona());
+        }
+        
         $this->view(
             'consultas/vista_consulta_detallada',
-            [
-                "clientes" => $this->clientes_proveedorDAO->consultar_clientes()
+            [                
+                "clientes" => $cliente
             ]
         );
     }
@@ -45,12 +51,19 @@ class ConsultasDetalladaControlador extends GenericoControlador
         header('Content-Type: application/json');
         $datos = $_POST['form'];
         $datos = Validacion::Decodifica($_POST['form']);
+        $id_persona = $_SESSION['usuario']->getId_persona();
+        $id_rol = $_SESSION['usuario']->getId_roll();
+        if ($id_rol == 1) {
+            $condicion = '';
+        }else{
+            $condicion = 'AND t2.id_persona ='.$id_persona;
+        }
         if ($datos['fecha'] == 1) {
             $fecha_consulta = 'fecha_crea_p';
         } else {
             $fecha_consulta = 'fecha_compromiso';
         }
-        $respu = $this->PedidosItemDAO->ConsultaRangoFecha($datos['desde'], $datos['hasta'], $fecha_consulta);
+        $respu = $this->PedidosItemDAO->ConsultaRangoFecha($datos['desde'], $datos['hasta'], $fecha_consulta, $condicion);
         foreach ($respu as $value) {
             if ($value->n_produccion == 0) {
                 $value->material = '';
@@ -94,8 +107,14 @@ class ConsultasDetalladaControlador extends GenericoControlador
         header('Content-Type: application/json');
         $datos = $_POST['form'];
         $datos = Validacion::Decodifica($datos);
+        $id_persona = $_SESSION['usuario']->getId_persona();
+        $id_rol = $_SESSION['usuario']->getId_roll();
         $texto = $datos['codigo_producto'];
-        $condicion = "t1.codigo = '$texto'";
+        if ($id_rol == 1) {
+            $condicion = "t1.codigo = '$texto'";
+        }else{
+            $condicion = "t1.codigo = '$texto' AND t2.id_persona =".$id_persona;
+        }
         $respu = $this->PedidosItemDAO->ConsultaDetallePedido($condicion);
         foreach ($respu as $value) {
             if ($value->n_produccion == 0) {
@@ -141,7 +160,13 @@ class ConsultasDetalladaControlador extends GenericoControlador
         header('Content-Type: application/json');
         $datos = $_POST['form'];
         $datos = Validacion::Decodifica($datos);
-        $condicion = "t2.num_pedido = " . $datos['numero_pedido'];
+        $id_persona = $_SESSION['usuario']->getId_persona();
+        $id_rol = $_SESSION['usuario']->getId_roll();
+        if ($id_rol == 1) {
+            $condicion = "t2.num_pedido = " . $datos['numero_pedido'];
+        }else{
+            $condicion = "t2.num_pedido = " . $datos['numero_pedido'] . " AND t2.id_persona = ".$id_persona;
+        }
         $respu = $this->PedidosItemDAO->ConsultaDetallePedido($condicion);
         foreach ($respu as $value) {
             if ($value->n_produccion == 0) {
@@ -187,7 +212,7 @@ class ConsultasDetalladaControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $datos = $_POST['form'];
-       $texto= implode(', ', $datos);
+        $texto= implode(', ', $datos);
         $condicion = "t2.id_cli_prov in($texto)";
         $respu = $this->PedidosItemDAO->ConsultaDetallePedido($condicion);
         foreach ($respu as $value) {
