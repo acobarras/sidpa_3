@@ -264,7 +264,7 @@ class PedidosItemDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
-    public function ConsultaRangoFecha($desde, $hasta, $fecha_consulta)
+    public function ConsultaRangoFecha($desde, $hasta, $fecha_consulta, $condicion)
     {
         $sql = "SELECT t1.cant_op, t2.fecha_crea_p, t2.hora_crea, t2.fecha_compromiso, 
             t2.num_pedido,t2.difer_mas,t2.difer_menos,t2.difer_ext, t1.item, t1.Cant_solicitada, t1.n_produccion, t1.codigo, t1.id_pedido, 
@@ -281,7 +281,7 @@ class PedidosItemDAO extends GenericoDAO
             INNER JOIN cliente_proveedor t8 ON t2.id_cli_prov = t8.id_cli_prov 
             INNER JOIN persona t9 ON t2.id_persona = t9.id_persona
             INNER JOIN cliente_producto t10 ON t10.id_clien_produc=t1.id_clien_produc 
-            WHERE t2.$fecha_consulta >= '$desde' AND t2.$fecha_consulta <= '$hasta'";
+            WHERE t2.$fecha_consulta >= '$desde' AND t2.$fecha_consulta <= '$hasta' $condicion";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
