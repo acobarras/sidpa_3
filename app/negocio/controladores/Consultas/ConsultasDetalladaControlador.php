@@ -33,10 +33,10 @@ class ConsultasDetalladaControlador extends GenericoControlador
     {
         parent::cabecera();
         
-        if ($_SESSION['usuario']->getId_roll() == 1) {
-            $cliente = $this->clientes_proveedorDAO->consultar_clientes();
-        }else{
+        if ($_SESSION['usuario']->getId_roll() == 4) {
             $cliente = $this->clientes_proveedorDAO->consultar_clientes_asesor($_SESSION['usuario']->getId_persona());
+        }else{
+            $cliente = $this->clientes_proveedorDAO->consultar_clientes();
         }
         
         $this->view(
@@ -53,10 +53,10 @@ class ConsultasDetalladaControlador extends GenericoControlador
         $datos = Validacion::Decodifica($_POST['form']);
         $id_persona = $_SESSION['usuario']->getId_persona();
         $id_rol = $_SESSION['usuario']->getId_roll();
-        if ($id_rol == 1) {
-            $condicion = '';
-        }else{
+        if ($id_rol == 4) {
             $condicion = 'AND t2.id_persona ='.$id_persona;
+        }else{
+            $condicion = '';
         }
         if ($datos['fecha'] == 1) {
             $fecha_consulta = 'fecha_crea_p';
@@ -110,10 +110,10 @@ class ConsultasDetalladaControlador extends GenericoControlador
         $id_persona = $_SESSION['usuario']->getId_persona();
         $id_rol = $_SESSION['usuario']->getId_roll();
         $texto = $datos['codigo_producto'];
-        if ($id_rol == 1) {
-            $condicion = "t1.codigo = '$texto'";
-        }else{
+        if ($id_rol == 4) {
             $condicion = "t1.codigo = '$texto' AND t2.id_persona =".$id_persona;
+        }else{
+            $condicion = "t1.codigo = '$texto'";
         }
         $respu = $this->PedidosItemDAO->ConsultaDetallePedido($condicion);
         foreach ($respu as $value) {
@@ -162,10 +162,10 @@ class ConsultasDetalladaControlador extends GenericoControlador
         $datos = Validacion::Decodifica($datos);
         $id_persona = $_SESSION['usuario']->getId_persona();
         $id_rol = $_SESSION['usuario']->getId_roll();
-        if ($id_rol == 1) {
-            $condicion = "t2.num_pedido = " . $datos['numero_pedido'];
-        }else{
+        if ($id_rol == 4) {
             $condicion = "t2.num_pedido = " . $datos['numero_pedido'] . " AND t2.id_persona = ".$id_persona;
+        }else{
+            $condicion = "t2.num_pedido = " . $datos['numero_pedido'];
         }
         $respu = $this->PedidosItemDAO->ConsultaDetallePedido($condicion);
         foreach ($respu as $value) {
