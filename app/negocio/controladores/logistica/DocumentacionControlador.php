@@ -9,6 +9,7 @@ use MiApp\persistencia\dao\control_facturacionDAO;
 use MiApp\persistencia\dao\ConsCotizacionDAO;
 use MiApp\persistencia\dao\cliente_productoDAO;
 use MiApp\persistencia\dao\EntregasLogisticaDAO;
+use MiApp\persistencia\dao\SerialesDAO;
 
 class DocumentacionControlador extends GenericoControlador
 {
@@ -17,6 +18,7 @@ class DocumentacionControlador extends GenericoControlador
     private $ConsCotizacionDAO;
     private $cliente_productoDAO;
     private $EntregasLogisticaDAO;
+    private $SerialesDAO;
 
     public function __construct(&$cnn)
     {
@@ -28,6 +30,7 @@ class DocumentacionControlador extends GenericoControlador
         $this->ConsCotizacionDAO = new ConsCotizacionDAO($cnn);
         $this->cliente_productoDAO = new cliente_productoDAO($cnn);
         $this->EntregasLogisticaDAO = new EntregasLogisticaDAO($cnn);
+        $this->SerialesDAO = new SerialesDAO($cnn);
     }
 
     public function vista_documentacion()
@@ -47,6 +50,7 @@ class DocumentacionControlador extends GenericoControlador
             $mas_data = $this->cliente_productoDAO->cliente_producto_id($value->id_clien_produc);
             $value->descripcion_productos = $mas_data[0]->descripcion_productos;
             $value->id_clase_articulo = $mas_data[0]->id_clase_articulo;
+            $value->garantia = $mas_data[0]->garantia;
         }
         echo json_encode($datos);
         return;
@@ -83,6 +87,56 @@ class DocumentacionControlador extends GenericoControlador
             } else {
                 $respu = PDF::certificado_cintas($datos, $fecha, $num_certificado, $form['vencimiento']);
             }
+        }
+        echo json_encode($respu);
+        return;
+    }
+
+    public function descarga_carta()
+    {
+        header('Content-type: application/pdf');
+        $form = $_POST['form'];
+        $datos = $_POST['items_carta'];
+        $fecha = date('d-m-Y');
+        $existe = $this->SerialesDAO->validar_carta($datos[0]['id_entrega']);
+        if (empty($existe)) {
+            if ($datos[0]['garantia'] != 0) {
+                $data_certificado = $this->ConsCotizacionDAO->consultar_cons_especifico(19);
+                $num_carta = $data_certificado[0]->numero_guardado;
+                // Aumentar el consecutivo
+                $nuevo_numero = $num_carta + 1;
+                $consecutivo = ['numero_guardado' => $nuevo_numero];
+                $cond_cons = 'id_consecutivo = 19';
+                $this->ConsCotizacionDAO->editar($consecutivo, $cond_cons);
+                $seriales = [];
+                foreach ($form as $value) {
+                    if ($value['name'] == 'seriales') {
+                        $serial = [
+                            'id_entrega' => $datos[0]['id_entrega'],
+                            'n_serial' => $value['value'],
+                            'estado' => 1,
+                            'descripcion' => $datos[0]['descripcion_productos'],
+                            'cantidad' => 1,
+                            'garantia' => $datos[0]['garantia']
+
+                        ];
+                        $inserta = [
+                            'id_entrega' => $datos[0]['id_entrega'],
+                            'n_serial' => $value['value'],
+                            'num_carta' => $num_carta,
+                            'fecha_crea' => date('Y-m-d H:i:s'),
+                            'estado' => 1
+                        ];
+                        $this->SerialesDAO->insertar($inserta);
+                        array_push($seriales, $serial);
+                    }
+                }
+                $respu = PDF::carta_garantia($datos, $seriales, $num_carta, $fecha);
+            } else {
+                $respu = 1;
+            }
+        } else {
+            $respu = PDF::error_pdf('20');
         }
         echo json_encode($respu);
         return;

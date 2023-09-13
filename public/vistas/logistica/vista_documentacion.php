@@ -75,6 +75,78 @@
                 </div>
                 <!-- Segundo link -->
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="container">
+                        <form class="panel panel-default" name="carta_garantia" id="carta_garantia">
+                            <div class="panel-heading text-center">
+                                <h2>Carta de garantia</h2>
+                            </div>
+                            <div class="row panel-body">
+                                <div class="col-10">
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="num_lista_carta">Numero lista de Empaque:</label>
+                                        <input type="text" class="form-control num_pedio" id="num_lista_carta" name="num_lista_carta">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <input type="submit" class="btn btn-success" value="Enviar" id="consulta_carta">
+                                </div>
+                            </div>
+                        </form>
+                        <br>
+                        <form method="POST" enctype="multipart/form-data" id="formulario_cartas" name="formulario_cartas">
+                            <table id="tabla_carta_1" class="table table-bordered table-responsive table-hover mb-3" cellspacing="0" width="100%">
+                                <thead style="background: #002b5f;color: white">
+                                    <tr>
+                                        <th>Cod. Producto</th>
+                                        <th>Referencia</th>
+                                        <th>Cantidad</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <label class="col-2" for="nombre_empresa_carta">Nombre Cliente:</label>
+                                    <div class="col-10">
+                                        <input type="text" class="form-control" id="nombre_empresa_carta">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <label class="col-2" for="orden_compra_carta">Documento entrega:</label>
+                                    <div class="col-10">
+                                        <input type="text" class="form-control" id="orden_compra_carta" name="orden_compra_carta">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <label class="col-2" for="cantidad_item">Cantidad Documento:</label>
+                                    <div class="col-10">
+                                        <input type="text" class="form-control" id="cantidad_item" name="cantidad_item" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="sn1">
+                                <div class="mb-3">
+                                    <div class="row">
+                                        <label class="col-2" for="input">Serial:</label>
+                                        <div class="col-10">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="input" name="seriales">
+                                                <button class="btn btn btn-success" type="button" id="agrega_serial"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 text-center">
+                                <button class="btn btn-success" id="boton_carta" type="submit">Descargar Carta<i class="fa fa-download boton_cambio_op"></i></button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
