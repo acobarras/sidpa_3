@@ -176,7 +176,7 @@ define(
     'VALORES_COTIZADOR',
     array(
         'costo_desperdicio' => 1.1,
-        'utili_inicial' => .67,
+        'utili_inicial' => .65,
         'utili_medio' => .9,
         'utili_alto' => .8,
         'cinta_calor' => 5300,

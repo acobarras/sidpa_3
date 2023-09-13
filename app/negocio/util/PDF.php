@@ -1754,4 +1754,88 @@ class PDF
         $pdf = $dompdf->output(); // Obtener el PDF generado
         return $pdf;
     }
+
+    public static function carta_garantia($datos, $seriales, $num_carta,$fecha)
+    {
+        $cabeza = "/carta_garantia";
+        $num_documento = $datos[0]['num_remision'];
+        if ($datos[0]['num_factura'] != 0) {
+            $num_documento = $datos[0]['num_factura'];
+        }
+        $html = '
+        <html>
+            <head>
+                <title>Certificado Productos</title>
+                <link rel="stylesheet" type="text/css" href="' . CARPETA_CSS . '/img_pdf/pdfstyle/style_carta.css" />
+            </head>
+            <body>
+                <header>
+                    <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf' . $cabeza . '.jpg">
+                </header>
+                <div class="titulo" style="font-size: small; margin-left: 3mm;">
+                    <p style="line-height:0"><b>Fecha elaboración: </b>'.$fecha.'</p>
+                    <p style="line-height:0"><b>Documento N°: </b>'.$num_carta.'</p>
+                    <p style="line-height:0"><b>Nombre Cliente: </b>'.$datos[0]['nombre_empresa'].'</p>
+                    <p style="line-height:0"><b>Orden de compra N°: </b>'.$datos[0]['orden_compra'].'</p>
+                    <p style="line-height:0"><b>N° documento de entrega: </b>'.$num_documento.'</p>
+                    <p style="line-height:0; text-align: right; margin-right: 30mm;"><b class="borde-top-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Firma de quien recibe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></p>
+                </div>
+                <div class="contenido">
+                    <div class="primera_parte">
+                        <table style="font-size: x-small;">
+                        <thead>
+                            <tr>
+                                <th style="width: 30mm">SERIAL</th>
+                                <th style="width: 112mm">REFERENCIA</th>
+                                <th style="width: 10mm">CANTIDAD</th>
+                                <th style="width: 30mm">GARANTÍA<br>(MESES)</th>
+                            </tr>';
+                            foreach ($seriales as $value) {
+                            $html .= '<tr>
+                                <td>'.$value['n_serial'].'</td>
+                                <td>'.$value['descripcion'].'</td>
+                                <td style="text-align: center;">'.$value['cantidad'].'</td>
+                                <td style="text-align: center;">'.$value['garantia'].'</td>	
+                            </tr>';
+                            }
+                        $html .= '</thead>
+                        </table>
+                    </div>
+                    <ol start="1" style="font-size: small; text-align: justify;">
+                        <li>A continuación se expone las cláusulas y condiciones dispuestas por ACOBARRAS S.A.S., para la cobertura y aplicación de garantía de los equipos previamente descrito.</li>
+                        <li><b>Importante:</b> La garantía de los equipos tiene vigencia a partir de la fecha de instalación del sistema.</li>
+                        <li>Para prestar el servicio de garantía es absolutamente indispensable la presentación de este documento y de un informe detallado del problema que presenta el equipo. El proceso de garantía inicia en el momento en que es recibido el equipo en nuestras instalaciones (no son valederos comunicados).</li>
+                        <li>La garantía cubre fallas de fabricación de los equipos que sean detectadas en la operación normal del sistema. En ningún caso cubre por daños ocasionados por transporte y/o mal manejo del producto por parte del usuario, así como la intervención en los equipos de personas ajenas a '.NOMBRE_EMPRESA.', o por inadecuadas condiciones de instalación y soporte eléctrico de los sistemas (sobre voltajes). Es indispensable el uso permanente de estabilizador eléctrico y de voltaje y la respectiva instalación de polo a tierra, con el objeto de no perder la garantía sobre los equipos anteriores descritos.</li>
+                        <li>Toda la mercancía debe retornar con sus respectivos manuales, caja original, bolsas, driver de instalación, adaptadores de corriente, cables y demás accesorios. Los equipos deben ser perfectamente empacados al devolverlos para evitar que sean afectadas durante el transporte.</li>
+                        <li>El servicio de garantía incluye mano de obra y repuestos originales UNICA y EXCLUSIVAMENTE por daños de Hardware que se ocasionen por defecto de fabricación. Si al momento de hacer efectiva una garantía, es necesario reemplazar una parte, dicha parte continuara con el mismo tiempo de garantía que le reste al producto.</li>
+                        <li>La garantía no incluye elementos de consumo (papel, cintas, baterías, etc.). Tampoco se incluye en esta garantía, eventualidades como: pérdida de información, cambio en la configuración del equipo y softwares maliciosos (virus) causados por la instalación de software. Se recomienda hacer una copia de su información antes de enviar el equipo a '.NOMBRE_EMPRESA.'</li>
+                        <li>Los costos de transporte y seguro de los equipos a nuestras instalaciones, como de regreso a la dirección del cliente, serán asumidos por cuenta del usuario o propietario del equipo</li>
+                    </ol>
+                </div>
+            </body>
+        </html>';
+
+        $options = new Options();
+        $options->set('enable_html5_parser', true);
+        $options->set('isHtml5ParserEnabled', true);
+        $options->setIsRemoteEnabled(true);
+        $options->set('chroot', PUBLICO);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html, 'UTF-8');
+        $dompdf->setPaper('letter', 'portrait');
+        $dompdf->render();
+        $dompdf->stream();
+        $pdf = $dompdf->output(); // Obtener el PDF generado
+        return $pdf;
+    }
+
+    public static function error_pdf($dato) {
+        $html = $dato;
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        // $dompdf->stream();
+        $pdf = $dompdf->output(); // Obtener el PDF generado
+        return $pdf;
+    }
 }
