@@ -44,8 +44,16 @@ var listar_inventario = function () {
                     // {"data": "entrada", render: $.fn.dataTable.render.number(',', '.', 2, '')},
                     // {"data": "salida", render: $.fn.dataTable.render.number(',', '.', 2, '')},
                     { "data": "cantidad_inventario", render: $.fn.dataTable.render.number(',', '.', 2, '') },
-                    { "data": "precio_usado", render: $.fn.dataTable.render.number(',', '.', 2, '') },
-                    { "data": "total", render: $.fn.dataTable.render.number(',', '.', 2, '') }
+                    { "data": "costo", render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                    {
+                        "data": "total", render: function (data, type, row) {
+                            if (row.id_clase_articulo == 2) {
+                                return 'N/A';
+                            } else {
+                                return $.fn.dataTable.render.number(',', '.', 2, '$ ').display(row.total);
+                            }
+                        }
+                    }
                 ],
             });
         }

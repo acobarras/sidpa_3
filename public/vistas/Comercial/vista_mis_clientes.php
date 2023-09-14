@@ -211,9 +211,9 @@
                                                     <br>
                                                     <div class="row">
                                                         <div class="col-md-5">
-                                                            <select class="form-control select_2" title="Los productos se muestran en el orden | Codigo| Descripcción| Ruta Emb| Core| Roll. paq X" style="width: 100%" id="id_clien_producPP"></select>
+                                                            <select class="form-control select_2" title="Los productos se muestran en el orden | Codigo | Codigo Cliente | Descripcción| Ruta Emb| Core| Roll. paq X" style="width: 100%" id="id_clien_producPP"></select>
                                                             <input type="hidden" id="data_product" name="data_product">
-                                                            <p class="text-muted pt-2">NOTA: Los productos se muestran en el orden | Codigo | Descripcción | Ruta Emb | Core | Roll. paq X </p>
+                                                            <p class="text-muted pt-2">NOTA: Los productos se muestran en el orden | Codigo | Codigo Cliente | Descripcción | Ruta Emb | Core | Roll. paq X </p>
                                                         </div>
                                                         <!-- <div class="col-md-1"></div> -->
                                                         <div class="col-md-2 add_product collapse">
@@ -853,6 +853,11 @@
                             <input class="form-control" type="number" name="cantidad_minima" id="cantidad_minima">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="codigo_cliente" class="col-form-label">Codigo Cliente:</label>
+                        <input class="form-control" type="text" name="codigo_cliente" id="codigo_cliente">
+                        <span class="text-danger" id="span_cod_cliente"></span>
+                    </div>
                     <div class="form-group ">
                         <label for="precio_venta" class="col-form-label">Precio Venta:(Ejemplo:[3,5] [1000] )</label>
                         <input class="form-control" type="number" step="Any" name="precio_venta" id="precio_venta">
@@ -934,14 +939,19 @@
                             <label for="presentacion" class="col-form-label">Rollos ó Pquetes Por:</label>
                             <input class="form-control" type="text" name="presentacion" id="presentacionM">
                         </div>
-                        <div class="form-group col-md-6">
+                        <!-- <div class="form-group col-md-6">
                             <label for="ficha_tecnica" class="col-form-label">Ficha Tecnica:</label>
                             <input class="form-control" type="text" name="ficha_tecnica" id="ficha_tecnicaM">
-                        </div>
+                        </div> -->
                     </div>
                     <div class="form-group" id="cambio_cantidad" style="display: none;">
                         <label for="cantidad_minimaM" class="col-form-label">Cantidad Cotizada:</label>
                         <input class="form-control" type="number" name="cantidad_minima" id="cantidad_minimaM">
+                    </div>
+                    <div class="form-group">
+                        <label for="codigo_clienteM" class="col-form-label">Codigo Cliente:</label>
+                        <input class="form-control" type="text" name="codigo_cliente" id="codigo_clienteM">
+                        <span class="text-danger" id="span_cod_cliente"></span>
                     </div>
                     <div class="form-group ">
                         <label for="message-text" class="col-form-label">Precio Venta:(Ejemplo:3,5)</label>
