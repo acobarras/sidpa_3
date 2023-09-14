@@ -7,6 +7,8 @@ $(document).ready(function () {
     crear_pro_cli();
     select_2();
     elimina_espacio('precio_ventaM', 'span_precio_ventaM');
+    elimina_espacio('codigo_cliente', 'span_cod_cliente');
+    elimina_espacio('codigo_clienteM', 'span_cod_clienteM');
     consulta_por_tipo_producto();
     diferencia();
     agrega_productos_storage();
@@ -537,7 +539,8 @@ var crear_pro_cli = function () {
     $("#form_crear_producto_cli").submit(function (e) {
         e.preventDefault();
         var form1 = $(this).serializeArray();
-        var valida = validar_formulario(form1);
+        var excepcion = ['codigo_cliente']
+        var valida = validar_formulario(form1, excepcion);
         var obj_inicial = $('#crear_pro_cli').html();
         var envio = 1;
         if (valida) {
@@ -639,6 +642,7 @@ var modificar_pro_cli = function (tbody, table_ver_p) {
         $("#presentacionM").val(datap.presentacion);
         $("#ficha_tecnicaM").val(datap.ficha_tecnica);
         $("#precio_ventaM").val($.fn.dataTable.render.number('', ',', 2, '').display(datap.precio_venta));
+        $("#codigo_clienteM").val(datap.codigo_cliente);
         $("#precio_autorizado").val(datap.precio_autorizado);
         $("#moneda_autoriza").val(datap.moneda_autoriza);
         $("#cantidad_minimaM").val(datap.cantidad_minima);
@@ -713,7 +717,8 @@ var modificar_p_cliente = function (table) {
     $("#form_modificar_producto_cli").submit(function (e) {
         e.preventDefault();
         var form1 = $(this).serializeArray();
-        var valida = validar_formulario(form1);
+        var excepcion=['codigo_cliente','ficha_tecnica']
+        var valida = validar_formulario(form1,excepcion);
         var envio = 1;
         var obj_inicial = $('#modificar_pro_client').html();
         btn_procesando('modificar_pro_client');
@@ -1064,7 +1069,7 @@ var productos_disponibles_cli = function (id_cli_prov) {
                         visible = 'disabled';
                     }
                     productos_disp /*html*/ += `<option ${visible} value='${JSON.stringify(element)}'>
-                    ${element.id_producto}| ${element.codigo_producto} | ${element.descripcion_productos} | ${element.nombre_r_embobinado} | ${element.nombre_core} | ${element.presentacion} 
+                    ${element.id_producto}| ${element.codigo_producto} | ${element.codigo_cliente} | ${element.descripcion_productos} | ${element.nombre_r_embobinado} | ${element.nombre_core} | ${element.presentacion} 
                     </option>`;
                 });
             }
