@@ -107,7 +107,9 @@ class productosDAO extends GenericoDAO
 
     public function consultar_productos_especifico($codigo_producto)
     {
-        $sql = "SELECT * FROM productos WHERE codigo_producto = '$codigo_producto'";
+        $sql = "SELECT t1.*,t2.nombre_articulo,t2.id_clase_articulo FROM productos t1 
+        INNER JOIN tipo_articulo t2 ON t2.id_tipo_articulo=t1.id_tipo_articulo 
+        WHERE codigo_producto = '$codigo_producto'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);

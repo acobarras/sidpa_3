@@ -132,10 +132,21 @@ class entrada_tecnologiaDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
+
     public function consultar_producto_diag($id_producto, $num_consecutivo, $item)
     {
         $sql = "SELECT * FROM `entrada_tecnologia` 
         WHERE documento='$num_consecutivo-$item' AND id_productos=$id_producto";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+
+    public function consultar_ingreso($id_producto, $ubicacion, $fecha)
+    {
+        $sql = "SELECT * FROM entrada_tecnologia
+        WHERE id_productos=$id_producto AND ubicacion='$ubicacion' AND DATE(fecha_crea)='$fecha'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);

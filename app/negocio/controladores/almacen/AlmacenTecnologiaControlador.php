@@ -78,6 +78,8 @@ class AlmacenTecnologiaControlador extends GenericoControlador
                 'estado' => true,
                 'id_producto' => $valida[0]->id_productos,
                 'id_tipo_articulo' => $valida[0]->id_tipo_articulo,
+                'id_clase_articulo' => $valida[0]->id_clase_articulo,
+                'nombre_articulo' => $valida[0]->nombre_articulo,
                 'mensaje' => $valida[0]->descripcion_productos,
                 'ubicacion' => $ubicacion,
             );
