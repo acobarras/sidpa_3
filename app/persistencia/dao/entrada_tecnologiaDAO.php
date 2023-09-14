@@ -146,7 +146,7 @@ class entrada_tecnologiaDAO extends GenericoDAO
     public function consultar_ingreso($id_producto, $ubicacion, $fecha)
     {
         $sql = "SELECT * FROM entrada_tecnologia
-        WHERE id_productos=$id_producto AND ubicacion='$ubicacion' AND DATE(fecha_crea)='$fecha'";
+        WHERE id_productos=$id_producto AND ubicacion='$ubicacion' AND DATE(fecha_crea)='$fecha' AND entrada != 0";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
