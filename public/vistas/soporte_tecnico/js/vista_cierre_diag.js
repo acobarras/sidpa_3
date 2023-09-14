@@ -84,13 +84,15 @@ var generar_acta = function () {
             if (array_item[0].estado_item == 15) {//15-Reparación Efectuada  
                 alertify.confirm(`ALERTA SIDPA`, `¿Requiere Factura?`,
                     function () {// si requiere factura 
-                        alertify.alert('ALERTA SIDPA', '</div><label for="observaciones"><b>Observaciones Pedido:</b></label><br> <textarea name="observaciones" id="observaciones" class="col-10" rows="10"></textarea><br><br>¿Factura con IVA?" <a href="javascript:showConfirm(1);" class="btn btn-success">Si</a>  <a href="javascript:showConfirm(2);" class="btn btn-danger">No</a>',
+                        alertify.alert('ALERTA SIDPA', '</div><label for="observaciones"><b>Observaciones Pedido:</b></label><br> <textarea name="observaciones" id="observaciones" class="col-10" rows="10"></textarea><br><br>¿Factura con IVA?" <button type="button" onclick="showConfirm(1);" id="iva_si" class="btn btn-success">Si</button>  <button type="button" onclick="showConfirm(2);" id="iva_no" class="btn btn-danger">No</button>',
                             function () {
                             }).set({
                                 'label': 'Cancelar',
                                 'transitionOff': true
                             });
                         window.showConfirm = function (vista) {
+                            btn_procesando('iva_no');
+                            btn_procesando('iva_si');
                             if (vista == 1) {// con iva
                                 var iva = 1;
                             } else {//sin iva
