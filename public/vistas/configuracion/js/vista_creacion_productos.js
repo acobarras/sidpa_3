@@ -14,7 +14,20 @@ $(document).ready(function () {
     $('#agrega-tab').on('click', function () {
         $('#clase_articulo').change();
     });
+    codigo_solicitud_diseño();
 });
+//variables de solicitud diseño
+var codigo = JSON.parse(localStorage.getItem('codigo'))
+var params = new URLSearchParams(location.search);
+var cod_url = params.get('cod');
+// implementacion del modulo solicitud de diseño 
+function codigo_solicitud_diseño() {
+    if (cod_url == codigo.id_solicitud) {// cuando existe un codigo desde la vista de solicictud de codigo
+        $('#agrega-tab').click();
+        $('#codigo_producto').val(codigo.codigo);
+        $('#tamano').val(codigo.tamano);
+    }// falta hacer los cambios cuando se crea el codigo, enviar codigo de confirmacion y cambiar estados, esto se debe hacer en esta misma vista 
+}
 
 var cargar_tabla_productos = function () {
     var table = $("#tabla_productos").DataTable({
@@ -331,6 +344,7 @@ var agrega_edita_productos = function () {
             //     alertify.error('Se requiere la imagen ficha tecnica para continuar');
             //     return;
             // }
+            // desque aqui se descomenta la creacion
             btn_procesando('crear_etiqueta');
             $.ajax({
                 "url": `${PATH_NAME}/configuracion/insertar_producto`,
@@ -341,11 +355,27 @@ var agrega_edita_productos = function () {
                 "contentType": false,
                 "success": function (respu) {
                     if (respu['status'] == true) {
-                        $("#tabla_productos").DataTable().ajax.reload(function () {
-                            alertify.success(respu.msg);
-                            $('#home-tab').click();
-                            btn_procesando('crear_etiqueta', obj_inicial, 1);
-                        });
+                        if (cod_url == codigo.id_solicitud) {// hacemos los cambios de la tabla de cierre
+                            codigo.codigo = $('#codigo_producto').val();
+                            $.ajax({
+                                "url": `${PATH_NAME}/diseno/cirre_solicitud_cod`,
+                                "type": 'POST',
+                                "data": codigo, 
+                                "success": function (res) {
+                                    alertify.alert('Cierre de solicitud', res.msg,
+                                        function () {
+                                            window.location.href = `${PATH_NAME}/vista_solicitudes_diseno`;
+                                        }
+                                    );
+                                }
+                            })
+                        } else {
+                            $("#tabla_productos").DataTable().ajax.reload(function () {
+                                alertify.success(respu.msg);
+                                $('#home-tab').click();
+                                btn_procesando('crear_etiqueta', obj_inicial, 1);
+                            });
+                        }
                     }
                 }
             });

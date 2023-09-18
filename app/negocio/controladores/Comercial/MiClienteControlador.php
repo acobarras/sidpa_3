@@ -458,16 +458,7 @@ class MiClienteControlador extends GenericoControlador
             'Comercial/vista_pqr'
         );
     }
-    /*  
-     * Función para cargar la vista (vista_pqr)
-     */
-    public function vista_solicitud_diseno()
-    {
-        parent::cabecera();
-        $this->view(
-            'Comercial/vista_solicitud_diseno'
-        );
-    }
+   
     /*  
      * Función para validar precio autorizado
      */

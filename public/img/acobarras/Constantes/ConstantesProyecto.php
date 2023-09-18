@@ -3,7 +3,7 @@
 define('NOMBRE_EMPRESA', 'ACOBARRAS S.A.S.'); //COLOCAR EL NOMBRE EN MAYUSCULA
 define('IMG_CORREO', 'https://www.acobarras.com/sidpa/public/img/img_sidpa/sidpa.gif'); //URL PARA OBTENER LAS IMAGENES PARA EL ENVIO DE CORREOS
 define('FIRMA_PEDIDO', 'firma_pedido'); //CUANDO SE CREE LA FIRMA GUARDARLA CON ESTE NOMBRE DE ARCHIVO
-define('CORREO_SOPORTE_TEC', 'desarrollo@acobarras.com'); //CORREO DE SOPORTE TECNICO
+define('CORREO_SOPORTE_TEC', 'miguel.aya@acobarras.com'); //CORREO DE SOPORTE TECNICO
 define('JEFE_SER_CLIENTE', 'PABLO ANDRES SUAREZ'); //NOMBRE DEL JEFE DE SERVICIO AL CLIENTE
 define('FIRMA_JEFE_SER', 'firma_pablo_andres.png'); // FIRMA PARA ACTAS DE RESPUESTAS DEL JEFE DE SERVICIO AL CLIENTE
 define('JEFE_SOPORTE', 'Miguel Angel Aya Zarate'); // NOMBRE PARA ACTAS DEL JEFE DE SOPORTE TECNICO
@@ -21,3 +21,4 @@ define('PORT', '8081'); //PUERTO DE LA EMPRESA
 define('ID_JEFE_PRODUCCION', '8'); //Id Jefe Produccion
 define('CORREO_LOSGISTICA', 'anderson.franco@acobarras.com'); //Correo Logistica
 define('ID_COMISIONES_CARTERA', '57'); //Id CARTERA CONTABILIDAD
+define('CORREO_CREACION_CLIENTE', 'cartera2@acobarras.com');  //CORREO DE CREACION CLIENTES

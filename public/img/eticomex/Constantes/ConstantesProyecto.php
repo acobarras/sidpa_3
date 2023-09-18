@@ -21,3 +21,5 @@ define('PORT', '8081'); //PUERTO DE LA EMPRESA
 define('ID_JEFE_PRODUCCION', '8'); //Id Jefe Produccion
 define('CORREO_LOSGISTICA', 'desarrollo@acobarras.com'); //Correo Logistica
 define('ID_COMISIONES_CARTERA', ''); //Id CARTERA CONTABILIDAD
+define('CORREO_CREACION_CLIENTE', 'info@eticomex.mx'); //CORREO DE CREACION CLIENTES
+

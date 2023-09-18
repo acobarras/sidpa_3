@@ -393,3 +393,17 @@ define(
         90 => 'COORDINADOR SOPORTE',
     )
 );
+
+// --------------------terminados diseño --------------------------------
+
+define(
+    'TERMINADOS_DISENO',
+    array(
+        0 => ['nombre' => 'SIN TERMINADO'],
+        1 => ['nombre' => 'LAMINADO'],
+        2 => ['nombre' => 'ESTAMPADO'],
+        3 => ['nombre' => 'IMPRESIÓN VARIABLE'],
+        4 => ['nombre' => 'UV TOTAL'],
+        5 => ['nombre' => 'UV PARCIAL']
+    )
+);

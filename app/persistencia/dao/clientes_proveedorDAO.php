@@ -60,7 +60,7 @@ class clientes_proveedorDAO extends GenericoDAO
         $sql = "SELECT  *  from direccion AS  t1
             INNER JOIN ciudad AS t2 ON t1.id_ciudad=t2.id_ciudad
             INNER JOIN cliente_proveedor AS t3 ON t1.id_cli_prov=t3.id_cli_prov
-                                   WHERE  t1.id_cli_prov =" . $id_prov . "  AND t1.estado_direccion = 1";
+            WHERE  t1.id_cli_prov =" . $id_prov . "  AND t1.estado_direccion = 1";
         // } else {
         //     $sql = "SELECT  *  from direccion AS  t1
         //     INNER JOIN ciudad AS t2 ON t1.id_ciudad=t2.id_ciudad
