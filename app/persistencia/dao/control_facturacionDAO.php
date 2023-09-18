@@ -107,6 +107,20 @@ class control_facturacionDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function consulta_datos_fac($id_fac)
+    {
+        $sql = "SELECT t1.*,t2.item,t2.codigo,t2.Cant_solicitada,t3.num_pedido,t4.descripcion_productos,t5.nombre_empresa,t5.id_cli_prov
+        FROM entregas_logistica t1 
+        INNER JOIN pedidos_item t2 ON t2.id_pedido_item=t1.id_pedido_item 
+        INNER JOIN pedidos t3 ON t3.id_pedido=t2.id_pedido 
+        INNER JOIN productos t4 ON t4.codigo_producto=t2.codigo
+        INNER JOIN cliente_proveedor t5 ON t5.id_cli_prov=t3.id_cli_prov
+        WHERE t1.id_factura in($id_fac)";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 
     // public function ConsultaPendienteReporte()
     // {
