@@ -234,21 +234,23 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         header('Content-Type: application/json');
         $datos = $_POST;
         $valida_reporte = $this->EntregasLogisticaDAO->valida_edicion_item($datos['datos_item'][0]['id_pedido_item']);
-        if (empty($valida_reporte)) {
-            $data = [
-                'id_pedido_item' => $datos['datos_item'][0]['id_pedido_item'],
-                'cantidad_factura' => $_POST['salida'],
-                'id_usuario' => $_SESSION['usuario']->getid_usuario(),
-                'estado' => 1,
-                'fecha_crea' => date('y-m-d'),
-                'hora_crea' => date('H:i:s'),
-            ];
-            $this->EntregasLogisticaDAO->insertar($data);
-        } else {
-            $nueva_cantidad = $_POST['salida'] + $valida_reporte[0]->cantidad_factura;
-            $data['cantidad_factura'] = $nueva_cantidad;
-            $condicion = 'id_entrega=' . $valida_reporte[0]->id_entrega;
-            $this->EntregasLogisticaDAO->editar($data, $condicion);
+        if ($datos['datos_item'][0]['id_estado_item_pedido'] != 6) {// para no enviar los item de impresion variable a facturacion (Y)
+            if (empty($valida_reporte)) {
+                $data = [
+                    'id_pedido_item' => $datos['datos_item'][0]['id_pedido_item'],
+                    'cantidad_factura' => $_POST['salida'],
+                    'id_usuario' => $_SESSION['usuario']->getid_usuario(),
+                    'estado' => 1,
+                    'fecha_crea' => date('y-m-d'),
+                    'hora_crea' => date('H:i:s'),
+                ];
+                $this->EntregasLogisticaDAO->insertar($data);
+            } else {
+                $nueva_cantidad = $_POST['salida'] + $valida_reporte[0]->cantidad_factura;
+                $data['cantidad_factura'] = $nueva_cantidad;
+                $condicion = 'id_entrega=' . $valida_reporte[0]->id_entrega;
+                $this->EntregasLogisticaDAO->editar($data, $condicion);
+            }
         }
 
         if ($_POST['alistamiento'] == 2) {

@@ -22,11 +22,13 @@ var params = new URLSearchParams(location.search);
 var cod_url = params.get('cod');
 // implementacion del modulo solicitud de diseño 
 function codigo_solicitud_diseño() {
-    if (cod_url == codigo.id_solicitud) {// cuando existe un codigo desde la vista de solicictud de codigo
-        $('#agrega-tab').click();
-        $('#codigo_producto').val(codigo.codigo);
-        $('#tamano').val(codigo.tamano);
-    }// falta hacer los cambios cuando se crea el codigo, enviar codigo de confirmacion y cambiar estados, esto se debe hacer en esta misma vista 
+    if (codigo != null) {
+        if (cod_url == codigo.id_solicitud) {// cuando existe un codigo desde la vista de solicictud de codigo
+            $('#agrega-tab').click();
+            $('#codigo_producto').val(codigo.codigo);
+            $('#tamano').val(codigo.tamano);
+        }// falta hacer los cambios cuando se crea el codigo, enviar codigo de confirmacion y cambiar estados, esto se debe hacer en esta misma vista   
+    }
 }
 
 var cargar_tabla_productos = function () {
@@ -355,20 +357,22 @@ var agrega_edita_productos = function () {
                 "contentType": false,
                 "success": function (respu) {
                     if (respu['status'] == true) {
-                        if (cod_url == codigo.id_solicitud) {// hacemos los cambios de la tabla de cierre
-                            codigo.codigo = $('#codigo_producto').val();
-                            $.ajax({
-                                "url": `${PATH_NAME}/diseno/cirre_solicitud_cod`,
-                                "type": 'POST',
-                                "data": codigo, 
-                                "success": function (res) {
-                                    alertify.alert('Cierre de solicitud', res.msg,
-                                        function () {
-                                            window.location.href = `${PATH_NAME}/vista_solicitudes_diseno`;
-                                        }
-                                    );
-                                }
-                            })
+                        if (codigo != null) {
+                            if (cod_url == codigo.id_solicitud) {// hacemos los cambios de la tabla de cierre
+                                codigo.codigo = $('#codigo_producto').val();
+                                $.ajax({
+                                    "url": `${PATH_NAME}/diseno/cirre_solicitud_cod`,
+                                    "type": 'POST',
+                                    "data": codigo, 
+                                    "success": function (res) {
+                                        alertify.alert('Cierre de solicitud', res.msg,
+                                            function () {
+                                                window.location.href = `${PATH_NAME}/vista_solicitudes_diseno`;
+                                            }
+                                        );
+                                    }
+                                })
+                            }
                         } else {
                             $("#tabla_productos").DataTable().ajax.reload(function () {
                                 alertify.success(respu.msg);
