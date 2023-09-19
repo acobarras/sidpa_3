@@ -36,8 +36,9 @@ class GestionPqrDAO extends GenericoDAO
 
     public function consultar_pqr($estado)
     {
-        $sql = "SELECT t1.*, t2.nombre_estado_pqr FROM gestion_pqr t1 
+        $sql = "SELECT t1.*, t2.nombre_estado_pqr,t3.codigo,t3.analisis_pqr,t3.descripcion,t3.accion FROM gestion_pqr t1 
             INNER JOIN estados_pqr t2 ON t1.estado = t2.id_estado 
+            LEFT JOIN codigo_respuesta_pqr t3 ON t3.id_respuesta_pqr=t1.id_respuesta_pqr
             WHERE t1.estado IN($estado)";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();

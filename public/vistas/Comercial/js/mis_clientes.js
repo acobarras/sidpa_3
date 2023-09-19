@@ -148,6 +148,7 @@ var tabla_ver_producto = function (data) {
             <tr>
                 <th>Id</th>
                 <th>Código</th>
+                <th>Código Cliente</th>
                 <th>Descripción</th>
                 <th>Ruta</th>
                 <th>Core</th>
@@ -190,6 +191,7 @@ var ver_productos_cliente = function (tbody, table) {
                 "columns": [
                     { "data": "id_clien_produc" },
                     { "data": "codigo_producto" },
+                    { "data": "codigo_cliente" },
                     { "data": "descripcion_productos" },
                     { "data": "nombre_r_embobinado" },
                     { "data": "nombre_core" },

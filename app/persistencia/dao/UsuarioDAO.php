@@ -169,4 +169,12 @@ class UsuarioDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function consultar_roll($id_roll)
+    {
+        $sql = "SELECT * FROM `usuarios` WHERE id_roll=$id_roll";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

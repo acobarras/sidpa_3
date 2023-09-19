@@ -311,7 +311,7 @@ var agrega_edita_productos = function () {
             exepcion = ['id_productos', 'avance', 'id_adh', 'consumo', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft', 'img_ficha_1[]', 'garantia'];
         }
         if (clase_articulo == 3) {
-            exepcion = ['id_productos', 'avance', 'id_adh', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft'];
+            exepcion = ['id_productos', 'avance', 'id_adh', 'tamano', 'ubi_troquel', 'ancho_material', 'cav_montaje', 'avance', 'magnetico', 'consumo', 'ficha_tecnica', 'ubica_ficha', 'img_ficha_1', 'img_ficha', 'acabados_ficha', 'nombre_color[]', 'color_producto[]', 'ficha_tecnica_produc', 'version_ft','garantia'];
         }
         var form = $(this).serializeArray();
         var valida_form = validar_formulario(form, exepcion);

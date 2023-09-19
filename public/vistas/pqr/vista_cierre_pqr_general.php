@@ -26,6 +26,8 @@
                                         <td>Motivo PQR</td>
                                         <td>Cantidad</td>
                                         <td>Estado</td>
+                                        <td>Codigo Respuesta</td>
+                                        <td>Descripcion Motivo</td>
                                         <td>Opción </td>
                                     </tr>
                                 </thead>
@@ -51,6 +53,8 @@
                                         <td>Motivo PQR</td>
                                         <td>Cantidad</td>
                                         <td>Estado</td>
+                                        <td>Codigo Respuesta</td>
+                                        <td>Descripcion Motivo</td>
                                         <td>Opción </td>
                                     </tr>
                                 </thead>

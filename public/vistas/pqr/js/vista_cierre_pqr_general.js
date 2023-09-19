@@ -63,6 +63,8 @@ var datos_productos = function (data, nombre_tabla) {
             { "data": "descripcion_pqr" },
             { "data": "cantidad_reclama", render: $.fn.dataTable.render.number('.', ',', 0) },
             { "data": "nombre_estado_pqr" },
+            { "data": "codigo" },
+            { "data": "descripcion" },
             {
                 "data": "botones", render: function (data, type, row) {
                     var boton = valida_botones(row);
@@ -152,6 +154,9 @@ var cierre_comite = function () {
     $('#tabla_cierre_comite_pqr tbody').on('click', 'button.cierre_comite', function () {
         var data = $('#tabla_cierre_comite_pqr').DataTable().row($(this).parents("tr")).data();
         $('#cierreComite').modal('toggle');
+        $('#responsable_cierre').val(data.responsable);
+        $('#costo_cierre').val(data.costo);
+        $('#observacion').val(data.observacion);
         $('#boton_cierre_pqr').attr('data', JSON.stringify(data));
         CKEDITOR.instances.accion_cierre.setData('');
         CKEDITOR.instances.analisis_pqr_cierre.setData('');

@@ -17,6 +17,7 @@ use MiApp\persistencia\dao\CotizacionItemSoporteDAO;
 use MiApp\persistencia\dao\SeguimientoDiagSoporteDAO;
 use MiApp\persistencia\dao\SoporteItemDAO;
 use MiApp\persistencia\dao\PrioridadesComercialDAO;
+use MiApp\persistencia\dao\VehiculosDAO;
 use MiApp\negocio\util\Validacion;
 use MiApp\negocio\util\PDF;
 
@@ -41,6 +42,7 @@ abstract class GenericoControlador
     private $SoporteItemDAO;
     private $SeguimientoDiagSoporteDAO;
     private $PrioridadesComercialDAO;
+    private $VehiculosDAO;
 
     public function __construct(&$cnn)
     {
@@ -62,6 +64,7 @@ abstract class GenericoControlador
         $this->SoporteItemDAO = new SoporteItemDAO($cnn);
         $this->SeguimientoDiagSoporteDAO = new SeguimientoDiagSoporteDAO($cnn);
         $this->PrioridadesComercialDAO = new PrioridadesComercialDAO($cnn);
+        $this->VehiculosDAO = new VehiculosDAO($cnn);
     }
     /**
      * Función protected para redireccionar al usuario al inicio de sesión
@@ -92,6 +95,7 @@ abstract class GenericoControlador
         $id = $usuario->getId_persona();
         $parametro = 'inicio';
         $todas_hojas = array();
+        // CONSULTA PRIORIDADES
         $consulta_prioridades = $this->PrioridadesComercialDAO->consultar_prioridades();
         $datos_prioridad = [];
         $muestra = false;
@@ -107,6 +111,7 @@ abstract class GenericoControlador
                 }
             }
         }
+        // CONSULTA DIAS FESTIVOS
         $dias_festivos = $this->dias_festivosDAO->consultar_dias_festivos();
         $disableddates = '';
         for ($i = 0; $i < count($dias_festivos); $i++) {
@@ -116,7 +121,7 @@ abstract class GenericoControlador
         //si es administrador se habilitan todos los permisos
         //--------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------
-
+        // CONSULTA TRM
         $dato_trm = $this->trmDAO->ConsultaUltimoRegistro();
         if (empty($dato_trm)) {
             $dato_vacio = [
@@ -126,6 +131,14 @@ abstract class GenericoControlador
             $Objeto = (object)$dato_vacio;
             array_push($dato_trm, $Objeto);
         }
+        if ($usuario->getId_roll() == 11) {
+            $condi = 'WHERE id_usuario=' . $usuario->getId_usuario();
+            $transportadores = $this->VehiculosDAO->consultar_usu_vehiculos($condi);
+        } else {
+            $condi = '';
+            $transportadores = $this->VehiculosDAO->consultar_usu_vehiculos($condi);
+        }
+
         if ($usuario->getId_roll() == 1) {
             $this->view(
                 '/plantilla/header',
@@ -139,6 +152,7 @@ abstract class GenericoControlador
                     "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
                     "consulta_prioridades" => $datos_prioridad,
                     "modal" => $muestra,
+                    "transportadores" => $transportadores,
                 ]
             );
         } else {
@@ -158,6 +172,7 @@ abstract class GenericoControlador
                     "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
                     "consulta_prioridades" => $datos_prioridad,
                     "modal" => $muestra,
+                    "transportadores" => $transportadores,
                 ]
             );
         }

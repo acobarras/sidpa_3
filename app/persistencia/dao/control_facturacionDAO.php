@@ -109,7 +109,7 @@ class control_facturacionDAO extends GenericoDAO
     }
     public function consulta_datos_fac($id_fac)
     {
-        $sql = "SELECT t1.*,t2.item,t2.codigo,t2.Cant_solicitada,t3.num_pedido,t4.descripcion_productos,t5.nombre_empresa,t5.id_cli_prov
+        $sql = "SELECT t1.*,t2.item,t2.codigo,t2.Cant_solicitada,t3.num_pedido,t4.descripcion_productos,t5.nombre_empresa,t5.id_cli_prov,t5.pertenece
         FROM entregas_logistica t1 
         INNER JOIN pedidos_item t2 ON t2.id_pedido_item=t1.id_pedido_item 
         INNER JOIN pedidos t3 ON t3.id_pedido=t2.id_pedido 
