@@ -106,7 +106,7 @@
                                                                     <label class="form-check-label fw-bolder">Tiene O.C :</label>
                                                                 </div>
                                                                 <div class="form-check form-switch col-9">
-                                                                    <input class="form-check-input" type="checkbox" id="check_oc" checked disabled>
+                                                                    <input class="form-check-input" type="checkbox" id="check_oc" checked <?= REQ_ORDEN ?>>
                                                                     <span class="fw-bolder" style="color: #0027d2;" id="span_orden_compra">Si</span>
                                                                 </div>
                                                             </div>

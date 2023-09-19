@@ -22,3 +22,4 @@ define('ID_JEFE_PRODUCCION', '8'); //Id Jefe Produccion
 define('CORREO_LOSGISTICA', 'anderson.franco@acobarras.com'); //Correo Logistica
 define('ID_COMISIONES_CARTERA', '57'); //Id CARTERA CONTABILIDAD
 define('CORREO_CREACION_CLIENTE', 'cartera2@acobarras.com');  //CORREO DE CREACION CLIENTES
+define('REQ_ORDEN', 'disabled');  //Esto es para que el campo de orden de compra este siempre en SI, si lo desea dejar para si y no quitar el disabled y dejarlo vacio
