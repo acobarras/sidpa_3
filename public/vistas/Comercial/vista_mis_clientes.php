@@ -274,6 +274,7 @@
                                                             <label for="fecha_cierre">Fecha Cierre Facturación <span class="text-rojos">*</span></label>
                                                             <input autocomplete="off" type="text" class="form-control datepicker" name="fecha_cierre" id="fecha_cierre">
                                                             <span id="m6"></span>
+                                                            <span id="info_fecha" style="color:red;"></span>
                                                         </div>
                                                         <div class="col-lg-4">
                                                             <label for="fecha_comp_programado">Fecha Compromiso Programado</span></label>
@@ -650,6 +651,12 @@
                                     <input type="text" class="form-control" id="horario" name="horario">
                                 </div>
                             </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="recor_dia_cierre" class="col-form-label">Recordatorio dia Cierre:</label>
+                                    <textarea type="text" class="form-control" id="recor_dia_cierre" name="recor_dia_cierre"></textarea>
+                                </div>
+                            </div>
                             <input hidden="true" id="ruta" name="ruta" value="7">
                             <input hidden="true" type="text" name="id_usuario" name="id_usuario" value="<?= $_SESSION['usuario']->getId_usuario() ?>" />
                         </div>
@@ -768,6 +775,12 @@
                                         <option value="<?= $key ?>"><?= $value ?></option>
                                     <?php } ?>
                                 </select>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="recor_dia_cierre_modi" class="col-form-label">Recordatorio dia Cierre:</label>
+                                    <textarea type="text" class="form-control" id="recor_dia_cierre_modi" name="recor_dia_cierre"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>

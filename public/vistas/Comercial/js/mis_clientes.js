@@ -392,7 +392,8 @@ var crear_direccion_cliente = function () {
         var obj_inicial = $('#crear_dir_cli').html();
         btn_procesando('crear_dir_cli');
         var form = $("#form_crear_dir_cli").serializeArray();
-        var valida_form = validar_formulario(form);
+        var excepcion = ['recor_dia_cierre'];
+        var valida_form = validar_formulario(form, excepcion);
         if (valida_form) {
             $.ajax({
                 url: `${PATH_NAME}/comercial/crear_dir_clientes`,
@@ -437,6 +438,7 @@ var obtener_data_dir = function (tbody, table) {
         $("#id_direccion").val(info.id_direccion);
         $("#rutaD").val(info.ruta).trigger('change');
         $("#link_mapsD").val(info.link_maps);
+        $("#recor_dia_cierre_modi").val(info.recor_dia_cierre);
         // $("#id_ciudadD").val(info.id_ciudad).trigger('change');
         carga_ubi_paises_modifi(info.id_pais, info.id_departamento, info.id_ciudad);
 
@@ -719,8 +721,8 @@ var modificar_p_cliente = function (table) {
     $("#form_modificar_producto_cli").submit(function (e) {
         e.preventDefault();
         var form1 = $(this).serializeArray();
-        var excepcion=['codigo_cliente','ficha_tecnica']
-        var valida = validar_formulario(form1,excepcion);
+        var excepcion = ['codigo_cliente', 'ficha_tecnica']
+        var valida = validar_formulario(form1, excepcion);
         var envio = 1;
         var obj_inicial = $('#modificar_pro_client').html();
         btn_procesando('modificar_pro_client');
@@ -894,6 +896,8 @@ var crear_pedido = function () {
                 $(".dir_entrega").toggle(500);
             }
             var op = JSON.parse($("#id_direccionC option:selected").attr('info-dir'));
+            // console.log(op);
+            $("#info_fecha").empty().html('Previamente usted ingreso el dia de cierre del cliente con esta observación: " '+ op.recor_dia_cierre+'". Tenga presente que esto puede variar y es su responsabilidad consultarle al cliente.');
             $("#infoCon").empty().html(op.contacto);
             $("#infoCar").empty().html(op.cargo);
             $("#infoEmail").empty().html(op.email);
