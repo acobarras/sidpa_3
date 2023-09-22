@@ -219,7 +219,7 @@
                 </div>
             </div>
         <?php } ?>
-        <?php
+        <!-- <?php
             if ($_SESSION['usuario']->getId_roll() == 11) {
                 if (empty($transportadores)) { ?>
                 <div class="modal fade" id="transportadores" tabindex="-1" aria-labelledby="transportadoresLabel" aria-hidden="true">
@@ -252,5 +252,5 @@
                     <h1>LLENO</h1>
                 <?php } ?>
                 </div>
-            <?php  } ?>
+            <?php  } ?> -->
         <?php } ?>
