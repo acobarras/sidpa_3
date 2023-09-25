@@ -77,6 +77,11 @@ class SolicitudesDisenoControlador extends GenericoControlador
     public function envio_solicitud_diseno()
     {
         header('Content-Type: application/json');
+        if ($_POST["tipo_codigo"] == 2) {// actualizacion 
+            $codigo_antiguo = $_POST["codigo_antiguo"];
+        }else{
+            $codigo_antiguo = null;
+        }
         $datos = [// esto cambia cuando agregemos la otra solicitud
             'id_cli_prov' => $_POST['id_cli_prov'],
             'tipo_solicitud' => 1,// solicitud codigo
@@ -92,6 +97,10 @@ class SolicitudesDisenoControlador extends GenericoControlador
             'grafe' => $_POST['gaf_cort'],
             'terminados' => $_POST['terminados'],
             'estado' => 1,//estado 1 solicitud creada
+            'tipo_codigo' => $_POST["tipo_codigo"],
+            'codigo_antiguo' => $codigo_antiguo,
+            'precio' => $_POST["precio"],
+            'cantidad' => $_POST["cantidad_etiquetas"],
             'observaciones' => $_POST['observaciones_cod'],
         ];
         $respuesta = $this->SolicitudesDisenoDAO->insertar($datos);

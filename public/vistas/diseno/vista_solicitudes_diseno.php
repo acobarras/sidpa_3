@@ -14,22 +14,25 @@
                         <h2>Solicitud de creación de código</h2>
                     </div>
                     <div class="table-responsive p-3">
-                        <table id="tb_solicitudes" class=" table table-bordered table-hover table-responsive-lg table-responsive-md" cellspacing="0" width="100%">
+                        <table id="tb_solicitudes" class="table table-bordered table-hover table-responsive-lg table-responsive-md" cellspacing="0" width="100%">
                             <thead class="bg-layout" style="background:#0d1b50;color:white">
                                 <tr>
                                     <th>id</th>
                                     <th>Nit</th>
                                     <th>Nombre empresa</th>
                                     <th>Asesor</th>
+                                    <th>Tipo de creación</th>
+                                    <th>Código Antiguo</th>
                                     <th>Tamaño</th>
                                     <th>Tipo producto</th>
                                     <th>Forma</th>
                                     <th>Material</th>
                                     <th>Adhesivo</th>
-                                    <th>Cavidades</th>
+                                    <!-- <th>Cavidades</th>  esto pasa a datos troquel-->
                                     <th>Cant. tintas</th>
                                     <th>Terminados</th>
                                     <th>Grafe</th>
+                                    <th>Datos troquel</th>
                                     <th>Observaciones</th>
                                     <th>Codigo_creado</th>
                                     <th>Acción</th>

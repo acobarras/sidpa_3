@@ -7,6 +7,7 @@ $(document).ready(function () {
     enviar_solicitud_diseño();
     cargar_select_();
     input_tintas();
+    tipo_codigo()
 });
 
 // consultar si el cliente existe - se reutiliza una funcion de soporte que ya exista 
@@ -173,6 +174,20 @@ function cargar_select_() {
     })
 }
 
+// tipo de codigo - nuevo antiguo 
+function tipo_codigo() {
+    $('.tipo_codigo').change(function (e) {
+        e.preventDefault();
+        var tipo_codigo = $(this).val();
+        console.log(tipo_codigo);
+        if (tipo_codigo == 1) {// codigo nuevo
+            $('#codigo_antiguo').prop( "disabled", true );
+        } else if (tipo_codigo == 2) {// codigo viejo
+            $('#codigo_antiguo').prop( "disabled", false )
+        } 
+    });
+}
+
 function enviar_solicitud_diseño() {
     $("#form_solicitud_codigo").submit(function (e) {
         e.preventDefault();
@@ -186,6 +201,8 @@ function enviar_solicitud_diseño() {
         } else if (tipo_solicitud == 2) { // solicitud diseño
             exepcion = ['gaf_cort','cant_tintas','tipo_arte', 'terminados'];
         }
+        console.log(formulario)
+        console.log(datos_form)
         var valida_form = validar_formulario(formulario, exepcion);
         formulario.push({ name: 'terminados', value: $('#terminados').val()}); // para guardar las opciones multiples
         if (valida_form) {
@@ -195,15 +212,7 @@ function enviar_solicitud_diseño() {
                 type: "POST",
                 data: formulario,
                 success: function (res) {
-                    btn_procesando('enviar_solicitud_Cod', obj_inicial, 1);
-                    alertify.success(res.msg)
-                    limpiar_formulario('form_solicitud_codigo','select');
-                    limpiar_formulario('form_solicitud_codigo','input');
-                    $('#input_crea').addClass('d-none');
-                    $('#tipo_solicitud').addClass('d-none');
-                    $('.diseno').addClass('d-none');
-                    $('.codigo').addClass('d-none');
-                    $('.solo_codigo').addClass('d-none');
+                    window.location.reload();
                 }
             })
             

@@ -12,10 +12,10 @@
                     <!-- pestaña solicitud de codigo -->
                     <div class="tab-pane fade show active" id="nav-codigo" role="tabpanel" aria-labelledby="nav-codigo-tab">
                         <div class="container mt-4 mb-4">
-                            <center>
+                            <!-- <center>
                                 <iframe src=<?= FORM_DISENOCOD ?> width="1000" height="5420" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
-                            </center>
-                            <!-- <form id="form_solicitud_codigo" class="shadow row g-3 p-2">
+                            </center> -->
+                            <form id="form_solicitud_codigo" class="shadow row g-3 p-2">
                                 <h1 id="titulo_cod" class="text-center">Solicitud de Diseño</h1>
                                 <input type="hidden" name="asesor_cod" id="asesor_cod" value="<?= $_SESSION['usuario']->getNombre() . ' ' . $_SESSION['usuario']->getApellido() ?>">
                                 <input type="hidden" name="id_asesor_cod" id="id_asesor_cod" value="<?= $_SESSION['usuario']->getId_usuario() ?>">
@@ -50,7 +50,7 @@
                                         <label class="form-check-label" for="tipo_sol2">Diseño</label>
                                     </div>
                                 </div>
-                                /// parte formulario diseño ///
+                                <!-- /// parte formulario diseño /// -->
                                 <div class=" row g-3 diseno d-none">
                                     <div class="col-md-6 col-12">
                                         <label for="contacto" class="form-label fw-bold"> Nombre contacto:</label>
@@ -64,9 +64,9 @@
                                         <label for="tipo_arte" class="form-label fw-bold">Tipo arte:</label>
                                         <select class="form-control select_2" name="tipo_arte" id="tipo_arte">
                                             <option value="">Selecciones tipo de arte</option>
-                                            /// <?php foreach (GRAF_CORTE as $key => $value) { ?>
+                                            <!-- /// <?php foreach (GRAF_CORTE as $key => $value) { ?>
                                                 <option value="<?= $key ?>"><?= $value['nombre'] ?></option>
-                                            <?php } ?> ////
+                                            <?php } ?> //// -->
                                         </select>
                                     </div>
                                     <div class="col-md-4 col-12">
@@ -81,30 +81,46 @@
                                     <div class="col-md-4 col-12">
                                         <label for="grafe" class="form-label fw-bold">Tipo corte:</label>
                                         <select class="form-control select_2" name="grafe" id="grafe" multiple>
-                                            //// <?php foreach (GRAF_CORTE as $key => $value) { ?>
+                                            <!-- //// <?php foreach (GRAF_CORTE as $key => $value) { ?>
                                                 <option value="<?= $key ?>"><?= $value['nombre'] ?></option>
-                                            <?php } ?> ////
+                                            <?php } ?> //// -->
                                         </select>
                                     </div>
                                     <div class="col-md-4 col-12">
                                         <label for="entrega" class="form-label fw-bold">Tipo entrega:</label>
                                         <select class="form-control select_2" name="entrega" id="entrega" multiple>
-                                            //// <?php foreach (GRAF_CORTE as $key => $value) { ?>
+                                            <!-- //// <?php foreach (GRAF_CORTE as $key => $value) { ?>
                                                 <option value="<?= $key ?>"><?= $value['nombre'] ?></option>
-                                            <?php } ?> ///
+                                            <?php } ?> /// -->
                                         </select>
                                     </div>
                                     <div class="col-md-4 col-12">
                                         <label for="op_solicitud" class="form-label fw-bold">Tipo solicitud:</label>
                                         <select class="form-control select_2" name="op_solicitud" id="op_solicitud" multiple>
-                                            //// <?php foreach (GRAF_CORTE as $key => $value) { ?>
+                                            <!-- //// <?php foreach (GRAF_CORTE as $key => $value) { ?>
                                                 <option value="<?= $key ?>"><?= $value['nombre'] ?></option>
-                                            <?php } ?> ////
+                                            <?php } ?> //// -->
                                         </select>
                                     </div>
                                 </div>
-                                //// Parte el fomulacio codigo ////
+                                <!-- //// Parte el fomulacio codigo //// -->
                                 <div class=" row g-3 codigo d-none">
+                                    <div class="form-check col-md-3 col-12">
+                                        <input class="form-check-input m-1 tipo_codigo" type="radio" name="tipo_codigo" id="cod_opcion1" value="1" >
+                                        <label class="form-check-label" for="cod_opcion1">
+                                            Código nuevo
+                                        </label>
+                                    </div>
+                                    <div class="form-check col-md-3 col-12">
+                                        <input class="form-check-input m-1 tipo_codigo" type="radio" name="tipo_codigo" id="cod_opcion2" value="2" checked>
+                                        <label class="form-check-label" for="cod_opcion2">
+                                            Actualización de código
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <label for="codigo_antiguo" class="form-label fw-bold">Código antiguo:</label>
+                                        <input class="form-control" type="text" name="codigo_antiguo" id="codigo_antiguo" placeholder="Código" >
+                                    </div>
                                     <div class="col-md-6 col-12">
                                         <label for="ancho" class="form-label fw-bold">Ancho:</label>
                                         <input class="form-control" type="number" name="ancho" id="ancho" placeholder="Ancho en milimetros">
@@ -163,11 +179,19 @@
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <label for="terminados1" class="form-label fw-bold">Tipo terminado:</label>
-                                        <select class="form-control select_2" name="terminados1" id="terminados"  multiple="multiple">
-                                             <?php foreach (TERMINADOS_DISENO as $key => $value) { ?>
+                                        <select class="form-control select_2" name="terminados1" id="terminados" multiple="multiple">
+                                            <?php foreach (TERMINADOS_DISENO as $key => $value) { ?>
                                                 <option value="<?= $key ?>"><?= $value['nombre'] ?></option>
                                             <?php } ?>
                                         </select>
+                                    </div>
+                                    <div class="col-md-6 col-12 solo_codigo d-none">
+                                        <label for="precio" class="form-label fw-bold">Precio por unidad:</label>
+                                        <input class="form-control" type="number" id="precio" name="precio" placeholder="Valor cotizado">
+                                    </div>
+                                    <div class="col-md-6 col-12 solo_codigo d-none">
+                                        <label for="cantidad_etiquetas" class="form-label fw-bold">Cantidad etiquetas:</label>
+                                        <input class="form-control" type="number" id="cantidad_etiquetas" name="cantidad_etiquetas" placeholder="Cantidad de etiquetas cotizadas">
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <label for="obsevaciones_cod" class="form-label fw-bold"> Observaciones:</label>
@@ -178,7 +202,7 @@
                                     </div>
                                 </div>
 
-                            </form> -->
+                            </form>
                         </div>
                     </div>
                     <div class="tab-pane fade show" id="nav-diseno" role="tabpanel" aria-labelledby="nav-diseno-tab">

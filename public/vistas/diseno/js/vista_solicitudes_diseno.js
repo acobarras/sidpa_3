@@ -14,6 +14,24 @@ function consulta_codigos() {
             { "data": "asesor" },
             {
                 "render": function (data, type, row) {
+                    if (row.tipo_codigo == 1) { // codigo nuevo
+                        return `<p>Nuevo</p>`
+                    } else {
+                        return `<p>Actualización</p>`
+                    }
+                }
+            },
+            {
+                "render": function (data, type, row) {
+                    if (row.codigo_antiguo == null) { // codigo nuevo
+                        return `<p>No aplica</p>`
+                    } else {
+                        return row.codigo_antiguo
+                    }
+                }
+            },
+            {
+                "render": function (data, type, row) {
                     return `${row.ancho}X${row.alto}`
                 }
             },// poner tamaño concatenado
@@ -29,10 +47,19 @@ function consulta_codigos() {
             { "data": "nombre_forma" },
             { "data": "nombre_material" },
             { "data": "nombre_adh" },
-            { "data": "cavidades" },
+            // { "data": "cavidades" },
             { "data": "cantidad_tintas" },
             { "data": "terminados" },
             { "data": "grafe.nombre" },
+            {
+                "render": function (data, type, row) {
+                    var metros_lineales = ((row.cantidad * (row.alto + 3)) / (row.cavidades * 1000));
+                    return `<p><b>Cavidades:</b> ${row.cavidades}  <br><b>Cantidad:</b> ${row.cantidad} <br>
+                    <b>Precio:</b> ${$.fn.dataTable.render.number('.', ',', 2, '$ ').display(row.precio)}  <br>
+                    <b>M-Lineales:</b> ${metros_lineales} Aprox.<br>
+                    </p>`
+                }
+            },
             { "data": "observaciones" },
             {
                 "render": function (data, type, row) {
@@ -43,15 +70,22 @@ function consulta_codigos() {
             }, //esto es un inpuit para diseño
             {
                 "render": function (data, type, row) {
-                    return `<center>
-                                <button type='button' title='Cerrar solicitud' class='btn btn-success btn-circle cerrar_solicitud' >
-                                    <span class="fas fa-check"></span>
-                                </button>
-                                <button type='button' id='ir_producto' title='Ir a crear producto' class='btn btn-info btn-circle ir_producto' >
-                                    <span class="fas fa-upload"></span>
-                                </button>
-                            <center>`
-
+                    if (row.tipo_codigo == 1) {// codigo nuevo
+                        return `<center>
+                                    <button type='button' title='Cerrar solicitud' class='btn btn-success btn-circle cerrar_solicitud' >
+                                        <span class="fas fa-check"></span>
+                                    </button>
+                                    <button type='button' id='ir_producto' title='Ir a crear producto' class='btn btn-info btn-circle ir_producto' >
+                                        <span class="fas fa-upload"></span>
+                                    </button>
+                                <center>`
+                    } else {
+                        return `<center>
+                                    <button type='button' title='Cerrar solicitud' class='btn btn-success btn-circle cerrar_solicitud' >
+                                        <span class="fas fa-check"></span>
+                                    </button>
+                                <center>`
+                    }
                 }
             }// en este boton de opciones vamos a enviar la data por el local storage (Y) para verla en la vista de crear producto
         ]
