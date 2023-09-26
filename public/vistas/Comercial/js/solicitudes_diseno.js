@@ -4,7 +4,7 @@ $(document).ready(function () {
     consulta_cliente();
     envio_creacion_cliente();
     tipo_solicitud();
-    enviar_solicitud_diseño();
+    enviar_solicitud_diseno();
     cargar_select_();
     input_tintas();
     tipo_codigo()
@@ -179,7 +179,6 @@ function tipo_codigo() {
     $('.tipo_codigo').change(function (e) {
         e.preventDefault();
         var tipo_codigo = $(this).val();
-        console.log(tipo_codigo);
         if (tipo_codigo == 1) {// codigo nuevo
             $('#codigo_antiguo').prop( "disabled", true );
         } else if (tipo_codigo == 2) {// codigo viejo
@@ -188,7 +187,7 @@ function tipo_codigo() {
     });
 }
 
-function enviar_solicitud_diseño() {
+function enviar_solicitud_diseno() {
     $("#form_solicitud_codigo").submit(function (e) {
         e.preventDefault();
         var obj_inicial = $('#enviar_solicitud_Cod').html();
@@ -197,18 +196,16 @@ function enviar_solicitud_diseño() {
         var datos_form = new FormData(document.getElementById('form_solicitud_codigo'))// esto permite traer por get cualcuer valor del fomulario
         var tipo_solicitud = datos_form.get("tipo_solicitud_check");
         if (tipo_solicitud == 1) { // solicitud codigo
-            exepcion = ['gaf_cort','cant_tintas','terminados','contacto', 'email_contacto', 'tipo_arte', 'cantidad', 'cantida_tintas_dis','tinta_1','tinta_2','tinta_3','tinta_4','tinta_5','tinta_6','tinta_7','tinta_8','tinta_9','tinta_10'];
+            exepcion = ['gaf_cort','cant_tintas','terminados1','contacto', 'email_contacto', 'tipo_arte', 'cantidad', 'cantida_tintas_dis','tinta_1','tinta_2','tinta_3','tinta_4','tinta_5','tinta_6','tinta_7','tinta_8','tinta_9','tinta_10'];
         } else if (tipo_solicitud == 2) { // solicitud diseño
-            exepcion = ['gaf_cort','cant_tintas','tipo_arte', 'terminados'];
+            exepcion = ['gaf_cort','cant_tintas','tipo_arte', 'terminados1'];
         }
-        console.log(formulario)
-        console.log(datos_form)
         var valida_form = validar_formulario(formulario, exepcion);
         formulario.push({ name: 'terminados', value: $('#terminados').val()}); // para guardar las opciones multiples
         if (valida_form) {
             btn_procesando('enviar_solicitud_Cod');
             $.ajax({
-                url: `${PATH_NAME}/comercial/envio_solicitud_diseno`,
+                url: `${PATH_NAME}/envio_solicitud_diseno`,
                 type: "POST",
                 data: formulario,
                 success: function (res) {

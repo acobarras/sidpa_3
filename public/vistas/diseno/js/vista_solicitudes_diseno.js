@@ -129,7 +129,6 @@ function cerrar_solicitud() {
                 "type": 'POST',
                 "data": { codigo: codigo, data: data },
                 "success": function (res) {
-                    console.log(res);
                     if (res.status == -1) {
                         alertify.error(res.msg);
                         $("#tb_solicitudes").DataTable().ajax.reload();

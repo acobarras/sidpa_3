@@ -16,7 +16,7 @@
                                 <iframe src=<?= FORM_DISENOCOD ?> width="1000" height="5420" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
                             </center> -->
                             <form id="form_solicitud_codigo" class="shadow row g-3 p-2">
-                                <h1 id="titulo_cod" class="text-center">Solicitud de Diseño</h1>
+                                <h1 id="titulo_cod" class="text-center">Solicitud de creación de código</h1>
                                 <input type="hidden" name="asesor_cod" id="asesor_cod" value="<?= $_SESSION['usuario']->getNombre() . ' ' . $_SESSION['usuario']->getApellido() ?>">
                                 <input type="hidden" name="id_asesor_cod" id="id_asesor_cod" value="<?= $_SESSION['usuario']->getId_usuario() ?>">
                                 <div class="col-md-6 col-12">
@@ -123,11 +123,11 @@
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <label for="ancho" class="form-label fw-bold">Ancho:</label>
-                                        <input class="form-control" type="number" name="ancho" id="ancho" placeholder="Ancho en milimetros">
+                                        <input class="form-control" type="text"  name="ancho" id="ancho" placeholder="Ancho en milimetros">
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <label for="alto" class="form-label fw-bold">Alto:</label>
-                                        <input class="form-control" type="number" name="alto" id="alto" placeholder="Alto en milimetros">
+                                        <input class="form-control" type="text"  name="alto" id="alto" placeholder="Alto en milimetros">
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <label for="tipo_product" class="form-label fw-bold">Tipo Producto:</label>
@@ -187,7 +187,7 @@
                                     </div>
                                     <div class="col-md-6 col-12 solo_codigo d-none">
                                         <label for="precio" class="form-label fw-bold">Precio por unidad:</label>
-                                        <input class="form-control" type="number" id="precio" name="precio" placeholder="Valor cotizado">
+                                        <input class="form-control" type="text" id="precio"  name="precio" placeholder="Valor cotizado">
                                     </div>
                                     <div class="col-md-6 col-12 solo_codigo d-none">
                                         <label for="cantidad_etiquetas" class="form-label fw-bold">Cantidad etiquetas:</label>

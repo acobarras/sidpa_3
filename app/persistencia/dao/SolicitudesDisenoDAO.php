@@ -19,7 +19,8 @@ final class SolicitudesDisenoDAO extends GenericoDAO
         t6.nombre_adh
         FROM solicitudes_diseno t1
         INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov
-        INNER JOIN persona t3 ON t1.id_usuario_asesor = t3.id_persona
+        INNER JOIN usuarios t7 ON t1.id_usuario_asesor = t7.id_usuario
+        INNER JOIN persona t3 ON t7.id_persona = t3.id_persona
         INNER JOIN forma_material t4 ON t1.id_forma = t4.id_forma
         INNER JOIN tipo_material t5 ON t1.codigo_tipo_material = t5.codigo
         INNER JOIN adhesivo t6 ON t1.codigo_adh = t6.codigo_adh
