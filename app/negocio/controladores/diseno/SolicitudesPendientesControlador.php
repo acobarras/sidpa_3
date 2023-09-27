@@ -41,8 +41,8 @@ final class SolicitudesPendientesControlador extends GenericoControlador
             $value->grafe = GRAF_CORTE[$value->grafe];
             $value->terminados1 =  explode(",", $value->terminados);
             $value->terminados = '';
-            foreach ($value->terminados1 as $terminados ) {
-                $value->terminados .= '- ' . implode(TERMINADOS_DISENO[$terminados]).'<br>';
+            foreach ($value->terminados1 as $terminados) {
+                $value->terminados .= '- ' . implode(TERMINADOS_DISENO[$terminados]) . '<br>';
             }
         }
         $data['data'] = $datos;
@@ -53,30 +53,44 @@ final class SolicitudesPendientesControlador extends GenericoControlador
     public function cirre_solicitud_cod()
     {
         header('Content-Type: application/json');
-            $datos = [
-                'estado' => 2, // codigo creado -- cierre de caso
-                'codigo_creado' => $_POST["codigo"]
-            ]; // este estado puede variar cuando uniquemos las solicitudes 
-            $condicion = 'id_solicitud =' . $_POST['id_solicitud'];
-            $cambio_estado = $this->SolicitudesDisenoDAO->editar($datos, $condicion);
-            if ($cambio_estado) {
-                $solicitud = $this->SolicitudesDisenoDAO->consulta_data_solicitud($_POST['id_solicitud']);//esta consulta funciona cuando vamos a enviar el correo por ahora no               
-                $correo_envio = Envio_Correo::correo_respuesta_creacodigo($solicitud[0]->asesor,$_POST['id_solicitud'], $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $solicitud[0]->codigo_creado, $solicitud[0]->correo);
+        $datos = [
+            'estado' => 2, // codigo creado -- cierre de caso
+            'codigo_creado' => $_POST["codigo"]
+        ]; // este estado puede variar cuando uniquemos las solicitudes 
+        $condicion = 'id_solicitud =' . $_POST['id_solicitud'];
+        $cambio_estado = $this->SolicitudesDisenoDAO->editar($datos, $condicion);
+        if ($cambio_estado) {
+            $solicitud = $this->SolicitudesDisenoDAO->consulta_data_solicitud($_POST['id_solicitud']); //esta consulta funciona cuando vamos a enviar             
+            if ($_POST["cierre"] == 'cierre') { // cierre normal
+                $datos_codigo = $this->productosDAO->consultar_productos_especifico($solicitud[0]->codigo_creado);
+                $descriocion = $datos_codigo[0]->descripcion_productos;
+                $ficha_tec = $datos_codigo[0]->ficha_tecnica_produc;
+                $correo_envio = Envio_Correo::correo_respuesta_creacodigo($solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $solicitud[0]->codigo_creado, $descriocion, $ficha_tec, $solicitud[0]->correo, '');
+                $correo_copia = Envio_Correo::correo_respuesta_creacodigo($solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $solicitud[0]->codigo_creado, $descriocion, $ficha_tec, CORREO_PRODUCCION_GRAF, CORREO_IMPRESION_VARIABLE);
                 $respuesta = [
                     'status' => 1,
-                    'msg' => 'El código <b>'.$_POST['codigo'].'</b> de la solicitud ' . $_POST['id_solicitud'] . ' fue creado exitosamente y se envio un correo al asesor.',
+                    'msg' => 'El código <b>' . $_POST['codigo'] . '</b> de la solicitud ' . $_POST['id_solicitud'] . ' fue creado exitosamente y se envio un correo al asesor.',
                 ];
-            } else {
+            } else { // cierre por rechazo
+                $correo_envio = Envio_Correo::correo_respuesta_rechazocodigo($solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $_POST["observaciones"], $solicitud[0]->correo, '');
+                $correo_copia = Envio_Correo::correo_respuesta_rechazocodigo($solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $_POST["observaciones"], CORREO_PRODUCCION_GRAF, CORREO_IMPRESION_VARIABLE);
                 $respuesta = [
-                    'status' => -1,
-                    'msg' => '¡Ups ocurrio un problema intenta de nuevo!',
+                    'status' => 1,
+                    'msg' => 'Esta solicitud fue rechazada exitosamente y se envio un correo al asesor.',
                 ];
             }
+        } else {
+            $respuesta = [
+                'status' => -1,
+                'msg' => '¡Ups ocurrio un problema intenta de nuevo!',
+            ];
+        }
         echo json_encode($respuesta);
         return;
     }
 
-    public function consulta_estado_solicitud() {
+    public function consulta_estado_solicitud()
+    {
         header('Content-Type: application/json');
         $solicitud = $this->SolicitudesDisenoDAO->consulta_data_solicitud($_POST["data"]['id_solicitud']);
         $codigo = $this->productosDAO->cons_prod_codigo($_POST['codigo']);
@@ -85,18 +99,18 @@ final class SolicitudesPendientesControlador extends GenericoControlador
                 'status' => -1,
                 'msg' => 'Esta solicitud ya fue cerrada'
             ];
-        } else if (empty($codigo)) {// no existe el codigo
+        } else if (empty($codigo)) { // no existe el codigo
             $respuesta = [
                 'status' => -2,
                 'msg' => 'Este código no ha sido creado, ¿Desea crearlo?'
             ];
-        }else{// el producto ya esta creado 
+        } else { // el producto ya esta creado 
             $respuesta = [
                 'status' => 1,
                 'msg' => 'El código ya está creado, cerraremos el caso y notificaremos por correo al asesor'
             ];
         }
         echo json_encode($respuesta);
-        return;        
+        return;
     }
 }

@@ -361,9 +361,9 @@ var agrega_edita_productos = function () {
                             if (cod_url == codigo.id_solicitud) {// hacemos los cambios de la tabla de cierre
                                 codigo.codigo = $('#codigo_producto').val();
                                 $.ajax({
-                                    "url": `${PATH_NAME}/diseno/cirre_solicitud_cod`,
+                                    "url": `${PATH_NAME}/diseno/cirre_solicitud_cod`,// falta mirar los parametros de este cierre
                                     "type": 'POST',
-                                    "data": codigo, 
+                                    "data":  { codigo: codigo, id_solicitud: codigo.id_solicitud, cierre: 'cierre' }, 
                                     "success": function (res) {
                                         alertify.alert('Cierre de solicitud', res.msg,
                                             function () {

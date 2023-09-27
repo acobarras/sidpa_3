@@ -571,13 +571,13 @@ class Envio_Correo
         return self::php_miler($body, $remite, $subject, $correo, $correo2 = '');
     }
 
-    public static function correo_solicitud_creacioncliente($nit, $razon, $asesor,$correo, $adjunto) 
+    public static function correo_solicitud_creacioncliente($nit, $razon, $asesor, $correo, $adjunto)
     {
         $body = "<div style='width: 90%; border-radius: 0.5em; font-family: Arial, Helvetica, sans-serif; margin: 3%;''>
                     <p>Buen día,<br><br>Solicito su amable colaboración creando el siguiente cliente: <br><br>
-                        <b>NIT: </b>".$nit." <br>
-                        <b>Razón Social: </b> ".$razon." <br>
-                        <b>Asesor: </b> ".$asesor." <br><br>
+                        <b>NIT: </b>" . $nit . " <br>
+                        <b>Razón Social: </b> " . $razon . " <br>
+                        <b>Asesor: </b> " . $asesor . " <br><br>
                         Adjunto Rut para su debida verificación. <br><br>
                         <i><b>*por favor confirmar cualquier novedad directamente al asesor y no responder este correo.*</b></i>
                     </p>
@@ -587,12 +587,14 @@ class Envio_Correo
         return self::php_miler($body, $remite, $subject, $correo, $correo2 = '', $adjunto);
     }
 
-    public static function correo_respuesta_creacodigo($asesor, $id_solicitud, $nit, $nombre_empresa, $codigo, $correo) 
+    public static function correo_respuesta_creacodigo($asesor, $nit, $nombre_empresa, $codigo, $descriocion, $ficha_tec, $correo, $correo2)
     {
         $body = "<div style='width: 90%; border-radius: 0.5em; font-family: Arial, Helvetica, sans-serif; margin: 3%;'>
             <p>Buen día $asesor,<br><br><br>
-                Su solicitud de creación de código, para el cliente <b>$nit - $nombre_empresa</b> fue resuelta: <br><br>
-                <b>Código: </b>$codigo<br><br>
+                Su solicitud de creación de código, para el cliente <b>" . $nit . " - " . $nombre_empresa . "</b> fue resuelta: <br><br>
+                <b>Código: </b>" . $codigo . "<br>
+                <b>Descripción: </b>" . $descriocion . "<br>
+                <b>Fucha técnica: </b>" . $ficha_tec . "<br><br>
                 Quedo atento a sus comentarios <br>
                 Atentamente <br><br>
                 <b>Diseño Grafico</b><br><br>
@@ -602,7 +604,27 @@ class Envio_Correo
         //-----------------------------------------------------------------------------
         $subject = "Creación de código SIDPA";
         $remite = '' . NOMBRE_EMPRESA . ' Creación de código ';
-        return self::php_miler($body, $remite, $subject, $correo, $correo2 = '');
+        return self::php_miler($body, $remite, $subject, $correo, $correo2);
+    }
+
+    public static function correo_respuesta_rechazocodigo($asesor, $nit, $nombre_empresa, $observaciones, $correo, $correo2)
+    {
+        $body = "<div style='width: 90%; border-radius: 0.5em; font-family: Arial, Helvetica, sans-serif; margin: 3%;'>
+            <p>Buen día $asesor,<br><br><br>
+                Su solicitud de creación de código, para el cliente <b>$nit - $nombre_empresa</b> fue rechazada: <br><br>
+                <b>Motivo de rechazo: </b>No cumple con las especificaciones<br><br>
+                <b>Observaciones: </b>$observaciones<br><br><br>
+                <b>Por favor ingresar una nueva solicitud con los parámetros adecuados para continuar con el proceso </b><br><br>
+                Quedo atento a sus comentarios <br>
+                Atentamente <br><br>
+                <b>Diseño Grafico</b><br><br>
+                <i><b>*por favor confirmar cualquier novedad directamente al area y no responder este correo.*</b></i>
+            </p>
+        </div>";
+        //-----------------------------------------------------------------------------
+        $subject = "Creación de código SIDPA";
+        $remite = '' . NOMBRE_EMPRESA . ' Creación de código ';
+        return self::php_miler($body, $remite, $subject, $correo, $correo2);
     }
 
     public static function pruebas()
