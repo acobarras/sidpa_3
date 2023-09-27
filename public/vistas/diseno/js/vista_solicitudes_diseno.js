@@ -2,6 +2,7 @@ $(document).ready(function () {
     consulta_codigos();
     cerrar_solicitud();
     creacion_producto();
+    rechazo_solicitud();
 });
 
 function consulta_codigos() {
@@ -53,7 +54,7 @@ function consulta_codigos() {
             { "data": "grafe.nombre" },
             {
                 "render": function (data, type, row) {
-                    var metros_lineales = ((row.cantidad * (row.alto + 3)) / (row.cavidades * 1000));
+                    var metros_lineales = ((row.cantidad * (parseFloat(row.alto) + 4)) / (row.cavidades * 1000));
                     return `<p><b>Cavidades:</b> ${row.cavidades}  <br><b>Cantidad:</b> ${row.cantidad} <br>
                     <b>Precio:</b> ${$.fn.dataTable.render.number('.', ',', 2, '$ ').display(row.precio)}  <br>
                     <b>M-Lineales:</b> ${metros_lineales} Aprox.<br>
@@ -70,22 +71,22 @@ function consulta_codigos() {
             }, //esto es un inpuit para diseño
             {
                 "render": function (data, type, row) {
-                    if (row.tipo_codigo == 1) {// codigo nuevo
-                        return `<center>
+                    var res = ` <center>
                                     <button type='button' title='Cerrar solicitud' class='btn btn-success btn-circle cerrar_solicitud' >
                                         <span class="fas fa-check"></span>
                                     </button>
+                                    <button type='button' title='Rechazar solicitud' class='btn btn-danger btn-circle rechazar_solicitud' >
+                                        <span class="fas fa-times"></span>
+                                    </button>
+                                <center>`
+                    if (row.tipo_codigo == 1) {// codigo nuevo
+                        res += `<center>
                                     <button type='button' id='ir_producto' title='Ir a crear producto' class='btn btn-info btn-circle ir_producto' >
                                         <span class="fas fa-upload"></span>
                                     </button>
                                 <center>`
-                    } else {
-                        return `<center>
-                                    <button type='button' title='Cerrar solicitud' class='btn btn-success btn-circle cerrar_solicitud' >
-                                        <span class="fas fa-check"></span>
-                                    </button>
-                                <center>`
                     }
+                    return res;
                 }
             }// en este boton de opciones vamos a enviar la data por el local storage (Y) para verla en la vista de crear producto
         ]
@@ -144,7 +145,7 @@ function cerrar_solicitud() {
                                 $.ajax({
                                     "url": `${PATH_NAME}/diseno/cirre_solicitud_cod`,
                                     "type": 'POST',
-                                    "data": { codigo: codigo, id_solicitud: data.id_solicitud },
+                                    "data": { codigo: codigo, id_solicitud: data.id_solicitud, cierre: 'cierre' },
                                     "success": function (res) {
                                         alertify.alert('Cierre de solicitud', res.msg,
                                             function () {
@@ -159,5 +160,40 @@ function cerrar_solicitud() {
                 }
             })
         }
+    })
+}
+
+// funcion para rechazar solicidudes
+function rechazo_solicitud() {// falta poner a cargar el boton de rechazo y recargar
+    $('#tb_solicitudes tbody').on("click", "button.rechazar_solicitud", function (e) {
+        e.preventDefault();
+        var data = $('#tb_solicitudes').DataTable().row($(this).parents("tr")).data();
+        var boton = $(this).parents("tr").find(".rechazar_solicitud")
+        alertify.confirm('Rechazar solicitud', '¿Desea continuar con el rechazo de esta solicitud?<br></br></div><label for="observaciones"><b>Motivo rechazo solicitud:</b></label><br> <textarea name="observaciones" id="observaciones" class="col-12" rows="7"></textarea><br><br></br>',
+            function () {
+                var observaciones = $('#observaciones').val();
+                if (observaciones != '') {
+                    boton.attr('disabled', 'true');
+                    boton.html('<span class="spinner-border spinner-border-sm"></span>');
+                    $.ajax({
+                        "url": `${PATH_NAME}/diseno/cirre_solicitud_cod`,
+                        "type": 'POST',
+                        "data": { codigo: 'rechazada', id_solicitud: data.id_solicitud, cierre: 'rechazo', observaciones: observaciones },
+                        "success": function (res) {
+                            alertify.alert('Cierre de solicitud', res.msg,
+                                function () {
+                                    $('#observaciones').val('');
+                                    $("#tb_solicitudes").DataTable().ajax.reload();
+                                }
+                            );
+                        }
+                    })
+                } else {
+                    alertify.error('¡Ingresa un motivo para rechazar la solicitud!');
+                }
+            },
+            function () {
+                alertify.error('Operación cancelada');
+            });
     })
 }
