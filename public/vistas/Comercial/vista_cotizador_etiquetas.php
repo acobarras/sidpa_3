@@ -114,6 +114,16 @@
                                                     NO <input type="radio" id="estfrio2" name="estfrio" value="2" checked="checked" />
                                                 </p>
                                             </div>
+                                            <label for="laminado" class="col-sm-2 col-form-label">LAMINADO:</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control" style="width: 100%;" id="laminado" name="laminado" required>
+                                                <option value="0">NO</option>
+                                                <option value="2">BRILLANTE</option>
+                                                <option value="3">MATE</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 form-group row">
                                             <label for="cantidad" class="col-sm-2 col-form-label">Q. SOLICITADA:</label>
                                             <div class="col-sm-4">
                                                 <input class="form-control" type="text" id="cantidad" name="cantidad" required />

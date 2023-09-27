@@ -29,7 +29,7 @@ var cotizar_etiquetas = function () {
         if ($('#error_cotiza').is(':visible')) {
             $('#error_cotiza').hide();
         }
-        var exepcion = ['selec_adh', 'selec_precio', 'tintas'];
+        var exepcion = ['selec_adh', 'selec_precio', 'tintas','laminado'];
         var valida = validar_formulario(form, exepcion);
         if (valida) {
             var obj_inicial = $("#enviar_cotiza").html();

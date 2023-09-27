@@ -220,6 +220,7 @@ abstract class GenericoControlador
                 "estcalor" => 2,
                 "estfrio" => 2,
                 "cantidad" => $cantidad_cotiza,
+                "laminado" => $datos_tinta[0]->variable,
             ];
             $datos_etiq = self::calculo_cotizador_etiquetas($data, $avance);
             $datos_etiq['tamano'] = $ancho . 'X' . $alto_tex;
@@ -241,6 +242,7 @@ abstract class GenericoControlador
         $estcalor = $datos["estcalor"];
         $estfrio = $datos["estfrio"];
         $cantidad_cotizada = $datos["cantidad"];
+        $laminado = $datos["laminado"];
         $aumento = 3; // Es la constante del gap a utilizar
         $ml = 1000;
         if (isset($datos["cantestcalor"])) {
@@ -290,6 +292,13 @@ abstract class GenericoControlador
                 $valor_material = $valor_material + $cinta_frio;
             }
             $tintas = $tintas + 1;
+        }
+        if ($laminado != 0) {
+            if ($laminado == 2) {
+                $valor_material = $valor_material + VALORES_COTIZADOR['laminado_brillante'];
+            } else {
+                $valor_material = $valor_material + VALORES_COTIZADOR['laminado_mate'];
+            }
         }
         $ancho_m2 = ($ancho + $aumento) / 1000;
         $avance_m2 = $avance / 1000;
