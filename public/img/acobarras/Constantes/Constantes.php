@@ -204,6 +204,8 @@ define(
         'troquel_plano' => 220000,
         'precio_clice' => 80000,
         'tiempo_cobro_pre_prensa' => 3,
+        'laminado_brillante' => 550,
+        'laminado_mate' => 890,
     )
 );
 

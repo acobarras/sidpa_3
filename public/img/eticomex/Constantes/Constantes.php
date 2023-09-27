@@ -204,6 +204,8 @@ define(
         'troquel_rotativo' => 1500000,
         'troquel_plano' => 220000,
         'precio_clice' => 80000, // Cinta estampado al calor
+        'laminado_brillante' => 550,
+        'laminado_mate' => 890,
     )
 );
 
