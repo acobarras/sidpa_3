@@ -24,3 +24,4 @@ define('ID_COMISIONES_CARTERA', ''); //Id CARTERA CONTABILIDAD
 define('CORREO_CREACION_CLIENTE', 'liz.torregrosa@eticaribe.com.co'); //CORREO DE CREACION CLIENTES
 define('REQ_ORDEN', '');  //Esto es para que el campo de orden de compra este siempre en SI, si lo desea dejar para si y no quitar el disabled y dejarlo vacio
 define('CORREO_IMPRESION_VARIABLE','');// CORREO para enviar copias a diseño
+define('DIAS_CHEQUEO_VEHICULO', '31');

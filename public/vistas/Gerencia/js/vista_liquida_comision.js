@@ -21,7 +21,13 @@ var cambio_consulta = function () {
                     alertify.error('Operacion Cancelada');
                 }
             );
-        } else {
+        } else if (cambio == 'con_pago') {
+            $('#periodo_liquida').css('display', 'none');
+            $('#rango_consulta').css("display", '');
+            $('#fecha_inicial').val('');
+            $('#fecha_fin').val('');
+        }
+        else {
             $('#periodo_liquida').css('display', '');
             $('#rango_consulta').css('display', 'none');
             $('#periodo').val('0').trigger('change');
@@ -57,6 +63,7 @@ var cargar_tabla = function (data) {
             { "data": "nit" },
             { "data": "nombre_empresa" },
             { "data": "fecha_factura" },
+            { "data": "fecha_vencimiento" },
             {
                 "data": "empresa",
                 render: function (data, type, row) {
@@ -94,6 +101,9 @@ var cargar_tabla = function (data) {
             { "data": "total_factura", render: $.fn.dataTable.render.number(',', '.', 2, '$ ') },
             { "data": "nombre_estado" },
             { "data": "dias_dados" },
+            { "data": "dias_vencimiento" },
+            { "data": "sumatoria_tecsop", render: $.fn.dataTable.render.number(',', '.', 2, '$ ') },
+            { "data": "subtotal", render: $.fn.dataTable.render.number(',', '.', 2, '$ ') },
         ],
         footerCallback: function (row, data, start, end, display) {
             var api = this.api();
@@ -139,6 +149,9 @@ var ver_comision = function () {
             }
             if (form[0].value == 'sin_pago') {
                 exepcion = ['periodo', 'fecha_inicial', 'fecha_fin'];
+            }
+            if (form[0].value == 'con_pago') {
+                exepcion = ['periodo'];
             }
             var valida_form = validar_formulario(form, exepcion);
             if (valida_form) {

@@ -4,6 +4,7 @@ $(document).ready(function () {
     cambio_contraseña_user();
     prioridades();
     $("#prioridades").modal("show");
+    $("#chequeo").modal("show");
 });
 
 // FUNCIÓN PARA DESPLEGAR MENU GLOBAL (SIDEBAR) LATERAL .

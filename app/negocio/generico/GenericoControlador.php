@@ -132,11 +132,9 @@ abstract class GenericoControlador
             array_push($dato_trm, $Objeto);
         }
         if ($usuario->getId_roll() == 11) {
-            $condi = 'WHERE id_usuario=' . $usuario->getId_usuario();
-            $transportadores = $this->VehiculosDAO->consultar_usu_vehiculos($condi);
+            $chequeo = $this->VehiculosDAO->consultar_chequeos($usuario->getId_usuario());
         } else {
-            $condi = '';
-            $transportadores = $this->VehiculosDAO->consultar_usu_vehiculos($condi);
+            $chequeo = $this->VehiculosDAO->consultar_chequeos($usuario->getId_usuario());
         }
 
         if ($usuario->getId_roll() == 1) {
@@ -152,7 +150,7 @@ abstract class GenericoControlador
                     "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
                     "consulta_prioridades" => $datos_prioridad,
                     "modal" => $muestra,
-                    "transportadores" => $transportadores,
+                    "chequeo" => $chequeo,
                 ]
             );
         } else {
@@ -172,7 +170,7 @@ abstract class GenericoControlador
                     "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
                     "consulta_prioridades" => $datos_prioridad,
                     "modal" => $muestra,
-                    "transportadores" => $transportadores,
+                    "chequeo" => $chequeo,
                 ]
             );
         }

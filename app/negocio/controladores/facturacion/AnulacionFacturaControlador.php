@@ -57,6 +57,11 @@ class AnulacionFacturaControlador extends GenericoControlador
                 'data_factura' => $factura,
                 'items' => $item,
             ];
+        } else {
+            $respu = [
+                'status' => -1,
+                'msg' => 'Lo sentimos el numero de factura digitado no tiene datos'
+            ];
         }
         echo json_encode($respu);
         return;
@@ -108,7 +113,6 @@ class AnulacionFacturaControlador extends GenericoControlador
                     }
                 }
                 // agregar seguimiento
-                print_r($items);
                 foreach ($items as $value_seg) {
                     // 102 es la actividad del cambio de factura
                     $seguimiento_op = [

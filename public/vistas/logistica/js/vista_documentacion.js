@@ -6,6 +6,7 @@ $(document).ready(function () {
     consulta_carta();
     agregar_serial();
     descarga_cartas();
+    item_carta();
 });
 
 var consultar_pedido = function () {
@@ -178,7 +179,7 @@ var consulta_carta = function () {
 
 var items_carta = [];
 
-var items_certificado = function () {
+var item_carta = function () {
     $('#tabla_carta_1 tbody').on("click", "input.agrupar_items", function () {
         var data = $("#tabla_carta_1").DataTable().row($(this).parents("tr")).data();
         if (data.n_produccion == 0) {
@@ -298,7 +299,7 @@ var descarga_cartas = function () {
                 success: function (res) {
                     if (res.size == 1) {
                         alertify.error("Lo sentimos este producto no contiene meses de garantia.");
-                    } else if(res.size == 0){
+                    } else if (res.size == 0) {
                         alertify.error("Lo sentimos este documento ya contiene un carta generada.");
                     } else {
                         var a = document.createElement('a');
