@@ -117,7 +117,7 @@
                         </div>
                         <div class="col-12">
                             <div class="row">
-                                <a style="color:white" class="col-12" href="<?= RUTA_PRINCIPAL ?>/cerrar_sesion">
+                                <a style="color:white" class="col-12" id="cerrar_sesion" href="<?= RUTA_PRINCIPAL ?>/cerrar_sesion">
                                     <strong class="col-10">Cerrar Sesión </strong>
                                     <i class="fa fa-power-off"></i>
                                 </a>
@@ -219,38 +219,33 @@
                 </div>
             </div>
         <?php } ?>
-        <!-- <?php
+        <?php
             if ($_SESSION['usuario']->getId_roll() == 11) {
-                if (empty($transportadores)) { ?>
-                <div class="modal fade" id="transportadores" tabindex="-1" aria-labelledby="transportadoresLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-xl">
-                        <form class="modal-content">
-                            <div class="modal-header header_aco">
-                                <img class="img-fluid mx-2" alt="Responsive image" src="<?= CARPETA_IMG ?>/img_sidpa/triangulo_aco.gif" width="75" style="border-right:1px solid #e7e7e7;border-radius:2px">
-                                <h5 class="modal-title text-center" id="transportadoresLabel">Prioridades </h5>
-                                <i class="bi bi-x" data-bs-dismiss="modal" style="font-size: 26px;"></i>
+                if (!empty($chequeo)) {
+                    $fecha_chequeo = date("d-m-Y", strtotime($chequeo[0]->fecha_crea . "+" . DIAS_CHEQUEO_VEHICULO . "days"));
+                    if ($fecha_chequeo >= date('d-m-Y')) { ?>
+                    <div class="modal fade" id="chequeo" tabindex="-1" data-bs-backdrop="static" aria-labelledby="chequeoLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header header_aco">
+                                    <img class="img-fluid mx-2" alt="Responsive image" src="<?= CARPETA_IMG ?>/img_sidpa/triangulo_aco.gif" width="75" style="border-right:1px solid #e7e7e7;border-radius:2px">
+                                    <h5 class="modal-title text-center" id="chequeoLabel">ALERTA SIDPA </h5>
+                                    <i class="bi bi-x" style="font-size: 26px;"></i>
+                                </div>
+                                <div class="modal-body">
+                                    <h5 class="text-danger text-center">Esta alerta es para realizar el chequeo periódico del vehículo. Por favor solicitar el chequeo para continuar. Recuerde que esta alerta no se cerrara hasta que se haya realizado el procedimiento.</h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" id="cerrar_sesion_modal">
+                                        <a style="color:white" class="col-12" id="cerrar_sesion" href="<?= RUTA_PRINCIPAL ?>/cerrar_sesion">
+                                            <strong class="col-10">Cerrar</strong>
+                                        </a>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <table id="tb_prioridades" style="background: white" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
-                                    <thead style="background:#0d1b50;color:white">
-                                        <tr>
-                                            <th>Id Prioridad</th>
-                                            <th>Prioridad</th>
-                                            <th>Fecha Creación</th>
-                                            <th>Solicitado por:</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            </div>
-                        </form>
+                        </div>
+                <?php }
+                } ?>
                     </div>
-                <?php } else { ?>
-                    <h1>LLENO</h1>
-                <?php } ?>
-                </div>
-            <?php  } ?> -->
-        <?php } ?>
+                <?php  } ?>
+            <?php } ?>

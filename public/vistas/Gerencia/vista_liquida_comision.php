@@ -20,6 +20,7 @@
                                     <option value="0"></option>
                                     <option value="cambio">Consulta Mensual</option>
                                     <option value="sin_pago">Consulta sin Pago</option>
+                                    <option value="con_pago">Consulta con Pago</option>
                                     <?php foreach ($asesores as $asesor) { ?>
                                         <option value="<?= $asesor->id_usuario ?>"><?= $asesor->nombre ?> <?= $asesor->apellido ?></option>
                                     <?php } ?>
@@ -56,6 +57,7 @@
                                         <th>Nit</th>
                                         <th>Empresa</th>
                                         <th>Fecha Factura</th>
+                                        <th>Fecha Vencimiento</th>
                                         <th>Pertenece a:</th>
                                         <th>Fecha Pago</th>
                                         <th>Asesor</th>
@@ -70,6 +72,9 @@
                                         <th>Total</th>
                                         <th>Estado</th>
                                         <th>Dias Credito</th>
+                                        <th>Dias Vencido</th>
+                                        <th>Sumatoria Tecno y Soporte</th>
+                                        <th>Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tfoot>

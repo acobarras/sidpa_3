@@ -446,139 +446,209 @@ define(
     array(
         0 => [
             'pregunta' => '¿El nivel de líquido de frenos se encuentra entre el máximo y el mínimo?',
-            'tipo' => 'select', 'name' => 'liquido_frenos', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'liquido_frenos', 'respu_valida' => 'si'
         ],
         1 => [
             'pregunta' => '¿El nivel del líquido de la dirección (hidráulico) se encuentra entre el máximo y el mínimo?',
-            'tipo' => 'select', 'name' => 'liquido_direccion', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'liquido_direccion', 'respu_valida' => 'si'
         ],
         2 => [
             'pregunta' => '¿El nivel del líquido de refrigeración se encuentra entre el máximo y el mínimo?',
-            'tipo' => 'select', 'name' => 'liquido_refrigeracion', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'liquido_refrigeracion', 'respu_valida' => 'si'
         ],
         3 => [
             'pregunta' => '¿El nivel del líquido del limpiabrisas se encuentra entre el máximo y el mínimo?',
-            'tipo' => 'select', 'name' => 'liquido_limpiabrisas', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'liquido_limpiabrisas', 'respu_valida' => 'si'
         ],
         4 => [
             'pregunta' => '¿Los limpiaparabrisas funcionan adecuadamente (movimiento, aspersión de líquido y escobillas)?',
-            'tipo' => 'select', 'name' => 'funciona_limpiabrisas', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'funciona_limpiabrisas', 'respu_valida' => 'si'
         ],
         5 => [
             'pregunta' => '¿Las luces direccionales derecha e izquierda funcionan en la parte frontal y posterior?',
-            'tipo' => 'select', 'name' => 'direccionales', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'direccionales', 'respu_valida' => 'si'
         ],
         6 => [
             'pregunta' => '¿Las luces de parqueo, freno, bajas, altas y cocuyos funcionan?',
-            'tipo' => 'select', 'name' => 'luces', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'luces', 'respu_valida' => 'si'
         ],
         7 => [
             'pregunta' => '¿Todas las puertas del vehículo abren, cierran y cuentan con sistema funcional para asegurarlas?',
-            'tipo' => 'select', 'name' => 'puertas', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'puertas', 'respu_valida' => 'si'
         ],
         8 => [
             'pregunta' => '¿El freno de mano y de pedal responden al activarlos?',
-            'tipo' => 'select', 'name' => 'freno_mano', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'freno_mano', 'respu_valida' => 'si'
         ],
         9 => [
             'pregunta' => '¿La dirección responde al maniobrar el volante?',
-            'tipo' => 'select', 'name' => 'direccion_volante', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'direccion_volante', 'respu_valida' => 'si'
         ],
         10 => [
             'pregunta' => '¿El pito suena al activarlo en el volante?',
-            'tipo' => 'select', 'name' => 'pito', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'pito', 'respu_valida' => 'si'
         ],
         11 => [
             'pregunta' => '¿Se detectan fugas de aceite o agua en la inspección visual del motor o debajo del vehículo?',
-            'tipo' => 'select', 'name' => 'fugas', 'respu_valida' => '2'
+            'tipo' => 'select', 'name' => 'fugas', 'respu_valida' => 'no'
         ],
         12 => [
             'pregunta' => '¿Se presentan abolladuras o perforaciones en las latas del vehículo?',
-            'tipo' => 'select', 'name' => 'abolladuras', 'respu_valida' => '2'
+            'tipo' => 'select', 'name' => 'abolladuras', 'respu_valida' => 'no'
         ],
         13 => [
             'pregunta' => '¿Se identifican peladuras o desprendimientos de pintura mayores a 5 cm de diámetro?',
-            'tipo' => 'select', 'name' => 'desprendimientos', 'respu_valida' => '2'
+            'tipo' => 'select', 'name' => 'desprendimientos', 'respu_valida' => 'no'
         ],
         14 => [
             'pregunta' => '¿El cinturón se expande y retrae adecuadamente y se asegura la lengüeta metálica en el anclaje?',
-            'tipo' => 'select', 'name' => 'cinturon_funcional', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'cinturon_funcional', 'respu_valida' => 'si'
         ],
         15 => [
             'pregunta' => '¿Se presenta separación entre la zona de carga y la zona de conducción?',
-            'tipo' => 'select', 'name' => 'separacion', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'separacion', 'respu_valida' => 'si'
         ],
         16 => [
             'pregunta' => '¿Se detectan productos alimenticios o químicos en la zona de carga?',
-            'tipo' => 'select', 'name' => 'estado_zona_carga', 'respu_valida' => '2'
+            'tipo' => 'select', 'name' => 'estado_zona_carga', 'respu_valida' => 'no'
         ],
         17 => [
             'pregunta' => '¿El vehículo se encuentra aseado (lavado y limpieza general a nivel interno y externo)?',
-            'tipo' => 'select', 'name' => 'vehiculo_aseado', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'vehiculo_aseado', 'respu_valida' => 'si'
         ],
         18 => [
             'pregunta' => '¿Evaluación visual de las llantas (no se notan desinfladas ni sin labrado)?',
-            'tipo' => 'select', 'name' => 'estado_llantas', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'estado_llantas', 'respu_valida' => 'si'
         ],
         19 => [
             'pregunta' => '¿Cuenta con llanta de repuesto?',
-            'tipo' => 'select', 'name' => 'llanta_repuesto', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'llanta_repuesto', 'respu_valida' => 'si'
         ],
         20 => [
             'pregunta' => '¿Cuenta con gato hidraulico?',
-            'tipo' => 'select', 'name' => 'gato_hidraulico', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'gato_hidraulico', 'respu_valida' => 'si'
         ],
         21 => [
             'pregunta' => '¿Cuenta con guantes?',
-            'tipo' => 'select', 'name' => 'guantes', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'guantes', 'respu_valida' => 'si'
         ],
         22 => [
             'pregunta' => '¿Cuenta con cruceta?',
-            'tipo' => 'select', 'name' => 'cruceta', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'cruceta', 'respu_valida' => 'si'
         ],
         23 => [
             'pregunta' => '¿Cuenta con dos tacos?',
-            'tipo' => 'select', 'name' => 'tacos', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'tacos', 'respu_valida' => 'si'
         ],
         24 => [
             'pregunta' => '¿Cuenta con señales reflectivas o triángulos?',
-            'tipo' => 'select', 'name' => 'señales', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'senales', 'respu_valida' => 'si'
         ],
         25 => [
             'pregunta' => '¿Cuenta con chaleco reflectivo?',
-            'tipo' => 'select', 'name' => 'chaleco', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'chaleco', 'respu_valida' => 'si'
         ],
         26 => [
             'pregunta' => '¿Cuenta con linterna?',
-            'tipo' => 'select', 'name' => 'linterna', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'linterna', 'respu_valida' => 'si'
         ],
         27 => [
             'pregunta' => '¿Cuenta con botiquín?',
-            'tipo' => 'select', 'name' => 'botiquin', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'botiquin', 'respu_valida' => 'si'
         ],
         28 => [
             'pregunta' => '¿Cuenta con herramienta básica/Llave expansión?',
-            'tipo' => 'select', 'name' => 'herramienta', 'respu_valida' => '1'
+            'tipo' => 'select', 'name' => 'herramienta', 'respu_valida' => 'si'
         ],
         29 => [
             'pregunta' => '¿Fecha de vencimiento del extintor?',
-            'tipo' => 'input', 'name' => 'vencimiento_extintor', 'respu_valida' => '1'
+            'tipo' => 'input', 'name' => 'vencimiento_extintor', 'respu_valida' => 'si'
         ],
         30 => [
             'pregunta' => '¿Fecha de vencimiento SOAT?',
-            'tipo' => 'input', 'name' => 'vencimiento_soat', 'respu_valida' => '1'
+            'tipo' => 'input', 'name' => 'vencimiento_soat', 'respu_valida' => 'si'
         ],
         31 => [
             'pregunta' => '¿Fecha de vencimiento de la revisión tecno mecánica?',
-            'tipo' => 'input', 'name' => 'rv_tecnomecanica', 'respu_valida' => '1'
+            'tipo' => 'input', 'name' => 'rv_tecnomecanica', 'respu_valida' => 'si'
         ],
         32 => [
             'pregunta' => '¿Fecha de vencimiento de la licencia de conducción?',
-            'tipo' => 'input', 'name' => 'vencimiento_licencia', 'respu_valida' => '1'
+            'tipo' => 'input', 'name' => 'vencimiento_licencia', 'respu_valida' => 'si'
         ],
         33 => [
             'pregunta' => '¿Fecha ultimo mantenimiento?',
-            'tipo' => 'input', 'name' => 'mantenimiento', 'respu_valida' => '1'
+            'tipo' => 'input', 'name' => 'mantenimiento', 'respu_valida' => 'si'
+        ],
+    )
+);
+
+define(
+    'CHEQUEO_MOTO',
+    array(
+        0 => [
+            'pregunta' => '¿El nivel de líquido de frenos se encuentra entre el máximo y el mínimo?',
+            'tipo' => 'select', 'name' => 'liquido_frenos_moto', 'respu_valida' => 'si'
+        ],
+        1 => [
+            'pregunta' => '¿Las luces direccionales derecha e izquierda funcionan en la parte frontal y posterior?',
+            'tipo' => 'select', 'name' => 'direccionales_moto', 'respu_valida' => 'si'
+        ],
+        2 => [
+            'pregunta' => '¿Las luces de freno, bajas y altas funcionan?',
+            'tipo' => 'select', 'name' => 'luces_moto', 'respu_valida' => 'si'
+        ],
+        3 => [
+            'pregunta' => '¿El freno delantero y tracero responden al activarlos?',
+            'tipo' => 'select', 'name' => 'freno_moto', 'respu_valida' => 'si'
+        ],
+        4 => [
+            'pregunta' => '¿El pito suena al activarlo?',
+            'tipo' => 'select', 'name' => 'pito_moto', 'respu_valida' => 'si'
+        ],
+        5 => [
+            'pregunta' => '¿Se detectan fugas liquido en la inspección visual del motor o debajo del vehículo?',
+            'tipo' => 'select', 'name' => 'fugas_moto', 'respu_valida' => 'no'
+        ],
+        6 => [
+            'pregunta' => '¿Se presentan abolladuras o perforaciones en las latas del vehículo?',
+            'tipo' => 'select', 'name' => 'abolladuras_moto', 'respu_valida' => 'no'
+        ],
+        7 => [
+            'pregunta' => '¿Se identifican peladuras o desprendimientos de pintura mayores a 5 cm de diámetro?',
+            'tipo' => 'select', 'name' => 'peladuras_moto', 'respu_valida' => 'no'
+        ],
+        8 => [
+            'pregunta' => '¿El vehículo se encuentra aseado (lavado y limpieza general a nivel interno y externo)?',
+            'tipo' => 'select', 'name' => 'aseo_moto', 'respu_valida' => 'si'
+        ],
+        9 => [
+            'pregunta' => '¿Evaluación visual de las llantas (no se notan desinfladas ni sin labrado)?',
+            'tipo' => 'select', 'name' => 'llantas_moto', 'respu_valida' => 'si'
+        ],
+        10 => [
+            'pregunta' => '¿Cuenta con casco y visera?',
+            'tipo' => 'select', 'name' => 'casco', 'respu_valida' => 'si'
+        ],
+        11 => [
+            'pregunta' => '¿Cuenta con arnes para carga?',
+            'tipo' => 'select', 'name' => 'arnes_moto', 'respu_valida' => 'si'
+        ],
+        12 => [
+            'pregunta' => '¿Fecha de vencimiento SOAT?',
+            'tipo' => 'input', 'name' => 'fecha_soat_moto', 'respu_valida' => 'si'
+        ],
+        13 => [
+            'pregunta' => '¿Fecha de vencimiento de la revisión tecno mecánica?',
+            'tipo' => 'input', 'name' => 'tecno_moto', 'respu_valida' => 'si'
+        ],
+        14 => [
+            'pregunta' => '¿Fecha de vencimiento de la licencia de conducción?',
+            'tipo' => 'input', 'name' => 'vencimiento_licencia', 'respu_valida' => 'si'
+        ],
+        15 => [
+            'pregunta' => '¿Fecha ultimo mantenimiento?',
+            'tipo' => 'input', 'name' => 'mantenimiento_moto', 'respu_valida' => 'si'
         ],
     )
 );

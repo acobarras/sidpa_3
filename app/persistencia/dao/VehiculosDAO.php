@@ -37,4 +37,16 @@ class VehiculosDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function consultar_chequeos($id_user)
+    {
+        $sql = "SELECT t1.nombre,t1.apellido,t2.*,t3.id_chequeo FROM usuarios t1 
+        INNER JOIN vehiculos t2 ON t2.id_usuario=t1.id_usuario 
+        INNER JOIN chequeo_vehicular t3 ON t2.id_vehiculo=t3.id_vehiculo 
+        WHERE t1.id_roll=11 AND t1.id_usuario=$id_user AND t3.id_chequeo=(SELECT MAX(chequeo_vehicular.id_chequeo) FROM chequeo_vehicular 
+        WHERE t2.id_vehiculo=chequeo_vehicular.id_vehiculo)";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

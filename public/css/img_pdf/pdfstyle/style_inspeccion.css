@@ -1,0 +1,42 @@
+@page {
+    margin: 0px 15px;
+}
+
+#imgtitulo {
+    width: 100%;
+}
+
+header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 30px;
+    text-align: center;
+    line-height: 5px;
+}
+body{
+    margin-top: 20mm;
+    margin-bottom: 20mm;
+}
+
+.titulo,
+.contenido {
+    margin-left: 1.3cm;
+    margin-right: 1.3cm;
+}
+
+html {
+    font-family: sans-serif;
+    text-align: justify;
+    font-size: 0.9rem;
+}
+
+table,
+td {
+    border: 1px solid black;
+}
+
+table {
+    border-collapse: collapse;
+}

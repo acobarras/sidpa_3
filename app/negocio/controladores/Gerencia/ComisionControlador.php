@@ -8,6 +8,7 @@ use MiApp\persistencia\dao\PeriodoCorteDAO;
 use MiApp\persistencia\dao\PortafolioDAO;
 use MiApp\negocio\util\Validacion;
 use MiApp\persistencia\dao\UsuarioDAO;
+use DateTime;
 
 class ComisionControlador extends GenericoControlador
 {
@@ -46,6 +47,10 @@ class ComisionControlador extends GenericoControlador
         $id_persona_asesor = '';
         if ($asesor == 'sin_pago') {
             $condicion = 'WHERE t1.estado_portafolio in(1,2)';
+        } elseif ($asesor == 'con_pago') {
+            $fecha_inicial = $_POST['fecha_inicial'];
+            $fecha_fin = $_POST['fecha_fin'];
+            $condicion = "WHERE t1.fecha_pago!='' AND t1.estado_portafolio=3 AND t1.fecha_pago >= '$fecha_inicial' AND t1.fecha_pago <= '$fecha_fin'";
         } elseif ($asesor == 'cambio') {
             $fecha_inicial = $_POST['fecha_inicial'];
             $fecha_fin = $_POST['fecha_fin'];
@@ -69,7 +74,19 @@ class ComisionControlador extends GenericoControlador
         }
         $data = $this->PortafolioDAO->Consultaportafolio($condicion);
         foreach ($data as $value) {
+            if ($value->fecha_pago == '') {
+                $dias = 'N/A';
+            } else {
+                $fecha_vencimiento = date_create($value->fecha_vencimiento);
+                $fecha_pago = date_create($value->fecha_pago);
+                $interval = date_diff($fecha_vencimiento, $fecha_pago);
+                $interval->format('%R%a');
+                $dias = $interval->days;
+            }
             $value->nombre_estado = ESTADO_PORTAFOLIO[$value->estado_portafolio];
+            $value->dias_vencimiento = $dias;
+            $value->subtotal = $value->total_cintas + $value->total_etiquetas + $value->total_alquiler + $value->total_tecnologia + $value->total_soporte;
+            $value->sumatoria_tecsop =  $value->total_tecnologia + $value->total_soporte;
         }
         echo json_encode($data);
         return;

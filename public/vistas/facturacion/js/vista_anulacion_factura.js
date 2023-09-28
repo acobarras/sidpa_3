@@ -13,7 +13,9 @@ var consulta_factura = function () {
                 type: "POST",
                 data: form,
                 success: function (res) {
-                    if (res != '') {
+                    if (res.status == -1) {
+                        alertify.error(res.msg);
+                    } else {
                         $('#boton_anular').html(`<button class="btn btn-danger btn-lg boton-x btn_anular" id="btn_anular" type="submit" data_fact='${JSON.stringify(res)}'>Anular</button>`)
                         enviar_anulacion();
                         var table = $("#tab_informe_facturas").DataTable({
@@ -68,8 +70,6 @@ var consulta_factura = function () {
                                 },
                             ],
                         });
-                    } else {
-                        alertify.error('No existe esta factura');
                     }
                 }
             });
@@ -80,21 +80,27 @@ var consulta_factura = function () {
 var enviar_anulacion = function () {
     $('.btn_anular').on('click', function () {
         var data_fac = JSON.parse($(this).attr('data_fact'));
-        var obj_inicial = $(`#btn_anular`).html();
-        btn_procesando_tabla(`btn_anular`);
-        $.ajax({
-            url: `${PATH_NAME}/envia_anulacion`,
-            type: "POST",
-            data: { data_fac },
-            success: function (res) {
-                btn_procesando_tabla(`btn_anular`, obj_inicial, 1);
-                if (res.status == -1) {
-                    alertify.error(res.msg);
-                } else {
-                    alertify.success(res.msg);
-                    location.reload();
-                }
-            }
-        });
+        alertify.confirm('Anulacion Factura', 'Esta seguro de eliminar esta factura?.',
+            function () {
+                var obj_inicial = $(`#btn_anular`).html();
+                btn_procesando_tabla(`btn_anular`);
+                $.ajax({
+                    url: `${PATH_NAME}/envia_anulacion`,
+                    type: "POST",
+                    data: { data_fac },
+                    success: function (res) {
+                        btn_procesando_tabla(`btn_anular`, obj_inicial, 1);
+                        if (res.status == -1) {
+                            alertify.error(res.msg);
+                        } else {
+                            alertify.success(res.msg);
+                            location.reload();
+                        }
+                    }
+                });
+            },
+            function () {
+                alertify.error('Operación cancelada');
+            });
     })
 }
