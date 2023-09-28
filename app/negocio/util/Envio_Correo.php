@@ -587,7 +587,7 @@ class Envio_Correo
         return self::php_miler($body, $remite, $subject, $correo, $correo2 = '', $adjunto);
     }
 
-    public static function correo_respuesta_creacodigo($asesor, $nit, $nombre_empresa, $codigo, $descriocion, $ficha_tec, $correo, $correo2)
+    public static function correo_respuesta_creacodigo($id, $asesor, $nit, $nombre_empresa, $codigo, $descriocion, $ficha_tec, $correo, $correo2)
     {
         $body = "<div style='width: 90%; border-radius: 0.5em; font-family: Arial, Helvetica, sans-serif; margin: 3%;'>
             <p>Buen día $asesor,<br><br><br>
@@ -602,12 +602,12 @@ class Envio_Correo
             </p>
         </div>";
         //-----------------------------------------------------------------------------
-        $subject = "Creación de código SIDPA";
+        $subject = "Creación de código SIDPA - " . $id;
         $remite = '' . NOMBRE_EMPRESA . ' Creación de código ';
         return self::php_miler($body, $remite, $subject, $correo, $correo2);
     }
 
-    public static function correo_respuesta_rechazocodigo($asesor, $nit, $nombre_empresa, $observaciones, $correo, $correo2)
+    public static function correo_respuesta_rechazocodigo($id, $asesor, $nit, $nombre_empresa, $observaciones, $correo, $correo2)
     {
         $body = "<div style='width: 90%; border-radius: 0.5em; font-family: Arial, Helvetica, sans-serif; margin: 3%;'>
             <p>Buen día $asesor,<br><br><br>
@@ -622,9 +622,26 @@ class Envio_Correo
             </p>
         </div>";
         //-----------------------------------------------------------------------------
-        $subject = "Creación de código SIDPA";
+        $subject = "Creación de código SIDPA - ".$id;
         $remite = '' . NOMBRE_EMPRESA . ' Creación de código ';
         return self::php_miler($body, $remite, $subject, $correo, $correo2);
+    }
+
+    public static function confirmacion_solicitud_codigo($asesor, $id_solicitud, $nit, $nombre_empresa,  $correo)
+    {
+        $body = "<div style='width: 90%; border-radius: 0.5em; font-family: Arial, Helvetica, sans-serif; margin: 3%;'>
+                    <p>Buen día $asesor,<br><br><br>
+                        Su solicitud de creación de código, para el cliente <b>$nit - $nombre_empresa</b> fue enviada satisfactoriamente <br><br>
+                        Quedo atento a sus comentarios <br>
+                        Atentamente <br><br>
+                        <b>Diseño Grafico</b><br><br>
+                        <i><b>*por favor confirmar cualquier novedad directamente al area y no responder este correo.*</b></i>
+                    </p>
+                </div>";
+        //-----------------------------------------------------------------------------
+        $subject = "Creación de código SIDPA - " . $id_solicitud;
+        $remite = '' . NOMBRE_EMPRESA . ' Creación de código ';
+        return self::php_miler($body, $remite, $subject, $correo, $correo2 = '');
     }
 
     public static function pruebas()

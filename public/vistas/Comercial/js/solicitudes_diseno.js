@@ -122,7 +122,7 @@ function tipo_solicitud() {
             $('.codigo').removeClass('d-none');
             $('.diseno').removeClass('d-none');
             $('.solo_codigo').addClass('d-none');// este pertenece a la cantidad de tintas por select
-        } 
+        }
     })
 }
 
@@ -180,10 +180,10 @@ function tipo_codigo() {
         e.preventDefault();
         var tipo_codigo = $(this).val();
         if (tipo_codigo == 1) {// codigo nuevo
-            $('#codigo_antiguo').prop( "disabled", true );
+            $('#codigo_antiguo').prop("disabled", true);
         } else if (tipo_codigo == 2) {// codigo viejo
-            $('#codigo_antiguo').prop( "disabled", false )
-        } 
+            $('#codigo_antiguo').prop("disabled", false)
+        }
     });
 }
 
@@ -193,26 +193,43 @@ function enviar_solicitud_diseno() {
         var obj_inicial = $('#enviar_solicitud_Cod').html();
         var formulario = $("#form_solicitud_codigo").serializeArray();
         var exepcion = ''
+        var campos_valida = '';
         var datos_form = new FormData(document.getElementById('form_solicitud_codigo'))// esto permite traer por get cualcuer valor del fomulario
         var tipo_solicitud = datos_form.get("tipo_solicitud_check");
         if (tipo_solicitud == 1) { // solicitud codigo
-            exepcion = ['gaf_cort','cant_tintas','terminados1','contacto', 'email_contacto', 'tipo_arte', 'cantidad', 'cantida_tintas_dis','tinta_1','tinta_2','tinta_3','tinta_4','tinta_5','tinta_6','tinta_7','tinta_8','tinta_9','tinta_10'];
+            exepcion = ['gaf_cort', 'cant_tintas', 'terminados1', 'contacto', 'email_contacto', 'tipo_arte', 'cantidad', 'cantida_tintas_dis', 'tinta_1', 'tinta_2', 'tinta_3', 'tinta_4', 'tinta_5', 'tinta_6', 'tinta_7', 'tinta_8', 'tinta_9', 'tinta_10'];
+            campos_valida = ['gaf_cort', 'cant_tintas', 'terminados1'];
         } else if (tipo_solicitud == 2) { // solicitud diseño
-            exepcion = ['gaf_cort','cant_tintas','tipo_arte', 'terminados1'];
+            exepcion = ['gaf_cort', 'cant_tintas', 'tipo_arte', 'terminados1'];
+            campos_valida = [];
         }
+
+        // validacion de campos vacios
+        var valida2 = true
+        campos_valida.forEach(element => {
+            if (datos_form.get(element) == '' || datos_form.get(element) == null) {
+                alertify.error('Ingresa el ' + element + ' para continuar');
+                $('#' + element).focus();
+                valida2 = false;
+            }
+        });
+
         var valida_form = validar_formulario(formulario, exepcion);
-        formulario.push({ name: 'terminados', value: $('#terminados').val()}); // para guardar las opciones multiples
-        if (valida_form) {
+        formulario.push({ name: 'terminados', value: $('#terminados').val() }); // para guardar las opciones multiples
+        if (valida_form && valida2) {
             btn_procesando('enviar_solicitud_Cod');
             $.ajax({
                 url: `${PATH_NAME}/envio_solicitud_diseno`,
                 type: "POST",
                 data: formulario,
                 success: function (res) {
-                    window.location.reload();
+                    alertify.alert('Solicitud de código', '¡Tu solicitud de código fue enviada correctamente!', 
+                    function () { 
+                        window.location.reload();     
+                    });
                 }
             })
-            
+
         }
     })
 }

@@ -12,7 +12,7 @@ use MiApp\persistencia\dao\SolicitudesDisenoDAO;
 use MiApp\negocio\util\Envio_Correo;
 
 
-class SolicitudesDisenoControlador extends GenericoControlador 
+class SolicitudesDisenoControlador extends GenericoControlador
 {
     private $AdhesivoDAO;
     private $TipoMaterialDAO;
@@ -30,9 +30,9 @@ class SolicitudesDisenoControlador extends GenericoControlador
         $this->AdhesivoDAO = new AdhesivoDAO($cnn);
         $this->TipoMaterialDAO = new TipoMaterialDAO($cnn);
         $this->TintasDAO = new TintasDAO($cnn);
-        $this->PrecioMateriaPrimaDAO = new PrecioMateriaPrimaDAO($cnn);        
-        $this->FormaMaterialDAO = new FormaMaterialDAO($cnn);        
-        $this->SolicitudesDisenoDAO = new SolicitudesDisenoDAO($cnn);        
+        $this->PrecioMateriaPrimaDAO = new PrecioMateriaPrimaDAO($cnn);
+        $this->FormaMaterialDAO = new FormaMaterialDAO($cnn);
+        $this->SolicitudesDisenoDAO = new SolicitudesDisenoDAO($cnn);
     }
 
     public function vista_solicitud_diseno()
@@ -45,13 +45,13 @@ class SolicitudesDisenoControlador extends GenericoControlador
                 "mat" => $this->TipoMaterialDAO->consultar_tipo_material(),
                 "tintas" => $this->TintasDAO->consultar_tintas(),
                 'forma_material' => $this->FormaMaterialDAO->consultar_forma_material(),
-                "precio" => $this->PrecioMateriaPrimaDAO->consultar_precio_materia_prima(), 
+                "precio" => $this->PrecioMateriaPrimaDAO->consultar_precio_materia_prima(),
             ]
         );
     }
 
     // envio correo de solicitud creación cliente
-    public function envio_correo_creacioncliente() 
+    public function envio_correo_creacioncliente()
     {
         header('Content-Type: application/json');
         $nit = $_POST['nit'];
@@ -65,10 +65,10 @@ class SolicitudesDisenoControlador extends GenericoControlador
         $extension = array_pop($explode);
         $ruta = $_FILES['rut']['tmp_name'];
         $nombre_nuevo = 'Rut_' . $nit . '.' . $extension;
-        $destino = CARPETA_IMG . PROYECTO . '/PDF/rut_temp/' .$nombre_nuevo; 
+        $destino = CARPETA_IMG . PROYECTO . '/PDF/rut_temp/' . $nombre_nuevo;
         move_uploaded_file($ruta, $destino);
         // enviar correo y borrar
-        $correo_envio = Envio_Correo::correo_solicitud_creacioncliente($nit,$razon_social,$asesor,$correo,$destino);
+        $correo_envio = Envio_Correo::correo_solicitud_creacioncliente($nit, $razon_social, $asesor, $correo, $destino);
         unlink($destino);
         echo json_encode($correo_envio);
     }
@@ -77,14 +77,14 @@ class SolicitudesDisenoControlador extends GenericoControlador
     public function envio_solicitud_diseno()
     {
         header('Content-Type: application/json');
-        if ($_POST["tipo_codigo"] == 2) {// actualizacion 
+        if ($_POST["tipo_codigo"] == 2) { // actualizacion 
             $codigo_antiguo = $_POST["codigo_antiguo"];
-        }else{
+        } else {
             $codigo_antiguo = null;
         }
-        $datos = [// esto cambia cuando agregemos la otra solicitud
+        $datos = [ // esto cambia cuando agregemos la otra solicitud
             'id_cli_prov' => $_POST['id_cli_prov'],
-            'tipo_solicitud' => 1,// solicitud codigo
+            'tipo_solicitud' => 1, // solicitud codigo
             'id_usuario_asesor' => $_POST['id_asesor_cod'],
             'ancho' => $_POST['ancho'],
             'alto' => $_POST['alto'],
@@ -96,7 +96,7 @@ class SolicitudesDisenoControlador extends GenericoControlador
             'cantidad_tintas' => $_POST['cant_tintas'],
             'grafe' => $_POST['gaf_cort'],
             'terminados' => $_POST['terminados'],
-            'estado' => 1,//estado 1 solicitud creada
+            'estado' => 1, //estado 1 solicitud creada
             'tipo_codigo' => $_POST["tipo_codigo"],
             'codigo_antiguo' => $codigo_antiguo,
             'precio' => $_POST["precio"],
@@ -104,7 +104,9 @@ class SolicitudesDisenoControlador extends GenericoControlador
             'observaciones' => $_POST['observaciones_cod'],
         ];
         $respuesta = $this->SolicitudesDisenoDAO->insertar($datos);
+        // correo de notificacion 
+        $solicitud = $this->SolicitudesDisenoDAO->consulta_data_solicitud($respuesta['id']); 
+        $correo_solicitud = Envio_Correo::confirmacion_solicitud_codigo($solicitud[0]->asesor, $respuesta['id'], $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $solicitud[0]->correo);
         echo json_encode($respuesta);
     }
-    
 }

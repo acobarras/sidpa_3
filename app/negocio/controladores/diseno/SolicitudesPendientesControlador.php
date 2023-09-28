@@ -65,15 +65,15 @@ final class SolicitudesPendientesControlador extends GenericoControlador
                 $datos_codigo = $this->productosDAO->consultar_productos_especifico($solicitud[0]->codigo_creado);
                 $descriocion = $datos_codigo[0]->descripcion_productos;
                 $ficha_tec = $datos_codigo[0]->ficha_tecnica_produc;
-                $correo_envio = Envio_Correo::correo_respuesta_creacodigo($solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $solicitud[0]->codigo_creado, $descriocion, $ficha_tec, $solicitud[0]->correo, '');
-                $correo_copia = Envio_Correo::correo_respuesta_creacodigo($solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $solicitud[0]->codigo_creado, $descriocion, $ficha_tec, CORREO_PRODUCCION_GRAF, CORREO_IMPRESION_VARIABLE);
+                $correo_envio = Envio_Correo::correo_respuesta_creacodigo($_POST['id_solicitud'],$solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $solicitud[0]->codigo_creado, $descriocion, $ficha_tec, $solicitud[0]->correo, '');
+                $correo_copia = Envio_Correo::correo_respuesta_creacodigo($_POST['id_solicitud'],$solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $solicitud[0]->codigo_creado, $descriocion, $ficha_tec, CORREO_PRODUCCION_GRAF, CORREO_IMPRESION_VARIABLE);
                 $respuesta = [
                     'status' => 1,
                     'msg' => 'El código <b>' . $_POST['codigo'] . '</b> de la solicitud ' . $_POST['id_solicitud'] . ' fue creado exitosamente y se envio un correo al asesor.',
                 ];
             } else { // cierre por rechazo
-                $correo_envio = Envio_Correo::correo_respuesta_rechazocodigo($solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $_POST["observaciones"], $solicitud[0]->correo, '');
-                $correo_copia = Envio_Correo::correo_respuesta_rechazocodigo($solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $_POST["observaciones"], CORREO_PRODUCCION_GRAF, CORREO_IMPRESION_VARIABLE);
+                $correo_envio = Envio_Correo::correo_respuesta_rechazocodigo($_POST['id_solicitud'],$solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $_POST["observaciones"], $solicitud[0]->correo, '');
+                $correo_copia = Envio_Correo::correo_respuesta_rechazocodigo($_POST['id_solicitud'],$solicitud[0]->asesor, $solicitud[0]->nit, $solicitud[0]->nombre_empresa, $_POST["observaciones"], CORREO_PRODUCCION_GRAF, CORREO_IMPRESION_VARIABLE);
                 $respuesta = [
                     'status' => 1,
                     'msg' => 'Esta solicitud fue rechazada exitosamente y se envio un correo al asesor.',
