@@ -676,12 +676,21 @@ class PDF
         // return $html;
     }
 
-    public static function listaEmpaquePdf($cabecera, $items)
+    public static function listaEmpaquePdf($cabecera, $items, $totaliza = '')
     {
         if ($cabecera['tipo_documento'] == 8 || $cabecera['tipo_documento'] == 11 || $cabecera['tipo_documento'] == 6) {
             $cabeza = "/cabeza_remision_acosas";
         } else {
             $cabeza = "/cabeza_remision_acocol";
+        }
+        if ($totaliza == 1) {
+            $campo_totaliza = '
+            <th class="borde-right-1" style="width: 10mm;">V. Unitario</th>
+            <th class="borde-right-1" style="width: 10mm;">Precio</th>';
+            $tabla_borde = '<td class="borde-right-1 borde-top-1 text-center"></td><td class="borde-right-1 borde-top-1 text-center"></td>';
+        } else {
+            $campo_totaliza = '';
+            $tabla_borde = '';
         }
         $html = '
         <html>
@@ -752,23 +761,42 @@ class PDF
                             <th class="borde-right-1" style="width: 20mm">Qr</th>
                             <th class="borde-right-1" style="width: 20mm">Codigo</th>
                             <th class="borde-right-1" style="width: 20mm">Cantidad</th>
-                            <th style="width: 100mm;">Descripción</th>
+                            <th class="borde-right-1" style="width: 70mm;">Descripción</th>' . $campo_totaliza . '
                         </tr>
                         <tr>
                             <td class="borde-right-1 borde-top-1 text-center"></td>
                             <td class="borde-right-1 borde-top-1 text-center"></td>
                             <td class="borde-right-1 borde-top-1 text-center"></td>
-                            <td class="borde-right-1 borde-top-1"></td>	
+                            <td class="borde-right-1 borde-top-1"></td>' . $tabla_borde . '	
                         </tr>';
         $contador = 0;
         $cantidad_inicial = 11;
+        $subtotal_doc = 0;
+        if ($cabecera['iva'] == 1) {
+            $iva = 19;
+            $valor_iva = 1.19;
+        } else {
+            $iva = 0;
+            $valor_iva = 1;
+        }
         for ($i = 0; $i < count($items); $i++) {
             if ($contador == $cantidad_inicial) {
                 $cantidad_inicial = 15;
                 $contador = 0;
-                $html .= '</table>
+                $html .= '
+                
+                </table>
                 <hr>
                 <table>';
+            }
+            if ($totaliza == 1) {
+                $precio_item = ($items[$i]['v_unidad'] * $items[$i]['cantidad_por_facturar']);
+                $subtotal_doc = $subtotal_doc + $precio_item;
+                $data_totaliza = '
+                <td class="borde-right-1 text-center">' . $items[$i]['v_unidad'] . '</td>
+                <td class="borde-right-1 text-center">' . number_format($precio_item, 2, '.', ',') . '</td>';
+            } else {
+                $data_totaliza = '';
             }
             $contador = $contador + 1;
             $codigo = $items[$i]['codigo'];
@@ -784,8 +812,28 @@ class PDF
                     <td class="borde-right-1 text-center" style="width: 20mm"><img src="' . CARPETA_IMG . PROYECTO . '/img_qr/QR/item' . $i . '.png" /></td>
                     <td class="borde-right-1 text-center" style="width: 20mm">' . $codigo . '</td>
                     <td class="borde-right-1 text-center" style="width: 20mm">' . $cantidad_codigo . '</td>
-                    <td class="borde-right-1" style="width: 100mm">' . strtoupper($items[$i]['descripcion_productos']) . '</td>
+                    <td class="borde-right-1" style="width: 70mm">' . strtoupper($items[$i]['descripcion_productos']) . '</td>' . $data_totaliza . '
                 </tr>';
+        }
+        if ($totaliza == 1) {
+            $html .= '			
+            <tfoot>
+                <tr>
+                    <td colspan="4" style="border-top:solid 1px"></td>
+                    <td class="text-center" style="border:solid 1px;">Subtotal</td>
+                    <td class="text-center" style="border:solid 1px;">' . number_format($subtotal_doc, 2, '.', ',') . '</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border:none"></td>
+                    <td class="text-center" style="border:solid 1px;">Iva</td>
+                    <td class="text-center" style="border:solid 1px;">' . $iva . '%</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border-bottom-style:solid 1px;"></td>
+                    <td class="text-center" style="border:solid 1px;">Total</td>
+                    <td class="text-center" style="border:solid 1px;">' . number_format(($subtotal_doc * $valor_iva), 2, '.', ',') . '</td>
+                </tr>
+            </tfoot>';
         }
         $html .= '
                     </div>

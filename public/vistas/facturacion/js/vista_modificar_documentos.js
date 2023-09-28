@@ -59,7 +59,7 @@ var tabla_documentos = function (limpio = '') {
                 "data": "cantidad_factura", render: function (data, type, row) {
                     var valor = row.cantidad_factura;
                     var input = numFormat(row.cantidad_factura);
-                    if (row.estado_entrega_logistica <= 2) {
+                    if (row.estado_entrega_logistica <= 2 || row.estado_entrega_logistica == 4) {
                         input = `<input type="text" id="pendiente${row.id_pedido_item}" class="form-control cantidad_factura" style='border:none;'  value="${numFormat(row.cantidad_factura)}">`;
                     }
                     return input;
@@ -81,27 +81,27 @@ var cantidad_por_facturar = function () {
             return;
         }
         alertify.confirm('Editar Cantidad Envio', 'Desea continuar con la edición para cambiar la cantidad reportada.',
-        function () {
-            $.ajax({
-                url: `${PATH_NAME}/facturacion/editar_lista_empaque`,
-                type: 'POST',
-                data: { data, numero },
-                success: function (res) {
-                    console.log(res);
-                    if (res.status == 1) {
-                        alertify.success(res.msg);
-                        $('#consulta_lista_de_empaque').click();
-                    } else {
-                        alertify.error(res.msg);
+            function () {
+                $.ajax({
+                    url: `${PATH_NAME}/facturacion/editar_lista_empaque`,
+                    type: 'POST',
+                    data: { data, numero },
+                    success: function (res) {
+                        if (res.status == 1) {
+                            alertify.success(res.msg);
+                            $('#consulta_lista_de_empaque').click();
+                            location.reload();
+                        } else {
+                            alertify.error(res.msg);
+                        }
                     }
-                }
+                });
+            },
+            function () {
+                $(`#pendiente${data.id_pedido_item}`).val(numFormat(data.cantidad_factura));
+                alertify.error('Operación cancelada');
             });
-        },
-        function () {
-            $(`#pendiente${data.id_pedido_item}`).val(numFormat(data.cantidad_factura));
-            alertify.error('Operación cancelada');
-        });
-       
+
     });
 
 }

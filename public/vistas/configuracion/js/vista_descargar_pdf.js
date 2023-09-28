@@ -86,35 +86,49 @@ var descarga_orden_produccion = function () {
 var descarga_lista_empaque = function () {
     $('#btn-lista-empaque').on('click', function () {
         var lista_empaque = $('#lista_empaque').val();
+        var totaliza = '';
         if (lista_empaque == '') {
-            alertify.warning('ingrese un valor');
+            alertify.error('ingrese un valor');
             $('#lista_empaque').focus();
             return;
-        }
+        } else {
+            alertify.confirm('Alerta SIDPA', 'Desea totalizar el documento?',
+                function () {
+                    totaliza = 1;
+                    enviar_lista_empaque(lista_empaque, totaliza);
+                },
+                function () {
+                    totaliza = 2;
+                    enviar_lista_empaque(lista_empaque, totaliza);
 
-        $.ajax({
-            url: `${PATH_NAME}/configuracion/generar_pdf_lista_empaque`,
-            type: 'POST',
-            data: { lista_empaque },
-            xhrFields: {
-                responseType: 'blob'
-            },
-            beforeSend: function (res) {
-                $('.boton_cambio_lista').removeClass('fa fa-download');
-                $('.boton_cambio_lista').addClass('fas fa-spinner fa-spin');
-                $('#lista_empaque').val('');
-            },
-            success: function (regreso) {
-                var a = document.createElement('a');
-                var url = window.URL.createObjectURL(regreso);
-                a.href = url;
-                a.download = lista_empaque + '_lista_empaque.pdf';
-                a.click();
-                window.URL.revokeObjectURL(url);
-                $('.boton_cambio_lista').addClass('fa fa-download');
-                $('.boton_cambio_lista').removeClass('fas fa-spinner fa-spin');
-            }
-        });
+                }).set('labels', { ok: 'Si', cancel: 'No' });
+
+        }
+    });
+}
+var enviar_lista_empaque = function (lista_empaque, totaliza) {
+    $.ajax({
+        url: `${PATH_NAME}/configuracion/generar_pdf_lista_empaque`,
+        type: 'POST',
+        data: { lista_empaque, totaliza },
+        xhrFields: {
+            responseType: 'blob'
+        },
+        beforeSend: function (res) {
+            $('.boton_cambio_lista').removeClass('fa fa-download');
+            $('.boton_cambio_lista').addClass('fas fa-spinner fa-spin');
+            $('#lista_empaque').val('');
+        },
+        success: function (regreso) {
+            var a = document.createElement('a');
+            var url = window.URL.createObjectURL(regreso);
+            a.href = url;
+            a.download = lista_empaque + '_lista_empaque.pdf';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            $('.boton_cambio_lista').addClass('fa fa-download');
+            $('.boton_cambio_lista').removeClass('fas fa-spinner fa-spin');
+        }
     });
 }
 

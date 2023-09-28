@@ -170,6 +170,7 @@ class DescargaControlador extends GenericoControlador
     {
         header('Content-type: application/pdf');
         $num_lista_empaque = $_POST['lista_empaque'];
+        $totaliza = $_POST['totaliza'];
         $datos = $this->control_facturacionDAO->consulta_lista_empaque($num_lista_empaque);
         $datos_direccion = $this->direccionDAO->consultaIdDireccion($datos[0]->id_dire_entre);
 
@@ -192,6 +193,7 @@ class DescargaControlador extends GenericoControlador
             'numero_doc_relacionado' => $datos[0]->tipo_documento_letra . " " . $documento,
             'tipo_documento' => $datos[0]->tipo_documento,
             'usuario_facturacion' => $persona[0]->nombres . " " . $persona[0]->apellidos,
+            'iva' => $datos[0]->iva,
         ];
         $items_factura = [];
         foreach ($datos as $value) {
@@ -204,7 +206,7 @@ class DescargaControlador extends GenericoControlador
             ];
         }
         // $items_factura = json_decode( json_encode( $datos ), true );
-        $respu = PDF::listaEmpaquePdf($cabecera, $items_factura);
+        $respu = PDF::listaEmpaquePdf($cabecera, $items_factura, $totaliza);
         Validacion::DELETE_QR();
         echo json_encode($respu);
         return;
