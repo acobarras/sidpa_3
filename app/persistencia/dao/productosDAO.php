@@ -214,4 +214,12 @@ class productosDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function busqueda_codigos_comercial($condicion)
+    {
+        $sql = "SELECT * FROM productos t1 $condicion";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;   
+    }
 }
