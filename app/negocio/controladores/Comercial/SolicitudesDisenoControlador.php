@@ -102,6 +102,7 @@ class SolicitudesDisenoControlador extends GenericoControlador
             'precio' => $_POST["precio"],
             'cantidad' => $_POST["cantidad_etiquetas"],
             'observaciones' => $_POST['observaciones_cod'],
+            'fecha_solicitud' => date('Y-m-d h:i:s'),
         ];
         $respuesta = $this->SolicitudesDisenoDAO->insertar($datos);
         // correo de notificacion 

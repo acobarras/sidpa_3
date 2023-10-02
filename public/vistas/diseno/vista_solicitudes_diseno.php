@@ -18,6 +18,7 @@
                             <thead class="bg-layout" style="background:#0d1b50;color:white">
                                 <tr>
                                     <th>id</th>
+                                    <th>Fecha</th>
                                     <th>Nit</th>
                                     <th>Nombre empresa</th>
                                     <th>Asesor</th>

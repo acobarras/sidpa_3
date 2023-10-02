@@ -55,7 +55,8 @@ final class SolicitudesPendientesControlador extends GenericoControlador
         header('Content-Type: application/json');
         $datos = [
             'estado' => 2, // codigo creado -- cierre de caso
-            'codigo_creado' => $_POST["codigo"]
+            'codigo_creado' => $_POST["codigo"],
+            'fecha_cierre' => date('Y-m-d h:i:s'),
         ]; // este estado puede variar cuando uniquemos las solicitudes 
         $condicion = 'id_solicitud =' . $_POST['id_solicitud'];
         $cambio_estado = $this->SolicitudesDisenoDAO->editar($datos, $condicion);

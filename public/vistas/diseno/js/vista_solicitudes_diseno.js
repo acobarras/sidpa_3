@@ -10,6 +10,7 @@ function consulta_codigos() {
         "ajax": `${PATH_NAME}/diseno/consulta_solicitudes_codigo`,
         "columns": [
             { "data": "id_solicitud" },
+            { "data": "fecha_solicitud" },
             { "data": "nit" },
             { "data": "nombre_empresa" },
             { "data": "asesor" },
