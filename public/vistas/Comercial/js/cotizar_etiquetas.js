@@ -6,6 +6,7 @@ $(document).ready(function () {
     medida_utilizar();
     selec_adh();
     estampado_calor();
+    dato_adh();
 });
 
 var estampado_calor = function () {
@@ -29,7 +30,7 @@ var cotizar_etiquetas = function () {
         if ($('#error_cotiza').is(':visible')) {
             $('#error_cotiza').hide();
         }
-        var exepcion = ['selec_adh', 'selec_precio', 'tintas','laminado'];
+        var exepcion = ['selec_adh', 'selec_precio', 'tintas', 'laminado'];
         var valida = validar_formulario(form, exepcion);
         if (valida) {
             var obj_inicial = $("#enviar_cotiza").html();
@@ -115,17 +116,25 @@ var selec_adh = function () {
         var items = '<option value="0"></option>';
         if (nuevo == '') {
             data.forEach(element => {
-                items += `<option value="${element.id_adh}">${element.nombre_adh}</option>`;
+                items += `<option value="${element.id_adh}" data-adh='${JSON.stringify(element)}'>${element.nombre_adh}</option>`;
             });
         } else {
             data.forEach(element => {
                 var indice = nuevo.indexOf(element.id_adh);
                 if (indice !== -1) {
-                    items += `<option value="${element.id_adh}">${element.nombre_adh}</option>`;
+                    items += `<option value="${element.id_adh}" data-adh='${JSON.stringify(element)}'>${element.nombre_adh}</option>`;
                 }
             });
         }
         $('#adh').empty().html(items);
     })
+    
+}
 
+var dato_adh = function () {
+    $('#adh').on('change', function () {
+        var data = JSON.parse($('option:selected',this).attr('data-adh'));
+        $('#superficies').empty().html('El Adhesivo seleccionado tiene un buen comportamiento en las siguientes superficies: '+data.superficies);
+        $('#rango_temp').empty().html('El rango de temperatura de servicio es de: '+data.rango_temp);
+    });
 }
