@@ -117,9 +117,9 @@
                                             <label for="laminado" class="col-sm-2 col-form-label">LAMINADO:</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control" style="width: 100%;" id="laminado" name="laminado" required>
-                                                <option value="0">NO</option>
-                                                <option value="2">BRILLANTE</option>
-                                                <option value="3">MATE</option>
+                                                    <option value="0">NO</option>
+                                                    <option value="2">BRILLANTE</option>
+                                                    <option value="3">MATE</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -128,6 +128,12 @@
                                             <div class="col-sm-4">
                                                 <input class="form-control" type="text" id="cantidad" name="cantidad" required />
                                             </div>
+                                        </div>
+                                        <div class="mb-3 form-group row">
+                                            <div class="col-12 text-primary"><span id="superficies"></span></div>
+                                        </div>
+                                        <div class="mb-3 form-group row">
+                                            <div class="col-12 text-primary"><span id="rango_temp"></span></div>
                                         </div>
                                         <div class="text-center">
                                             <button class="btn btn-primary" type="button" id="enviar_cotiza">
