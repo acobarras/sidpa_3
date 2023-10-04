@@ -703,7 +703,12 @@ class PDF
                     <img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_lista_empaque' . $cabeza . '.jpg">
                     <br>
                     <div class="numero">
-                        <h5> N°' . $cabecera['numero_lista_empaque'] . '</h5>
+                    ';
+        $num_lista = $cabecera['numero_lista_empaque'];
+        $nombre_doc = "lista" . $num_lista;
+        Validacion::GeneraQR($num_lista, $nombre_doc);
+        $html .= '
+                            <h5> N°' . $cabecera['numero_lista_empaque'] . '</h5>
                     </div>
                 </header>
                 <footer>
@@ -726,8 +731,13 @@ class PDF
                             <tr>
                                 <th>Fecha Elaboración:</th>
                                 <td colspan="3">' . $cabecera['fecha_elaboracion'] . '</td>
-                                <th>N° Documento:</th>
-                                <td colspan="1">' . $cabecera['numero_lista_empaque'] . '</td>
+                                <th>N° Documento: 
+                                </th>
+                                <td colspan="1" style="height:11mm;width:15mm;justify-content-center;">
+                                <img style="width:10mm;float: left;" src="' . CARPETA_IMG . PROYECTO . '/img_qr/QR/lista' . $num_lista . '.png" />
+                                &nbsp;
+                                ' . $cabecera['numero_lista_empaque'] . '
+                                </td>
                             </tr>
                             <tr>
                                 <th>Cliente:</th>

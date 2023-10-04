@@ -165,4 +165,11 @@ class ConsultasControlador extends GenericoControlador
         echo json_encode($res);
         return;
     }
+    public function vista_consulta_documentos()
+    {
+        parent::cabecera();
+        $this->view(
+            'consultas/vista_consulta_documentos',
+        );
+    }
 }

@@ -897,7 +897,7 @@ var crear_pedido = function () {
             }
             var op = JSON.parse($("#id_direccionC option:selected").attr('info-dir'));
             // console.log(op);
-            $("#info_fecha").empty().html('Previamente usted ingreso el dia de cierre del cliente con esta observación: " '+ op.recor_dia_cierre+'". Tenga presente que esto puede variar y es su responsabilidad consultarle al cliente.');
+            $("#info_fecha").empty().html('Previamente usted ingreso el dia de cierre del cliente con esta observación: " ' + op.recor_dia_cierre + '". Tenga presente que esto puede variar y es su responsabilidad consultarle al cliente.');
             $("#infoCon").empty().html(op.contacto);
             $("#infoCar").empty().html(op.cargo);
             $("#infoEmail").empty().html(op.email);
@@ -1090,6 +1090,7 @@ var productos_disponibles_cli = function (id_cli_prov) {
 var carga_datos_productos = function () {
     $("#id_clien_producPP").change(function (e) {
         e.preventDefault();
+        console.log($("#id_clien_producPP").val());
         var info = JSON.parse($("#id_clien_producPP").val());
         if (info != 0) {
             $('#valor_venta').empty().html(info.precio_venta);
