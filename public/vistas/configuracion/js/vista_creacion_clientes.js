@@ -12,20 +12,43 @@ $(document).ready(function () {
     solo_numeros('dias_max_mora');
     solo_numeros('dias_max_mora_modifi');
     datos_usu();
+    consulta_cliente();
 });
+
+var consulta_cliente = function () {
+    $("#nit").on('blur', function (e) {
+        e.preventDefault();
+        var form = $(this).serializeArray();
+        var valida = validar_formulario(form);
+        if (valida) {
+            $.ajax({
+                url: `${PATH_NAME}/soporte_tecnico/consulta_datos_empresa`,
+                type: "POST",
+                data: form,
+                success: function (res) {
+                    if (res['data_empresa'] != '') {// la empresa no existe 
+                        alertify.error('Este cliente ya se encuentra creado');
+                        limpiar_formulario('form_crear_cliente', 'input');
+                        limpiar_formulario('form_crear_cliente', 'select');
+                    }
+                }
+            });
+        }
+    });
+}
 
 // datos de asesores en vista principal
 var datos_usuarios = [];
 var datos_usu = function () {
     datos_usuarios = JSON.parse($('#datos_usuarios').val());
 }
-var vista_asesores_tb = function (id_asesores='') {
+var vista_asesores_tb = function (id_asesores = '') {
     id_asesores = id_asesores.split(',');
     nombres_asesor = '';
     id_asesores.forEach(id => {
         datos_usuarios.forEach(datos => {
             if (id == datos.id_persona) {
-               nombres_asesor += datos.nombre + ' ' + datos.apellido + '<br> ';
+                nombres_asesor += datos.nombre + ' ' + datos.apellido + '<br> ';
             }
         });
     });
@@ -54,15 +77,15 @@ var cargar_tabla_clientes = function () {
             { "data": "id_cli_prov" },
             { "data": "nit" },
             { "data": "nombre_empresa" },
-            { 
+            {
                 "data": "id_usuarios_asesor",
-                render : function (data, type, row) {
+                render: function (data, type, row) {
                     if (row.id_usuarios_asesor != null) {
                         return vista_asesores_tb(row.id_usuarios_asesor);
-                    }else{
+                    } else {
                         return '<p></p>'
                     }
-                    
+
                 }
             },
             {
