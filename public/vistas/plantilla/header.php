@@ -223,7 +223,11 @@
             if ($_SESSION['usuario']->getId_roll() == 11) {
                 if (!empty($chequeo)) {
                     $fecha_chequeo = date("d-m-Y", strtotime($chequeo[0]->fecha_crea . "+" . DIAS_CHEQUEO_VEHICULO . "days"));
-                    if ($fecha_chequeo >= date('d-m-Y')) { ?>
+                    $dt = new DateTime($fecha_chequeo);
+                    $dt_hoy = new DateTime(date('d-m-Y'));
+                    // Si los dias de diferencia son negativos o iguales a 0 aparece el modal 
+                    $dias_diferencia = $dt_hoy->diff($dt);
+                    if (intval($dias_diferencia->format('%R%a')) <= 0) { ?>
                     <div class="modal fade" id="chequeo" tabindex="-1" data-bs-backdrop="static" aria-labelledby="chequeoLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl">
                             <div class="modal-content">

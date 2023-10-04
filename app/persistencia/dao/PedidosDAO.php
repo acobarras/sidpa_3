@@ -86,7 +86,7 @@ class PedidosDAO extends GenericoDAO
                 INNER JOIN direccion dir ON pedidos.id_dire_entre = dir.id_direccion
                 INNER JOIN estado_pedido est ON pedidos.id_estado_pedido=est.id_estado_pedido
                 INNER JOIN usuarios usu ON pedidos.id_usuario=usu.id_usuario
-                WHERE $consulta" ;
+                WHERE $consulta";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -99,7 +99,7 @@ class PedidosDAO extends GenericoDAO
                 INNER JOIN direccion dir ON pedidos.id_dire_entre = dir.id_direccion
                 INNER JOIN estado_pedido est ON pedidos.id_estado_pedido=est.id_estado_pedido
                 INNER JOIN usuarios usu ON pedidos.id_usuario=usu.id_usuario
-                WHERE $consulta" ;
+                WHERE $consulta";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -180,6 +180,21 @@ class PedidosDAO extends GenericoDAO
         $sql = "SELECT t1.id_cli_prov, t2.nit, t2.nombre_empresa,COUNT(t1.id_cli_prov) as paso_pedido FROM pedidos t1
         INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov=t2.id_cli_prov 
         WHERE t1.paso_pedido = 1 GROUP BY t2.nombre_empresa";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    public function consulta_pedido_direccion($num_pedido)
+    {
+        $sql = "SELECT t1.num_pedido,t2.direccion,t2.celular,t2.telefono,t2.email,t2.contacto,t2.cargo,t2.link_maps,t2.ruta,t3.nombre AS nombre_pais,t4.nombre AS nombre_ciudad,t5.nombre AS nombre_depa,t6.nombre_empresa 
+        FROM pedidos t1 
+        INNER JOIN direccion t2 ON t2.id_direccion=t1.id_dire_entre 
+        INNER JOIN pais t3 ON t2.id_pais=t3.id_pais 
+        INNER JOIN ciudad t4 ON t4.id_ciudad=t2.id_ciudad 
+        INNER JOIN departamento t5 ON t5.id_departamento=t2.id_departamento 
+        INNER JOIN cliente_proveedor t6 ON t6.id_cli_prov=t1.id_cli_prov
+        WHERE t1.num_pedido=$num_pedido";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);

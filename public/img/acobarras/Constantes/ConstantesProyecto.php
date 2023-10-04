@@ -25,3 +25,4 @@ define('CORREO_CREACION_CLIENTE', 'cartera2@acobarras.com');  //CORREO DE CREACI
 define('REQ_ORDEN', 'disabled');  //Esto es para que el campo de orden de compra este siempre en SI, si lo desea dejar para si y no quitar el disabled y dejarlo vacio
 define('CORREO_IMPRESION_VARIABLE','impresion@acobarras.com');// CORREO para enviar copias a diseño
 define('DIAS_CHEQUEO_VEHICULO', '31');
+define('DIRECCION_EMPRESA', 'Autopista Medellin - Bogota Parque la Florida Km 1 Parque Industrial Rosalinda, Bodega 37, Cota, Cundinamarca');
