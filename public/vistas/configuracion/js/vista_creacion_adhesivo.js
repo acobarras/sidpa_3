@@ -3,7 +3,8 @@ $(document).ready(function () {
     cargar_tabla_adhesivos();
     editar_adhesivo();
     crear_adhesivo();
-    // elimina_espacio('codigo_producto_bobina', 'span_codigo_MP');
+    regresar_adhesivo();
+    obtener_data_editar();
 });
 
 var cargar_tabla_adhesivos = function () {
@@ -13,44 +14,32 @@ var cargar_tabla_adhesivos = function () {
             { "data": "id_adh" },
             { "data": "codigo_adh" },
             { "data": "nombre_adh" },
-            { "defaultContent": '<button type="button" class="btn btn-primary editar_registro" title="Consultar/Modificar" data-bs-toggle="modal" data-bs-target="#ModalAdhesivo"><i class="fa fa-edit"></i></button>', "className": "text-center" }
+            { "data": "nombre_corto" },
+            { "data": "superficies" },
+            { "data": "rango_temp" },
+            { "defaultContent": '<button type="button" class="btn btn-primary editar_registro" title="Consultar/Modificar"><i class="fa fa-edit"></i></button>', "className": "text-center" }
 
         ],
     });
-    obtener_data_editar("#tabla_adhesivo tbody", table);
 }
 
-var obtener_data_editar = function (tbody, table) {
-    $(tbody).on('click', 'button.editar_registro', function () {
-        var data = table.row($(this).parents("tr")).data();
-        rellenar_formulario(data);
-        $('#modificar_adhesivo').attr('data-id', data.id_adh);
+var regresar_adhesivo = function () {
+    $('#home-tab').on('click', function () {
+        $('#agrega-tab').empty().html('Nuevo Adhesivo');
+        $('#titulo_form').empty().html('Crear Nuevo Adhesivo');
+        limpiar_formulario('form_crear_adhesivo', 'input');
+        limpiar_formulario('form_crear_adhesivo', 'select');
+        $('#crear_adhesivo').empty().html(`<i class="fa fa-plus-circle"></i> Crear Adhesivo`);
     });
 }
-
-var editar_adhesivo = function () {
-    $('#form_modificar_adhesivo').submit(function (e) {
-        e.preventDefault();
-        var form = $(this).serialize();
-        var id_adhesivo = $('#modificar_adhesivo').attr('data-id');
-        var envio = {
-            'form': form,
-            'id': id_adhesivo
-        };
-        $.ajax({
-            "url": `${PATH_NAME}/configuracion/modificar_adhesivo`,
-            "type": 'POST',
-            "data": envio,
-            "success": function (respu) {
-                if (respu) {
-                    $("#ModalAdhesivo").modal("hide");
-                    alertify.success('Modificacion realizada corectamente');
-                    $("#tabla_adhesivo").DataTable().ajax.reload();
-                } else {
-                    alertify.error('Error inesperado');
-                }
-            }
-        });
+var obtener_data_editar = function (tbody, table) {
+    $("#tabla_adhesivo tbody").on('click', 'button.editar_registro', function () {
+        var data = $("#tabla_adhesivo").DataTable().row($(this).parents("tr")).data();
+        $('#agrega-tab').empty().html('Modificar Adhesivo');
+        $('#titulo_form').empty().html('Modificar Adhesivo');
+        $('#crear_adhesivo').empty().html(`<i class="fa fa-plus-circle"></i> Modificar Adhesivo`);
+        rellenarFormulario(data);
+        $('#agrega-tab').click();
     });
 }
 
@@ -58,6 +47,7 @@ var crear_adhesivo = function () {
     $("#form_crear_adhesivo").submit(function (e) {
         e.preventDefault();
         var obj_inicial = $('#crear_adhesivo').html();
+        var exepcion = ['id_adh'];
         var form = $(this).serializeArray();
         valida = validar_formulario(form);
         if (valida) {
@@ -67,16 +57,22 @@ var crear_adhesivo = function () {
                 "type": 'POST',
                 "data": form,
                 "success": function (respuesta) {
-                    if (respuesta.estado) {
-                        alertify.success(`Datos ingresados corretamente la posicion insetada es ${respuesta.id}`);
-                        btn_procesando('crear_adhesivo', obj_inicial, 1);
-                        limpiar_formulario('form_crear_adhesivo', 'select');
-                        limpiar_formulario('form_crear_adhesivo', 'input');
+                    if (respuesta) {
+                        alertify.success('Modificacion realizada corectamente');
                         $("#tabla_adhesivo").DataTable().ajax.reload();
                     } else {
-                        alertify.error(`Error al insertar`);
-                        btn_procesando('crear_adhesivo', obj_inicial, 1);
+                        if (respuesta.estado) {
+                            alertify.success(`Datos ingresados corretamente la posicion insetada es ${respuesta.id}`);
+                            btn_procesando('crear_adhesivo', obj_inicial, 1);
+                            limpiar_formulario('form_crear_adhesivo', 'select');
+                            limpiar_formulario('form_crear_adhesivo', 'input');
+                            $("#tabla_adhesivo").DataTable().ajax.reload();
+                        } else {
+                            alertify.error(`Error al insertar`);
+                        }
                     }
+                    btn_procesando('crear_adhesivo', obj_inicial, 1);
+                    $('#home-tab').click();
                 }
             });
         }

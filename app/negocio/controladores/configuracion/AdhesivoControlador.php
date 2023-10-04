@@ -41,24 +41,29 @@ class AdhesivoControlador extends GenericoControlador
     {
         header("Content-type: application/json; charset=utf-8");
         $datos = $_POST;
-        // Validar si el tipo articulo ya fue creado
-        $respuesta = $this->AdhesivoDAO->validar_adhesivo($datos['codigo_adh']);
-        if (empty($respuesta)) {
-            $respu = $this->AdhesivoDAO->insertar($datos);
+        if ($_POST['id_adh'] == 0) {
+            unset($datos['id_adh']);
+            // Validar si el tipo articulo ya fue creado
+            $respuesta = $this->AdhesivoDAO->validar_adhesivo($datos['codigo_adh']);
+            if (empty($respuesta)) {
+                $respu = $this->AdhesivoDAO->insertar($datos);
+            } else {
+                $respu = ['estado' => false];    
+            }
         } else {
-            $respu = ['estado' => false];    
+           $respu = self::modificar_adhesivo();
         }
         echo json_encode($respu);
     }
-
+    
     public function modificar_adhesivo()
     {
         header("Content-type: application/json; charset=utf-8");
-        $id_adh = $_POST['id'];
-        $formulario = Validacion::Decodifica($_POST['form']);
+        $id_adh = $_POST['id_adh'];
+        unset($_POST['id_adh']);
         $condicion = 'id_adh =' . $id_adh;
-        $resultado = $this->AdhesivoDAO->editar($formulario, $condicion);
-        echo json_encode($resultado);
+        $resultado = $this->AdhesivoDAO->editar($_POST, $condicion);
+        return $resultado;
     }
     
 
