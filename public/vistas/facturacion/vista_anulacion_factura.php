@@ -20,6 +20,7 @@
                                     <label for="numero_factura_consulta" class="col-2">N° factura:</label>
                                     <div class="col-10">
                                         <input type="text" class="form-control" id="numero_factura_consulta" name="numero_factura_consulta">
+                                        <span class="text-danger"><b>La consulta se realiza por número de factura, solo cuando se debe reemplazar de lo contrario no se debe realizar ninguna acción </b></span>
                                     </div>
                                 </div>
                             </div>

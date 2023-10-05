@@ -46,6 +46,7 @@ class ImpresionEtiquetasControlador extends GenericoControlador
                 $value->fecha_compromiso  = $id_pedido[0]->fecha_compromiso;
                 $value->nombre_empresa = $id_pedido[0]->nombre_empresa;
                 $value->id_persona = $id_pedido[0]->id_persona;
+                $value->orden_compra = $id_pedido[0]->orden_compra;
             }
         } else {
             $items = -1;
