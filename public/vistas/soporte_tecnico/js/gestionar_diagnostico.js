@@ -326,7 +326,7 @@ var enviar_items_cotizacion = function () {
                     estado = 3;// validacion piezas 
                     enviar_ajax(boton_procesando, estado, array_storage);
                 }, function () {//no es comodato
-                    estado = 7;// Devuelve sin reparar
+                    estado = 6;// Se cambio de 7 DSR a 6 Pendiente Acta Entrega
                     enviar_ajax(boton_procesando, estado, array_storage);
                 }).set({
                     'labels': { ok: 'Si', cancel: 'No' },

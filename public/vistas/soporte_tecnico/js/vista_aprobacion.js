@@ -1,6 +1,10 @@
 $(document).ready(function () {
+    select_2();
     consultar_datos_aprobacion();
     generar_pdf();
+    vista_formAgregar();
+    cargar_productos();
+    agregar_item();
 });
 
 var consultar_datos_aprobacion = function () {
@@ -51,7 +55,7 @@ var recotizar = function () {
         $.ajax({
             "url": `${PATH_NAME}/soporte_tecnico/recotizar_diag`,
             "type": 'POST',
-            "data": { data },
+            "data": { data, tipo: 'eliminar' },
             success: function (res) {
                 if (res == 1) {
                     alertify.success('Se elimino el repuesto');
@@ -68,6 +72,8 @@ var generar_pdf = function () {
     $('.generar_pdf').on("click", function () {
         var datos = JSON.parse($(".generar_pdf").attr('data'));
         var num_cotiza = datos['repuestos'][0]['num_cotizacion'];
+        var obj_inicial = $('#generar_pdf').html();
+        btn_procesando('generar_pdf');
         $.ajax({
             "url": `${PATH_NAME}/soporte_tecnico/generar_cotizacion`,
             "type": 'POST',
@@ -76,6 +82,7 @@ var generar_pdf = function () {
                 responseType: 'blob'
             },
             success: function (res) {
+                btn_procesando(`generar_pdf`, obj_inicial, 1);
                 var a = document.createElement('a');
                 var url = window.URL.createObjectURL(res);
                 a.href = url;
@@ -129,6 +136,10 @@ var aprobacion_cotiza = function (tbody, table) {
     });
     $(tbody).on("click", "button.recotizar", function () {
         array_item = table.row($(this).parents("tr")).data();
+        // datos para agregar respuestos al item
+        $('#id_diagnostico_ag').val(array_item['id_diagnostico']);
+        $('#item_ag').val(array_item['item']);
+        $('#cotizacion_ag').val(array_item['repuestos'][0]['num_cotizacion']);
         var contar = array_item['repuestos'].length;
         $('#modal_recotizar').modal("show");
         $('#nombre_equipo').html(array_item['equipo'] + ' ' + 'S/N' + array_item['serial_equipo']);
@@ -139,7 +150,7 @@ var aprobacion_cotiza = function (tbody, table) {
                 {
                     "render": function (data, type, row) {
                         return `${row.codigo_producto}-${row.descripcion_productos}`
-                    }
+                    }, className: "col-6"
                 },
                 {
                     "render": function (data, type, row) {
@@ -154,7 +165,7 @@ var aprobacion_cotiza = function (tbody, table) {
                 {
                     "render": function (data, type, row) {
                         if (contar == 1) {
-                            return ` <h5 style="color:red;">Este item solo tiene un repuesto y no se puede eliminar</h5>`;
+                            return ` <p style="color:red;">Este item solo tiene un repuesto y no se puede eliminar</p>`;
                         } else {
                             return `
                             <center> 
@@ -189,4 +200,58 @@ var aprobacion_cotiza = function (tbody, table) {
         $("#modal_repuestos").modal("show");
     });
 }
+// arreglo para agregar items
 
+function vista_formAgregar() {
+    $(".agregar_rep").click(function () {
+        $("#agregar_item").toggle(500);
+        $("#tabla_items").toggle(500);
+    });
+}
+
+var cargar_productos = function () {
+    var productos_disp = '<option value="0">Elija un producto</option>';
+    $.ajax({
+        "url": `${PATH_NAME}/soporte_tecnico/cargar_productos`,
+        "type": 'GET',
+        success: function (res) {
+            res.forEach(element => {
+                productos_disp /*html*/ += `<option value='${element.id_productos}'>
+                ${element.codigo_producto} | ${element.descripcion_productos}
+                </option>`;
+            });
+            $(`#id_producto`).empty().html(productos_disp);
+        }
+    });
+}
+
+
+function agregar_item() {
+    $('#formulario_agregar').submit(function (e) {
+        e.preventDefault();
+        var formulario = $('#formulario_agregar').serializeArray();// falta validarlo 
+        var data = $('#formulario_agregar').serialize();// falta validarlo
+        var valida = validar_formulario(formulario);
+        var obj_inicial = $('#agregar_pro').html();
+        btn_procesando('agregar_pro');
+        if (valida) {
+            $.ajax({
+                "url": `${PATH_NAME}/soporte_tecnico/recotizar_diag`,
+                "type": 'POST',
+                "data": { data, tipo: 'agregar' },
+                success: function (res) {
+                    btn_procesando('agregar_pro', obj_inicial, 1);
+                    if (res.status == true) {
+                        alertify.success('Se agreggo el repuesto');
+                        location.reload();
+                    } else if (res.status == false) {
+                        alertify.error(res.msg);
+                    } else {
+                        alertify.error('Algo a ocurrido');
+                    }
+                }
+            });
+        }
+    })
+
+}

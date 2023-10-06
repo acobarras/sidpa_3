@@ -7,6 +7,7 @@ $(document).ready(function () {
     etiqueta_ingreso();
 });
 
+
 var consulta_visita = function () {
     $('#form_visitas').submit(function (e) {
         e.preventDefault();

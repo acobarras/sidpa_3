@@ -5,6 +5,7 @@ $(document).ready(function () {
     mostrar_formulario();
     seleccionar_producto();
 });
+
 const IDPERSONA = $('#id_usuario').val();
 const ROLL = $('#roll_usuario').val();
 

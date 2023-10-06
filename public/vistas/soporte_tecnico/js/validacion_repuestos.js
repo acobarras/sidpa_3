@@ -6,6 +6,7 @@ $(document).ready(function () {
     compras_diag();
 });
 
+
 var consultar_repuestos = function () {
     var table = $("#tabla_repuestos").DataTable({
         "ajax": `${PATH_NAME}/soporte_tecnico/consultar_repuestos`,
@@ -145,7 +146,7 @@ var enviar = function () {
         var valor = $(this).val();
         if (valor == 1) {
             var obj_inicial = $(`#descontar_inv`).html();
-            btn_procesando(`descontar_inv`, obj_inicial, 1);
+            btn_procesando('descontar_inv');
             $.ajax({
                 "url": `${PATH_NAME}/soporte_tecnico/validacion_inv`,
                 "type": 'POST',
@@ -154,6 +155,7 @@ var enviar = function () {
                     responseType: 'blob'
                 },
                 success: function (res) {
+                    btn_procesando(`descontar_inv`, obj_inicial, 1);
                     var a = document.createElement('a');
                     var url = window.URL.createObjectURL(res);
                     a.href = url;
@@ -166,13 +168,14 @@ var enviar = function () {
                 }
             });
         } else {
-            var obj_inicial = $(`#comprar`).html();
-            btn_procesando(`comprar`, obj_inicial, 1);
+            var obj_inicial1 = $(`#comprar`).html();
+            btn_procesando('comprar');
             $.ajax({
                 "url": `${PATH_NAME}/soporte_tecnico/validacion_inv`,
                 "type": 'POST',
                 "data": { valor, datos_envio },
                 success: function (res) {
+                    btn_procesando(`comprar`, obj_inicial1, 1);
                     if (res == 1) {
                         consultar_repuestos();
                         $("#modal_inventario").modal("hide");
