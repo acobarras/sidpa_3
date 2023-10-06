@@ -146,7 +146,7 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="form-group col-4" id="req_cotiza" style="display: none;">
-                                            <label class="fw-bolder" for="req_cotiza">¿Requiere Cotizacion?</label>
+                                            <label class="fw-bolder" for="req_cotiza">¿Requiere Cotización de la visita?</label>
                                             <span class="form-control select_acob">
                                                 Si &nbsp;&nbsp;
                                                 <input type="radio" class="req_cotiza" name="req_cotiza" id="req_cotiza_si" value="1">

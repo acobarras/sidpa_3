@@ -8,6 +8,7 @@ use MiApp\persistencia\dao\CotizacionItemSoporteDAO;
 use MiApp\persistencia\dao\entrada_tecnologiaDAO;
 use MiApp\persistencia\dao\ConsCotizacionDAO;
 use MiApp\persistencia\dao\SoporteTecnicoDAO;
+use MiApp\negocio\util\Validacion;
 use MiApp\persistencia\dao\MiPedidoControlador;
 use MiApp\negocio\util\Envio_Correo;
 use MiApp\negocio\util\PDF;
@@ -95,7 +96,7 @@ class AprobacionControlador extends GenericoControlador
         $editar = $this->SoporteItemDAO->editar($editar_item, $condicion_item);
 
         if ($_POST['estado_cotiza'] == 6 || $_POST['estado_cotiza'] == 7) {
-            $id_actividad = 91;//COTIZACION DE REPUESTOS CANCELADA
+            $id_actividad = 91; //COTIZACION DE REPUESTOS CANCELADA
             $observacion = 'COTIZACION DE REPUESTOS CANCELADA';
             $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos['id_diagnostico'], $datos['item'], $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
         } else {
@@ -121,9 +122,34 @@ class AprobacionControlador extends GenericoControlador
     public function recotizar_diag()
     {
         header('Content-Type: application/json');
+        $tipo = $_POST['tipo'];
         $datos = $_POST['data'];
-        $condicion = 'id_cotizacion =' . $datos['id_cotizacion'];
-        $modificacion = $this->CotizacionItemSoporteDAO->eliminar($condicion);
+        if ($tipo == 'eliminar') {
+            $condicion = 'id_cotizacion =' . $datos['id_cotizacion'];
+            $modificacion = $this->CotizacionItemSoporteDAO->eliminar($condicion);
+        } else { // agregar items
+            $form = Validacion::Decodifica($datos);
+            //consultar_datos
+            $items = $this->CotizacionItemSoporteDAO->consultar_datos($form['id_diagnostico'], $form['item']);
+            $existe = false;
+            foreach ($items as $value) {
+                if ($value->id_producto == $form['id_producto']) {
+                    $existe = true;
+                }
+            }
+            if (!$existe) {
+                $form['num_acta'] = 0;
+                $form['estado'] = 2;
+                $form['fecha_crea'] = date('Y-m-d');
+                $form['hora_crea'] = date('H:i:s');
+                $modificacion = $this->CotizacionItemSoporteDAO->insertar($form);
+            } else {
+                $modificacion = [
+                    'status' => false,
+                    'msg' => 'Este producto ya está cotizado',
+                ];
+            }
+        }
         echo json_encode($modificacion);
         return;
     }

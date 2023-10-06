@@ -129,12 +129,11 @@ var asignar_tecnico = function (tbody, table) {
                     "type": 'POST',
                     "data": { data, id_diagnostico_item, form },
                     success: function (res) {
+                        btn_procesando('enviar_selec', obj_inicial, 1);
                         if (res == true) {
-                            btn_procesando('enviar_selec', obj_inicial, 1);
                             alertify.success('Técnico Asignado');
                             location.reload();
                         } else {
-                            btn_procesando('enviar_selec', obj_inicial, 1);
                             alertify.error('Algo a ocurrido');
                             return;
                         }

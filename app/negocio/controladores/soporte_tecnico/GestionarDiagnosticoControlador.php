@@ -93,17 +93,17 @@ class GestionarDiagnosticoControlador extends GenericoControlador
                     $item_repuestos['estado'] = 2;// en espera de aprobacion
                     $agregar_repuestos = $this->CotizacionItemSoporteDAO->insertar($item_repuestos);
                 };
-            } elseif ($estado_cotizacion == 7) { // DSR
-                $id_actividad = 93; // DEVUELVE SIN REPARAR
-                $observacion = 'DEVUELVE SIN REPARAR';
-                $estado_itemequipo['estado'] = 16;
+            } elseif ($estado_cotizacion == 6) { // DEVUELVE SIN COTIZAR
+                $id_actividad = 103; //DEVUELVE SIN COTIZAR
+                $observacion = 'DEVUELVE SIN COTIZAR';
+                $estado_itemequipo['estado'] = 15;// reparacion efectuada
                 for ($a = 0; $a < count($datos[$i]); $a++) { // for de item-repuestos
                     $item_repuestos['num_cotizacion'] = 0;
                     $item_repuestos['moneda'] = $datos[$i][$a]['moneda'];
                     $item_repuestos['valor'] = $datos[$i][$a]['valor'];
                     $item_repuestos['cantidad'] = $datos[$i][$a]['cantidad'];
                     $item_repuestos['id_producto'] = $datos[$i][$a]['producto']['id_productos'];
-                    $item_repuestos['estado'] = 7; // devuelve sin reparar   
+                    $item_repuestos['estado'] = 6; // devuelve sin reparar   
                     $agregar_repuestos = $this->CotizacionItemSoporteDAO->insertar($item_repuestos);
                 };
             } else { // COMODATO
@@ -134,7 +134,7 @@ class GestionarDiagnosticoControlador extends GenericoControlador
             header('Content-type: application/pdf');
             $crea_cotiza = GestionarDiagnosticoControlador::crear_cotizacion($num_cotizacion[0]->numero_guardado);
             $respu = $crea_cotiza;
-        }elseif ($agregar_repuestos['status'] && $estado_cotizacion == 7) {
+        }elseif ($agregar_repuestos['status'] && $estado_cotizacion == 6) {
             header('Content-type: application/json');
             $respu = [
                 'status' => -1,

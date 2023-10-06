@@ -1,6 +1,7 @@
 $(document).ready(function () {
     consultar_datos_item();
 });
+
 var consultar_datos_item = function () {
     $.ajax({
         url: `${PATH_NAME}/soporte_tecnico/consultar_datos_cierre`,

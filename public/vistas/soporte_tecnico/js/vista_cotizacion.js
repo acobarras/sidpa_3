@@ -3,6 +3,7 @@ $(document).ready(function () {
     personal_soporte();
 });
 
+
 var valida_url = function () {
     var params = new URLSearchParams(location.search);
     var id_url = params.get('id');
@@ -96,6 +97,7 @@ var reagendar_visita = function (tbody, table) {
         $('#reagenda_persona').val(datos_tabla['id_usuario_visita']);
         $('#reagendar_fecha').empty().val(datos_tabla['fecha_agendamiento']);
         $('#enviar_reagendar_visita').on('click', function () {
+            var obj_inicial = $('#enviar_reagendar_visita').html();
             var fecha = $('#reagendar_fecha').val();
             var persona = $('#reagenda_persona').val();
             var envio = {
@@ -103,11 +105,13 @@ var reagendar_visita = function (tbody, table) {
                 'fecha_visita': fecha,
                 'persona_visita': persona
             }
+            btn_procesando('enviar_reagendar_visita');
             $.ajax({
                 "url": `${PATH_NAME}/soporte_tecnico/reagendar_visita`,
                 "type": 'POST',
                 "data": envio,
                 success: function (res) {
+                    btn_procesando(`enviar_reagendar_visita`, obj_inicial, 1);
                     if (res.status == 1) {
                         limpiar_formulario('form_reagendar_visita', 'input');
                         $('#reagendar_visita').modal('hide')
@@ -130,14 +134,15 @@ var enviar_cotizacion = function (tbody, table) {
     $(tbody).on("click", "button.cotiza", function () {
         var datos_tabla = table.row($(this).parents("tr")).data();
         $('#enviar_cotiza').on('click', function () {
+            var obj_inicial = $('#enviar_cotiza').html();
             var form = $('#form_cotizar').serializeArray();
             var valida = validar_formulario(form);
             var envio = {
                 'datos': datos_tabla,
                 'form': $('#form_cotizar').serialize(),
             }
-            console.log(form);
             if (valida) {
+                btn_procesando('enviar_cotiza');
                 alertify.confirm('ALERTA SIDPA', '¿Esta seguro que desea continuar con el valor digitado?', function () {
                     $.ajax({
                         "url": `${PATH_NAME}/soporte_tecnico/cotizacion_visita`,
@@ -147,6 +152,7 @@ var enviar_cotizacion = function (tbody, table) {
                             responseType: 'blob'
                         },
                         success: function (res) {
+                            btn_procesando(`enviar_cotiza`, obj_inicial, 1);
                             if (res.status == -1) {
                                 alertify.error('algo a ocurrido');
                             } else {
@@ -251,6 +257,7 @@ var agendar_visita = function (tbody, table) {
         var datos_tabla = table.row($(this).parents("tr")).data();
         var id_diagnostico = datos_tabla['id_diagnostico'];
         $('#enviar_agenda_visita').on("click", function () {
+            var obj_inicial = $('#enviar_agenda_visita').html();
             var form = $('#form_agendar_visita').serialize();
             var valida = validar_formulario(form);
             var envio = {
@@ -258,11 +265,13 @@ var agendar_visita = function (tbody, table) {
                 'form': form,
             };
             if (valida) {
+                btn_procesando('enviar_agenda_visita');
                 $.ajax({
                     "url": `${PATH_NAME}/soporte_tecnico/agendar_visita`,
                     "type": 'POST',
                     "data": envio,
                     success: function (res) {
+                        btn_procesando(`enviar_agenda_visita`, obj_inicial, 1);
                         if (res.status == 1) {
                             limpiar_formulario('form_cotizar', 'input');
                             $('#agendar_visita').modal('hide')

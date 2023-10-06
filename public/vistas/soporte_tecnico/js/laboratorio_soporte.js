@@ -6,6 +6,7 @@ $(document).ready(function () {
     redirigir();
 });
 
+
 var valida_url = function () {
     var params = new URLSearchParams(location.search);
     var id_url = params.get('id');
@@ -99,7 +100,6 @@ var cargar_item = function () {
             } else {
                 var respu = false;
                 array_item.forEach(element => {
-                    // console.log(element);
                     if (element.serial_equipo == serial_equipo) {
                         alertify.error('el serial digitado ya fue cargado');
                         borrar_formulario();
