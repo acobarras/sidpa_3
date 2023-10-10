@@ -81,7 +81,8 @@ class SolicitudPrioritariaControlador extends GenericoControlador
             'mensaje' => $formulario['observacion'],
             'id_usuario' => $_SESSION['usuario']->getid_usuario(),
             'estado' => 2,
-            'fecha_crea' => date('Y-m-d'),
+            'fecha_crea' => date('Y-m-d H:i:s'),
+            
         ];
         $respu = $this->SeguimientoPrioridadesDAO->insertar($crea_seg);
         if ($respu['status'] == 1) {
