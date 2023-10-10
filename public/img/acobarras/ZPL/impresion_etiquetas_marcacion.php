@@ -164,8 +164,8 @@
             ^PQ" . $formulario['cantidad'] . ",0,1,Y^XZ";
         } else {
 
-            $imagen = '
-            ^FO17,20^GFA,06912,06912,00072,:Z64:
+            $imagen = '        
+            ^FO15,25^GFA,06912,06912,00072,:Z64:
             eJztWM9rG0ka/VodRWbsuG2w0CVCJqfggXEOCzZhdlo5zF0B9ToHixj2H1BAnp5DdtzsXIIPu/+CmMuG9sHX4IWR9rD3XHQ0NOxhjQci3yw0Tte+930tR+v
             TsjEsLK6kf1RXdenV6/e9+soid+Wu/A/L+u0MU41btzLOont7K+N0ot3bGGbx/NFx/xbGqcuK173xrJTo5c1/NMCCdZ7IO/n5FvC0ZEVmBG2kKQcvDfI+Ll
             /qB0hRtMXa075d1nlmr5Kb8lU/kxPZXLdxGgcHQ1wqcYyZenH8Gmd3cHAgoiep4YKWl7i8Z6XJZ3HMVz2RHk9aNp0jnoFzE+qBNR9ndyZ6LyEueWIXaTiXo
@@ -193,33 +193,28 @@
             ZxY5vUzy910HPz7xv/TVk8WzhObmGc2/r7j3xpicFnF2+neSvj3JW7clfuyv9L+Re8DUvl:2219
             ';
             $prueba = '
-            ^XA
-            ^MMT
-            ^PW831
-            ^LL0400
-            ^LS0
-            ' . $imagen . '
+            ^XA ^PW831 ^CI28 ^LL1199 ^LS0' . $imagen . ' 
             ^BY112,112^FT643,317^BXN,7,200,0,0,1,~
             ^FH\^FD' . $data_item->codigo . '^FS
             ^FT618,91^ACN,36,20^FH\^FD' . $data_item->num_pedido . '-' . $data_item->item . '^FS
             ^FT655,358^ACN,18,10^FH\^FD' . $ano_compro . 'D' . $dia_compro . 'M' . $mes_compro . '^FS
             ^FT614,357^A0N,24,24^FH\^FDC^FS
-            ^FT225,270^A0N,24,26^FH\^FDCantidad total:^FS
-            ^FT396,272^ACN,18,10^FH\^FD' . $formulario['caja'] . '^FS
-            ^FT225,228^A0N,24,26^FH\^FDCantidad por rollo:^FS
-            ^FT435,229^ACN,18,10^FH\^FD' . $formulario['cant_x'] . '^FS
+            ^FT456,274^ACN,18,10^FH\^FD' . $formulario['caja'] . '^FS
+            ^FT328,273^A0N,24,26^FH\^FDCant. total:^FS
+            ^FT498,229^ACN,18,10^FH\^FD' . $formulario['cant_x'] . '^FS
+            ^FT328,228^A0N,24,26^FH\^FDCant. por rollo:^FS
+            ^FT162,274^ACN,18,10^FH\^FD' . $data_item->cav_cliente  . '^FS
             ^FT36,358^A0N,24,26^FH\^FDOrden de Compra:^FS
+            ^FT40,273^A0N,24,26^FH\^FDCavidades:^FS
+            ^FT136,228^ACN,18,10^FH\^FD' . $porciones_cod[0] . '^FS
             ^FT238,358^ACN,18,10^FH\^FD' . $data_item->orden_compra . '^FS
-            ^FT36,269^A0N,24,26^FH\^FDCavidades:^FS
-            ^FT162,270^ACN,18,10^FH\^FD' . $data_item->cav_cliente . '^FS
-            ^FT450,315^A0N,24,24^FH\^FDAux:^FS
-            ^FT498,316^ACN,18,10^FH\^FD' . $operario . '^FS
-            ^FT225,313^A0N,24,24^FH\^FDLote:^FS
-            ^FT288,314^ACN,18,10^FH\^FD' . $formulario['lote'] . '^FS
+            ^FT212,314^ACN,18,10^FH\^FD' . $operario . '^FS
+            ^FT388,314^ACN,18,10^FH\^FD' . $formulario['lote'] . '^FS
+            ^FT164,313^A0N,24,24^FH\^FDAux:^FS
+            ^FT328,313^A0N,24,24^FH\^FDLote:^FS
+            ^FT102,314^ACN,18,10^FH\^FD' . $data_item->nombre_core . '^FS
             ^FT36,227^A0N,24,26^FH\^FDTama\A4o:^FS
-            ^FT139,228^ACN,18,10^FH\^FD' . $porciones_cod[0] . '^FS
-            ^FT36,314^A0N,24,24^FH\^FDCore:^FS
-            ^FT98,315^ACN,18,10^FH\^FD' . $data_item->core . '^FS
+            ^FT40,313^A0N,24,24^FH\^FDCore:^FS
             ^FT37,185^A0N,25,24^FH\^FD' . $nombre1 . '^FS
             ^FT37,154^A0N,25,24^FH\^FD' . $nombre2 . '^FS
             ^FO26,370^GB770,0,1^FS
@@ -228,8 +223,8 @@
             ^FO26,123^GB776,0,2^FS
             ^FO27,239^GB575,0,1^FS
             ^FO26,195^GB776,0,1^FS
-            ^FO437,283^GB0,42,1^FS
-            ^FO210,196^GB0,129,2^FS
+            ^FO152,283^GB0,42,1^FS
+            ^FO312,196^GB0,129,1^FS
             ^FO600,13^GB0,110,1^FS
             ^FO600,196^GB0,175,1^FS
             ^PQ' . $formulario['cantidad'] . ',0,1,Y^XZ';

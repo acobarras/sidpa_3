@@ -9,6 +9,7 @@ $(document).ready(function () {
     consulta_diag();
     consulta_prioridad();
     CKEDITOR.replace('observacion', { toolbar: 'mybar' });
+    consulta_ubi_pedido();
 });
 // ---------------------------------------------------------INICIO CONSULTAS POR NUMERO DE PEDIDO-------------------------------------------------------------------------------
 
@@ -590,4 +591,44 @@ var consulta_prioridad = function () {
             });
         }
     });
+}
+
+var consulta_ubi_pedido = function () {
+    $('#consulta_ubicacion').on('submit', function (e) {
+        e.preventDefault();
+        var form1 = $(this).serializeArray();
+        var valida = validar_formulario(form1);
+        var obj_inicial = $('#ubica_pedido').html();
+        if (valida) {
+            btn_procesando('ubica_pedido');
+            $.ajax({
+                type: "POST",
+                url: `${PATH_NAME}/consulta_pedido_ubica`,
+                data: { form1 },
+                success: function (res) {
+                    if (res.status == -1) {
+                        alertify.error(res.msg);
+                        btn_procesando('ubica_pedido', obj_inicial, 1);
+                        limpiar_formulario('consulta_ubicacion', 'input');
+                    } else {
+                        limpiar_formulario('consulta_ubicacion', 'input');
+                        btn_procesando('ubica_pedido', obj_inicial, 1);
+                        var table = $('#tabla_ubicaciones').DataTable({
+                            data: res.data,
+                            "columns": [
+                                { "data": "num_pedido" },
+                                { "data": "item" },
+                                { "data": "nombre_empresa" },
+                                { "data": "orden_compra" },
+                                { "data": "codigo" },
+                                { "data": "cantidad_factura" },
+                                { "data": "nombre_ubicacion" },
+
+                            ],
+                        });
+                    }
+                }
+            });
+        }
+    })
 }

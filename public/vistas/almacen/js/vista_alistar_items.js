@@ -154,23 +154,33 @@ var logistica_checked_completo = function (tbody, table) {
 }
 var envio_completo = function (tbody, table, reload, alistamiento) {
     $(tbody).on('click', 'tr button.report_cant_factu', function () {
+        $('#ubicacion').modal('show');
         var data = table.row($(this).parents("tr")).data();
-        var obj_inicial = $(`#report_cant_factu${data['id_ingresotec']}`).html();
-        btn_procesando_tabla(`report_cant_factu${data['id_ingresotec']}`);
+        envia(data, alistamiento, reload);
+
+    });
+}
+
+var envia = function (data, alistamiento, reload) {
+    $('#modal_ubica').on('click', function () {
+        var ubicacion = $('#ubicacion_materialmodal').val();
+        var obj_inicial = $(`#modal_ubica`).html();
+        btn_procesando_tabla(`modal_ubica`);
         data.alistamiento = alistamiento;
+        data.ubicacion_material = ubicacion;
         $.ajax({
             url: `${PATH_NAME}/almacen/crea_entrega_logistica`,
             type: "POST",
             data: data,
             success: function (res) {
                 $(reload).DataTable().ajax.reload(function () {
-                    btn_procesando_tabla(`report_cant_factu${data['id_ingresotec']}`, obj_inicial, 1);
+                    btn_procesando_tabla(`modal_ubica`, obj_inicial, 1);
                     alertify.success(`${res} CORRECTAMENTE.`);
+                    $('#ubicacion').modal('hide')
                 });
             }
         });
-
-    });
+    })
 }
 var enviar_reproceso = function (tbody, table, reload, alistamiento) {
     $(tbody).on('click', 'tr button.item_en_reproceso', function () {
@@ -205,6 +215,7 @@ var envio_cantidad_reproceso = function () {
     $(`#bt_reprocesar_item`).on('click', function () {
         var data = JSON.parse($(this).attr('data'));
         var cantidad = $("#cantidad").val();
+        var ubicacion_material = $("#ubicacion_material").val();
         if (cantidad == 0 || cantidad == '') {
             alertify.error('La cantidad no puede ser 0 o vacia.');
         } else {
@@ -215,6 +226,7 @@ var envio_cantidad_reproceso = function () {
                 btn_procesando(`bt_reprocesar_item`, obj_inicial, 1);
             } else {
                 data.salida = cantidad;
+                data.ubicacion_material = ubicacion_material;
                 $.ajax({
                     url: `${PATH_NAME}/almacen/reportar_cant_reproceso`,
                     type: "POST",
@@ -229,7 +241,7 @@ var envio_cantidad_reproceso = function () {
                                 $("#dt_alistamiento_bod_incompleto").DataTable().ajax.reload();
                             }
                             btn_procesando(`bt_reprocesar_item`, obj_inicial, 1);
-                            alertify.success(`${res.observacion} CORRECTAMENTE.`);                          
+                            alertify.success(`${res.observacion} CORRECTAMENTE.`);
                         } else {
                             alertify.error('Error lo sentimos algo a ocurrido comuniquese con los desarrolladores');
                             btn_procesando(`bt_reprocesar_item`, obj_inicial, 1);
@@ -384,7 +396,7 @@ var alistamiento_items_bobina = function () {
                     return `<div>
                                 <button class="btn btn-primary btn-sm consulta_inventario" title="Consulta Inventario"><i class="fas fa-search"></i></button>\n\
                                 </div>`;
-                                // <button class="btn btn-success btn-sm envio_compras" title="Enviar a compras"><i class="fas fa-cart-plus"></i></button>\n\
+                    // <button class="btn btn-success btn-sm envio_compras" title="Enviar a compras"><i class="fas fa-cart-plus"></i></button>\n\
                 }
             }
         ],

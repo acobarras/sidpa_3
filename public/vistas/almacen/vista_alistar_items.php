@@ -102,12 +102,56 @@
                             <div class="mb-3">
                                 <label for="cantidad" class="col-form-label">Cantidad:</label>
                                 <input type="text" class="form-control" id="cantidad" name="cantidad">
-                                <!-- <input type="hidden" id="data"> -->
+                            </div>
+                            <div>
+                                <label for="ubicacion_material">Ubicación:</label>
+                                <select class="form-control select_2" name="ubicacion_material" id="ubicacion_material" style="width: 100%;">
+                                    <option value="0"></option>
+                                    <?php foreach ($ubicacion_despacho as $ubicacion) { ?>
+                                        <option value="<?= $ubicacion->id ?>"><?= $ubicacion->nombre_ubicacion ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                             <br>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
                                 <button type="button" class="btn btn-primary btn-sm" id="bt_reprocesar_item" data="">Reportar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-------------------------------------------------- MODAL Ubicacion --------------------------------------------->
+<div class="modal fade" id="ubicacion" role="dialog" aria-labelledby="exampleubicacion" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header header_aco">
+                <div class="img_modal">
+                    <p> </p>
+                </div>
+                <h3 class="modal-title" id="exampleubicacion">Ubicación Material</h3>
+                <i class="bi bi-x cerrar" data-bs-dismiss="modal" style="font-size: 26px;"></i>
+            </div>
+            <div class="modal-body">
+                <div class="recuadro">
+                    <div class="container-fluid">
+                        <form id="form_ubicacion">
+                            <div>
+                                <label for="ubicacion_materialmodal">Ubicación:</label>
+                                <select class="form-control select_2" name="ubicacion_material" id="ubicacion_materialmodal" style="width: 100%;">
+                                    <option value="0"></option>
+                                    <?php foreach ($ubicacion_despacho as $value) { ?>
+                                        <option value="<?= $value->id ?>"><?= $value->nombre_ubicacion ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="modal_ubica" data="">Reportar</button>
                             </div>
                         </form>
                     </div>

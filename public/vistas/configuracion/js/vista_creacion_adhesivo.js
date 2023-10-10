@@ -1,7 +1,7 @@
 $(document).ready(function () {
     select_2();
     cargar_tabla_adhesivos();
-    editar_adhesivo();
+    // editar_adhesivo();
     crear_adhesivo();
     regresar_adhesivo();
     obtener_data_editar();

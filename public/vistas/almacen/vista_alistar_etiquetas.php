@@ -99,6 +99,15 @@
                                     <label for="precio_autorizado">Cantidad Reporte:</label>
                                     <input type="text" class="form-control" name="cantidad_factura" id="cantidad_factura">
                                 </div>
+                                <div>
+                                    <label for="ubicacion_material">Ubicación:</label>
+                                    <select class="form-control select_2" name="ubicacion_material" id="ubicacion_material" style="width: 100%;">
+                                        <option value="0"></option>
+                                        <?php foreach ($ubicacion_despacho as $ubicacion_despacho) { ?>
+                                            <option value="<?= $ubicacion_despacho->id ?>"><?= $ubicacion_despacho->nombre_ubicacion ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>

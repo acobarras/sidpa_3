@@ -13,9 +13,9 @@
                     <h3 class="text-center fw-bold">Pendientes por alistar tecnología</h3>
                     <br>
                     <div class="mb-3">
-                            <p class="mx-3 text-danger"> ► Si la cantidad de bodega se encuentra en rojo la mercancia no ha sido alistada</p>
-                            <p class="mx-3 text-success"> ► Si la cantidad de bodega se encuentra en verde la mercancia ya se alisto</p>
-                        </div>
+                        <p class="mx-3 text-danger"> ► Si la cantidad de bodega se encuentra en rojo la mercancia no ha sido alistada</p>
+                        <p class="mx-3 text-success"> ► Si la cantidad de bodega se encuentra en verde la mercancia ya se alisto</p>
+                    </div>
                     <table id="dt_alistamiento_tecnologia" style="background: white" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
                         <thead style="background:#0d1b50;color:white">
                             <tr>
@@ -93,6 +93,15 @@
                                 <div>
                                     <label for="precio_autorizado">Cantidad Reporte:</label>
                                     <input type="text" class="form-control" name="cantidad_factura" id="cantidad_factura">
+                                </div>
+                                <div>
+                                    <label for="ubicacion_material">Ubicación:</label>
+                                    <select class="form-control select_2" name="ubicacion_material" id="ubicacion_material" style="width: 100%;">
+                                        <option value="0"></option>
+                                        <?php foreach ($ubicacion_despacho as $ubicacion_despacho) { ?>
+                                            <option value="<?= $ubicacion_despacho->id ?>"><?= $ubicacion_despacho->nombre_ubicacion ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>

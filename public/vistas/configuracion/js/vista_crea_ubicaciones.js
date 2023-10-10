@@ -6,7 +6,7 @@ $(document).ready(function () {
 });
 
 
-var carga_tabla_ubicaciones = function() {
+var carga_tabla_ubicaciones = function () {
     var table = $("#tabla_ubicaciones").DataTable({
         "deferRender": true,
         "ajax": `${PATH_NAME}/configuracion/consultar_ubicaciones`,
@@ -19,14 +19,14 @@ var carga_tabla_ubicaciones = function() {
                 "searchable": false,
                 "orderable": false,
                 "render": function (data, type, row) {
-                    if (row["estado"] == 1) {
+                    if (row["estado"] == 1 || row["estado"] == 2) {
                         return '<center><button class="btn btn-link estado" value="1"><i style="font-size:25px" class="fa fa-toggle-on text-success"></i></button></center>';
                     } else {
                         return '<center><button class="btn btn-link estado" value="0"><i style="font-size:25px" class="fa fa-toggle-off text-danger"></i></button></center>';
                     }
                 }
             },
-            { "defaultContent": '<button type="button" class="btn btn-primary editar_registro" title="Consultar/Modificar" data-bs-toggle="modal" data-bs-target="#ModalUbicacion"><i class="fa fa-edit"></i></button>',"className": "text-center" }
+            { "defaultContent": '<button type="button" class="btn btn-primary editar_registro" title="Consultar/Modificar" data-bs-toggle="modal" data-bs-target="#ModalUbicacion"><i class="fa fa-edit"></i></button>', "className": "text-center" }
         ],
         "language": idioma
     });
@@ -94,12 +94,13 @@ var editar_ubicacion = function () {
 
 
 
-var crea_ubicacion = function() {
+var crea_ubicacion = function () {
     $("#form_crear_ubicacion").submit(function (e) {
         e.preventDefault();
         var obj_inicial = $('#crear_ubicacion').html();
         var form = $(this).serializeArray();
-        valida = validar_formulario(form);
+        var excepcion = ['tipo_producto'];
+        valida = validar_formulario(form, excepcion);
         if (valida) {
             btn_procesando('crear_ubicacion');
             $.ajax({
@@ -107,7 +108,7 @@ var crea_ubicacion = function() {
                 "type": 'POST',
                 "data": form,
                 "success": function (respuesta) {
-                    if (respuesta.estado) {
+                    if (respuesta.status) {
                         alertify.success(`Datos ingresados corretamente la posicion insetada es ${respuesta.id}`);
                         btn_procesando('crear_ubicacion', obj_inicial, 1);
                         limpiar_formulario('form_crear_ubicacion', 'select');
