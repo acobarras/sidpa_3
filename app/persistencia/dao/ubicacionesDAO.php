@@ -42,4 +42,12 @@ class ubicacionesDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function ubicacion_despacho()
+    {
+        $sql = "SELECT * FROM ubicaciones WHERE estado=2";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

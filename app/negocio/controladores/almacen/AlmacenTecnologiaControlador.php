@@ -183,9 +183,11 @@ class AlmacenTecnologiaControlador extends GenericoControlador
     public function vista_alistar_items()
     {
         parent::cabecera();
-
         $this->view(
-            'almacen/vista_alistar_items'
+            'almacen/vista_alistar_items',
+            [
+                "ubicacion_despacho" => $this->ubicacionesDAO->ubicacion_despacho()
+            ]
         );
     }
     /*
@@ -234,11 +236,12 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         header('Content-Type: application/json');
         $datos = $_POST;
         $valida_reporte = $this->EntregasLogisticaDAO->valida_edicion_item($datos['datos_item'][0]['id_pedido_item']);
-        if ($datos['datos_item'][0]['id_estado_item_pedido'] != 6) {// para no enviar los item de impresion variable a facturacion (Y)
+        if ($datos['datos_item'][0]['id_estado_item_pedido'] != 6) { // para no enviar los item de impresion variable a facturacion (Y)
             if (empty($valida_reporte)) {
                 $data = [
                     'id_pedido_item' => $datos['datos_item'][0]['id_pedido_item'],
                     'cantidad_factura' => $_POST['salida'],
+                    'ubicacion_material' => $_POST['ubicacion_material'],
                     'id_usuario' => $_SESSION['usuario']->getid_usuario(),
                     'estado' => 1,
                     'fecha_crea' => date('y-m-d'),
@@ -247,7 +250,9 @@ class AlmacenTecnologiaControlador extends GenericoControlador
                 $this->EntregasLogisticaDAO->insertar($data);
             } else {
                 $nueva_cantidad = $_POST['salida'] + $valida_reporte[0]->cantidad_factura;
+                $ubicacion_material = $_POST['ubicacion_material'] + $valida_reporte[0]->ubicacion_material;
                 $data['cantidad_factura'] = $nueva_cantidad;
+                $data['ubicacion_material'] = $ubicacion_material;
                 $condicion = 'id_entrega=' . $valida_reporte[0]->id_entrega;
                 $this->EntregasLogisticaDAO->editar($data, $condicion);
             }
@@ -369,6 +374,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
             $data = [
                 'id_pedido_item' => $datos['datos_item'][0]['id_pedido_item'],
                 'cantidad_factura' => $_POST['salida'],
+                'ubicacion_material' => $_POST['ubicacion_material'],
                 'id_usuario' => $_SESSION['usuario']->getid_usuario(),
                 'estado' => 1,
                 'fecha_crea' => date('y-m-d'),
@@ -377,7 +383,9 @@ class AlmacenTecnologiaControlador extends GenericoControlador
             $this->EntregasLogisticaDAO->insertar($data);
         } else {
             $nueva_cantidad = $_POST['salida'] + $valida_reporte[0]->cantidad_factura;
+            $ubicacion_material = $_POST['ubicacion_material'] + $valida_reporte[0]->ubicacion_material;
             $data['cantidad_factura'] = $nueva_cantidad;
+            $data['ubicacion_material'] = $ubicacion_material;
             $condicion = 'id_entrega=' . $valida_reporte[0]->id_entrega;
             $this->EntregasLogisticaDAO->editar($data, $condicion);
         }

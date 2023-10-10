@@ -44,7 +44,7 @@
                         <div class="mb-3">
                             <label for="tipo_producto" class="form-label">Tipo Producto : </label>
                             <select class="form-control select_2" style="width: 100%;" id="tipo_producto" name="tipo_producto">
-                                <option value="0"></option>
+                                <option value="0">Ubicación Despacho</option>
                                 <?php foreach ($clase_articulo as $value) { ?>
                                     <option value="<?= $value->id_clase_articulo ?>"><?= $value->nombre_clase_articulo ?></option>
                                 <?php } ?>

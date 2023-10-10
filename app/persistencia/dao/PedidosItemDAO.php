@@ -334,4 +334,18 @@ class PedidosItemDAO extends GenericoDAO
         ];
         return $res;
     }
+    public function consulta_ubica_pedido($num_pedido)
+    {
+        $sql = "SELECT t1.num_pedido,t1.orden_compra,t2.item,t2.codigo,t3.ubicacion_material,t3.cantidad_factura,t4.nombre_empresa,t5.nombre_ubicacion
+        FROM pedidos t1 
+        INNER JOIN pedidos_item t2 ON t1.id_pedido=t2.id_pedido 
+        INNER JOIN entregas_logistica t3 ON t3.id_pedido_item=t2.id_pedido_item 
+        INNER JOIN cliente_proveedor t4 on t1.id_cli_prov=t4.id_cli_prov 
+        INNER JOIN ubicaciones t5 ON t5.id=t3.ubicacion_material 
+        WHERE t1.num_pedido=$num_pedido AND t3.ubicacion_material!=0";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

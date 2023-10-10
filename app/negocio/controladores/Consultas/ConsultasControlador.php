@@ -172,4 +172,24 @@ class ConsultasControlador extends GenericoControlador
             'consultas/vista_consulta_documentos',
         );
     }
+
+    public function consulta_pedido_ubica()
+    {
+        header('Content-Type: application/json');
+        $num_pedido = $_POST['form1'][0]['value'];
+        $data = $this->PedidosItemDAO->consulta_ubica_pedido($num_pedido);
+        if (!empty($data)) {
+            $respu = [
+                'status' => 1,
+                'data' => $data
+            ];
+        } else {
+            $respu = [
+                'status' => -1,
+                'msg' => 'El numero de pedido digitado no tiene reportes',
+            ];
+        }
+        echo json_encode($respu);
+        return;
+    }
 }

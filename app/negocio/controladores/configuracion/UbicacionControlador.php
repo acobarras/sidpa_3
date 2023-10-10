@@ -163,6 +163,8 @@ class UbicacionControlador extends GenericoControlador
             foreach ($clase_articulo as $value) {
                 if ($value_tab->tipo_producto == $value->id_clase_articulo) {
                     $value_tab->nombre_articulo = $value->nombre_clase_articulo;
+                } elseif ($value_tab->tipo_producto == 0) {
+                    $value_tab->nombre_articulo = 'Ubicacion Despachos';
                 }
             }
         }
@@ -174,7 +176,12 @@ class UbicacionControlador extends GenericoControlador
     {
         header("Content-type: application/json; charset=utf-8");
         $datos = $_POST;
-        $datos['estado'] = 1;
+        if ($datos['tipo_producto'] == 0) {
+            $datos['estado'] = 2;
+            $datos['carga_inv'] = 2;
+        } else {
+            $datos['estado'] = 1;
+        }
         $datos['fecha_crea'] = date('Y-m-d H:i:s');
         // Validar si el tipo articulo ya fue creado
         $respuesta = $this->ubicacionesDAO->valida_ubicacion($datos['nombre_ubicacion']);
@@ -197,6 +204,6 @@ class UbicacionControlador extends GenericoControlador
             $condicion = 'id =' . $_POST['id'];
         }
         $resultado = $this->ubicacionesDAO->editar($datos_editar, $condicion);
-        echo json_encode($resultado);        
+        echo json_encode($resultado);
     }
 }

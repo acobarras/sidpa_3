@@ -54,7 +54,10 @@ class AlistaEtiquetasControlador extends GenericoControlador
         parent::cabecera();
 
         $this->view(
-            'almacen/vista_alistar_etiquetas'
+            'almacen/vista_alistar_etiquetas',
+            [
+                'ubicacion_despacho' => $this->ubicacionesDAO->ubicacion_despacho()
+            ]
         );
     }
     public function consultar_items_op()
@@ -137,10 +140,13 @@ class AlistaEtiquetasControlador extends GenericoControlador
         $obj['estado'] = 1;
         $obj['id_pedido_item'] = $data['id_pedido_item'];
         $obj['cantidad_factura'] = $form['cantidad_factura'];
+        $obj['ubicacion_material'] = $form['ubicacion_material'];
         $item_facturacion = $this->EntregasLogisticaDAO->ItemFacturacionId($data['id_pedido_item']);
         if (!empty($item_facturacion)) {
             $cantidad_lista = $item_facturacion[0]->cantidad_factura;
+            $ubicacion_material = $item_facturacion[0]->ubicacion_material;
             $obj['cantidad_factura'] = $form['cantidad_factura'] + $cantidad_lista;
+            $obj['ubicacion_material'] = $form['ubicacion_material'] . ',' . $ubicacion_material;
             $condicion_entrega = 'id_entrega =' . $item_facturacion[0]->id_entrega;
             $this->EntregasLogisticaDAO->editar($obj, $condicion_entrega);
         } else {
@@ -170,7 +176,7 @@ class AlistaEtiquetasControlador extends GenericoControlador
                 // Envio del correo fecha de compromiso
                 $persona = $this->PersonaDAO->consultar_personas_id($fecha_programada[0]->id_persona);
                 $asesor = $persona[0]->correo;
-                $cliente = $fecha_programada[0]->email; 
+                $cliente = $fecha_programada[0]->email;
                 Envio_Correo::correo_confirmacion_fecha_compromiso($fecha_programada, $fecha_compro, $cliente, $asesor);
             }
         }
@@ -216,10 +222,13 @@ class AlistaEtiquetasControlador extends GenericoControlador
         $obj['estado'] = 1;
         $obj['id_pedido_item'] = $data['id_pedido_item'];
         $obj['cantidad_factura'] = $form['cantidad_factura'];
+        $obj['ubicacion_material'] = $form['ubicacion_material'];
         $item_facturacion = $this->EntregasLogisticaDAO->ItemFacturacionId($data['id_pedido_item']);
         if (!empty($item_facturacion)) {
             $cantidad_lista = $item_facturacion[0]->cantidad_factura;
+            $ubicacion_material = $item_facturacion[0]->ubicacion_material;
             $obj['cantidad_factura'] = $form['cantidad_factura'] + $cantidad_lista;
+            $obj['ubicacion_material'] = $form['ubicacion_material'] . ',' . $ubicacion_material;
             $condicion_entrega = 'id_entrega =' . $item_facturacion[0]->id_entrega;
             $this->EntregasLogisticaDAO->editar($obj, $condicion_entrega);
         } else {
@@ -249,7 +258,7 @@ class AlistaEtiquetasControlador extends GenericoControlador
                 // Envio del correo fecha de compromiso
                 $persona = $this->PersonaDAO->consultar_personas_id($fecha_programada[0]->id_persona);
                 $asesor = $persona[0]->correo;
-                $cliente = $fecha_programada[0]->email; 
+                $cliente = $fecha_programada[0]->email;
                 Envio_Correo::correo_confirmacion_fecha_compromiso($fecha_programada, $fecha_compro, $cliente, $asesor);
             }
         }

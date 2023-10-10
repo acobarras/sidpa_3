@@ -11,6 +11,7 @@
                     <a class="nav-link " id="consulta_pqr-tab" data-bs-toggle="tab" href="#consulta_pqr" role="tab" aria-controls="movimientos_pedido" aria-selected="true">Consulta PQR</a>
                     <a class="nav-link " id="consulta_diag-tab" data-bs-toggle="tab" href="#consulta_diag" role="tab" aria-controls="consulta_diag" aria-selected="true">Consulta Diag. Soporte</a>
                     <a class="nav-link " id="consulta_prioridad-tab" data-bs-toggle="tab" href="#consulta_prioridad" role="tab" aria-controls="consulta_prioridad" aria-selected="true">Consulta N° Prioridad</a>
+                    <a class="nav-link " id="consulta_ubi_pedido-tab" data-bs-toggle="tab" href="#consulta_ubi_pedido" role="tab" aria-controls="consulta_ubi_pedido" aria-selected="true">Consulta Ubicación Pedido</a>
                 </div>
             </nav>
             <div class="tab-content" id="myTabContent">
@@ -351,6 +352,51 @@
                                         <th>Prioridad</th>
                                         <th>Respuestas</th>
                                         <th>Estado</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- noveno link -->
+                <div class="tab-pane fade show" id="consulta_ubi_pedido" role="tabpanel" aria-labelledby="consulta_ubi_pedido-tab">
+                    <br>
+                    <div class="container-fluid recuadro">
+                        <div class="container mt-3 mb-3">
+                            <div class="px-2 py-2 col-lg-12 text-center">
+                                <h3>Consultar Ubicacion Pedido</h3>
+                                <form class="panel-body py-2" id="consulta_ubicacion">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <div class="form-group row mb-3">
+                                                <label for="num_pedido_ubi" class="col-2">N° Pedido:</label>
+                                                <div class="col-10">
+                                                    <input type="text" class="form-control" id="num_pedido_ubi" name="num_pedido_ubi">
+                                                    <span class="text-danger"><b>Digite el numero de pedido para saber las ubicaciones que se han reportado</b></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="text-center mb-3">
+                                                <button class="btn btn-primary btn-lg boton-x" type="submit" id="ubica_pedido">Consultar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col-lg-12">
+                            <table id="tabla_ubicaciones" style="background: white;" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
+                                <thead style="background:#0d1b50;color:white">
+                                    <tr>
+                                        <th>N° Pedido</th>
+                                        <th>Item</th>
+                                        <th>Empresa</th>
+                                        <th>Orden Compra</th>
+                                        <th>Codigo</th>
+                                        <th>Cantidad Reportada</th>
+                                        <th>Ubicacion Reporte</th>
                                     </tr>
                                 </thead>
                             </table>

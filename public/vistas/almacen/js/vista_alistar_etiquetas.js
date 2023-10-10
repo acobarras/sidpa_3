@@ -120,10 +120,11 @@ var envio_alistamiento_checked = function () {
         var data = JSON.parse($("#btn_reportar_factu_etiq").attr('data-id'));
         var form = $(this).serializeArray();
         var form1 = $(this).serialize();
-        var valida = validar_formulario(form);
+        var excepcion = ['ubicacion_material'];
+        var valida = validar_formulario(form, excepcion);
         if (valida) {
             var obj_inicial = $(`#btn_reportar_factu_etiq`).html();
-            btn_procesando(`btn_reportar_factu_etiq`);            
+            btn_procesando(`btn_reportar_factu_etiq`);
             $.ajax({
                 url: `${PATH_NAME}/almacen/reportar_facturacion_etiq`,
                 type: 'POST',
