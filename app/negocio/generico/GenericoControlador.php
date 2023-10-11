@@ -18,6 +18,7 @@ use MiApp\persistencia\dao\SeguimientoDiagSoporteDAO;
 use MiApp\persistencia\dao\SoporteItemDAO;
 use MiApp\persistencia\dao\PrioridadesComercialDAO;
 use MiApp\persistencia\dao\VehiculosDAO;
+use MiApp\persistencia\dao\AreaTrabajoDAO;
 use MiApp\negocio\util\Validacion;
 use MiApp\negocio\util\PDF;
 
@@ -43,6 +44,7 @@ abstract class GenericoControlador
     private $SeguimientoDiagSoporteDAO;
     private $PrioridadesComercialDAO;
     private $VehiculosDAO;
+    private $AreaTrabajoDAO;
 
     public function __construct(&$cnn)
     {
@@ -65,6 +67,7 @@ abstract class GenericoControlador
         $this->SeguimientoDiagSoporteDAO = new SeguimientoDiagSoporteDAO($cnn);
         $this->PrioridadesComercialDAO = new PrioridadesComercialDAO($cnn);
         $this->VehiculosDAO = new VehiculosDAO($cnn);
+        $this->AreaTrabajoDAO = new AreaTrabajoDAO($cnn);
     }
     /**
      * Función protected para redireccionar al usuario al inicio de sesión
@@ -100,10 +103,13 @@ abstract class GenericoControlador
         $datos_prioridad = [];
         $muestra = false;
         if (!empty($consulta_prioridades)) {
+            $areas = $this->AreaTrabajoDAO->consulta_area_usuario($consulta_prioridades[0]->id_user_recibe);
             foreach ($consulta_prioridades as $value) {
                 $id = explode(",", $value->id_user_recibe);
+                $value->areas_implicada = $areas;
+                $value->mensajes_prioridad = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $usuario->getId_usuario(), 1);
                 if (in_array($usuario->getId_usuario(), $id)) {
-                    $consulta_mensajes = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $usuario->getId_usuario());
+                    $consulta_mensajes = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $usuario->getId_usuario(), 2);
                     if (empty($consulta_mensajes)) {
                         array_push($datos_prioridad, $value);
                         $muestra = true;
@@ -136,7 +142,6 @@ abstract class GenericoControlador
         } else {
             $chequeo = $this->VehiculosDAO->consultar_chequeos($usuario->getId_usuario());
         }
-
         if ($usuario->getId_roll() == 1) {
             $this->view(
                 '/plantilla/header',

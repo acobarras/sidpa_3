@@ -231,7 +231,7 @@ class UsuarioControlador extends GenericoControlador
     header('Content-Type: application/json');
     if ($_POST['valor'] == 1) {
       $permiso_existe = $this->usuarioDAO->validar_personas_responde($_POST['id_area_trabajo']);
-      if ($permiso_existe[0]->cant_per_asig >= $permiso_existe[0]->cant_personas_res) {
+      if ($permiso_existe[0]->cant_per_asig > $permiso_existe[0]->cant_personas_res) {
         $respu = [
           'status' => -1,
           'msg' => 'La cantidad de personas que pueden responder, ya se encuentran asignadas',

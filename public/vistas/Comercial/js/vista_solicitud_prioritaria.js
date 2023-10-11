@@ -63,7 +63,7 @@ var enviar_prioridad = function () {
         if (valor == 2) {
             excepcion = ['item', 'observacion', 'pedido', 'item', 'cliente'];
         }
-        // btn_procesando('enviar_prioridad');
+        btn_procesando('enviar_prioridad');
         var valida = validar_formulario(form, excepcion);
         if (valida) {
             var observaciones = CKEDITOR.instances.observacion.getData();
@@ -81,12 +81,14 @@ var enviar_prioridad = function () {
                 data: { form, id_areas },
                 success: function (res) {
                     if (res.status == true) {
+                        btn_procesando(`enviar_prioridad`, obj_inicial, 1);
                         alertify.success('Se ha crado la prioridad exitosamente');
                         limpiar_formulario('form_prioridad', 'input');
                         limpiar_formulario('form_prioridad', 'select');
                         limpiar_formulario('form_prioridad', 'textarea');
                         CKEDITOR.instances.observacion.setData('');
                     } else {
+                        btn_procesando(`enviar_prioridad`, obj_inicial, 1);
                         alertify.error('Algo a pasado');
                     }
                 }
@@ -115,7 +117,14 @@ var consultar_prioridad = function () {
                     "columns": [
                         { "data": "id_prioridad" },
                         { "data": "prioridad" },
-                        { "data": "respuestas" },
+                        {
+                            "data": "respuestas", render: function (data, type, row) {
+                                return `<div class="overflow-auto" style="max-height: 10rem;">
+                            ${row.respuestas}
+                            </div>
+                            `;
+                            }
+                        },
                         {
                             "data": "estado", render: function (data, type, row) {
                                 if (row.estado == 1) {

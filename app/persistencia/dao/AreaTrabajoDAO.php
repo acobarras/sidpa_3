@@ -55,4 +55,15 @@ class AreaTrabajoDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function consulta_area_usuario($id_user)
+    {
+        $sql = "SELECT t3.id_area_trabajo ,t3.nombre_area_trabajo FROM usuarios t1 
+        INNER JOIN persona t2 ON t2.id_persona=t1.id_persona 
+        INNER JOIN area_trabajo t3 ON t3.id_area_trabajo=t2.id_area_trabajo 
+        WHERE t1.id_usuario in($id_user) GROUP BY(t3.id_area_trabajo)";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
