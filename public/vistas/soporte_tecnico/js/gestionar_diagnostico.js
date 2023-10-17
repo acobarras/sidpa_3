@@ -312,7 +312,7 @@ var enviar_items_cotizacion = function () {
             var storage = JSON.parse(localStorage.getItem('articulo' + element.id_diagnostico + '-' + element.item));
             if (storage != null) { array_storage.push(storage); }
         }
-        if (array_storage.length == 0 || (array_storage.length == 1 && array_storage[0].length == 0)) {// sin repuestos
+        if (array_storage.length == 0 || (array_storage.length == 1 && array_storage[0].length == 0)||data.length !=array_storage.length) {// sin repuestos
             alertify.error('Debe agregar repuestos para continuar');
             return;
         } else {
@@ -379,12 +379,12 @@ var enviar_ajax = function (boton_procesando, estado, array_storage) {
                     alertify.success(res.msg);
                     window.location.href = `${PATH_NAME}/vista_cierre_diag`;
 
-                }else if (res.status == -2) { // COMODATO
+                } else if (res.status == -2) { // COMODATO
                     btn_procesando(`${boton_procesando}`, obj_inicial, 1);
                     window.location.href = `${PATH_NAME}/validacion_repuestos`;
                 }
 
-                
+
             }
         });
     }
