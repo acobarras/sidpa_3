@@ -24,7 +24,7 @@
                                     </div>
                                     <div class="col-5">
                                         <label for="area" class="col-form-label" style="font-family: 'gothic'; font-weight: bold; ">Proceso</label>
-                                        <select class="form-control select_2" multiple name="area" id="area">
+                                        <select class="form-control select_2" multiple name="" id="area">
                                             <option value="0"></option>
                                             <?php foreach ($area as $areas) { ?>
                                                 <option value="<?= $areas->id_area_trabajo ?>"><?= $areas->nombre_area_trabajo ?></option>

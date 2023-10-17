@@ -38,6 +38,10 @@ class SolicitudPrioritariaControlador extends GenericoControlador
         header('Content-Type:application/json');
         $formulario = Validacion::Decodifica($_POST['form']);
         $id_usuario = '';
+        $area = $_POST['id_areas'];
+        if (!in_array("7", $area)) {
+            array_push($_POST['id_areas'], '7');
+        }
         foreach ($_POST['id_areas'] as $value) {
             $person = $this->AreaTrabajoDAO->responde_prio($value); //Consulta para traer los id de los usuario de las areas que responden las prioridades
             for ($i = 0; $i < count($person); $i++) {
