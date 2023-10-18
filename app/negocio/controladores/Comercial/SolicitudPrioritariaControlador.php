@@ -162,7 +162,7 @@ class SolicitudPrioritariaControlador extends GenericoControlador
         $condicion = '';
         if (isset($_POST['id_prioridad'])) {
             if ($_POST['id_prioridad'] == 0) {
-                if ($_SESSION['usuario']->getId_roll() == 1) {
+                if ($_SESSION['usuario']->getId_roll() != 4) {
                     $condicion = 'WHERE t2.estado=1';
                 } else {
                     $condicion = 'WHERE t1.id_user_remite=' . $_SESSION['usuario']->getid_usuario() . ' AND t2.estado=1';

@@ -53,12 +53,31 @@ var prioridades = function () {
         "columns": [
             { "data": "id_prioridad" },
             { "data": "mensaje" },
+            {
+                "render": function (data, type, row) {
+                    if (row.pedido == 0) {
+                        return 'N/A';
+                    } else {
+                        return row.pedido;
+                    }
+                }
+            },
+            {
+                "render": function (data, type, row) {
+                    if (row.item == 0) {
+                        return 'N/A';
+                    } else {
+                        return row.item;
+                    }
+                }
+            },
             { "data": "fecha_mensaje" },
             {
                 "render": function (data, type, row) {
                     return row.nombre + ' ' + row.apellido;
                 }
             },
+
             {
                 "render": function (data, type, row) {
                     botones = `

@@ -205,6 +205,8 @@
                                     <tr>
                                         <th>Id Prioridad</th>
                                         <th>Prioridad</th>
+                                        <th>Pedido</th>
+                                        <th>Item</th>
                                         <th>Fecha Creación</th>
                                         <th>Solicitado por:</th>
                                         <th></th>

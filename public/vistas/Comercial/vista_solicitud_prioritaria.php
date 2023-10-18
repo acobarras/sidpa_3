@@ -83,6 +83,8 @@
                                     <tr>
                                         <th>id_Prioridad</th>
                                         <th>Prioridad</th>
+                                        <th>Pedido</th>
+                                        <th>Item</th>
                                         <th>Respuestas</th>
                                         <th>Estado</th>
                                     </tr>

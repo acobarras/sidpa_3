@@ -118,6 +118,24 @@ var consultar_prioridad = function () {
                         { "data": "id_prioridad" },
                         { "data": "prioridad" },
                         {
+                            "render": function (data, type, row) {
+                                if (row.pedido == 0) {
+                                    return 'N/A';
+                                } else {
+                                    return row.pedido;
+                                }
+                            }
+                        },
+                        {
+                            "render": function (data, type, row) {
+                                if (row.item == 0) {
+                                    return 'N/A';
+                                } else {
+                                    return row.item;
+                                }
+                            }
+                        },
+                        {
                             "data": "respuestas", render: function (data, type, row) {
                                 return `<div class="overflow-auto" style="max-height: 10rem;">
                             ${row.respuestas}
