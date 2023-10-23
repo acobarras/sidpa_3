@@ -321,7 +321,7 @@ abstract class GenericoControlador
         } else {
             $cavidad = number_format(round((110 / $ancgap), 0), 0, ".", ".");
         }
-        $cavidad_montaje = number_format(round((254 / $ancgap), 0), 0, ".", ".");
+        $cavidad_montaje = number_format(round((VALORES_COTIZADOR['ancho_montaje'] / $ancgap), 0), 0, ".", ".");
         $cav_ml = $cavidad * $ml;
         // Se calculan las cantidades y los precios despues del costo
         $precio_bajo = $costo / VALORES_COTIZADOR['utili_inicial']; //0.6;
