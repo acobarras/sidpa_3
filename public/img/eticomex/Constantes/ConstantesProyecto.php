@@ -26,3 +26,5 @@ define('REQ_ORDEN', '');  //Esto es para que el campo de orden de compra este si
 define('CORREO_IMPRESION_VARIABLE','');// CORREO para enviar copias a diseño
 define('DIAS_CHEQUEO_VEHICULO', '31');
 define('DIRECCION_EMPRESA', 'Autopista Medellin - Bogota Parque la Florida Km 1 Parque Industrial Rosalinda, Bodega 37, Cota, Cundinamarca');
+define('DECIMALES', '3');
+define('MONEDA', 'Mxn $');

@@ -150,25 +150,84 @@
                                             <div class="mb-3 form-group row">
                                                 <label for="" class="col-sm-6 col-form-label">PRECIO PARA MENOS DE <span class="cant_minima_etiq">$cant_minima_etiq </span> <span class="texto">$texto</span> </label>
                                                 <div class="col-sm-6">
-                                                    <input class="form-control" id="precio_variante" readonly="readonly" value="$ ' . number_format($precio_variante, 2) . '" />
+                                                    <div class="row">
+                                                        <?php if (DECIMALES == 3) {
+                                                            $col = 'col-6';
+                                                            $oculto = '';
+                                                        } else {
+                                                            $col = 'col-12';
+                                                            $oculto = 'd-none';
+                                                        } ?>
+                                                        <div class="<?= $col ?>">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Und <?=MONEDA?></span>
+                                                                <input class="form-control" id="precio_variante" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 <?= $oculto ?>">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Millar <?=MONEDA?></span>
+                                                                <input class="form-control" id="precio_variante_mil" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="mb-3 form-group row">
                                                 <label for="" class="col-sm-6 col-form-label">PRECIO ENTRE <span class="cant_minima_etiq">$cant_minima_etiq </span> Y MENOS DE <span class="cant_minima_etiq1">$cant_minima_etiq1 </span> <span class="texto">$texto</span></label>
                                                 <div class="col-sm-6">
-                                                    <input class="form-control" id="precio_alto" readonly="readonly" value="$' . number_format($precio_alto, 2) . '" />
+                                                    <div class="row">
+                                                        <div class="<?= $col ?>">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Und <?=MONEDA?></span>
+                                                                <input class="form-control" id="precio_alto" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 <?= $oculto ?>">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Millar <?=MONEDA?></span>
+                                                                <input class="form-control" id="precio_alto_mil" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="mb-3 form-group row">
                                                 <label for="" class="col-sm-6 col-form-label">PRECIO ENTRE <span class="cant_minima_etiq1">$cant_minima_etiq1 </span> Y MENOS DE <span class="cant_minima_etiq2">$cant_minima_etiq2 </span> <span class="texto">$texto</span></label>
                                                 <div class="col-sm-6">
-                                                    <input class="form-control" id="precio_medio" readonly="readonly" value="$ ' . number_format($precio_medio, 2) . '" />
+                                                    <div class="row">
+                                                        <div class="<?= $col ?>">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Und <?=MONEDA?></span>
+                                                                <input class="form-control" id="precio_medio" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 <?= $oculto ?>">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Millar <?=MONEDA?></span>
+                                                                <input class="form-control" id="precio_medio_mil" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="mb-3 form-group row">
                                                 <label for="" class="col-sm-6 col-form-label">PRECIO PARA MAS DE <span class="cant_minima_etiq2">$cant_minima_etiq2 </span> <span class="texto">$texto</span></label>
                                                 <div class="col-sm-6">
-                                                    <input class="form-control" id="precio_bajo" readonly="readonly" value="$' . number_format($precio_bajo, 2) . '" />
+                                                    <div class="row">
+                                                        <div class="<?= $col ?>">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Und <?=MONEDA?></span>
+                                                                <input class="form-control" id="precio_bajo" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 <?= $oculto ?>">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text">Millar <?=MONEDA?></span>
+                                                                <input class="form-control" id="precio_bajo_mil" readonly="readonly" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
