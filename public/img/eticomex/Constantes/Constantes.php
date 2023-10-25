@@ -182,7 +182,7 @@ define(
         'utili_alto' => .8,
         'cinta_calor' => 26, // precio en m2 en pesos mexicanos
         'cinta_frio' => 8, // precio en m2 en pesos mexicanos
-        'monto_blanco' => 250,
+        'monto_blanco' => 250, // metros lineales
         'utili_1tintas' => .85,
         'monto_1tinta' => 250,
         'utili_2tintas' => .75,
@@ -199,14 +199,14 @@ define(
         'monto_7tinta' => 800,
         'utili_8tintas' => .45,
         'monto_8tinta' => 800,
-        'precio_cyrel' => 80000,
+        'precio_cyrel' => 400,
         'ml_req_troq_rotativo' => 1500,
         'troquel_rotativo' => 6481, // precio en m2 en pesos mexicanos
         'troquel_plano' => 6481, // precio en m2 en pesos mexicanos
         'precio_clice' => 344, // precio en m2 en pesos mexicanos
         'tiempo_cobro_pre_prensa' => 3,
-        'laminado_brillante' => 550,
-        'laminado_mate' => 890,
+        'laminado_brillante' => 4,
+        'laminado_mate' => 6,
         'ancho_montaje' => 214,
     )
 );
