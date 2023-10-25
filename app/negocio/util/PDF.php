@@ -727,7 +727,7 @@ class PDF
                 </footer> 
                 <div class="contenido">
                     <div class="primera_parte">
-                        <table>
+                        <table style="width:100%">
                             <tr>
                                 <th>Fecha Elaboración:</th>
                                 <td colspan="3">' . $cabecera['fecha_elaboracion'] . '</td>
