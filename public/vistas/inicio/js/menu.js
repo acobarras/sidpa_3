@@ -131,7 +131,7 @@ var mostrar_formulario = function (data) {
             <div class="m-auto justify-content-center col-12 text-center">
                 <label class="col-form-label" for="area" style="font-family: 'gothic'; font-weight: bold; ">Area:<br><span class="text-info">Para mantener la solicitud abierta seleccione siempre el area que debe responder su solicitud</span></label>
                 <select class="form-control select_2" name="area" id="area">
-                    <option value="0">Responder a todos</option>
+                    <option value="0">Respuesta Definitiva</option>
                     <option value="${data.id_area_trabajo}">${data.nombre_area_trabajo}</option>
                     `;
     var areas_prio = data.areas_implicada;

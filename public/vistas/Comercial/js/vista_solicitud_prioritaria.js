@@ -4,16 +4,6 @@ $(document).ready(function () {
     enviar_prioridad();
     cambio_actividad();
     consultar_prioridad();
-    CKEDITOR.config.toolbar_mybar = [
-        ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SpellChecker', 'Scayt'],
-        ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat'],
-        ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
-        ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote'],
-        ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-        ['TextColor', 'BGColor'],
-        ['Styles', 'Format', 'Font', 'FontSize']
-    ];
-    CKEDITOR.replace('observacion', { toolbar: 'mybar' });
 });
 
 var cambio_actividad = function () {
@@ -63,10 +53,10 @@ var enviar_prioridad = function () {
         if (valor == 2) {
             excepcion = ['item', 'observacion', 'pedido', 'item', 'cliente'];
         }
-        btn_procesando('enviar_prioridad');
         var valida = validar_formulario(form, excepcion);
         if (valida) {
-            var observaciones = CKEDITOR.instances.observacion.getData();
+            btn_procesando('enviar_prioridad');
+            var observaciones = $('#observacion').val();
             var id_areas = $('#area').val();
             var form = $(this).serialize();
             form += observaciones;
@@ -82,11 +72,10 @@ var enviar_prioridad = function () {
                 success: function (res) {
                     if (res.status == true) {
                         btn_procesando(`enviar_prioridad`, obj_inicial, 1);
-                        alertify.success('Se ha crado la prioridad exitosamente');
                         limpiar_formulario('form_prioridad', 'input');
                         limpiar_formulario('form_prioridad', 'select');
                         limpiar_formulario('form_prioridad', 'textarea');
-                        CKEDITOR.instances.observacion.setData('');
+                        $('#observacion').val('');
                     } else {
                         btn_procesando(`enviar_prioridad`, obj_inicial, 1);
                         alertify.error('Algo a pasado');

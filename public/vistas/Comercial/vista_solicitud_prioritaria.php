@@ -58,7 +58,7 @@
                                 <div class="mx-3 row">
                                     <div class="m-auto justify-content-center col-8 text-center">
                                         <label class="col-form-label" for="observacion" style="font-family: 'gothic'; font-weight: bold; ">Decripcion Solicitud</label>
-                                        <textarea class="form-control" name="observacion" id="observacion"></textarea>
+                                        <textarea class="form-control" rows="10" name="observacion" id="observacion"></textarea>
                                     </div>
                                 </div>
                                 <br>

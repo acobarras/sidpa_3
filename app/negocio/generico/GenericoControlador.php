@@ -103,8 +103,8 @@ abstract class GenericoControlador
         $datos_prioridad = [];
         $muestra = false;
         if (!empty($consulta_prioridades)) {
-            $areas = $this->AreaTrabajoDAO->consulta_area_usuario($consulta_prioridades[0]->id_user_recibe);
             foreach ($consulta_prioridades as $value) {
+                $areas = $this->AreaTrabajoDAO->consulta_area_usuario($value->id_user_recibe);
                 $id = explode(",", $value->id_user_recibe);
                 $value->areas_implicada = $areas;
                 $value->mensajes_prioridad = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $usuario->getId_usuario(), 1);
