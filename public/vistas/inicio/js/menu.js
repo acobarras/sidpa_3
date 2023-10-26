@@ -179,7 +179,7 @@ var enviar_formulario = function () {
                         window.location.reload();
                     } else {
                         btn_procesando(`enviar_prioridad${id_prioridad}`, obj_inicial, 1);
-                        alertify.error('Algo a pasado');
+                        alertify.error('El area seleccionada no puede responder');
                     }
                 }
             });

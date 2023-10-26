@@ -97,49 +97,55 @@ class SolicitudPrioritariaControlador extends GenericoControlador
             $person = $this->AreaTrabajoDAO->responde_prio($formulario['area']); //Consulta para traer los id de los usuario de las areas que responden las prioridades
             $condicion = "WHERE t1.id_prioridad=$id_prioridad";
             $prioridad = $this->PrioridadesComercialDAO->consulta_prioridades($condicion);
-            for ($i = 0; $i < count($person); $i++) {
-                if ($id_usuario == '') {
-                    $id_usuario = $person[$i]->id_usuario;
-                } else {
-                    $id_usuario = $id_usuario . ',' . $person[$i]->id_usuario;
+            if (!empty($person)) {
+                for ($i = 0; $i < count($person); $i++) {
+                    if ($id_usuario == '') {
+                        $id_usuario = $person[$i]->id_usuario;
+                    } else {
+                        $id_usuario = $id_usuario . ',' . $person[$i]->id_usuario;
+                    }
                 }
-            }
-            $personas_invo = explode(",", $prioridad[0]->id_user_recibe);
-            if (!in_array($id_usuario, $personas_invo)) {
-                $carga_usu = $prioridad[0]->id_user_recibe . ',' . $id_usuario;
-                $editar_usu = [
-                    'id_user_recibe' => $carga_usu, //estado de prioridad creada
-                ];
-                $condicion = 'id_prioridad=' . $id_prioridad;
-                $edita = $this->PrioridadesComercialDAO->editar($editar_usu, $condicion);
-            }
-            $crea_seg = [
-                'id_prioridad' => $id_prioridad,
-                'mensaje' => $formulario['observacion'],
-                'id_usuario' => $_SESSION['usuario']->getid_usuario(),
-                'estado' => 2,
-                'fecha_crea' => date('Y-m-d H:i:s'),
-            ];
-            $respu = $this->SeguimientoPrioridadesDAO->insertar($crea_seg);
-            $usuario_area = '';
-            foreach ($person as $value_person) {
-                if ($usuario_area == '') {
-                    $usuario_area = $value_person->id_usuario;
-                } else {
-                    $usuario_area = $usuario_area . ',' . $value_person->id_usuario;
+                $personas_invo = explode(",", $prioridad[0]->id_user_recibe);
+                if (!in_array($id_usuario, $personas_invo)) {
+                    $carga_usu = $prioridad[0]->id_user_recibe . ',' . $id_usuario;
+                    $editar_usu = [
+                        'id_user_recibe' => $carga_usu, //estado de prioridad creada
+                    ];
+                    $condicion = 'id_prioridad=' . $id_prioridad;
+                    $edita = $this->PrioridadesComercialDAO->editar($editar_usu, $condicion);
                 }
-            }
-            $consulta_mensaje = $this->PrioridadesComercialDAO->consulta_mensajes_user($id_prioridad, $usuario_area);
-            if (!empty($consulta_mensaje)) {
-                $condicion_msg = "id_prioridad=$id_prioridad AND id_usuario in($usuario_area) AND estado=2";
-                $edita_mensaje = [
-                    'estado' => 3
+                $crea_seg = [
+                    'id_prioridad' => $id_prioridad,
+                    'mensaje' => $formulario['observacion'],
+                    'id_usuario' => $_SESSION['usuario']->getid_usuario(),
+                    'estado' => 2,
+                    'fecha_crea' => date('Y-m-d H:i:s'),
                 ];
-                $edita_msg = $this->SeguimientoPrioridadesDAO->editar($edita_mensaje, $condicion_msg);
+                $respu = $this->SeguimientoPrioridadesDAO->insertar($crea_seg);
+                $usuario_area = '';
+                foreach ($person as $value_person) {
+                    if ($usuario_area == '') {
+                        $usuario_area = $value_person->id_usuario;
+                    } else {
+                        $usuario_area = $usuario_area . ',' . $value_person->id_usuario;
+                    }
+                }
+                $consulta_mensaje = $this->PrioridadesComercialDAO->consulta_mensajes_user($id_prioridad, $usuario_area);
+                if (!empty($consulta_mensaje)) {
+                    $condicion_msg = "id_prioridad=$id_prioridad AND id_usuario in($usuario_area) AND estado=2";
+                    $edita_mensaje = [
+                        'estado' => 3
+                    ];
+                    $edita_msg = $this->SeguimientoPrioridadesDAO->editar($edita_mensaje, $condicion_msg);
+                }
+                $res = [
+                    'status' => 1,
+                ];
+            } else {
+                $res = [
+                    'status' => -1,
+                ];
             }
-            $res = [
-                'status' => 1,
-            ];
         }
         if ($res['status'] == 1) {
             $cant_mensajes = $this->PrioridadesComercialDAO->consulta_cant_mensajes($id_prioridad);

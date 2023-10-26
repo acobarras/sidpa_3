@@ -59,7 +59,7 @@ var enviar_prioridad = function () {
             var observaciones = $('#observacion').val();
             var id_areas = $('#area').val();
             var form = $(this).serialize();
-            form += observaciones;
+            // form += observaciones;
             if (observaciones == '') {
                 alertify.error('El campo observacion es requerido');
                 $('#observacion').focus();
@@ -72,6 +72,7 @@ var enviar_prioridad = function () {
                 success: function (res) {
                     if (res.status == true) {
                         btn_procesando(`enviar_prioridad`, obj_inicial, 1);
+                        alertify.success('Prioridad creada');
                         limpiar_formulario('form_prioridad', 'input');
                         limpiar_formulario('form_prioridad', 'select');
                         limpiar_formulario('form_prioridad', 'textarea');
