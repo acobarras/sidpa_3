@@ -108,6 +108,7 @@ var consultar_prioridad = function () {
                         { "data": "id_prioridad" },
                         { "data": "prioridad" },
                         { "data": "fecha_crea" },
+                        { "data": "nombre_empresa" },
                         {
                             "render": function (data, type, row) {
                                 if (row.pedido == 0) {

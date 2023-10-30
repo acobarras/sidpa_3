@@ -53,6 +53,7 @@ var prioridades = function () {
         "columns": [
             { "data": "id_prioridad" },
             { "data": "mensaje" },
+            { "data": "nombre_empresa" },
             {
                 "render": function (data, type, row) {
                     if (row.pedido == 0) {

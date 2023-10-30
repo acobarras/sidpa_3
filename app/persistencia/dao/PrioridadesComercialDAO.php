@@ -45,14 +45,16 @@ class PrioridadesComercialDAO extends GenericoDAO
 
     function consultar_prioridades()
     {
-        $sql = "SELECT t1.*,t2.*, t2.fecha_crea AS fecha_mensaje,t3.nombre,t3.apellido,
-        t1.estado AS estado_prioridad,t2.estado AS estado_mensaje,t5.nombre_area_trabajo,t5.id_area_trabajo
+        $sql = "SELECT t1.*,t2.*, t2.fecha_crea AS fecha_mensaje,t3.nombre,t3.apellido, t1.estado AS estado_prioridad,t2.estado AS estado_mensaje,
+        t5.nombre_area_trabajo,t5.id_area_trabajo,t7.nombre_empresa 
         FROM prioridades_comercial t1 
         INNER JOIN seguimiento_prioridades t2 ON t2.id_prioridad=t1.id_prioridad 
         INNER JOIN usuarios t3 ON t3.id_usuario=t1.id_user_remite 
-        INNER JOIN persona t4 ON t4.id_persona=t3.id_persona
-        INNER JOIN area_trabajo t5 ON t5.id_area_trabajo=t4.id_area_trabajo
-        WHERE t1.estado=1 AND t2.estado=1";
+        INNER JOIN persona t4 ON t4.id_persona=t3.id_persona 
+        INNER JOIN area_trabajo t5 ON t5.id_area_trabajo=t4.id_area_trabajo 
+        LEFT JOIN pedidos t6 ON t1.pedido=t6.num_pedido 
+        LEFT JOIN cliente_proveedor t7 ON t7.id_cli_prov=t6.id_cli_prov
+         WHERE t1.estado=1 AND t2.estado=1;";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -72,8 +74,10 @@ class PrioridadesComercialDAO extends GenericoDAO
 
     function consulta_prioridades($condicion)
     {
-        $sql = "SELECT t1.*,t2.mensaje AS prioridad FROM prioridades_comercial t1
+        $sql = "SELECT t1.*,t2.mensaje AS prioridad,t4.nombre_empresa FROM prioridades_comercial t1
         INNER JOIN seguimiento_prioridades t2 ON t2.id_prioridad=t1.id_prioridad
+        LEFT JOIN pedidos t3 ON t3.num_pedido=t1.pedido
+        LEFT JOIN cliente_proveedor t4 ON t4.id_cli_prov=t3.id_cli_prov
         $condicion";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();

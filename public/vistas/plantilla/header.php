@@ -208,6 +208,7 @@
                                     <tr>
                                         <th>Id Prioridad</th>
                                         <th>Prioridad</th>
+                                        <th>Cliente</th>
                                         <th>Pedido</th>
                                         <th>Item</th>
                                         <th>Fecha Creación</th>
