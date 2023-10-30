@@ -46,6 +46,9 @@
         <!-- Se usa este input para tener la hora del dia actual -->
         <input type="hidden" id="host_port" value="<?= HOST . ':' . PORT ?>">
         <?php
+
+        use MiApp\negocio\util\Validacion;
+
         if (isset($_SESSION['usuario'])) { ?>
             <input type="hidden" id="sesion" value="<?= $_SESSION['usuario']->getId_usuario() ?>"><!-- Se usa este input para tener la hora del dia actual -->
             <!-- <div id="vista_chat_sidpa"></div> -->
@@ -224,7 +227,7 @@
         <?php
             if ($_SESSION['usuario']->getId_roll() == 11) {
                 if (!empty($chequeo)) {
-                    $fecha_chequeo = date("d-m-Y", strtotime($chequeo[0]->fecha_crea . "+" . DIAS_CHEQUEO_VEHICULO . "days"));
+                    $fecha_chequeo = date("d-m-Y", strtotime($chequeo[0]->fecha_chequeo . "+" . DIAS_CHEQUEO_VEHICULO . "days"));
                     $dt = new DateTime($fecha_chequeo);
                     $dt_hoy = new DateTime(date('d-m-Y'));
                     // Si los dias de diferencia son negativos o iguales a 0 aparece el modal 

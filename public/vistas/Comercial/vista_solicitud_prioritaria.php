@@ -83,6 +83,7 @@
                                     <tr>
                                         <th>id_Prioridad</th>
                                         <th>Prioridad</th>
+                                        <th>Fecha Creación</th>
                                         <th>Pedido</th>
                                         <th>Item</th>
                                         <th>Respuestas</th>

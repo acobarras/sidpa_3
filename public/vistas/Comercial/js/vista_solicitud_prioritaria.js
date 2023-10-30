@@ -107,6 +107,7 @@ var consultar_prioridad = function () {
                     "columns": [
                         { "data": "id_prioridad" },
                         { "data": "prioridad" },
+                        { "data": "fecha_crea" },
                         {
                             "render": function (data, type, row) {
                                 if (row.pedido == 0) {
