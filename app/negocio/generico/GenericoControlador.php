@@ -3,7 +3,6 @@
 namespace MiApp\negocio\generico;
 
 use MiApp\persistencia\dao\dias_festivosDAO;
-use MiApp\persistencia\dao\dias_produccionDAO;
 use MiApp\persistencia\dao\Modulos_hojasDAO;
 use MiApp\persistencia\dao\permisosDAO;
 use MiApp\persistencia\dao\PersonaDAO;
@@ -29,7 +28,6 @@ abstract class GenericoControlador
      * @var PDO
      */
     protected $cnn;
-    private $dias_produccionDAO;
     private $dias_festivosDAO;
     private $Modulos_hojasDAO;
     private $trmDAO;
@@ -54,7 +52,6 @@ abstract class GenericoControlador
         date_default_timezone_set('America/Bogota');
         $this->permisosDAO = new permisosDAO($cnn);
         $this->dias_festivosDAO = new dias_festivosDAO($cnn);
-        $this->dias_produccionDAO = new dias_produccionDAO($cnn);
         $this->Modulos_hojasDAO = new Modulos_hojasDAO($cnn);
         $this->trmDAO = new trmDAO($cnn);
         $this->PrecioMateriaPrimaDAO = new PrecioMateriaPrimaDAO($cnn);
@@ -147,8 +144,7 @@ abstract class GenericoControlador
                 '/plantilla/header',
                 [ /*variables para la vista*/
                     "todas_hojas" => $modulo->todas_hojas(),
-                    "usuario" => $usuario,
-                    "dias_produccion" => $this->dias_produccionDAO->consultar_dias_produccion(),
+                    "usuario" => $usuario,                    
                     "modulo_hojas" => $modulo->Consultar_modulo_hojas($parametro),
                     "id" => $id,
                     "dia_festivo" => $dia_festivo,
@@ -161,13 +157,12 @@ abstract class GenericoControlador
         } else {
             $modulo_hojas = $this->permisosDAO->consultar_permisos();
             $todas_hojas = $modulo->todas_hojas_especifica();
-            $dias_produccion = $this->dias_produccionDAO->consultar_dias_produccion();
+            
             $this->view(
                 '/plantilla/header',
                 [
                     "modulo_hojas" => $modulo_hojas,
                     "todas_hojas" => $todas_hojas,
-                    "dias_produccion" => $dias_produccion,
                     "usuario" => $usuario,
                     "modulo" => $modulo,
                     "id" => $id,
