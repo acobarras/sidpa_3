@@ -29,22 +29,22 @@
                         </div>
                         <div class="mb-3 row">
                             <?php
-                            $gestor = opendir(CARPETA_IMG . '/cartelera');
-                            while (($archivo = readdir($gestor)) !== false) {
-                                if ($archivo != "." && $archivo != ".." && $archivo != 'Thumbs.db') { ?>
-                                    <div class="mb-3 col-4 text-center">
-                                        <div class="card" style="width: 18rem;">
-                                            <h5 class="card-title"><?= $archivo ?></h5>
-                                            <img src="<?= CARPETA_IMG ?>/cartelera/<?= $archivo ?>" class="card-img-top">
-                                            <div class="card-body">
-                                                <div class="text-center">
-                                                    <button class="btn btn-danger elimina" value="<?= $archivo ?>">Eliminar Imagen</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            <?php }
-                            } ?>
+                           $gestor = opendir(CARPETA_IMG . PROYECTO .'/cartelera');
+                           while (($archivo = readdir($gestor)) !== false) {
+                               if ($archivo != "." && $archivo != ".." && $archivo != 'Thumbs.db') { ?>
+                                   <div class="mb-3 col-4 text-center">
+                                       <div class="card" style="width: 18rem;">
+                                           <h5 class="card-title"><?= $archivo ?></h5>
+                                           <img src="<?= CARPETA_IMG . PROYECTO  ?>/cartelera/<?= $archivo ?>" class="card-img-top">
+                                           <div class="card-body">
+                                               <div class="text-center">
+                                                   <button class="btn btn-danger elimina" value="<?= $archivo ?>">Eliminar Imagen</button>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                           <?php }
+                           } ?>
                         </div>
                     </div>
                 </div>
