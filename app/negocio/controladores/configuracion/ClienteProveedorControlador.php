@@ -7,6 +7,7 @@ use MiApp\negocio\util\Validacion;
 use MiApp\persistencia\dao\clientes_proveedorDAO;
 use MiApp\persistencia\dao\TipoDocumentoDAO;
 use MiApp\persistencia\dao\UsuarioDAO;
+use MiApp\persistencia\dao\EmpresasDAO;
 
 class ClienteProveedorControlador extends GenericoControlador
 {
@@ -14,6 +15,7 @@ class ClienteProveedorControlador extends GenericoControlador
     private $clientes_proveedorDAO;
     private $TipoDocumentoDAO;
     private $UsuarioDAO;
+    private $EmpresasDAO;
 
     public function __construct(&$cnn)
     {
@@ -24,6 +26,7 @@ class ClienteProveedorControlador extends GenericoControlador
         $this->clientes_proveedorDAO = new clientes_proveedorDAO($cnn);
         $this->TipoDocumentoDAO = new TipoDocumentoDAO($cnn);
         $this->UsuarioDAO = new UsuarioDAO($cnn);
+        $this->EmpresasDAO = new EmpresasDAO($cnn);
     }
 
     public function vista_creacion_clientes()
@@ -34,6 +37,8 @@ class ClienteProveedorControlador extends GenericoControlador
             [
                 "documento" => $this->TipoDocumentoDAO->consultar_tipo_documento(),
                 "usuarios" => $this->UsuarioDAO->ConsultarUsuario(),
+                "pertenece" => $this->EmpresasDAO->consultar_empresas(),
+                "pertenece_modifi" => $this->EmpresasDAO->consultar_empresas(),
             ]
         );
     }

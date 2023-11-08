@@ -32,7 +32,7 @@
                         </table>
                     </div>
                 </div>
-                <input id="datos_usuarios" type="hidden" value='<?=json_encode($usuarios)?>'>
+                <input id="datos_usuarios" type="hidden" value='<?= json_encode($usuarios) ?>'>
                 <!-- segundo link -->
                 <div class="tab-pane fade" id="first" role="tabpanel" aria-labelledby="first-tab">
                     <br>
@@ -101,8 +101,9 @@
                                 <div class="mb-3 col-6">
                                     <label for="pertenece" class="form-label">Pertenece A : </label>
                                     <select class="form-control select_2" style="width: 100%;" name="pertenece" id="pertenece">
-                                        <?php foreach (PERTENECE as $key => $pertenece) { ?>
-                                            <option value="<?= $key ?>"><?= $pertenece ?></option>
+                                        <option value="0"></option>
+                                        <?php foreach ($pertenece as $pertenece) { ?>
+                                            <option value="<?= $pertenece->id_empresa ?>"><?= $pertenece->nombre_compania ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -220,8 +221,9 @@
                             <div class="mb-3 col-6">
                                 <label for="pertenece_modifi" class="form-label">Pertenece A : </label>
                                 <select class="form-control select_2" style="width: 100%;" name="pertenece" id="pertenece_modifi">
-                                    <?php foreach (PERTENECE as $key => $pertenece) { ?>
-                                        <option value="<?= $key ?>"><?= $pertenece ?></option>
+                                    <option value="0"></option>
+                                    <?php foreach ($pertenece_modifi as $value) { ?>
+                                        <option value="<?= $value->id_empresa ?>"><?= $value->nombre_compania ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
