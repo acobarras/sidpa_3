@@ -13,6 +13,7 @@ use MiApp\persistencia\dao\ItemProducirDAO;
 use MiApp\persistencia\dao\EntregasLogisticaDAO;
 use MiApp\persistencia\dao\SeguimientoOpDAO;
 use MiApp\persistencia\dao\UsuarioDAO;
+use MiApp\persistencia\dao\TintasDAO;
 use MiApp\negocio\util\Validacion;
 
 class AlmacenTecnologiaControlador extends GenericoControlador
@@ -27,6 +28,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
     private $EntregasLogisticaDAO;
     private $SeguimientoOpDAO;
     private $UsuarioDAO;
+    private $TintasDAO;
 
     public function __construct(&$cnn)
     {
@@ -43,6 +45,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         $this->EntregasLogisticaDAO = new EntregasLogisticaDAO($cnn);
         $this->SeguimientoOpDAO = new SeguimientoOpDAO($cnn);
         $this->UsuarioDAO = new UsuarioDAO($cnn);
+        $this->TintasDAO = new TintasDAO($cnn);
     }
 
     /**
@@ -236,7 +239,19 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         header('Content-Type: application/json');
         $datos = $_POST;
         $valida_reporte = $this->EntregasLogisticaDAO->valida_edicion_item($datos['datos_item'][0]['id_pedido_item']);
-        if ($datos['datos_item'][0]['id_estado_item_pedido'] != 6) { // para no enviar los item de impresion variable a facturacion (Y)
+        $impresion_variable = false;
+        // validacion de informacion variable 
+        $codigo = $datos['datos_item'][0]["codigo"];
+        $caracter = "-";
+        $posicion_coincidencia = strpos($codigo, $caracter);
+        $tinta_codigo = substr($codigo, ($posicion_coincidencia + 6), 2);
+        $tintas = $this->TintasDAO->consultar_tintas_valiables();
+        foreach ($tintas as $tinta) {
+            if ($tinta_codigo == $tinta->numeros) {
+                $impresion_variable = true;
+            }
+        }
+        if ($impresion_variable === false) { // Reportamos a facturación cuando no es impresion varibale 
             if (empty($valida_reporte)) {
                 $data = [
                     'id_pedido_item' => $datos['datos_item'][0]['id_pedido_item'],
