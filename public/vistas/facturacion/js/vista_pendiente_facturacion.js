@@ -10,6 +10,12 @@ $(document).ready(function () {
 var tabla_pendientes_facturar = function () {
     var table = $('#table_pendientes_facturar').DataTable({
         ajax: `${PATH_NAME}/facturacion/tabla_facturacion`,
+        buttons: [{
+            extend: 'excelHtml5',
+            text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
+            tittleAttr: ' Exportar a exel',
+            className: 'btn btn-success',
+        }],
         columns: [
             { "data": "fecha_compromiso" },
             { "data": "nombre_empresa" },
