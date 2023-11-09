@@ -61,4 +61,28 @@ class ModificaDocumentoControlador extends GenericoControlador
         echo json_encode($respu);
         return;
     }
+    public function cambio_fecha_fac()
+    {
+        header('Content-Type: application/json');
+        $edita_entrega_logistica = [
+            'fecha_factura' => $_POST['nueva_fecha']
+        ];
+        $condicion = 'id_factura = ' . $_POST['id_control_factura'];
+        $grabo = $this->EntregasLogisticaDAO->editar($edita_entrega_logistica, $condicion);
+        if ($grabo) {
+            $respu = [
+                'status' => 1,
+                'msg' => 'Fecha Modificada Correctamente',
+                'table' => ''
+            ];
+        } else {
+            $respu = [
+                'status' => -1,
+                'msg' => 'Lo sentimos algo a pasado',
+                'table' => ''
+            ];
+        }
+        echo json_encode($respu);
+        return;
+    }
 }

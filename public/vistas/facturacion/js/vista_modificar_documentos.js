@@ -2,6 +2,7 @@ $(document).ready(function () {
     alertify.set('notifier', 'position', 'bottom-left');
     consulta_documentos();
     cantidad_por_facturar();
+    cambiar_fecha();
 });
 
 var PRINCIPAL = [];
@@ -37,6 +38,59 @@ var consulta_documentos = function () {
             }
         });
     });
+    $('#consulta_num').on('click', function () {
+        var obj_inicial = $('#consulta_num').html();
+        var numero_lista_de_empaque = $('#num_lista').val();
+        if (numero_lista_de_empaque == '') {
+            alertify.error('Se requiere El numero de lista de empaque');
+            return;
+        }
+        btn_procesando('consulta_num', obj_inicial);
+        $.ajax({
+            url: `${PATH_NAME}/entregas/consulta_lista_empaque`,
+            type: "POST",
+            data: { numero_lista_de_empaque },
+            success: function (res) {
+                btn_procesando('consulta_num', obj_inicial, 1);
+                $('#cliente').val(res['cabecera'].nombre_empresa);
+                $('#pedido').val(res['cabecera'].num_pedido);
+                $('#fecha_factura').val(res['cabecera'].fecha_factura);
+                $('#fecha_factura_ant').val(res['cabecera'].fecha_factura);
+                $('#id_control_factura').val(res['cabecera'].id_control_factura);
+            }
+        });
+    });
+}
+
+var cambiar_fecha = function () {
+    $('#fecha_factura').change(function () {
+        var nueva_fecha = $('#fecha_factura').val();
+        var fecha_ant = $('#fecha_factura_ant').val();
+        var id_control_factura = $('#id_control_factura').val();
+        if (nueva_fecha != fecha_ant) {
+            alertify.confirm('Cambio Fecha Factura', 'Esta seguro de cambiar la fecha del documento?.',
+                function () {
+                    $.ajax({
+                        url: `${PATH_NAME}/cambio_fecha_fac`,
+                        type: "POST",
+                        data: { nueva_fecha, id_control_factura },
+                        success: function (res) {
+                            if (res.status == 1) {
+                                alertify.success(res.msg);
+                                location.reload();
+                            } else {
+                                alertify.error(res.msg);
+                            }
+                        }
+                    });
+                },
+                function () {
+                    alertify.error('Operación cancelada');
+                });
+        } else {
+            alertify.error('No se puede cambiar la fecha');
+        }
+    })
 }
 
 var tabla_documentos = function (limpio = '') {
