@@ -1,9 +1,20 @@
 $(document).ready(function () {
-    alistamiento_items_completos();
-    alistamiento_items_incompletos();
+    click();
+    $('#ali_completo-tab').click();
     envio_cantidad_reproceso();
-    alistamiento_items_bobina();
 });
+
+var click = function () {
+    $('#ali_completo-tab').on('click', function () {
+        alistamiento_items_completos();
+    });
+    $('#ali_incompleto-tab').on('click', function () {
+        alistamiento_items_incompletos();
+    });
+    $('#ali_bobinas-tab').on('click', function () {
+        alistamiento_items_bobina();
+    });
+}
 
 var alistamiento_items_completos = function () {
     var table = $('#dt_alistamiento_bod_completo').DataTable({
