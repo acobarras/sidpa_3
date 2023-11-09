@@ -85,70 +85,70 @@ class AnulacionFacturaControlador extends GenericoControlador
                     $cumple = false;
                 }
             }
-            if ($cumple) {
-                $pertenece = $data[0]['pertenece'];
-                if ($pertenece == 1) { //pertenece a acobarras sas
-                    $id = 8;
-                    $consecutivo = $this->cons_cotizacionDAO->consultar_cons_especifico($id);
-                    $num_cons =  $consecutivo[0]->numero_guardado;
-                } else { // si el cliente pertenece a 2 es de acobarras colombia
-                    $id = 9;
-                    $consecutivo = $this->cons_cotizacionDAO->consultar_cons_especifico($id);
-                    $num_cons =  $consecutivo[0]->numero_guardado;
-                }
-                $nuevo_cons['numero_guardado'] = $num_cons + 1; // aumentamos el consecutivo en 1
-                $condicion = 'id_consecutivo=' . $id;
-                $this->cons_cotizacionDAO->editar($nuevo_cons, $condicion); // subimos el nuevo consecutivo
-                $items = [];
-                foreach ($data as $value) {
-                    $item = $value;
-                    if (empty($items)) {
-                        array_push($items, $item);
-                    } else {
-                        foreach ($items as $value_item) {
-                            if ($item['id_pedido_item'] != $value_item['id_pedido_item']) {
-                                array_push($items, $item);
-                            }
+        }
+        if ($cumple) {
+            $pertenece = $data[0]['pertenece'];
+            if ($pertenece == 1) { //pertenece a acobarras sas
+                $id = 8;
+                $consecutivo = $this->cons_cotizacionDAO->consultar_cons_especifico($id);
+                $num_cons =  $consecutivo[0]->numero_guardado;
+            } else { // si el cliente pertenece a 2 es de acobarras colombia
+                $id = 9;
+                $consecutivo = $this->cons_cotizacionDAO->consultar_cons_especifico($id);
+                $num_cons =  $consecutivo[0]->numero_guardado;
+            }
+            $nuevo_cons['numero_guardado'] = $num_cons + 1; // aumentamos el consecutivo en 1
+            $condicion = 'id_consecutivo=' . $id;
+            $this->cons_cotizacionDAO->editar($nuevo_cons, $condicion); // subimos el nuevo consecutivo
+            $items = [];
+            foreach ($data as $value) {
+                $item = $value;
+                if (empty($items)) {
+                    array_push($items, $item);
+                } else {
+                    foreach ($items as $value_item) {
+                        if ($item['id_pedido_item'] != $value_item['id_pedido_item']) {
+                            array_push($items, $item);
                         }
                     }
                 }
-                // agregar seguimiento
-                foreach ($items as $value_seg) {
-                    // 102 es la actividad del cambio de factura
-                    $seguimiento_op = [
-                        'id_persona' => $_SESSION['usuario']->getid_persona(),
-                        'id_area' => 2,
-                        'id_actividad' => 102,
-                        'pedido' => $value_seg['num_pedido'],
-                        'item' => $value_seg['item'],
-                        'observacion' => $value_seg['tipo_documento'] . " " . $consecutivo[0]->numero_guardado,
-                        'estado' => 1,
-                        'id_usuario' => $_SESSION['usuario']->getid_usuario(),
-                        'fecha_crea' => date('Y-m-d'),
-                        'hora_crea' => date('H:i:s')
-                    ];
-                    $seg = $this->SeguimientoOpDAO->insertar($seguimiento_op);
-                }
-                // editar num_factura
-                foreach ($data_factura as $value_fact) {
-                    $edit_fact = [
-                        'num_factura' => $num_cons,
-                    ];
-                    $condicion = 'id_control_factura=' . $value_fact['id_control_factura'];
-                    $edit = $this->control_facturacionDAO->editar($edit_fact, $condicion);
-                }
-                $respu = [
-                    'status' => 1,
-                    'msg' => 'Se a realizado el cambio de factura al N°' . $num_cons,
-                ];
-            } else {
-                $respu = [
-                    'status' => -1,
-                    'msg' => 'Lo sentimos esta factura no se puede anular',
-                ];
             }
-            echo json_encode($respu);
-            return;
+            // agregar seguimiento
+            foreach ($items as $value_seg) {
+                // 102 es la actividad del cambio de factura
+                $seguimiento_op = [
+                    'id_persona' => $_SESSION['usuario']->getid_persona(),
+                    'id_area' => 2,
+                    'id_actividad' => 102,
+                    'pedido' => $value_seg['num_pedido'],
+                    'item' => $value_seg['item'],
+                    'observacion' => $value_seg['tipo_documento'] . " " . $consecutivo[0]->numero_guardado,
+                    'estado' => 1,
+                    'id_usuario' => $_SESSION['usuario']->getid_usuario(),
+                    'fecha_crea' => date('Y-m-d'),
+                    'hora_crea' => date('H:i:s')
+                ];
+                $seg = $this->SeguimientoOpDAO->insertar($seguimiento_op);
+            }
+            // editar num_factura
+            foreach ($data_factura as $value_fact) {
+                $edit_fact = [
+                    'num_factura' => $num_cons,
+                ];
+                $condicion = 'id_control_factura=' . $value_fact['id_control_factura'];
+                $edit = $this->control_facturacionDAO->editar($edit_fact, $condicion);
+            }
+            $respu = [
+                'status' => 1,
+                'msg' => 'Se a realizado el cambio de factura al N°' . $num_cons,
+            ];
+        } else {
+            $respu = [
+                'status' => -1,
+                'msg' => 'Lo sentimos esta factura no se puede anular',
+            ];
         }
+        echo json_encode($respu);
+        return;
     }
 }
