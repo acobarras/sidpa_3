@@ -156,7 +156,7 @@ var cantidad_por_facturar = function (tbody, table) {
         numero = numero.replace(/\./g, '');
         var cant_fac = data.cantidad_facturada;
         var suma_cantidad = parseFloat(numero) + parseFloat(cant_fac);
-        var restante = parseFloat(data.cantidad_por_facturar) - parseFloat(suma_cantidad);
+        var restante = parseFloat(data.cantidad_por_facturar) - parseFloat(numero);
         var array_cantidad = {
             'id_pedido_item': data.id_pedido_item,
             'cantidad_factura': restante,
@@ -331,7 +331,7 @@ var lista_de_empaque = function () {
             alertify.error('Selecciona el tipo de documento');
             $('#remision_factura').focus();
             return
-        }else{
+        } else {
             var obj_inicial = $('#genera_lista_de_empaque').html();
             var num_pedido = $('.boton-x').attr('formulario');
             var pertenece = $('#pertenece').val();

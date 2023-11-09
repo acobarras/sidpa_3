@@ -200,4 +200,71 @@ class PedidosDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function consulta_pedidos_atrasados($param)
+    {
+        if ($param['tipo'] == "1") {
+            $condicion = "t4.forma_pago=4 AND t3.fecha_compromiso !='0000-00-00'";
+        } else if ($param['tipo'] == "2") {
+            $condicion = "t4.forma_pago!=4 AND t3.fecha_compromiso !='0000-00-00'";
+        } else {
+            $condicion = "t3.fecha_compromiso ='0000-00-00'";
+        }
+        $sql = "SELECT t3.id_pedido, t3.num_pedido, t3.fecha_crea_p, t3.hora_crea , t3.fecha_compromiso, t3.fecha_cierre, 
+        COUNT(t2.item) AS items_reportados, t4.nombre_empresa, t4.forma_pago, t5.nombres, t5.apellidos 
+        FROM entregas_logistica t1 
+        INNER JOIN pedidos_item t2 ON t1.id_pedido_item = t2.id_pedido_item 
+        INNER JOIN pedidos t3 ON t2.id_pedido = t3.id_pedido 
+        INNER JOIN cliente_proveedor t4 ON t3.id_cli_prov = t4.id_cli_prov 
+        INNER JOIN persona t5 ON t3.id_persona = t5.id_persona 
+        WHERE t1.id_factura = 0 AND t1.fecha_cargue IS NULL AND $condicion GROUP BY t3.num_pedido ORDER BY t3.fecha_compromiso ASC;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    public function conteo_items_pedido($id_pedido)
+    {
+        $sql = "SELECT COUNT(t1.item) as items_pedido, COUNT(CASE WHEN t1.n_produccion<>0 THEN 1 END) AS items_op 
+        FROM pedidos_item t1 WHERE id_pedido=$id_pedido";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    public function consulta_items_idpedido($id_pedido)
+    {
+        $sql = "SELECT t1.id_pedido_item, t1.n_produccion,t1.item,t1.Cant_solicitada,t1.cant_bodega,t1.cant_op,t1.total,t1.id_estado_item_pedido,t1.orden_compra,t3.codigo_producto,t3.tamano,
+        t3.descripcion_productos,t4.nombre_estado_item
+        FROM pedidos_item t1 
+        INNER JOIN cliente_producto t2 ON t1.id_clien_produc=t2.id_clien_produc 
+        INNER JOIN productos t3 ON t3.id_productos=t2.id_producto 
+        INNER JOIN estado_item_pedido t4 ON t4.id_estado_item_pedido=t1.id_estado_item_pedido
+        WHERE t1.id_pedido=$id_pedido;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    public function consulta_items_incompletos()
+    {
+        // $sql = "SELECT t1.id_pedido_item,t1.cantidad_factura,t1.id_factura,t2.item,t2.codigo,t2.Cant_solicitada,t3.num_pedido,t3.parcial,t3.porcentaje,t3.difer_mas,t3.difer_menos,t3.difer_ext 
+        // FROM entregas_logistica t1 
+        // INNER JOIN pedidos_item t2 ON t2.id_pedido_item=t1.id_pedido_item 
+        // INNER JOIN pedidos t3 on t3.id_pedido=t2.id_pedido 
+        // WHERE t1.id_factura!=0 AND t1.cantidad_factura<t2.Cant_solicitada";
+        $sql = "SELECT t1.id_pedido_item,t1.id_factura,t2.item,t2.codigo,t2.Cant_solicitada,t3.num_pedido,t3.parcial,t3.porcentaje,t3.difer_mas,t3.difer_menos,t3.difer_ext, 
+        SUM(CASE WHEN t1.id_factura = 0 THEN t1.cantidad_factura ELSE 0 END) AS cant_reportada, 
+        SUM(CASE WHEN t1.id_factura != 0 THEN t1.cantidad_factura ELSE 0 END) AS cant_facturada, 
+        (CASE WHEN t3.difer_menos = 1 THEN (t2.Cant_solicitada-((t3.porcentaje/100)*t2.Cant_solicitada)) 
+        ELSE t2.Cant_solicitada END) AS cant_minima
+        FROM entregas_logistica t1 
+        INNER JOIN pedidos_item t2 ON t2.id_pedido_item=t1.id_pedido_item 
+        INNER JOIN pedidos t3 on t3.id_pedido=t2.id_pedido  
+        GROUP BY t1.id_pedido_item
+        HAVING cant_facturada<cant_minima;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

@@ -191,4 +191,22 @@ class EntregasLogisticaDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function registro_entregas_logistica($id_pedido_item)
+    {
+        $sql = "SELECT t1.*,t2.num_factura,t2.num_remision,t2.num_lista_empaque FROM entregas_logistica t1 
+        LEFT JOIN control_facturas t2 ON t2.id_control_factura=t1.id_factura 
+        WHERE t1.id_pedido_item in($id_pedido_item);";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    public function items_pendientes_fac($id_pedido_item)
+    {
+        $sql = "SELECT SUM(cantidad_factura) AS cant_pendiente_fac FROM entregas_logistica WHERE id_factura=0 AND id_pedido_item=$id_pedido_item;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
