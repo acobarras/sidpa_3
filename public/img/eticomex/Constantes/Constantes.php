@@ -174,44 +174,6 @@ define(
 );
 
 define(
-    'VALORES_COTIZADOR',
-    array(
-        'costo_desperdicio' => 1.1,
-        'utili_inicial' => .45,
-        'utili_medio' => .9,
-        'utili_alto' => .8,
-        'cinta_calor' => 26, // precio en m2 en pesos mexicanos
-        'cinta_frio' => 8, // precio en m2 en pesos mexicanos
-        'monto_blanco' => 250, // metros lineales
-        'utili_1tintas' => .85,
-        'monto_1tinta' => 250,
-        'utili_2tintas' => .75,
-        'monto_2tinta' => 300,
-        'utili_3tintas' => .65,
-        'monto_3tinta' => 380,
-        'utili_4tintas' => .6,
-        'monto_4tinta' => 525,
-        'utili_5tintas' => .55,
-        'monto_5tinta' => 720,
-        'utili_6tintas' => .5,
-        'monto_6tinta' => 800,
-        'utili_7tintas' => .45,
-        'monto_7tinta' => 800,
-        'utili_8tintas' => .45,
-        'monto_8tinta' => 800,
-        'precio_cyrel' => 400,
-        'ml_req_troq_rotativo' => 1500,
-        'troquel_rotativo' => 6481, // precio en m2 en pesos mexicanos
-        'troquel_plano' => 6481, // precio en m2 en pesos mexicanos
-        'precio_clice' => 344, // precio en m2 en pesos mexicanos
-        'tiempo_cobro_pre_prensa' => 3,
-        'laminado_brillante' => 4,
-        'laminado_mate' => 6,
-        'ancho_montaje' => 214,
-    )
-);
-
-define(
     'ROLL_DESPERDICIO',
     array(
         2 => 'no',

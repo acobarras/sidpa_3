@@ -18,6 +18,7 @@ use MiApp\persistencia\dao\SoporteItemDAO;
 use MiApp\persistencia\dao\PrioridadesComercialDAO;
 use MiApp\persistencia\dao\VehiculosDAO;
 use MiApp\persistencia\dao\AreaTrabajoDAO;
+use MiApp\persistencia\dao\ValoresCotizadorDAO;
 use MiApp\negocio\util\Validacion;
 use MiApp\negocio\util\PDF;
 
@@ -43,6 +44,7 @@ abstract class GenericoControlador
     private $PrioridadesComercialDAO;
     private $VehiculosDAO;
     private $AreaTrabajoDAO;
+    private $ValoresCotizadorDAO;
 
     public function __construct(&$cnn)
     {
@@ -65,6 +67,7 @@ abstract class GenericoControlador
         $this->PrioridadesComercialDAO = new PrioridadesComercialDAO($cnn);
         $this->VehiculosDAO = new VehiculosDAO($cnn);
         $this->AreaTrabajoDAO = new AreaTrabajoDAO($cnn);
+        $this->ValoresCotizadorDAO = new ValoresCotizadorDAO($cnn);
     }
     /**
      * Función protected para redireccionar al usuario al inicio de sesión
@@ -144,7 +147,7 @@ abstract class GenericoControlador
                 '/plantilla/header',
                 [ /*variables para la vista*/
                     "todas_hojas" => $modulo->todas_hojas(),
-                    "usuario" => $usuario,                    
+                    "usuario" => $usuario,
                     "modulo_hojas" => $modulo->Consultar_modulo_hojas($parametro),
                     "id" => $id,
                     "dia_festivo" => $dia_festivo,
@@ -157,7 +160,7 @@ abstract class GenericoControlador
         } else {
             $modulo_hojas = $this->permisosDAO->consultar_permisos();
             $todas_hojas = $modulo->todas_hojas_especifica();
-            
+
             $this->view(
                 '/plantilla/header',
                 [
@@ -228,6 +231,11 @@ abstract class GenericoControlador
 
     public function calculo_cotizador_etiquetas($datos, $cambio_avance = 0)
     {
+        $datos_cotizador = $this->ValoresCotizadorDAO->consultar_valores_cotizador();
+        $valores_cotizador = [];
+        foreach ($datos_cotizador as $value) {
+            $valores_cotizador[$value->nombre_variable] = $value->valor_campo;
+        }
         $fecha = $datos["fecha"];
         $tipo_cotiza = $datos['tipo_cotiza'];
         $ancho = $datos["ancho"];
@@ -275,7 +283,7 @@ abstract class GenericoControlador
             $valor_material = $datos_materia_prima[0]->valor_material;
         }
         if ($estcalor == 1) {
-            $cinta_calor = VALORES_COTIZADOR['cinta_calor']; //1143;
+            $cinta_calor = $valores_cotizador['cinta_calor']; //1143;
             if (empty($valor_material)) {
                 $valor_material = 0;
             } else {
@@ -283,7 +291,7 @@ abstract class GenericoControlador
             }
         }
         if ($estfrio == 1) {
-            $cinta_frio = VALORES_COTIZADOR['cinta_frio']; //1380;
+            $cinta_frio = $valores_cotizador['cinta_frio']; //1380;
             if (empty($valor_material)) {
                 $valor_material = 0;
             } else {
@@ -293,22 +301,22 @@ abstract class GenericoControlador
         }
         if ($laminado != 0) {
             if ($laminado == 2) {
-                $valor_material = $valor_material + VALORES_COTIZADOR['laminado_brillante'];
+                $valor_material = $valor_material + $valores_cotizador['laminado_brillante'];
             } else {
-                $valor_material = $valor_material + VALORES_COTIZADOR['laminado_mate'];
+                $valor_material = $valor_material + $valores_cotizador['laminado_mate'];
             }
         }
         $ancho_m2 = ($ancho + $aumento) / 1000;
         $avance_m2 = $avance / 1000;
         $m2 = ($ancho_m2) * ($avance_m2);
-        $costo = ($m2 * $valor_material) * VALORES_COTIZADOR['costo_desperdicio']; // 1.1;
-        $montaje_minimo = VALORES_COTIZADOR['monto_blanco'];
+        $costo = ($m2 * $valor_material) * $valores_cotizador['costo_desperdicio']; // 1.1;
+        $montaje_minimo = $valores_cotizador['monto_blanco'];
         if ($tintas != 0) {
             $texto_tinta = 'monto_' . $tintas . 'tinta';
-            $montaje_minimo = VALORES_COTIZADOR[$texto_tinta];
+            $montaje_minimo = $valores_cotizador[$texto_tinta];
             // $costo = Validacion::costo_tinta($costo, $tintas);
             $utilidad_tintas = 'utili_' . $tintas . 'tintas';
-            $costo = ($costo / VALORES_COTIZADOR[$utilidad_tintas]);
+            $costo = ($costo / $valores_cotizador[$utilidad_tintas]);
         }
         $ancgap = $ancho + $aumento; //35
         if ($ancho > 110) {
@@ -316,12 +324,12 @@ abstract class GenericoControlador
         } else {
             $cavidad = number_format(round((110 / $ancgap), 0), 0, ".", ".");
         }
-        $cavidad_montaje = number_format(round((VALORES_COTIZADOR['ancho_montaje'] / $ancgap), 0), 0, ".", ".");
+        $cavidad_montaje = number_format(round(($valores_cotizador['ancho_montaje'] / $ancgap), 0), 0, ".", ".");
         $cav_ml = $cavidad * $ml;
         // Se calculan las cantidades y los precios despues del costo
-        $precio_bajo = $costo / VALORES_COTIZADOR['utili_inicial']; //0.6;
-        $precio_medio = $precio_bajo / VALORES_COTIZADOR['utili_medio'];
-        $precio_alto = $precio_bajo / VALORES_COTIZADOR['utili_alto'];
+        $precio_bajo = $costo / $valores_cotizador['utili_inicial']; //0.6;
+        $precio_medio = $precio_bajo / $valores_cotizador['utili_medio'];
+        $precio_alto = $precio_bajo / $valores_cotizador['utili_alto'];
         $monto_q = round(((($montaje_minimo * 1000) / $avance) * $cavidad_montaje) * $precio_alto, -2);
         $cant_minima_etiq = (($cavidad * $ml) * (($monto_q / $precio_alto) * $avance) / ($cavidad * $ml) / $avance);
         $cant_minima_etiq1 = (($cavidad * $ml) * ((($monto_q / $precio_alto) * $avance) / ($cavidad * $ml) + 1000) / $avance);
@@ -331,7 +339,7 @@ abstract class GenericoControlador
             $cantidad_cotizada = $cant_minima_etiq;
         }
         if ($cantidad_cotizada < $cant_minima_etiq) {
-            $monto_cliente = ($precio_bajo / VALORES_COTIZADOR['utili_medio']) * $cantidad_cotizada;
+            $monto_cliente = ($precio_bajo / $valores_cotizador['utili_medio']) * $cantidad_cotizada;
             if ($monto_cliente < $monto_q) {
                 $precio_variante = ($monto_q / $cantidad_cotizada);
             }
@@ -341,9 +349,9 @@ abstract class GenericoControlador
             if ($cyrel == 2) {
                 $costo_cyrel = 0;
             } else {
-                $precio_cyrel = VALORES_COTIZADOR['precio_cyrel']; // 50000
+                $precio_cyrel = $valores_cotizador['precio_cyrel']; // 50000
                 $precio_cyreles = $precio_cyrel * $tintas;
-                $cantidad_cotizada = $cantidad_cotizada * VALORES_COTIZADOR['tiempo_cobro_pre_prensa'];
+                $cantidad_cotizada = $cantidad_cotizada * $valores_cotizador['tiempo_cobro_pre_prensa'];
                 $costo_cyrel = $precio_cyreles / $cantidad_cotizada;
             }
             $precio_bajo = $precio_bajo + $costo_cyrel;
@@ -356,12 +364,12 @@ abstract class GenericoControlador
         // Se valida para el cobrar en costo del troquel
         if ($troquel == 1) {
             $ml_requeridos = ($cantidad_cotizada * $avance) / $cav_ml;
-            if ($ml_requeridos > VALORES_COTIZADOR['ml_req_troq_rotativo']) {
-                $precio_troquel = VALORES_COTIZADOR['troquel_rotativo']; // Rotativo
+            if ($ml_requeridos > $valores_cotizador['ml_req_troq_rotativo']) {
+                $precio_troquel = $valores_cotizador['troquel_rotativo']; // Rotativo
             } else {
-                $precio_troquel = VALORES_COTIZADOR['troquel_plano']; // Plano
+                $precio_troquel = $valores_cotizador['troquel_plano']; // Plano
             }
-            $cantidad_cotizada = $cantidad_cotizada * VALORES_COTIZADOR['tiempo_cobro_pre_prensa'];
+            $cantidad_cotizada = $cantidad_cotizada * $valores_cotizador['tiempo_cobro_pre_prensa'];
             $costo_troquel = $precio_troquel / $cantidad_cotizada;
             $precio_bajo = $precio_bajo + $costo_troquel;
             $precio_medio = $precio_medio + $costo_troquel;
@@ -372,7 +380,7 @@ abstract class GenericoControlador
         }
         // Cuanto tiene estampado al calor segun la cantidad adicional de estampacion
         if ($estcalor == 1) {
-            $precio_clice = VALORES_COTIZADOR['precio_clice'];
+            $precio_clice = $valores_cotizador['precio_clice'];
             $precio_clices = $precio_clice * $cantestcalor;
             $costo_clice = $precio_clices / $cantidad_cotizada;
             $precio_bajo = $precio_bajo + $costo_clice;

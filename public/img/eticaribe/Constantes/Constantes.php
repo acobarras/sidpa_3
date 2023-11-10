@@ -175,44 +175,6 @@ define(
 );
 
 define(
-    'VALORES_COTIZADOR',
-    array(
-        'costo_desperdicio' => 1.1,
-        'utili_inicial' => .65,
-        'utili_medio' => .9,
-        'utili_alto' => .8,
-        'cinta_calor' => 5300,
-        'cinta_frio' => 2040,
-        'monto_blanco' => 250, //80000,
-        'utili_1tintas' => .85,
-        'monto_1tinta' => 250, //150000,
-        'utili_2tintas' => .75,
-        'monto_2tinta' => 300, //250000,
-        'utili_3tintas' => .65,
-        'monto_3tinta' => 380, //400000,
-        'utili_4tintas' => .6,
-        'monto_4tinta' => 525, //600000,
-        'utili_5tintas' => .55,
-        'monto_5tinta' => 720, //900000,
-        'utili_6tintas' => .5,
-        'monto_6tinta' => 800, //1000000,
-        'utili_7tintas' => .45,
-        'monto_7tinta' => 800, //1100000,
-        'utili_8tintas' => .45,
-        'monto_8tinta' => 800, //1200000,
-        'precio_cyrel' => 80000,
-        'ml_req_troq_rotativo' => 1500,
-        'troquel_rotativo' => 1500000,
-        'troquel_plano' => 220000,
-        'precio_clice' => 80000,
-        'tiempo_cobro_pre_prensa' => 3,
-        'laminado_brillante' => 550,
-        'laminado_mate' => 890,
-        'ancho_montaje' => 214,
-    )
-);
-
-define(
     'ROLL_DESPERDICIO',
     array(
         2 => 'no',

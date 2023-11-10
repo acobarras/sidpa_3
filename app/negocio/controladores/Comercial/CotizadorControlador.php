@@ -8,6 +8,7 @@ use MiApp\persistencia\dao\productosDAO;
 use MiApp\persistencia\dao\TipoMaterialDAO;
 use MiApp\persistencia\dao\PrecioMateriaPrimaDAO;
 use MiApp\persistencia\dao\TintasDAO;
+use MiApp\persistencia\dao\ValoresCotizadorDAO;
 use MiApp\negocio\util\Validacion;
 
 
@@ -18,6 +19,7 @@ class CotizadorControlador extends GenericoControlador
     private $TipoMaterialDAO;
     private $PrecioMateriaPrimaDAO;
     private $TintasDAO;
+    private $ValoresCotizadorDAO;
 
     public function __construct(&$cnn)
     {
@@ -28,6 +30,7 @@ class CotizadorControlador extends GenericoControlador
         $this->TipoMaterialDAO = new TipoMaterialDAO($cnn);
         $this->PrecioMateriaPrimaDAO = new PrecioMateriaPrimaDAO($cnn);
         $this->TintasDAO = new TintasDAO($cnn);
+        $this->ValoresCotizadorDAO = new ValoresCotizadorDAO($cnn);
     }
 
     /*  
@@ -60,5 +63,34 @@ class CotizadorControlador extends GenericoControlador
         $datos_etiq = parent::calculo_cotizador_etiquetas($_POST);
         echo json_encode($datos_etiq);
         return;
+    }
+
+    function vista_datos_cotizador()
+    {
+        parent::cabecera();
+        $this->view(
+            'configuracion/vista_datos_cotizador'
+        );
+    }
+
+    function consulta_datos_cotizador()
+    {
+        header('Content-Type:application/json');
+        $datos_cotizador = $this->ValoresCotizadorDAO->consultar_valores_cotizador();
+        $respu['data'] = $datos_cotizador;
+        echo json_encode($respu);
+        return;
+    }
+
+    function editar_cotizador()
+    {
+        header('Content-Type:application/json');
+        $edita = [
+            'valor_campo' => $_POST['nuevo_numero'],
+            'fecha_modifi' => date('Y-m-d H:i:s')
+        ];
+        $condicion = 'id_cotizador ='.$_POST['id_cotizador'];
+        $respu = $this->ValoresCotizadorDAO->editar($edita,$condicion);
+        echo json_encode($respu);
     }
 }
