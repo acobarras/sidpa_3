@@ -151,7 +151,7 @@
                             <br>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary btn-sm" id="modal_ubica" data="">Reportar</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="modal_ubica">Reportar</button>
                             </div>
                         </form>
                     </div>

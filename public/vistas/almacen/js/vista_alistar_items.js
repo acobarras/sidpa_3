@@ -2,6 +2,8 @@ $(document).ready(function () {
     click();
     $('#ali_completo-tab').click();
     envio_cantidad_reproceso();
+    envia();
+    tablas();
 });
 
 var click = function () {
@@ -84,7 +86,7 @@ var alistamiento_items_completos = function () {
                         boton_alistar = '';
                         boton_reproceso = `<button class="btn btn-danger btn-sm reportar_cant_reproceso" title="Reprocesando" id="reportar_cant_reproceso${row['id_ingresotec']}" data-bs-toggle="modal" data-bs-target="#Modal_CANT_REPROC"><i class="fas fa-sync"></i></button>`;
                     } else {
-                        boton_alistar = `<button class="btn btn-success btn-sm report_cant_factu" title="Alistamiento completo" id="report_cant_factu${row['id_ingresotec']}"><i class="fa fa-check"></i></button>`;
+                        boton_alistar = `<button class="btn btn-success btn-sm report_cant_factu" title="Alistamiento completo" id="report_cant_factu${row['id_ingresotec']}" data-tabla="#dt_alistamiento_bod_completo" data_alistamiento="2"><i class="fa fa-check"></i></button>`;
                         boton_reproceso = `<button class="btn btn-warning btn-sm item_en_reproceso" title="Enviar a Reproceso" id="item_en_reproceso${row['id_ingresotec']}"><i class="fas fa-sync"></i></button>`;
                     }
                     return `<div>\n\
@@ -98,7 +100,7 @@ var alistamiento_items_completos = function () {
         ],
     });
     logistica_checked_completo('#dt_alistamiento_bod_completo tbody', table);
-    envio_completo('#dt_alistamiento_bod_completo tbody', table, '#dt_alistamiento_bod_completo', 2);// el segundo parametro es el tipo de alistamiento en este caso 2 "alistamiento completo".
+    // envio_completo('#dt_alistamiento_bod_completo tbody', table, '#dt_alistamiento_bod_completo', 2);// el segundo parametro es el tipo de alistamiento en este caso 2 "alistamiento completo".
     enviar_reproceso('#dt_alistamiento_bod_completo tbody', table, '#dt_alistamiento_bod_completo', 4);// el tercer parametro es para poder recargar la tabla despues de la accion y el cuarto parametro es el tipo de alistamiento 4 "reproceso completo"
     reportar_cant_reproceso('#dt_alistamiento_bod_completo tbody', table);
 }
@@ -165,26 +167,37 @@ var logistica_checked_completo = function (tbody, table) {
 }
 var envio_completo = function (tbody, table, reload, alistamiento) {
     $(tbody).on('click', 'tr button.report_cant_factu', function () {
-        $('#ubicacion').modal('show');
-        var data = table.row($(this).parents("tr")).data();
-        envia(data, alistamiento, reload);
+        //envia(data, alistamiento, reload);
 
     });
 }
 
-var envia = function (data, alistamiento, reload) {
-    $('#modal_ubica').on('click', function () {
+var tablas = function () {
+    $('#dt_alistamiento_bod_completo, #dt_alistamiento_bod_incompleto').on('click', 'tr button.report_cant_factu', function () {
+        $('#ubicacion').modal('show');
+        var tablaDT = $(this).data('tabla');
+        var alistamiento = $(this).attr('data_alistamiento');
+        var data = $(`${tablaDT}`).DataTable().row($(this).parents("tr")).data();
+        data.alistamiento = alistamiento;// llega como atributo
+        data.tabla_dt = tablaDT;
+        $('#modal_ubica').attr('data-item', JSON.stringify(data));
+    })
+}
+
+var envia = function () {
+    $('#modal_ubica').on('click', function (e) {
+        e.preventDefault();
+        var data = $(this).data('item');
         var ubicacion = $('#ubicacion_materialmodal').val();
         var obj_inicial = $(`#modal_ubica`).html();
-        btn_procesando_tabla(`modal_ubica`);
-        data.alistamiento = alistamiento;
         data.ubicacion_material = ubicacion;
+        btn_procesando_tabla(`modal_ubica`);
         $.ajax({
             url: `${PATH_NAME}/almacen/crea_entrega_logistica`,
             type: "POST",
             data: data,
             success: function (res) {
-                $(reload).DataTable().ajax.reload(function () {
+                $(`${data.tabla_dt}`).DataTable().ajax.reload(function () {
                     btn_procesando_tabla(`modal_ubica`, obj_inicial, 1);
                     alertify.success(`${res} CORRECTAMENTE.`);
                     $('#ubicacion').modal('hide')
@@ -335,7 +348,7 @@ var alistamiento_items_incompletos = function () {
                         boton_alistar = '';
                         boton_reproceso = `<button class="btn btn-danger btn-sm reportar_cant_reproceso" title="Reprocesando" id="reportar_cant_reproceso${row['id_ingresotec']}" data-bs-toggle="modal" data-bs-target="#Modal_CANT_REPROC"><i class="fas fa-sync"></i></button>`;
                     } else {
-                        boton_alistar = `<button class="btn btn-success btn-sm report_cant_factu" title="Alistamiento completo" id="report_cant_factu${row['id_ingresotec']}"><i class="fa fa-check"></i></button>`;
+                        boton_alistar = `<button class="btn btn-success btn-sm report_cant_factu" title="Alistamiento completo" id="report_cant_factu${row['id_ingresotec']}" data-tabla="#dt_alistamiento_bod_incompleto" data_alistamiento="3"><i class="fa fa-check"></i></button>`;
                         boton_reproceso = `<button class="btn btn-warning btn-sm item_en_reproceso" title="Enviar a Reproceso" id="item_en_reproceso${row['id_ingresotec']}"><i class="fas fa-sync"></i></button>`;
 
                     }
@@ -349,7 +362,7 @@ var alistamiento_items_incompletos = function () {
         ],
     });
     logistica_checked_completo('#dt_alistamiento_bod_incompleto', table1);
-    envio_completo('#dt_alistamiento_bod_incompleto tbody', table1, '#dt_alistamiento_bod_incompleto', 3);// el segundo parametro es el tipo de alistamiento en este caso 2 "alistamiento completo".
+    // envio_completo('#dt_alistamiento_bod_incompleto tbody', table1, '#dt_alistamiento_bod_incompleto', 3);// el segundo parametro es el tipo de alistamiento en este caso 2 "alistamiento completo".
     enviar_reproceso('#dt_alistamiento_bod_incompleto tbody', table1, '#dt_alistamiento_bod_incompleto', 5);// el tercer parametro es para poder recargar la tabla despues de la accion y el cuarto parametro es el tipo de alistamiento 5 "reproceso incompleto"
     reportar_cant_reproceso('#dt_alistamiento_bod_incompleto tbody', table1);
 }
@@ -580,7 +593,7 @@ var consulta_ubicacion_inventario = function (tbody, table, data_princi) {
         }
     });
 }
-//* funcion que valida y envia el inventario y alista el item 
+//* funcion que valida y envia el inventario y alista el item
 
 var alista_bobina = function (tbody, table, data_prici) {
     $(".alistar").on('click', function () {
