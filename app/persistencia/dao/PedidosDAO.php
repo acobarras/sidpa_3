@@ -234,7 +234,7 @@ class PedidosDAO extends GenericoDAO
     public function consulta_items_idpedido($id_pedido)
     {
         $sql = "SELECT t1.id_pedido_item, t1.n_produccion,t1.item,t1.Cant_solicitada,t1.cant_bodega,t1.cant_op,t1.total,t1.id_estado_item_pedido,t1.orden_compra,t3.codigo_producto,t3.tamano,
-        t3.descripcion_productos,t4.nombre_estado_item
+        t3.descripcion_productos,t4.nombre_estado_item,t1.fecha_compro_item
         FROM pedidos_item t1 
         INNER JOIN cliente_producto t2 ON t1.id_clien_produc=t2.id_clien_produc 
         INNER JOIN productos t3 ON t3.id_productos=t2.id_producto 

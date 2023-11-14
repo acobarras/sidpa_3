@@ -15,6 +15,13 @@ var tabla_pedidos = function (val = 1, tab = 'tb_pedidos_credito') {
             "type": "POST",
             "data": { tipo },
         },
+        "dom": 'Bflrtip',
+        "buttons": [{
+            extend: 'excelHtml5',
+            text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
+            tittleAttr: ' Exportar a exel',
+            className: 'btn btn-success',
+        }],
         "columns": [
             { "data": "fecha_compromiso" },
             { "data": "fecha_crea_p" },
@@ -111,6 +118,7 @@ var obtener_data = function () {
                             { data: "codigo_producto" },
                             { data: "descripcion_productos" },
                             { data: "n_produccion" },
+                            { data: "fecha_compro_item" },
                             { data: "Cant_solicitada" },
                             { data: "cant_reportada" },
                             {
@@ -192,6 +200,7 @@ function tabla_detalle_consul_ped_item(data) {
                         <th>Codigo</th>
                         <th>Descripción</th>
                         <th>Orden Produccion</th>
+                        <th>Fecha Compromiso Item</th>
                         <th>Cant Solicitada</th>
                         <th>Cant Facturada</th>
                         <th>Cant Faltante</th>
@@ -214,6 +223,13 @@ var pedidos_incompletos = function () {
             "url": `${PATH_NAME}/pedidos_incompletos`,
             "type": "POST",
         },
+        "dom": 'Bflrtip',
+        "buttons": [{
+            extend: 'excelHtml5',
+            text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
+            tittleAttr: ' Exportar a exel',
+            className: 'btn btn-success',
+        }],
         "columns": [
             { data: "num_pedido" },
             { data: "item" },
@@ -228,7 +244,7 @@ var pedidos_incompletos = function () {
             {
                 "render": function (data, type, row) {
                     var saldo = row.Cant_solicitada - row.cant_facturada - row.cant_reportada;
-                    return $.fn.dataTable.render.number('.', ',', 0, '').display(saldo) ;
+                    return $.fn.dataTable.render.number('.', ',', 0, '').display(saldo);
                 }
             },
         ],
