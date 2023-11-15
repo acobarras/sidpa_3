@@ -98,6 +98,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         unset($datos['conocido']); //eliminar dato que no se encuentra en la base de datos
         $datos['id_usuario'] = $_SESSION['usuario']->getId_usuario(); //obtener informacion del usurio
         $datos['fecha_crea'] = date('Y-m-d-H-i-s'); //obtener la fecha de creacion
+        $datos['estado_inv'] = 1; //obtener la fecha de creacion
         $respu = $this->entrada_tecnologiaDAO->insertar($datos); //es la variable que le devolvemos al ajax cuando se insertaron los datos a la base de datos 
         echo json_encode($respu); //envio de variable respuesta
 

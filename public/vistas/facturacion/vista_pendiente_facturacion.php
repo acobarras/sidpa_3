@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="px-2 py-2 col-lg-12" id="ConsultarPedido" style="display: none;">
-        <input type="hidden" id="pertenece">
+            <input type="hidden" id="pertenece">
             <div class="row">
                 <div class="form-group col-md-2">
                     <button class="btn btn-success ocultar_ver_pedido" type="button">
@@ -279,10 +279,11 @@
                         <div class="text-center mt-2">
                             <h4>PRODUCTOS</h4>
                         </div>
-                        <table id="tabla_items_pedido" style="background: white; width: 100%;" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" >
+                        <table id="tabla_items_pedido" style="background: white; width: 100%;" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg">
                             <thead style="background:#0d1b50;color:white">
                                 <tr>
                                     <th>item #</th>
+                                    <th>Fecha Compromiso Item</th>
                                     <th style="width: 130px;">Codigo</th>
                                     <th>Cant. Solicitada</th>
                                     <th>Cant. Por Facturar</th>
@@ -308,7 +309,7 @@
                         <div class="row">
                             <label for="observaciones_modifi">Observaciones :</label>
                             <div class="containt-fluid">
-                                <textarea disabled="true" class="form-control bg-white" id="observaciones_modifi" rows="4" cols="50" ></textarea>
+                                <textarea disabled="true" class="form-control bg-white" id="observaciones_modifi" rows="4" cols="50"></textarea>
                             </div>
                         </div>
                         <br>
@@ -340,7 +341,7 @@
                             </div>
                         </div>
                         <div class="text-center mb-3">
-                            <button class="btn btn-primary btn-lg boton-x" type="button" id="genera_lista_de_empaque" >Grabar</button>
+                            <button class="btn btn-primary btn-lg boton-x" type="button" id="genera_lista_de_empaque">Grabar</button>
                         </div>
                     </div>
                 </div>

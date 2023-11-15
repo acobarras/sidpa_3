@@ -216,7 +216,7 @@ class PedidosDAO extends GenericoDAO
         INNER JOIN pedidos t3 ON t2.id_pedido = t3.id_pedido 
         INNER JOIN cliente_proveedor t4 ON t3.id_cli_prov = t4.id_cli_prov 
         INNER JOIN persona t5 ON t3.id_persona = t5.id_persona 
-        WHERE t1.id_factura = 0 AND t1.fecha_cargue IS NULL AND $condicion GROUP BY t3.num_pedido ORDER BY t3.fecha_compromiso ASC;";
+        WHERE t1.id_factura = 0 AND t1.fecha_cargue IS NULL AND $condicion AND t1.estado <=6 GROUP BY t3.num_pedido ORDER BY t3.fecha_compromiso ASC;";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);

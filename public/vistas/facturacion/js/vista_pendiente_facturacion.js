@@ -119,6 +119,7 @@ var tabla_productos = function (data) {
         'ordering': false,
         columns: [
             { "data": "item" },
+            { "data": "fecha_compro_item" },
             { "data": "codigo" },
             { "data": "Cant_solicitada", render: $.fn.dataTable.render.number('.', ',', 0, '') },
             {

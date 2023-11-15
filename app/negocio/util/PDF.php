@@ -33,7 +33,6 @@ class PDF
      */
     public static function pdf_pedidos($persona, $pedido, $items, $dire_entre, $dire_radic)
     {
-
         $dias = '';
         if ($pedido['pertenece'] == 1) {
             $cabeza_pedido = "<img id='imgtitulo' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/cabeza_pedido.jpg'>";
@@ -619,6 +618,7 @@ class PDF
                             <td class="borde-right-1 borde-top-1 text-center"></td>
                         </tr>';
         $cuenta = 0;
+        $valor_documento = 0;
         for ($i = 0; $i < count($items); $i++) {
             $cuenta = $cuenta + 1;
             $cantidad_codigo = $items[$i]['cantidad_por_facturar'];
@@ -637,6 +637,7 @@ class PDF
                             <td class="borde-right-1 text-center">$ ' . number_format($valor_item_total, 2, ',', '.') . '</td>
                         </tr>
                         ';
+            $valor_documento = $valor_documento + $valor_item_total;
         }
         for ($j = $cuenta; $j < 10; $j++) {
             $html .= '			
@@ -652,7 +653,7 @@ class PDF
                         <tr>
                             <td class="borde-right-1 text-center">&nbsp;</td>
                             <td colspan="3" class="borde-right-1">Total</td>	
-                            <td class="borde-right-1 text-center">' . number_format($cabecera['total_documento'], 2, ',', '.') . '</td>
+                            <td class="borde-right-1 text-center">' . number_format($valor_documento, 2, ',', '.') . '</td>
                         </tr>
                 </tfoot>';
 
