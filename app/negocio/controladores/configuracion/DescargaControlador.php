@@ -16,6 +16,7 @@ use MiApp\persistencia\dao\ItemProducirDAO;
 use MiApp\persistencia\dao\control_facturacionDAO;
 use MiApp\persistencia\dao\productosDAO;
 use MiApp\persistencia\dao\GestionPqrDAO;
+use MiApp\persistencia\dao\EmpresasDAO;
 
 class DescargaControlador extends GenericoControlador
 {
@@ -31,6 +32,7 @@ class DescargaControlador extends GenericoControlador
     private $control_facturacionDAO;
     private $productosDAO;
     private $GestionPqrDAO;
+    private $EmpresasDAO;
 
     public function __construct(&$cnn)
     {
@@ -49,6 +51,7 @@ class DescargaControlador extends GenericoControlador
         $this->control_facturacionDAO = new control_facturacionDAO($cnn);
         $this->productosDAO = new productosDAO($cnn);
         $this->GestionPqrDAO = new GestionPqrDAO($cnn);
+        $this->EmpresasDAO = new EmpresasDAO($cnn);
     }
 
     public function vista_descargar_pdf()
@@ -77,6 +80,12 @@ class DescargaControlador extends GenericoControlador
         $persona = $this->PersonaDAO->consultar_personas_id($id_persona[0]->id_persona); //necesario
         $items = $this->PedidosItemDAO->ConsultaIdPedido($pedido[0]->id_pedido); //necesario
         $pertenece = $this->clientes_proveedorDAO->cliente_pertenece($pedido[0]->id_cli_prov); //necesario
+        $empresa = $this->EmpresasDAO->consulta_empresa_id($pertenece[0]->pertenece);
+        foreach ($empresa[0] as $key => $value) {
+            $pedido[0]->$key = $value;
+        }
+        print_r($pedido);
+        return;
         $direc_entre = $this->direccionDAO->consultaIdDireccion($pedido[0]->id_dire_entre);
         $direc_radic = $this->direccionDAO->consultaIdDireccion($pedido[0]->id_dire_radic);
         // $traz = $this->TrazPedidoDAO->consultar_traz_pedido_id($pedido[0]->id_pedido);
