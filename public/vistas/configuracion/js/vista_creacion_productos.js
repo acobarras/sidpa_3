@@ -169,6 +169,7 @@ var obtener_data_editar = function () {
         $('#agrega-tab').click();
         setTimeout(function () {
             $('#id_tipo_articulo').val(data.id_tipo_articulo).change();
+            $('#id_adh').val(data.id_adh).change();
         }, 1000);
     });
 }

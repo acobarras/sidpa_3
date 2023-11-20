@@ -11,6 +11,7 @@ use MiApp\persistencia\dao\clientes_proveedorDAO;
 use MiApp\persistencia\dao\PortafolioDAO;
 use MiApp\persistencia\dao\PedidosDAO;
 use MiApp\persistencia\dao\PeriodoCorteDAO;
+use MiApp\persistencia\dao\EmpresasDAO;
 
 
 
@@ -23,6 +24,7 @@ class PortafolioControlador extends GenericoControlador
     private $PortafolioDAO;
     private $pedidosDAO;
     private $PeriodoCorteDAO;
+    private $EmpresasDAO;
 
 
 
@@ -38,6 +40,7 @@ class PortafolioControlador extends GenericoControlador
         $this->PortafolioDAO = new PortafolioDAO($cnn);
         $this->pedidosDAO = new PedidosDAO($cnn);
         $this->PeriodoCorteDAO = new PeriodoCorteDAO($cnn);
+        $this->EmpresasDAO = new EmpresasDAO($cnn);
     }
 
     public function portafolio()
@@ -45,7 +48,10 @@ class PortafolioControlador extends GenericoControlador
         parent::cabecera();
 
         $this->view(
-            'Contabilidad/vista_portafolio'
+            'Contabilidad/vista_portafolio',
+            [
+                "pertenece" => $this->EmpresasDAO->empresa_portafolio(),
+            ]
         );
     }
     public function valida_factura()
@@ -278,7 +284,11 @@ class PortafolioControlador extends GenericoControlador
         parent::cabecera();
 
         $this->view(
-            'Contabilidad/vista_gestion_factura'
+            'Contabilidad/vista_gestion_factura',
+            [
+                "pertenece" => $this->EmpresasDAO->consultar_empresas(),
+                "pertenece_fecha_pago" => $this->EmpresasDAO->consultar_empresas(),
+            ]
         );
     }
 
@@ -377,7 +387,7 @@ class PortafolioControlador extends GenericoControlador
     public function consulta_acobarras_sas()
     {
         header('Content-Type:cation/json');
-        $empresa = 1; // pertenece a acobarras sas
+        $empresa = $_POST['id_empresa']; // pertenece a acobarras sas
         $data_acobarras_sas = $this->PortafolioDAO->ConsultarPortafolioEmpresa($empresa);
         foreach ($data_acobarras_sas as $value) {
             $value->nombre_estado = ESTADO_PORTAFOLIO[$value->estado_portafolio];
@@ -551,7 +561,10 @@ class PortafolioControlador extends GenericoControlador
         parent::cabecera();
 
         $this->view(
-            'Contabilidad/vista_documentos_recibidos'
+            'Contabilidad/vista_documentos_recibidos',
+            [
+                "pertenece" => $this->EmpresasDAO->consultar_empresas(),
+            ]
         );
     }
     public function valida_documento_recibido()

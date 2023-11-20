@@ -11,10 +11,85 @@ $(document).ready(function () {
     aplica_iva();
     calculo_iva();
     envio_factura();
-    tb_acobarras_sas();
-    tb_acobarras_col();
+    cambio_port();
     lectura_factura();
 });
+
+var cambio_port = function () {
+    $('.cambio_port').on('click', function () {
+        var nombre_tabla = $(this).attr('nombre_tabla');
+        var id_empresa = $(this).attr('id_empresa');
+        if (nombre_tabla != '') {
+            tabla_portafolio(nombre_tabla, id_empresa);
+        }
+    })
+}
+function tabla_portafolio(nombre_tabla, id_empresa) {
+    //Creamos una fila en el head de la tabla y lo clonamos para cada columna
+    $(`#${nombre_tabla} thead tr`).clone(true).appendTo(`#${nombre_tabla} thead`);
+    $(`#${nombre_tabla} thead tr:eq(1) th`).each(function (i) {
+        var title = $(this).text(); //es el nombre de la columna
+        $(this).html('<input type="text" placeholder="Search...' + title + '" />');
+        $('input', this).on('keyup change', function () {
+            if (tb_acobarras_sas.column(i).search() !== this.value) {
+                tb_acobarras_sas
+                    .column(i)
+                    .search(this.value)
+                    .draw();
+            }
+        });
+    });
+    var tb_acobarras_sas = $(`#${nombre_tabla}`).DataTable({
+        "ajax": {
+            "url": `${PATH_NAME}/contabilidad/consulta_acobarras_sas`,
+            "type": "POST",
+            "data": { id_empresa },
+        },
+        dom: 'Bflrtip',
+        buttons: [{
+            extend: 'excelHtml5',
+            text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
+            tittleAttr: ' Exportar a exel',
+            className: 'btn btn-success',
+        }],
+        "columns": [
+            { "data": "num_factura" },
+            { "data": "nit" },
+            { "data": "nombre_empresa" },
+            { "data": "fecha_factura" },
+            { "data": "fecha_vencimiento" },
+            {
+                "data": "iva",
+                "render": function (data, type, row) {
+                    if (row["iva"] == 1) {
+                        return 'Si';
+                    } else {
+                        return 'No';
+                    }
+                }
+            },
+            { "data": "total_etiquetas", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "total_cintas", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "total_etiq_cint", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "total_alquiler", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "total_tecnologia", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "total_soporte", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "total_fletes", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "total_m_prima", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "total_factura", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
+            { "data": "dias_mora" },
+            {
+                "data": "asesor",
+                "render": function (data, type, row) {
+                    var asesor = row["nombres"] + " " + row["apellidos"];
+                    return asesor;
+                }
+            },
+            { "data": "nombre_estado" }
+        ],
+    });
+}
+
 var data = new Object;
 var usuario_rol = '';
 
@@ -356,129 +431,5 @@ var envio_factura_ajax = function (form, obj_inicial) {
                 $("#tabla-acobarras-col").DataTable().ajax.reload();
             }
         }
-    });
-}
-
-var tb_acobarras_sas = function () {
-    //Creamos una fila en el head de la tabla y lo clonamos para cada columna
-    $('#tabla-acobarras-sas thead tr').clone(true).appendTo('#tabla-acobarras-sas thead');
-    $('#tabla-acobarras-sas thead tr:eq(1) th').each(function (i) {
-        var title = $(this).text(); //es el nombre de la columna
-        $(this).html('<input type="text" placeholder="Search...' + title + '" />');
-        $('input', this).on('keyup change', function () {
-            if (tb_acobarras_sas.column(i).search() !== this.value) {
-                tb_acobarras_sas
-                    .column(i)
-                    .search(this.value)
-                    .draw();
-            }
-        });
-    });
-    var tb_acobarras_sas = $('#tabla-acobarras-sas').DataTable({
-        "ajax": `${PATH_NAME}/contabilidad/consulta_acobarras_sas`,
-        dom: 'Bflrtip',
-        buttons: [{
-            extend: 'excelHtml5',
-            text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
-            tittleAttr: ' Exportar a exel',
-            className: 'btn btn-success',
-        }],
-        "columns": [
-            { "data": "num_factura" },
-            { "data": "nit" },
-            { "data": "nombre_empresa" },
-            { "data": "fecha_factura" },
-            { "data": "fecha_vencimiento" },
-            {
-                "data": "iva",
-                "render": function (data, type, row) {
-                    if (row["iva"] == 1) {
-                        return 'Si';
-                    } else {
-                        return 'No';
-                    }
-                }
-            },
-            { "data": "total_etiquetas", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_cintas", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_etiq_cint", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_alquiler", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_tecnologia", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_soporte", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_fletes", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_m_prima", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_factura", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "dias_mora" },
-            {
-                "data": "asesor",
-                "render": function (data, type, row) {
-                    var asesor = row["nombres"] + " " + row["apellidos"];
-                    return asesor;
-                }
-            },
-            { "data": "nombre_estado" }
-        ],
-    });
-}
-
-var tb_acobarras_col = function () {
-    //Creamos una fila en el head de la tabla y lo clonamos para cada columna
-    $('#tabla-acobarras-col thead tr').clone(true).appendTo('#tabla-acobarras-col thead');
-    $('#tabla-acobarras-col thead tr:eq(1) th').each(function (i) {
-        var title = $(this).text(); //es el nombre de la columna
-        $(this).html('<input type="text" placeholder="Search...' + title + '" />');
-        $('input', this).on('keyup change', function () {
-            if (tb_acobarras_col.column(i).search() !== this.value) {
-                tb_acobarras_col
-                    .column(i)
-                    .search(this.value)
-                    .draw();
-            }
-        });
-    });
-    var tb_acobarras_col = $('#tabla-acobarras-col').DataTable({
-        "ajax": `${PATH_NAME}/contabilidad/consulta_acobarras_col`,
-        dom: 'Bflrtip',
-        buttons: [{
-            extend: 'excelHtml5',
-            text: 'Descargar Excel <i class="fas fa-file-excel"></i>',
-            tittleAttr: ' Exportar a exel',
-            className: 'btn btn-success',
-        }],
-        "columns": [
-            { "data": "num_factura" },
-            { "data": "nit" },
-            { "data": "nombre_empresa" },
-            { "data": "fecha_factura" },
-            { "data": "fecha_vencimiento" },
-            {
-                "data": "iva",
-                "render": function (data, type, row) {
-                    if (row["iva"] == 1) {
-                        return 'Si';
-                    } else {
-                        return 'No';
-                    }
-                }
-            },
-            { "data": "total_etiquetas", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_cintas", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_etiq_cint", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_alquiler", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_tecnologia", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_soporte", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_fletes", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_m_prima", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "total_factura", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
-            { "data": "dias_mora" },
-            {
-                "data": "asesor",
-                "render": function (data, type, row) {
-                    var asesor = row["nombres"] + " " + row["apellidos"];
-                    return asesor;
-                }
-            },
-            { "data": "nombre_estado" }
-        ],
     });
 }

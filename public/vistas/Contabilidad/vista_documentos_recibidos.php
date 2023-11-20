@@ -52,15 +52,10 @@
                                         <div class="col-md-3">
                                             <label for="empresa_a" class="form-label">Empresa :</label>
                                             <select class="form-select select_2" class="form-control select_2" style="width: 100%;" name="empresa_a" id="empresa_d_modifi" disabled="disabled">
-                                            <?php
-                                                foreach (PERTENECE as $key => $value) {
-                                                    if ($key != 3) {
-                                                        if ($key != 0) { ?>
-                                                            <option value="<?= $key ?>"><?= $value ?></option>
-                                                <?php }
-                                                    }
-                                                }
-                                                ?>
+                                                <?php foreach ($pertenece as $value) { ?>
+                                                    <option value="<?= $value->id_empresa ?>"><?= $value->nombre_compania ?></option>
+                                                <?php } ?>
+                                               
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -104,11 +99,11 @@
                                             <input type="text" class="form-control" name="total_alquiler_iva" id="total_alquiler_iva_d_modifi" disabled="disabled">
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="total_tecnologia" class="form-label">Total Neto Hardware  :</label>
+                                            <label for="total_tecnologia" class="form-label">Total Neto Hardware :</label>
                                             <input type="text" class="form-control totales" name="total_tecnologia" id="total_tecnologia_d_modifi" disabled="disabled">
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="total_tecnologia_iva" class="form-label">Valor Total Hardware  :</label>
+                                            <label for="total_tecnologia_iva" class="form-label">Valor Total Hardware :</label>
                                             <input type="text" class="form-control" name="total_tecnologia_iva" id="total_tecnologia_iva_d_modifi" disabled="disabled">
                                         </div>
                                         <div class="col-md-6">
@@ -128,11 +123,11 @@
                                             <input type="text" class="form-control" name="total_fletes_iva" id="total_fletes_iva_d_modifi" disabled="disabled">
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="total_m_prima" class="form-label">Total Neto  M. Prima :</label>
+                                            <label for="total_m_prima" class="form-label">Total Neto M. Prima :</label>
                                             <input type="text" class="form-control totales" name="total_m_prima" id="total_m_prima_d_modifi" disabled="disabled">
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="total_m_prima_iva" class="form-label">Valor Total  M. Prima :</label>
+                                            <label for="total_m_prima_iva" class="form-label">Valor Total M. Prima :</label>
                                             <input type="text" class="form-control" name="total_m_prima_iva" id="total_m_prima_iva_d_modifi" disabled="disabled">
                                         </div>
                                         <div class=" col-md-6 border border-primary  border-3">
