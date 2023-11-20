@@ -34,16 +34,21 @@ class PDF
     public static function pdf_pedidos($persona, $pedido, $items, $dire_entre, $dire_radic)
     {
         $dias = '';
-        if ($pedido['pertenece'] == 1) {
-            $cabeza_pedido = "<img id='imgtitulo' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/cabeza_pedido.jpg'>";
-            $pie_pedido = "<img id='imgpie_formato' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/pie_pedido.jpg'>";
-        } elseif ($pedido['pertenece'] == 2) {
-            $cabeza_pedido = '<img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/cabeza_pedido_col.jpg">';
-            $pie_pedido = "";
-        } else {
-            $cabeza_pedido = "<img id='imgtitulo' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/cuenta_cobro.jpg'>";
-            $pie_pedido = "";
+        $img_cabeza_pedido = $pedido['img_cabeza_pedido'];
+        $img_pie_pedido = $pedido['img_pie_pedido'];
+        $cabeza_pedido = "<img id='imgtitulo' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/$img_cabeza_pedido'>";
+        $pie_pedido = "<img id='imgpie_formato' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/$img_pie_pedido'>";
+        if ($img_pie_pedido == '') {
+            $pie_pedido = '';
         }
+        // if ($pedido['pertenece'] == 1) {
+        // } elseif ($pedido['pertenece'] == 2) {
+        //     $cabeza_pedido = '<img id="imgtitulo" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/cabeza_pedido_col.jpg">';
+        //     $pie_pedido = "";
+        // } else {
+        //     $cabeza_pedido = "<img id='imgtitulo' src='" . CARPETA_IMG . PROYECTO . "/img_pdf/cuenta_cobro.jpg'>";
+        //     $pie_pedido = "";
+        // }
         $forma_pago = FORMA_PAGO[$pedido['forma_pago']];
         if ($pedido['forma_pago'] == 4) {
             $numero_dias = $pedido['dias_dados'];

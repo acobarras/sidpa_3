@@ -12,8 +12,7 @@ use MiApp\negocio\util\PDF;
 use MiApp\persistencia\dao\direccionDAO;
 use MiApp\persistencia\dao\cliente_productoDAO;
 use MiApp\persistencia\dao\clientes_proveedorDAO;
-
-
+use MiApp\persistencia\dao\EmpresasDAO;
 
 
 class HistorialPedidoControlador extends GenericoControlador
@@ -26,6 +25,7 @@ class HistorialPedidoControlador extends GenericoControlador
     private $direccionDAO;
     private $cliente_productoDAO;
     private $clientes_proveedorDAO;
+    private $EmpresasDAO;
 
 
     public function __construct(&$cnn)
@@ -40,6 +40,7 @@ class HistorialPedidoControlador extends GenericoControlador
         $this->direccionDAO = new direccionDAO($cnn);
         $this->cliente_productoDAO = new cliente_productoDAO($cnn);
         $this->clientes_proveedorDAO = new clientes_proveedorDAO($cnn);
+        $this->EmpresasDAO = new EmpresasDAO($cnn);
     }
 
     /*  
@@ -163,6 +164,10 @@ class HistorialPedidoControlador extends GenericoControlador
         $direc_entre = $this->direccionDAO->consultaIdDireccion($pedido['id_dire_entre']);
         $direc_radic = $this->direccionDAO->consultaIdDireccion($pedido['id_dire_radic']);
         $items = $this->pedidosDAO->consultar_items_pedido_liberado($id_pedido);
+        $empresa = $this->EmpresasDAO->consulta_empresa_id($pedido['pertenece']);
+        foreach ($empresa[0] as $key => $value) {
+            $pedido[$key] = $value;
+        }
         PDF::pdf_pedidos($persona[0], $pedido, $items, $direc_entre[0], $direc_radic[0]);
     }
 }

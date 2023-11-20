@@ -84,8 +84,6 @@ class DescargaControlador extends GenericoControlador
         foreach ($empresa[0] as $key => $value) {
             $pedido[0]->$key = $value;
         }
-        print_r($pedido);
-        return;
         $direc_entre = $this->direccionDAO->consultaIdDireccion($pedido[0]->id_dire_entre);
         $direc_radic = $this->direccionDAO->consultaIdDireccion($pedido[0]->id_dire_radic);
         // $traz = $this->TrazPedidoDAO->consultar_traz_pedido_id($pedido[0]->id_pedido);
