@@ -5,6 +5,7 @@
             <br>
             <div class="mb-3 text-center">
                 <h1>DATOS PARA IMPRESIÓN POR NUMERO DE PEDIDO</h1>
+                <p id='sistema'></p>
             </div>
             <div class="mb-3">
                 <div class="row" name="form_reclamacion" id="form_reclamacion">
@@ -33,16 +34,27 @@
                     <label for="tamano" class="col-sm-2 col-form-label">Tamaño Etiqueta:</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="tamano" id="tamano">
-                            <option value="1" selected="">46x18</option>
-                            <option value="3">52x33</option>
-                            <option value="2">100x50</option>
+                            <?php foreach ($tamano_impresion as $value) { ?>
+                                <option value = "<?= $value->id ?>"><?= $value->tamano ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <?php
+                if ($_SESSION['usuario']->getId_roll() == 12 || $_SESSION['usuario']->getId_roll() == 1) {
+                    $stylo = '';
+                    $nombre = 'password';
+                    $valor_id_persona = '';
+                } else {
+                    $stylo = 'style="display: none;"';
+                    $nombre = '';
+                    // $valor_id_persona = 'value = "'. $_SESSION['usuario']->getId_persona().'"';
+                    $valor_id_persona =  $_SESSION['usuario']->getId_persona();
+                } ?>
+                <div class="mb-3 row" <?= $stylo ?>>
                     <label for="pasword" class="col-2 col-form-label">Codigo Operario:</label>
                     <div class="col-10">
-                        <input class="form-control codigo_operario" type="password" name="pasword" id="pasword">
+                        <input class="form-control codigo_operario" type="password" name="<?= $nombre ?>" id="pasword" >
                         <span class="respu_consulta"></span>
                     </div>
                 </div>
@@ -72,7 +84,7 @@
                 </div>
                 <div class="mb-3 text-center">
                     <label for="id_persona" style="display: none;">Codigo Operario:</label>
-                    <input type="hidden" id="id_persona" name="id_persona">
+                    <input type="hidden" class="id_persona" id="id_persona" name="id_persona" data-persona="<?= $valor_id_persona ?>">
                     <button type="submit" class="btn btn-primary btn-lg" id="boton_imprime">Imprimir</button>
                 </div>
                 <br>

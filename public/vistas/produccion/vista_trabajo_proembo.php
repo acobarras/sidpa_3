@@ -336,7 +336,7 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="reporte_operario" class="form-label">Código Operario : </label>
+                    <label for="reporte_operario" class="form-label">Código Operario: </label>
                     <input autocomplete="off" type="password" class="form-control codigo_operario" name="reporte_operario" id="reporte_operario">
                 </div>
                 <div class="mb-3">
@@ -461,5 +461,6 @@
 </div>
 
 <?php include PUBLICO . '/vistas/plantilla/footer.php'; ?>
+<?php include PUBLICO . '/vistas/produccion/modal_impresion.php'; ?>
 <script src="<?= PUBLICO ?>/vistas/produccion/js/vista_trabajo_proembo.js"></script>
 <script src="<?= PUBLICO ?>/vistas/produccion/js/modal_impresion.js"></script>

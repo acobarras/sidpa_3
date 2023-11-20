@@ -317,5 +317,6 @@
 </div>
 
 <?php include PUBLICO . '/vistas/plantilla/footer.php'; ?>
+<?php include PUBLICO . '/vistas/produccion/modal_impresion.php'; ?>
 <script src="<?= PUBLICO ?>/vistas/produccion/js/vista_trabajo_embobinado.js"></script>
 <script src="<?= PUBLICO ?>/vistas/produccion/js/modal_impresion.js"></script>

@@ -14,16 +14,27 @@
                     <label for="tamano" class="col-sm-2 col-form-label">Tamaño Etiqueta:</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="tamano" id="tamano">
-                            <option value="1" selected="">46x18</option>
-                            <option value="3">52x33</option>
-                            <option value="2">100x50</option>
+                            <?php foreach ($tamano_impresion as $value) { ?>
+                                <option value="<?= $value->id ?>"><?= $value->tamano ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                <?php
+                if ($_SESSION['usuario']->getId_roll() == 12 || $_SESSION['usuario']->getId_roll() == 1) {
+                    $stylo = '';
+                    $nombre = 'operario';
+                    $valor_id_persona = '';
+                } else {
+                    $stylo = 'style="display: none;"';
+                    $nombre = '';
+                    // $valor_id_persona = 'value = "'. $_SESSION['usuario']->getId_persona().'"';
+                    $valor_id_persona =  $_SESSION['usuario']->getId_persona();
+                } ?>
+                <div class="mb-3 row" id="div_operario" <?= $stylo ?>>
                     <label for="operario" class="col-2 form-label">Código Operario : </label>
                     <div class="col-10">
-                        <input autocomplete="off" type="password" class="form-control codigo_operario" name="operario" id="operario">
+                        <input autocomplete="off" type="password" class="form-control codigo_operario" name="<?= $nombre ?>" id="operario">
                         <span class="respu_consulta"></span>
                     </div>
                 </div>
@@ -54,7 +65,7 @@
             </div>
             <div class="modal-footer">
                 <label for="id_persona" style="display: none;">Codigo Operario:</label>
-                <input type="hidden" class="id_persona" name="id_persona" id="id_persona" >
+                <input type="hidden" class="id_persona" name="id_persona" id="id_persona" data-persona="<?= $valor_id_persona ?>">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
                 <button type="submit" class="btn btn-primary boton_codigo_operario" id="boton_imprime">Imprimir</button>
             </div>

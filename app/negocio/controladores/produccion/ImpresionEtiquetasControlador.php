@@ -6,12 +6,20 @@ use MiApp\negocio\generico\GenericoControlador;
 use MiApp\negocio\util\Validacion;
 use MiApp\persistencia\dao\PedidosDAO;
 use MiApp\persistencia\dao\PedidosItemDAO;
+use MiApp\persistencia\dao\impresorasDAO;
+use MiApp\persistencia\dao\impresora_tamanoDAO;
+use MiApp\persistencia\dao\PersonaDAO;
+use MiApp\persistencia\dao\UsuarioDAO;
 
 class ImpresionEtiquetasControlador extends GenericoControlador
 {
 
     private $PedidosDAO;
     private $PedidosItemDAO;
+    private $impresorasDAO;
+    private $impresora_tamanoDAO;
+    private $PersonaDAO;
+    private $UsuarioDAO;
 
     public function __construct(&$cnn)
     {
@@ -21,12 +29,21 @@ class ImpresionEtiquetasControlador extends GenericoControlador
 
         $this->PedidosDAO = new PedidosDAO($cnn);
         $this->PedidosItemDAO = new PedidosItemDAO($cnn);
+        $this->impresorasDAO = new impresorasDAO($cnn);
+        $this->impresora_tamanoDAO = new impresora_tamanoDAO($cnn);
+        $this->PersonaDAO = new PersonaDAO($cnn);
+        $this->UsuarioDAO = new UsuarioDAO($cnn);
     }
 
     public function vista_impresion_etiquetas()
     {
         parent::cabecera();
-        $this->view('produccion/vista_impresion_etiquetas');
+        $this->view(
+            'produccion/vista_impresion_etiquetas',
+            [
+                'tamano_impresion' => $this->impresora_tamanoDAO->consulta_tamano_impresion(),
+            ]
+        );
     }
 
     public function consultar_items_pedido_impresion()
@@ -53,6 +70,38 @@ class ImpresionEtiquetasControlador extends GenericoControlador
         }
 
         echo json_encode($items);
+        return;
+    }
+
+    public function impresoras_marcacion()
+    {
+
+        header('Content-Type: application/json');
+        $id_usuario = $_GET["id_usuario"];
+        $id_tamano = $_GET['id_tamano'];
+
+        $impresora = '';
+
+        if (isset($_GET['maquina'])) {
+            $id_maquina = $_GET['maquina'];
+            $impresora = $this->impresorasDAO->consulta_impresoras_maquina($id_maquina, $id_tamano);
+        }
+        if (empty($impresora)) {
+            $impresora = $this->impresorasDAO->impresoras_por_area($id_usuario, $id_tamano);
+            if (empty($impresora)) {// no encontramos impresoras
+                $error = -1;
+                echo json_encode($error);
+                return;
+            } 
+        } 
+        // consulta nombre de operario
+        $id_persona = $this->UsuarioDAO->consultarIdPersona($id_usuario); 
+        $datos_persona = $this->PersonaDAO->consultar_personas_id($id_persona[0]->id_persona);
+        $data = [
+            'impresora' => $impresora,
+            'persona' => $datos_persona
+        ];
+        echo json_encode($data);
         return;
     }
 

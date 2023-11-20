@@ -551,3 +551,13 @@ var tamano_codigo = function (cod) {
     };
     return res;
 }
+
+function quitarTildes(texto) {
+    const mapaTildes = {
+        á: 'a', é: 'e', í: 'i', ó: 'o', ú: 'u', Á: 'A', É: 'E', Í: 'I', Ó: 'O', Ú: 'U'
+    };
+    // Utilizar una expresión regular para buscar las letras con tilde y reemplazarlas con sus equivalentes sin tilde
+    return texto.replace(/[áéíóúÁÉÍÓÚ]/g, function (matched) {
+        return mapaTildes[matched];
+    });
+}

@@ -19,6 +19,8 @@ use MiApp\Sabberworm\CSS\Value\Value;
 use MiApp\persistencia\dao\MaquinaEmbobinadoDAO;
 use MiApp\persistencia\dao\entrada_tecnologiaDAO;
 use MiApp\persistencia\dao\SeguimientoOpDAO;
+use MiApp\persistencia\dao\impresorasDAO;
+use MiApp\persistencia\dao\impresora_tamanoDAO;
 
 class MaquinasEmbobinadoControlador extends GenericoControlador
 {
@@ -36,6 +38,8 @@ class MaquinasEmbobinadoControlador extends GenericoControlador
     private $MaquinaEmbobinadoDAO;
     private $entrada_tecnologiaDAO;
     private $SeguimientoOpDAO;
+    private $impresora_tamanoDAO;
+    private $impresorasDAO;
 
     public function __construct(&$cnn)
     {
@@ -56,6 +60,8 @@ class MaquinasEmbobinadoControlador extends GenericoControlador
         $this->MaquinaEmbobinadoDAO = new MaquinaEmbobinadoDAO($cnn);
         $this->entrada_tecnologiaDAO = new entrada_tecnologiaDAO($cnn);
         $this->SeguimientoOpDAO = new SeguimientoOpDAO($cnn);
+        $this->impresora_tamanoDAO = new impresora_tamanoDAO($cnn);
+        $this->impresorasDAO = new impresorasDAO($cnn);
     }
 
     public function vista_programacion_embobinado()
@@ -258,6 +264,7 @@ class MaquinasEmbobinadoControlador extends GenericoControlador
                 'datos' => $datos,
                 'maquinas' => $this->MaquinasDAO->consultar_maquinas(),
                 'q_maquinas' => json_encode($Q_maquinas),
+                'tamano_impresion' => $this->impresora_tamanoDAO->consulta_tamano_impresion(),
             ]
         );
         $this->view('produccion/modal_impresion');

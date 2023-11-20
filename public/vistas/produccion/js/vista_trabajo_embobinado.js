@@ -480,7 +480,7 @@ var tabla_items_embo = function (data, data_maquina) {
                 "data": "boton1", render: function (data, type, row) {
                     var respu = '';
                     if (row.id_estado_item_pedido == 20) {
-                        respu = `<button class='btn btn-info btn-circle imprimir_trasavilidad' data-m='${row.nombre_maquina}' data-item='${JSON.stringify(row)}'  data-toggle='modal' data-target='.modalImpresion' title='Imprimir Etiqueta Remarcación'><i class='fa fa-print'></i> </button>`;
+                        respu = `<button class='btn btn-info btn-circle imprimir_trasavilidad' data-id-m='${data_maquina.maquina}'  data-m='${row.nombre_maquina}' data-item='${JSON.stringify(row)}'  data-toggle='modal' data-target='.modalImpresion' title='Imprimir Etiqueta Remarcación'><i class='fa fa-print'></i> </button>`;
                     }
                     return respu;
                 },

@@ -60,7 +60,7 @@
                 "^FT972,181^A0N,25,24^FH\^FD" . $operario . "^FS" . "<br>" .
                 "^FT972,231^A0N,25,24^FH\^FD" . $formulario['cant_x'] . "^FS" . "<br>" .
                 "^FT899,186^A0N,37,36^FH\^FDAux:^FS" . "<br>" .
-                "^FT972,84^A0N,25,24^FH\^FD" . $fecha_año . "^FS" . "<br>" .
+                "^FT972,84^A0N,25,24^FH\^FD" . $fecha_ano . "^FS" . "<br>" .
                 "^FT972,132^A0N,25,24^FH\^FD" . $formulario['lote'] . "^FS" . "<br>" .
                 "^FT972,35^A0N,25,24^FH\^FD" . date('d/m/Y') . "^FS" . "<br>" .
                 "^FT889,235^A0N,37,36^FH\^FDCant:^FS" . "<br>" .
