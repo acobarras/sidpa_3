@@ -93,7 +93,7 @@ var envio_alistamiento_checked = function () {
         var valida = validar_formulario(form, excepcion);
         if (valida) {
             var obj_inicial = $(`#btn_reportar_factu`).html();
-            // btn_procesando(`btn_reportar_factu`);
+            btn_procesando(`btn_reportar_factu`);
             $.ajax({
                 url: `${PATH_NAME}/almacen/reportar_facturacion`,
                 type: 'POST',
@@ -102,13 +102,13 @@ var envio_alistamiento_checked = function () {
                     if (res.status == 1) {
                         $("#dt_alistamiento_tecnologia").DataTable().ajax.reload(function () {
                             $("#logistica_checked_Modal").modal('hide');
-                            // btn_procesando(`btn_reportar_factu`, obj_inicial, 1);
+                            btn_procesando(`btn_reportar_factu`, obj_inicial, 1);
                             $("#form_reporta_factu")[0].reset();
                             alertify.success(res.msg);
                         });
                     } else {
                         $("#dt_alistamiento_tecnologia").DataTable().ajax.reload(function () {
-                            // btn_procesando(`btn_reportar_factu`, obj_inicial, 1);
+                            btn_procesando(`btn_reportar_factu`, obj_inicial, 1);
                             alertify.error(res.msg);
                         });
 

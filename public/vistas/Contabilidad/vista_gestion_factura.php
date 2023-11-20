@@ -59,15 +59,9 @@
                                         <div class="col-md-3">
                                             <label for="empresa_a" class="form-label">Empresa :</label>
                                             <select class="form-select select_2" class="form-control select_2" style="width: 100%;" name="empresa_a" id="empresa_a_modifi" disabled="disabled">
-                                            <?php
-                                                foreach (PERTENECE as $key => $value) {
-                                                    if ($key != 3) {
-                                                        if ($key != 0) { ?>
-                                                            <option value="<?= $key ?>"><?= $value ?></option>
-                                                <?php }
-                                                    }
-                                                }
-                                                ?>
+                                                <?php foreach ($pertenece as $pertenece) { ?>
+                                                    <option value="<?= $pertenece->id_empresa ?>"><?= $pertenece->nombre_compania ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -198,15 +192,9 @@
                                         <div class="col-md-3">
                                             <label for="empresa_f" class="form-label">Empresa :</label>
                                             <select class="form-select select_2" class="form-control select_2" style="width: 100%;" name="empresa_f" id="empresa_f_modifi" disabled="disabled">
-                                            <?php
-                                                foreach (PERTENECE as $key => $value) {
-                                                    if ($key != 3) {
-                                                        if ($key != 0) { ?>
-                                                            <option value="<?= $key ?>"><?= $value ?></option>
-                                                <?php }
-                                                    }
-                                                }
-                                                ?>
+                                                <?php foreach ($pertenece_fecha_pago as $value) { ?>
+                                                    <option value="<?= $value->id_empresa ?>"><?= $value->nombre_compania ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
