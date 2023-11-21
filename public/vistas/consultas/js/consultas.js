@@ -173,13 +173,14 @@ var consulta_fecha = function () {
         e.preventDefault();
         var form = $(this).serializeArray();
         var form1 = $(this).serialize();
+        var actividades = $('#actividad').val();
         var valida = validar_formulario(form);
         if (valida) {
             var table = $('#tb_fecha').DataTable({
                 "ajax": {
                     "url": `${PATH_NAME}/consultas/consulta_fecha`,
                     "type": "POST",
-                    "data": { form1 }
+                    "data": { form1, actividades }
                 },
                 "dom": 'Bflrtip',
                 "buttons": [{

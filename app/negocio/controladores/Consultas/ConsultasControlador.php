@@ -82,12 +82,12 @@ class ConsultasControlador extends GenericoControlador
     public function consulta_fecha()
     {
         header('Content-Type:application/json');
-
         $form = Validacion::Decodifica($_POST['form1']);
+        $actividad = $_POST['actividades'];
+        $actividades = implode(',', $actividad);
         $fecha_desde = $form['fecha_desde'];
         $fecha_hasta = $form['fecha_hasta'];
-        $actividad = $form['actividad'];
-        $respuesta['data'] = $this->SeguimientoProduccionDAO->consultar_seguimiento_fecha($fecha_desde, $fecha_hasta, $actividad);
+        $respuesta['data'] = $this->SeguimientoProduccionDAO->consultar_seguimiento_fecha($fecha_desde, $fecha_hasta, $actividades);
         echo json_encode($respuesta);
         return;
     }
