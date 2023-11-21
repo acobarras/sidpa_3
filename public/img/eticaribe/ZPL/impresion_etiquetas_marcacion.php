@@ -5,12 +5,45 @@
 
     $data_item = json_decode($_POST['datos']);
     $formulario = Validacion::Decodifica($_POST['formulario']);
+    // resolucion de la impresora
+    $resolucion = 200;
+    if (isset($_POST['resolucion'])) {
+        $resolucion = $_POST['resolucion'];
+    }
     $check = $data_item->logo_etiqueta;
     $operario = "0" . ($formulario['id_persona']);
 
     $fecha_actual = date("d-m-Y");
     //sumo 1 año
     $fecha_ano = date("d-m-Y", strtotime($fecha_actual . "+ 1 year"));
+
+
+    // extraer año,mes, dia de la fecha de compromiso
+    $fechacompro = strtotime($data_item->fecha_compro_item);
+    $ano_compro = date("y", $fechacompro);
+    $dia_compro = date("d", $fechacompro);
+    $mes_compro = date("m", $fechacompro);
+
+    //parametros de orden de compra y de nombres
+    $porciones_cod = explode("-", $data_item->codigo);
+    $empresa = $data_item->nombre_empresa;
+    $orden_compra = $data_item->orden_compra;
+
+    if (strlen($empresa) >= 50) {
+        $nombre1 = substr($empresa, 0, 53);
+        $nombre2 = substr($empresa, 54, strlen($empresa));
+    } else {
+        $nombre1 = substr($empresa, 0, strlen($empresa));
+        $nombre2 = "";
+    }
+    if (strlen($orden_compra) >= 27) {
+        $orden1 = substr($orden_compra, 0, 30);
+        $orden2 = substr($orden_compra, 30, strlen($orden_compra));
+    } else {
+        $orden1 = substr($orden_compra, 0, strlen($orden_compra));
+        $orden2 = "";
+    }
+
 
     if ($formulario['caja'] == '') { // se ejecutan las etiquetas 32 y 55x33
         if ($formulario['tamano'] == 1) { // La etiqueta es de 32

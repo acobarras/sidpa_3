@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <?php
-                if ($_SESSION['usuario']->getId_roll() == 12 || $_SESSION['usuario']->getId_roll() == 1) {
+                if ($_SESSION['usuario']->getId_roll() == 12 || $_SESSION['usuario']->getId_roll() == 1) {// EL ID ROLL PARA ETICARIBE ES 9 EN VEZ DE 12
                     $stylo = '';
                     $nombre = 'password';
                     $valor_id_persona = '';

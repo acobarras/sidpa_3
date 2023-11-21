@@ -227,9 +227,9 @@
                         "^XA" ."<br>" .
                         "^MMT" ."<br>" .
                         "^PW783" ."<br>" .
-                        "^LT20" ."<br>" .
+                        "^LT6" ."<br>" .
                         "^LL0144" ."<br>" .
-                        "^LS0" ."<br>" .
+                        "^LS10" ."<br>" .
                         "^BY96,96^FT254,106^BXN,6,200,0,0,1,~" ."<br>" .
                         "^FH\^FD" . $data_item->codigo . ";" . $formulario['cant_x'] . "^FS" ."<br>" .
                         "^FT30,21^A0N,18,19^FH\^FDFecha:^FS" . "<br>" .
