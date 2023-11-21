@@ -84,23 +84,7 @@ var carga_tabla_clientes_asesor = function () {
             { "data": "nit" },
             { "data": "nombre_empresa" },
             {
-                "data": "pertenece",
-                "render": function (data, type, row) {
-
-                    if (row["pertenece"] == 0) {
-                        return 'SIN ASIGNAR';
-                    }
-                    if (row["pertenece"] == 1) {
-                        return FAC_SAS;
-                    }
-                    if (row["pertenece"] == 2) {
-                        return FAC_COL;
-                    }
-                    if (row["pertenece"] == 3) {
-                        return FAC_ESP;
-                    }
-                }
-
+                "data": "nombre_compania",
             },
             {
                 "render": function (data, type, row) {

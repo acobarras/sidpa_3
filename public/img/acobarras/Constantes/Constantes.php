@@ -88,15 +88,15 @@ define(
     )
 );
 
-define(
-    'PERTENECE',
-    array(
-        0 => 'Ninguno',
-        1 => 'Acobarras S.A.S',
-        2 => 'Acobarras Colombia',
-        3 => 'Acobarras Especial',
-    )
-);
+// define(
+//     'PERTENECE',
+//     array(
+//         0 => 'Ninguno',
+//         1 => 'Acobarras S.A.S',
+//         2 => 'Acobarras Colombia',
+//         3 => 'Acobarras Especial',
+//     )
+// );
 
 define(
     'ID_CON_PEDIDO',

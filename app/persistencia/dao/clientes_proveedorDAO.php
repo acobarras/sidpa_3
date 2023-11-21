@@ -25,9 +25,14 @@ class clientes_proveedorDAO extends GenericoDAO
     public function consultar_clientes($roll = '')
     {
         if ($roll == 1) {
-            $sql = "SELECT * FROM cliente_proveedor";
+            $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania 
+                FROM cliente_proveedor t1 
+                LEFT JOIN empresas t2 ON t1.pertenece = t2.id_empresa OR t1.pertenece = 0";
         } else {
-            $sql = "SELECT * FROM cliente_proveedor WHERE estado_cli_prov != 0";
+            $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania 
+                FROM cliente_proveedor t1 
+                LEFT JOIN empresas t2 ON t1.pertenece = t2.id_empresa OR t1.pertenece = 0
+                WHERE t1.estado_cli_prov != 0";
         }
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
