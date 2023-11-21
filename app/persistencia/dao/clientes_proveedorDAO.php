@@ -42,7 +42,10 @@ class clientes_proveedorDAO extends GenericoDAO
 
     public function consultar_clientes_asesor($id_persona)
     {
-        $sql = "SELECT * FROM `cliente_proveedor` WHERE id_usuarios_asesor LIKE '%$id_persona%'";
+        $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania
+            FROM cliente_proveedor t1 
+            LEFT JOIN empresas t2 ON t1.pertenece = t2.id_empresa OR t1.pertenece = 0
+            WHERE id_usuarios_asesor LIKE '%$id_persona%'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
