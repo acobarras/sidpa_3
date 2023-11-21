@@ -46,7 +46,7 @@ class ActividadAreaDAO extends GenericoDAO
 
     public function NombreActivida()
     {
-        $sql = "SELECT DISTINCT(nombre_actividad_area) FROM actividad_area";
+        $sql = "SELECT DISTINCT(nombre_actividad_area),id_actividad_area FROM actividad_area;";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);

@@ -115,10 +115,10 @@
                                 </div>
                                 <div class="form-group col-12 col-md-3">
                                     <label for="actividad">Actividad</label>
-                                    <select class="form-control select_2" style="width:100%" name="actividad" id="actividad">
+                                    <select class="form-control select_2" multiple style="width:100%" name="actividad" id="actividad">
                                         <option value="0"></option>
                                         <?php foreach ($nombre_actividad as $actividad) { ?>
-                                            <option value="<?= $actividad->nombre_actividad_area ?>"><?= $actividad->nombre_actividad_area ?></option>
+                                            <option value="<?= $actividad->id_actividad_area ?>"><?= $actividad->nombre_actividad_area ?></option>
                                         <?php } ?>
                                     </select>
                                     <p class="help-block"></p>

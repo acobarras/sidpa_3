@@ -50,19 +50,19 @@ class SeguimientoProduccionDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function consultar_seguimiento_fecha($fecha_desde, $fecha_hasta, $actividad)
+    public function consultar_seguimiento_fecha($fecha_desde, $fecha_hasta, $actividades)
     {
         $sql = "SELECT t1.*, t2.nombre_actividad_area, t3.nombres FROM seguimiento_produccion t1 
-                    INNER JOIN actividad_area t2 ON t1.id_actividad = t2.id_actividad_area 
-                        INNER JOIN persona t3 ON t1.id_persona = t3.id_persona 
-                            WHERE t1.fecha_crea >= '$fecha_desde' AND t1.fecha_crea <= '$fecha_hasta' AND t2.nombre_actividad_area = '$actividad'";
+        INNER JOIN actividad_area t2 ON t1.id_actividad = t2.id_actividad_area 
+            INNER JOIN persona t3 ON t1.id_persona = t3.id_persona 
+                WHERE t1.fecha_crea >= '$fecha_desde' AND t1.fecha_crea <= '$fecha_hasta' AND t2.id_actividad_area in($actividades)";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
 
-    public function SeguimienrtoIndicadorProductividad($fecha_desde, $fecha_hasta,$id_actividades)
+    public function SeguimienrtoIndicadorProductividad($fecha_desde, $fecha_hasta, $id_actividades)
     {
         $sql = "SELECT t1.*, t2.nombres, t2.apellidos 
             FROM seguimiento_produccion t1 
