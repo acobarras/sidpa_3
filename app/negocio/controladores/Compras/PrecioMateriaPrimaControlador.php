@@ -44,19 +44,19 @@ class PrecioMateriaPrimaControlador extends GenericoControlador
         $datos = $_POST;
         $id_precio = $datos['id_precio'];
         unset($datos['id_precio']);
-        $valida = $this->PrecioMateriaPrimaDAO->valida_precio($datos['id_tipo_material'], $datos['id_adhesivo']);
-        if ($id_precio == 0 && empty($valida)) {
-            $respu = $this->PrecioMateriaPrimaDAO->insertar($datos);
+        if ($id_precio != 0) {
+            $condicion = 'id_precio =' . $id_precio;
+            $edita = $this->PrecioMateriaPrimaDAO->editar($datos, $condicion);
+            if ($edita) {
+                $respu = [
+                    'status' => 1,
+                    'msg' => 'Datos editados de manera correcta'
+                ];
+            }
         } else {
-            if ($valida[0]->id_precio == $id_precio) {
-                $condicion = 'id_precio =' . $id_precio;
-                $edita = $this->PrecioMateriaPrimaDAO->editar($datos, $condicion);
-                if ($edita) {
-                    $respu = [
-                        'status' => 1,
-                        'msg' => 'Datos editados de manera correcta'
-                    ];
-                }
+            $valida = $this->PrecioMateriaPrimaDAO->valida_precio($datos['id_tipo_material'], $datos['id_adhesivo']);
+            if (empty($valida)) {
+                $respu = $this->PrecioMateriaPrimaDAO->insertar($datos);
             } else {
                 $respu = [
                     'status' => -1,
