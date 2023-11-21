@@ -15,6 +15,7 @@ use MiApp\persistencia\dao\direccionDAO;
 use MiApp\persistencia\dao\SeguimientoOpDAO;
 use MiApp\persistencia\dao\clientes_proveedorDAO;
 use MiApp\persistencia\dao\PedidosItemDAO;
+use MiApp\persistencia\dao\EmpresasDAO;
 
 class FacturacionControlador extends GenericoControlador
 {
@@ -29,6 +30,7 @@ class FacturacionControlador extends GenericoControlador
     private $SeguimientoOpDAO;
     private $clientes_proveedorDAO;
     private $PedidosItemDAO;
+    private $EmpresasDAO;
 
     public function __construct(&$cnn)
     {
@@ -46,6 +48,7 @@ class FacturacionControlador extends GenericoControlador
         $this->SeguimientoOpDAO = new SeguimientoOpDAO($cnn);
         $this->clientes_proveedorDAO = new clientes_proveedorDAO($cnn);
         $this->PedidosItemDAO = new PedidosItemDAO($cnn);
+        $this->EmpresasDAO = new EmpresasDAO($cnn);
     }
 
     public function vista_pendiente_facturacion()
@@ -66,11 +69,12 @@ class FacturacionControlador extends GenericoControlador
         $res = $this->EntregasLogisticaDAO->ConsultarPedidosFacturar();
         foreach ($res as $item) {
             $items = $this->EntregasLogisticaDAO->CantidadItemPedido($item->id_pedido);
+            $empresa = $this->EmpresasDAO->consulta_empresa_id($item->pertenece);
             $item->cantidad_item = $items->q_item;
             $item->cantidad_reporte = $items->q_reporte;
             $item->forma_pago = FORMA_PAGO[$item->forma_pago];
             $item->parcial = RECIBE_PARCIAL[$item->parcial];
-            $item->empresa_pertenece = PERTENECE[$item->pertenece];
+            $item->empresa_pertenece = $empresa[0]->nombre_compania;
         }
         $tabla['data'] = $res;
         echo json_encode($tabla);
