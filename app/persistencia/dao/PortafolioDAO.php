@@ -49,9 +49,11 @@ class PortafolioDAO extends GenericoDAO
     public function Consultaportafolio($condicion)
     {
 
-        $sql = "SELECT t1.*,t2.nombre_empresa,t2.nit,t2.id_usuarios_asesor,t3.nombres,t3.apellidos FROM portafolio t1
+        $sql = "SELECT t1.*,t2.nombre_empresa,t2.nit,t2.id_usuarios_asesor,t3.nombres,t3.apellidos, (CASE WHEN t2.pertenece != 0 THEN t4.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania 
+                FROM portafolio t1
                 INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov 
-                INNER JOIN persona t3 ON t1.asesor = t3.id_persona 
+                INNER JOIN persona t3 ON t1.asesor = t3.id_persona
+                LEFT JOIN empresas t4 ON t2.pertenece = t4.id_empresa OR t2.pertenece = 0
                 $condicion";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
@@ -62,11 +64,12 @@ class PortafolioDAO extends GenericoDAO
 
     // CARTER COMERCIAL
 
-    public function consulta_cartera($id_persona, $condicion) {
-        $id_rol= $_SESSION['usuario']->getId_roll();
+    public function consulta_cartera($id_persona, $condicion)
+    {
+        $id_rol = $_SESSION['usuario']->getId_roll();
         $id_usu = $_SESSION['usuario']->getId_usuario();
-        $asesor = 'AND asesor ='. $id_persona;
-        if ($id_rol == 1 || $id_usu == ID_COMISIONES_CARTERA ) {
+        $asesor = 'AND asesor =' . $id_persona;
+        if ($id_rol == 1 || $id_usu == ID_COMISIONES_CARTERA) {
             $asesor = '';
         }
         $sql = "SELECT t2.nit, t2.nombre_empresa,
@@ -74,18 +77,19 @@ class PortafolioDAO extends GenericoDAO
         FROM portafolio t1
         INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov
         WHERE t1.fecha_vencimiento $condicion CURDATE() AND t1.estado_portafolio IN(1,2) $asesor AND NOT t1.id_cli_prov = 2606 AND NOT t1.id_cli_prov = 21 
-        GROUP BY t1.id_cli_prov";// 2606 ACOBARRAS COLOMBIA, 21 ACOBARRAS 
+        GROUP BY t1.id_cli_prov"; // 2606 ACOBARRAS COLOMBIA, 21 ACOBARRAS 
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
 
-    public function detalle_facturasVencidas($id_cliente, $id_persona, $condicion) {
-        $id_rol= $_SESSION['usuario']->getId_roll();
+    public function detalle_facturasVencidas($id_cliente, $id_persona, $condicion)
+    {
+        $id_rol = $_SESSION['usuario']->getId_roll();
         $id_usu = $_SESSION['usuario']->getId_usuario();
-        $asesor = 'AND asesor ='. $id_persona;
-        if ($id_rol == 1 || $id_usu == ID_COMISIONES_CARTERA ) {
+        $asesor = 'AND asesor =' . $id_persona;
+        if ($id_rol == 1 || $id_usu == ID_COMISIONES_CARTERA) {
             $asesor = '';
         }
         $sql = "SELECT t2.nit, t2.nombre_empresa,
@@ -99,5 +103,4 @@ class PortafolioDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
-
 }

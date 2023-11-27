@@ -64,18 +64,7 @@ var cargar_tabla = function (data) {
             { "data": "nombre_empresa" },
             { "data": "fecha_factura" },
             { "data": "fecha_vencimiento" },
-            {
-                "data": "empresa",
-                render: function (data, type, row) {
-                    var nombre_empresa = '';
-                    if (row.empresa == 1) {
-                        nombre_empresa = FAC_SAS;
-                    } else {
-                        nombre_empresa = FAC_COL;
-                    }
-                    return nombre_empresa;
-                }
-            },
+            { "data": "nombre_compania" },
             { "data": "fecha_pago" },
             {
                 "data": "asesor", render: function (data, type, row) {
