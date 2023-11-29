@@ -283,6 +283,25 @@ class Validacion
 
     //     return festivos($Fecha, $festivos);
     // }
-
+    public static function quitarTildes($cadena) {
+        $tildes = array(
+            'á' => 'a',
+            'é' => 'e',
+            'í' => 'i',
+            'ó' => 'o',
+            'ú' => 'u',
+            'Á' => 'A',
+            'É' => 'E',
+            'Í' => 'I',
+            'Ó' => 'O',
+            'Ú' => 'U',
+            'ü' => 'u',
+            'Ü' => 'U',
+            'ñ' => 'n',
+            'Ñ' => 'N'
+        );
+    
+        return strtr($cadena, $tildes);
+    }
 
 }

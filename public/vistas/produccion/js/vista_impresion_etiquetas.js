@@ -12,30 +12,35 @@ $(document).ready(function () {
 var consulta_operario = function () {
     $('.codigo_operario').on('change', function () {
         var documento = $(this).val();
-        $.ajax({
-            url: `${PATH_NAME}/produccion/validar_operario`,
-            type: "POST",
-            data: { documento },
-            success: function (respu) {
-                if (respu != '') {
-                    var items = `<h4> Nombre :
-                    <span style="color: blue">${respu[0].nombres} ${respu[0].apellidos}</span>
-                    </h4>
-                    `;
-                    var atributo = false;
-                    var id_persona = respu[0].id_persona;
-                } else {
-                    var items = `<h4>
-                    <span style="color: red">El código del operario es incorrecto !!</span>
-                    </h4>`;
-                    var atributo = true;
-                    var id_persona = 0;
+        var persona = $("#id_persona.id_persona").data("persona");
+        if (persona != '') {// lo usamos para saber si es administrador o no
+            $('#id_persona').val(persona)
+        } else {
+            $.ajax({
+                url: `${PATH_NAME}/produccion/validar_operario`,
+                type: "POST",
+                data: { documento },
+                success: function (respu) {
+                    if (respu != '') {
+                        var items = `<h4> Nombre :
+                        <span style="color: blue">${respu[0].nombres} ${respu[0].apellidos}</span>
+                        </h4>
+                        `;
+                        var atributo = false;
+                        var id_persona = respu[0].id_persona;
+                    } else {
+                        var items = `<h4>
+                        <span style="color: red">El código del operario es incorrecto !!</span>
+                        </h4>`;
+                        var atributo = true;
+                        var id_persona = 0;
+                    }
+                    $('.respu_consulta').empty().html(items);
+                    $('#imprimir').prop('disabled', atributo);
+                    $('#id_persona').val(id_persona);
                 }
-                $('.respu_consulta').empty().html(items);
-                $('.boton_imprime').prop('disabled', atributo);
-                $('#id_persona').val(id_persona);
-            }
-        });
+            })
+        }
     });
 }
 
@@ -178,7 +183,7 @@ var boton_imprime = function () {
                                 $("div.div_impresion").printArea(options);
                                 $('#formulario_remarcacion').css('display', 'none');
                             }
-        
+                            btn_procesando('boton_imprime', obj_inicial, 1);
                         });
                 }
             });

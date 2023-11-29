@@ -222,4 +222,21 @@ class productosDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;   
     }
+    public function consulta_bobinas()
+    {
+        $sql = "SELECT * FROM productos t1 WHERE t1.id_tipo_articulo = 4 AND t1.estado_producto != 0;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado; 
+        
+    }
+    public function consulta_marcacion_bobinas($codigo) 
+    {
+        $sql = "SELECT * FROM `productos` WHERE codigo_producto = '$codigo'";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

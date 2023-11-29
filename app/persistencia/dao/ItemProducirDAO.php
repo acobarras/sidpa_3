@@ -125,4 +125,18 @@ class ItemProducirDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+
+    public function consulta_marcacion_cola($num_op) {
+        $sql = "SELECT t1.num_produccion, 
+        (CASE WHEN t1.material_solicitado = '' THEN t1.material ELSE t1.material_solicitado END) AS material_op, 
+        (CASE WHEN t1.ancho_confirmado = '0' THEN t1.ancho_op ELSE t1.ancho_confirmado END) AS ancho_material, 
+        t2.descripcion_productos, t1.num_produccion
+        FROM item_producir t1
+        INNER JOIN productos t2 ON (CASE WHEN t1.material_solicitado = '' THEN t1.material ELSE t1.material_solicitado END) = t2.codigo_producto
+        WHERE t1.num_produccion = '$num_op'";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

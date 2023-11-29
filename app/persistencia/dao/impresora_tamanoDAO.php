@@ -19,4 +19,13 @@ final class impresora_tamanoDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+
+    public function consulta_tamano($tamano)
+    {
+        $sql = "SELECT * FROM `impresora_tamano` WHERE tamano = '$tamano'";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
