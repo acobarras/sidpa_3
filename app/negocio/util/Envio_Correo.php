@@ -12,7 +12,7 @@ use PHPMailer\PHPMailer\Exception;
 
 class Envio_Correo
 {
-    public static function SolicitudesCompras($TipoCompra, $correo, $data)
+    public static function SolicitudesCompras($TipoCompra, $correo, $data, $correo2)
     {
         // data debe contener el correo de envio,forma_pago,fecha_compromiso,asesor, y toda la data del item del pedido
         $html = '
@@ -76,7 +76,7 @@ class Envio_Correo
             </html>';
         $remite = 'Solicitud de Compra ' . $TipoCompra . ' Sidpa';
         $subject = "Solicitud " . $TipoCompra . " " . $data->nombre_empresa;
-        self::php_miler($html, $remite, $subject, $correo);
+        self::php_miler($html, $remite, $subject, $correo, $correo2);
     }
     public static function envio_correo_aprobacion_precio($data, $user, $correo)
     {
@@ -622,7 +622,7 @@ class Envio_Correo
             </p>
         </div>";
         //-----------------------------------------------------------------------------
-        $subject = "Creación de código SIDPA - ".$id;
+        $subject = "Creación de código SIDPA - " . $id;
         $remite = '' . NOMBRE_EMPRESA . ' Creación de código ';
         return self::php_miler($body, $remite, $subject, $correo, $correo2);
     }

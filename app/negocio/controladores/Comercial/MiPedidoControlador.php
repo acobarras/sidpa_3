@@ -320,7 +320,7 @@ class MiPedidoControlador extends GenericoControlador
 
                         $value->fecha_compro_item = '';
                         // Modificación más reciente de impresión variable no descuenta de inventario cuando es impresión variable 
-                        if ( $value->id_estado_item_pedido != 6) {
+                        if ($value->id_estado_item_pedido != 6) {
                             $this->descuento_inventario($value); //para tb entrada_tecnologia estado_inv 3 y descontar
                         }
 
@@ -448,10 +448,12 @@ class MiPedidoControlador extends GenericoControlador
             $nombre_comprador = "Paola";
             $correo = CORREO_COMPRAS_MA;
             $TipoCompra = 'Materia Prima';
+            $correo2 = '';
         } elseif ($data->id_clase_articulo == 3) {
             $nombre_comprador = "Marcela";
             $correo = CORREO_COMPRAS_TEC;
             $TipoCompra = 'Tecnologia';
+            $correo2 = CORREO_AUX_COMPRAS;
         }
         if ($cons_pedido[0]->forma_pago == 4) {
             $forma_pago = $cons_pedido[0]->dias_dados . ' Días';
@@ -464,7 +466,7 @@ class MiPedidoControlador extends GenericoControlador
         $data->asesor = $asesor;
         $data->fecha_compromiso = $fecha_compromiso;
         $data->nombre_comprador = $nombre_comprador;
-        $correo1 = Envio_Correo::SolicitudesCompras($TipoCompra, $correo, $data);
+        $correo1 = Envio_Correo::SolicitudesCompras($TipoCompra, $correo, $data, $correo2);
         return $correo1;
     }
     public function correos_confirmacion_pedido_cliente_asesor($data, $items_correo)
