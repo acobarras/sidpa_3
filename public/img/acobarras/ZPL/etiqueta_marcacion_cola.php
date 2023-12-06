@@ -117,7 +117,7 @@
             ^FT379,482^A0N,42,43^FH\^FDOperario:^FS
             ^FT379,389^A0N,42,43^FH\^FDMetros Lineales: ^FS
             ^FT915,238^BQN,2,7
-            ^FH\^FDLA,' . $data['codigo'] . ';' . $data['ancho'] . ';' .  $data['ml'] . '^FS
+            ^FH\^FDLA,' . $data['codigo'] . ';' . $data['ancho'] . ';' .  $data['ml'] . ';' . $data['lote'] . '^FS
             ^FO5,226^GB1169,350,3^FS
             ^FO5,334^GB1165,0,3^FS
             ^FO5,422^GB1165,0,3^FS
@@ -197,7 +197,7 @@
             ^FT257,326^A0N,28,28^FH\^FDOperario:^FS
             ^FT257,259^A0N,28,28^FH\^FDMetros Lineales: ^FS
             ^FT619,165^BQN,2,5
-            ^FH\^FDLA,' . $data['codigo'] . ';' . $data['ancho'] . ';' .  $data['ml'] . '^FS
+            ^FH\^FDLA,' . $data['codigo'] . ';' . $data['ancho'] . ';' .  $data['ml'] . ';' . $data['lote'] . '^FS
             ^FO3,153^GB791,237,2^FS
             ^FO3,226^GB788,0,2^FS
             ^FO3,285^GB788,0,2^FS

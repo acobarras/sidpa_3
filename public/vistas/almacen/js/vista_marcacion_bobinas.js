@@ -19,6 +19,7 @@ function consulta_cod_bobina() {
             cod_factura = cant['0'];
             ancho = cant['1'];
             metros_lineales = cant['2'];
+            lote = cant['3'];
             // CODIGO DE PRODUCTO DE ARCLAD
         } else if (data.includes('|')) {
             var cant = data.split('|');
@@ -134,7 +135,8 @@ function impresion_etiqueta() {
         e.preventDefault();
         var obj_inicial = $('#imprimir').html();
         var form = $(this).serializeArray();
-        valida = validar_formulario(form);
+        var exepcion = ['lote', 'peso'];
+        valida = validar_formulario(form, exepcion);
         if (valida) {
             btn_procesando('imprimir');
             var sistema_operativo = navigator.platform;

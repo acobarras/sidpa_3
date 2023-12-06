@@ -51,24 +51,6 @@
                                 <input type="number" class="form-control" name="ancho" id="ancho">
                             </div>
                         </div>
-                        <?php
-                        if ($_SESSION['usuario']->getId_roll() == 12 || $_SESSION['usuario']->getId_roll() == 1) { // EL ID ROLL PARA ETICARIBE ES 9 EN VEZ DE 12
-                            $stylo = '';
-                            $nombre = 'operario_digitado';
-                            $valor_id_persona = '';
-                        } else {
-                            $stylo = 'style="display: none;"';
-                            $nombre = '';
-                            // $valor_id_persona = 'value = "'. $_SESSION['usuario']->getId_persona().'"';
-                            $valor_id_persona =  $_SESSION['usuario']->getId_persona();
-                        } ?>
-                        <div class="mb-3 row" <?= $stylo ?>>
-                            <label for="operario_digitado" class="col-sm-2 col-form-label fw-bold">Codigo Operario:</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" name="<?= $nombre ?>" id="operario_digitado">
-                                <span class="respu_consulta"></span>
-                            </div>
-                        </div>
                         <div class="mb-3 row">
                             <label for="peso" class="col-sm-2 col-form-label fw-bold">Peso:</label>
                             <div class="col-sm-10">
@@ -94,7 +76,7 @@
                             </div>
                         </div>
                         <label for="id_persona" style="display: none;">Codigo Operario:</label>
-                        <input type="hidden" class="id_persona" id="id_persona" name="id_persona" data-persona="<?= $valor_id_persona ?>"">
+                        <input type="hidden" class="id_persona" id="id_persona" name="id_persona" data-persona="<?= $_SESSION['usuario']->getId_persona() ?>">
                         <!-- aqui va el operario  -->
                         <br>
                             <button type=" submit" class="btn btn-primary d-block m-auto" id="imprimir">Imprimir</button>
