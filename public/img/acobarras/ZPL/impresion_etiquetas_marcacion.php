@@ -169,38 +169,38 @@
                     ';
                     break;
                 case '3': //55x33
-                    $prueba =
-                        '^XA
+                    $prueba = 
+                    '^XA
                     ^MMT
-                    ^PW1205
+                    ^PW1228
                     ^LL0390
                     ^LS0
-                    ^BY168,168^FT330,257^BXN,12,200,0,0,1,~
+                    ^BY192,192^FT336,262^BXN,12,200,0,0,1,~
                     ^FH\^FD' . $data_item->codigo . ';' . $formulario['cant_x'] . '^FS
                     ^FT37,78^A0N,42,40^FH\^FDFecha:^FS
-                    ^FT37,130^A0N,42,40^FH\^FD' . date('d/m/Y') . '^FS
-                    ^FT37,187^A0N,42,40^FH\^FDO.P.:^FS
-                    ^FT132,187^A0N,42,40^FH\^FD' . $data_item->n_produccion . '^FS
-                    ^FT37,246^A0N,42,40^FH\^FDLote:^FS
-                    ^FT132,246^A0N,42,40^FH\^FD' . $formulario['lote'] . '^FS
-                    ^FT37,309^A0N,42,40^FH\^FDCant:^FS
-                    ^FT132,309^A0N,42,40^FH\^FD' .  $formulario['cant_x'] . '^FS
-                    ^FT341,309^A0N,42,40^FH\^FDAux:^FS
-                    ^FT460,309^A0N,42,40^FH\^FD' . $operario . '^FS
+                    ^FT146,73^AAN,36,16^FH\^FD' . date('d/m/Y') . '^FS
+                    ^FT37,221^A0N,42,40^FH\^FDLote:^FS
+                    ^FT132,221^A0N,42,40^FH\^FD' . $formulario['lote'] . '^FS
+                    ^FT37,303^A0N,42,40^FH\^FDCant:^FS
+                    ^FT132,303^A0N,42,40^FH\^FD' . $formulario['cant_x'] . '^FS
+                    ^FT341,303^A0N,42,40^FH\^FDAux:^FS
+                    ^FT430,303^A0N,42,40^FH\^FD' . $operario . '^FS
                     ^FT124,364^A0N,42,40^FH\^FD' . $data_item->codigo . '^FS
-                    ^BY168,168^FT979,257^BXN,12,200,0,0,1,~
+                    ^FT37,151^A0N,42,40^FH\^FDVence:^FS
+                    ^FT146,147^AAN,36,16^FH\^FD' . $fecha_ano . '^FS
+                    ^BY192,192^FT985,262^BXN,12,200,0,0,1,~
                     ^FH\^FD' . $data_item->codigo . ';' . $formulario['cant_x'] . '^FS
                     ^FT686,78^A0N,42,40^FH\^FDFecha:^FS
-                    ^FT686,130^A0N,42,40^FH\^FD' . date('d/m/Y') . '^FS
-                    ^FT686,187^A0N,42,40^FH\^FDO.P.:^FS
-                    ^FT781,187^A0N,42,40^FH\^FD' . $data_item->n_produccion . '^FS
-                    ^FT686,246^A0N,42,40^FH\^FDLote:^FS
-                    ^FT781,246^A0N,42,40^FH\^FD' . $formulario['lote'] . '^FS
-                    ^FT686,309^A0N,42,40^FH\^FDCant:^FS
-                    ^FT781,309^A0N,42,40^FH\^FD' .  $formulario['cant_x'] . '^FS
-                    ^FT990,309^A0N,42,40^FH\^FDAux:^FS
-                    ^FT1109,309^A0N,42,40^FH\^FD' . $operario . '^FS
+                    ^FT795,73^AAN,36,16^FH\^FD' . date('d/m/Y') . '^FS
+                    ^FT686,221^A0N,42,40^FH\^FDLote:^FS
+                    ^FT781,221^A0N,42,40^FH\^FD' . $formulario['lote'] . '^FS
+                    ^FT686,303^A0N,42,40^FH\^FDCant:^FS
+                    ^FT781,303^A0N,42,40^FH\^FD' . $formulario['cant_x'] . '^FS
+                    ^FT990,303^A0N,42,40^FH\^FDAux:^FS
+                    ^FT1080,303^A0N,42,40^FH\^FD' . $operario . '^FS
                     ^FT773,364^A0N,42,40^FH\^FD' . $data_item->codigo . '^FS
+                    ^FT686,151^A0N,42,40^FH\^FDVence:^FS
+                    ^FT795,147^AAN,36,16^FH\^FD' . $fecha_ano . '^FS
                     ^PQ' . $formulario['cantidad'] . ',0,1,Y^XZ
                     ';
                     break;
@@ -373,39 +373,38 @@
                     ';
                     break;
                 case '3': //55x33
-                    $prueba = "^XA" .
-                        "^LH0,0 " .
-                        "^MMT " .
-                        "^PW831 " .
-                        "^LL0264 " .
-                        "^LS0 " .
-                        "^BY144,144^FT216,162^BXN,7,200,0,0,1,~ " .
-                        "^FH\^FD" . $data_item->codigo . ";" . $formulario['cant_x'] . "^FS " .
-                        "^FT17,206^A0N,31,31^FH\^FDCant:^FS " .
-                        "^FT99,206^A0N,31,31^FH\^FD" .  $formulario['cant_x'] . "^FS " .
-                        "^FT217,206^A0N,31,31^FH\^FDAux:^FS " .
-                        "^FT289,207^A0N,31,31^FH\^FD" . $operario . "^FS " .
-                        "^FT17,164^A0N,31,31^FH\^FDLote:^FS " .
-                        "^FT91,164^A0N,31,31^FH\^FD" . $formulario['lote'] . "^FS " .
-                        "^FT17,122^A0N,31,31^FH\^FDO.P.:^FS " .
-                        "^FT91,122^A0N,31,31^FH\^FD" . $data_item->n_produccion . "^FS " .
-                        "^FT21,38^A0N,31,31^FH\^FDFecha:^FS " .
-                        "^FT21,80^A0N,31,31^FH\^FD" . date('d/m/Y') . "^FS " .
-                        "^FT81,249^A0N,28,28^FH\^FD" . $data_item->codigo . "^FS " .
-                        "^BY144,144^FT632,162^BXN,7,200,0,0,1,~ " .
-                        "^FH\^FD" . $data_item->codigo . ";" . $formulario['cant_x'] . "^FS " .
-                        "^FT433,206^A0N,31,31^FH\^FDCant:^FS " .
-                        "^FT515,206^A0N,31,31^FH\^FD" .  $formulario['cant_x'] . "^FS " .
-                        "^FT633,206^A0N,31,31^FH\^FDAux:^FS " .
-                        "^FT705,207^A0N,31,31^FH\^FD" . $operario . "^FS " .
-                        "^FT433,164^A0N,31,31^FH\^FDLote:^FS " .
-                        "^FT507,164^A0N,31,31^FH\^FD" . $formulario['lote'] . "^FS " .
-                        "^FT433,122^A0N,31,31^FH\^FDO.P.:^FS " .
-                        "^FT507,122^A0N,31,31^FH\^FD" . $data_item->n_produccion . "^FS " .
-                        "^FT437,38^A0N,31,31^FH\^FDFecha:^FS " .
-                        "^FT437,80^A0N,31,31^FH\^FD" . date('d/m/Y') . "^FS " .
-                        "^FT497,249^A0N,28,28^FH\^FD" . $data_item->codigo . "^FS " .
-                        "^PQ" . $formulario['cantidad'] . ",0,1,Y^XZ ";
+                    $prueba = '^XA
+                    ^MMT
+                    ^PW831
+                    ^LL0264
+                    ^LS0
+                    ^BY128,128^FT227,175^BXN,8,200,0,0,1,~
+                    ^FH\^FD' . $data_item->codigo . ';' . $formulario['cant_x'] . '^FS
+                    ^FT25,53^A0N,28,28^FH\^FDFecha:^FS
+                    ^FT105,51^AAN,27,12^FH\^FD' . date('d/m/Y') . '^FS
+                    ^FT25,149^A0N,28,28^FH\^FDLote:^FS
+                    ^FT89,149^A0N,28,28^FH\^FD' . $formulario['lote'] . '^FS
+                    ^FT25,205^A0N,28,28^FH\^FDCant:^FS
+                    ^FT89,205^A0N,28,28^FH\^FD' . $formulario['cant_x'] . '^FS
+                    ^FT230,205^A0N,28,28^FH\^FDAux:^FS
+                    ^FT290,205^A0N,28,28^FH\^FD' . $operario . '^FS
+                    ^FT84,246^A0N,28,28^FH\^FD' . $data_item->codigo . '^FS
+                    ^FT25,102^A0N,28,28^FH\^FDVence:^FS
+                    ^FT105,101^AAN,27,12^FH\^FD' . $fecha_ano . '^FS
+                    ^BY128,128^FT667,175^BXN,8,200,0,0,1,~
+                    ^FH\^FD' . $data_item->codigo . ';' . $formulario['cant_x'] . '^FS
+                    ^FT465,53^A0N,28,28^FH\^FDFecha:^FS
+                    ^FT545,51^AAN,27,12^FH\^FD' . date('d/m/Y') . '^FS
+                    ^FT465,149^A0N,28,28^FH\^FDLote:^FS
+                    ^FT529,149^A0N,28,28^FH\^FD' . $formulario['lote'] . '^FS
+                    ^FT465,205^A0N,28,28^FH\^FDCant:^FS
+                    ^FT529,205^A0N,28,28^FH\^FD' . $formulario['cant_x'] . '^FS
+                    ^FT670,205^A0N,28,28^FH\^FDAux:^FS
+                    ^FT731,205^A0N,28,28^FH\^FD' . $operario . '^FS
+                    ^FT524,246^A0N,28,28^FH\^FD' . $data_item->codigo . '^FS
+                    ^FT465,102^A0N,28,28^FH\^FDVence:^FS
+                    ^FT545,101^AAN,27,12^FH\^FD' . $fecha_ano . '^FS
+                    ^PQ' . $formulario['cantidad'] . ',0,1,Y^XZ';
                     break;
 
                 default: // zpl no creado 
