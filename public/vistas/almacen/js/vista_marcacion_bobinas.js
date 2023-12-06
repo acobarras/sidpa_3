@@ -3,7 +3,63 @@ $(document).ready(function () {
     consulta_select_codigo();
     consultar_operario();
     impresion_etiqueta();
+    consulta_cod_bobina();
 });
+
+function consulta_cod_bobina() {
+    $('#consulta_cod_bobina').on('click', function () {
+        var data = $('#cod_bobina').val();
+        var cod_factura = '';
+        var ancho = '';
+        var lote = '';
+        var metros_lineales = '';
+        // CODIGO DE PRODUCTO DE NOSOTROS
+        if (data.includes(';')) {
+            var cant = data.split(';');
+            cod_factura = cant['0'];
+            ancho = cant['1'];
+            metros_lineales = cant['2'];
+            // CODIGO DE PRODUCTO DE ARCLAD
+        } else if (data.includes('|')) {
+            var cant = data.split('|');
+            cod_factura = cant['1'];
+            lote = cant['2'];
+            ancho = cant['3'];
+            cod_factura = cod_factura.slice(0, -4);
+            // CODIGO DE PRODUCTO DE OTROS
+        } else {
+            cod_factura = data;
+        }
+        $('#cod_bobina').val(cod_factura);
+        var persona = $("#id_persona.id_persona").data("persona");
+        if (persona != '') {// lo usamos para saber si es administrador o no
+            $('#id_persona.id_persona').val(persona)
+        }
+        var obj_inicial = $('#consulta_cod_bobina').html();
+        btn_procesando('consulta_cod_bobina');
+        $.ajax({
+            type: "GET",
+            url: `${PATH_NAME}/almacen/consulta_cod_bobinas`,
+            data: { codigo: cod_factura, lote: lote, ancho: ancho, metros_lineales: metros_lineales },
+            success: function (res) {
+                btn_procesando('consulta_cod_bobina', obj_inicial, 1);
+                if (res == '') {
+                    alertify.error('El codigo ingresado no existe, Por favor comuniquese con el area de compras');
+                } else {
+                    if ($('#contenedor').css('display') == 'none') {
+                        $('#contenedor').toggle(500);
+                    }
+                    $('#codigo_form').val(res[0].codigo_producto);
+                    $('#descripcion').val(res[0].descripcion_productos);
+                    $('#ancho').val(ancho);
+                    $('#lote').val(lote);
+                    $('#ml').val(metros_lineales);
+                    $('.div_impresion').empty().html();
+                }
+            }
+        })
+    })
+}
 
 function consulta_select_codigo() {
     $('#consulta').on('click', function (e) {
@@ -14,7 +70,7 @@ function consulta_select_codigo() {
             $('#id_persona.id_persona').val(persona)
         }
         var codigo = $('#codigo').val();
-        if ( codigo != 0) {
+        if (codigo != 0) {
             btn_procesando('consulta');
             $.ajax({
                 type: "GET",
@@ -29,13 +85,13 @@ function consulta_select_codigo() {
                     $('#descripcion').val(res[0].descripcion_productos)
                     $('.div_impresion').empty().html();
                 }
-            })   
+            })
         } else {
             alertify.error('¡Selecciona un codigo de bobina!');
             $('#codigo').focus();
         }
     })
-    
+
 }
 
 function consultar_operario() {
@@ -145,7 +201,7 @@ function impresion_etiqueta() {
                             } else if (impresion_red == false && eswindow == false && IMPRESION_API === 1) {
                                 alertify.alert('Alerta Impresoras', '¡No hay impresoras configuradas para esta área!',
                                     function () { alertify.success(''); });
-                                    btn_procesando('imprimir', obj_inicial, 1);
+                                btn_procesando('imprimir', obj_inicial, 1);
                             } else {
                                 $('.div_impresion').empty().html(respu);
                                 var mode = 'iframe'; //popup

@@ -88,6 +88,8 @@
                                             <thead class="bg-layout">
                                                 <tr class="">
                                                     <td><b>Código Producto</b></td>
+                                                    <td><b>Ancho</b></td>
+                                                    <td><b>Metros</b></td>
                                                     <td><b>Cantidad</b></td>
                                                     <td><b>Canasta</td>
                                             </thead>

@@ -5,6 +5,7 @@ var inventario_bobinas = {
     init: function () {
         $('#id_usuario_bob').blur(inventario_bobinas.valida_operario);
         $('#codigo_producto_bob').blur(inventario_bobinas.valida_codigoProduct);
+        $('#codigo_producto_bob').change(inventario_bobinas.cambio_cod);
         $('.envio_conteo_bob').on('click', inventario_bobinas.validacion_form_conteo);
         inventario_bobinas.cargar_tabla();
         $("#conteo_bobinas").on('click', '.borrar', inventario_bobinas.borrar_item);
@@ -13,6 +14,17 @@ var inventario_bobinas = {
         $('#metros_bob').keyup(inventario_bobinas.calcula_entrada);
         $('#ubicacion_bob').select2();
 
+    },
+    cambio_cod: function () {
+        var data = $("#codigo_producto_bob").val();
+        var cant = data.split(';');
+        var codigo = cant['0'];
+        var ancho = cant['1'];
+        var metros = cant['2'];
+        $('#codigo_producto_bob').val(codigo);
+        $('#ancho_bob').val(ancho);
+        $('#metros_bob').val(metros);
+        inventario_bobinas.valida_codigoProduct();
     },
     valida_operario: function () {
         let newUsu = $('#id_usuario_bob').val().replace(/ /g, "");
@@ -48,7 +60,7 @@ var inventario_bobinas = {
                     $("#span_codigo_CB").empty().css('color', 'red').html(`NO EXISTE ESTE CODIGO DE PRODUCTO!!`);
                     $("#id_producto_bob").val('');
                 } else {
-                    if (res[0].id_tipo_articulo == 4||res[0].id_tipo_articulo == 15) {
+                    if (res[0].id_tipo_articulo == 4 || res[0].id_tipo_articulo == 15) {
                         $("#id_producto_bob").val(res[0].id_productos);
                         $("#span_codigo_CB").empty().css('color', 'blue').html(`CODIGO: ${res[0].descripcion_productos}`);
 
@@ -134,7 +146,7 @@ var inventario_bobinas = {
             ancho: $('#ancho_bob').val(),
             metros: $('#metros_bob').val(),
             entrada: $('#entrada_bob').val(),
-            documento: 'INV 2020',
+            documento: 'INV 2023',
             id_proveedor: 21,
             id_productos: $("#id_producto_bob").val(),
             estado: estado,
@@ -146,7 +158,7 @@ var inventario_bobinas = {
             var respu = false;
             valida_storage.forEach(element => {
                 if (element.codigo_producto == datos.codigo_producto) {
-                    var nuevo = parseInt(element.entrada) + parseInt(datos.entrada);
+                    var nuevo = parseFloat(element.entrada) + parseFloat(datos.entrada);
                     element['entrada'] = nuevo;
                     respu = true;
                 }
@@ -351,5 +363,4 @@ var inventario_bobinas = {
     }
 }
 inventario_bobinas.init();
-
 

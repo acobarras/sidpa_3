@@ -14,9 +14,12 @@ var conteo_inventario = {
     },
     cambio_cod: function () {
         let codigo = $("#codigo_producto").val();
-        let num_coma = codigo.indexOf(";")
+        var cant = codigo.split(';');
+        var cantidad = cant['1'];
+        let num_coma = codigo.indexOf(";");
         if (num_coma != -1) {
             $('#codigo_producto').val(codigo.substr(0, num_coma));
+            $('#entrada').val(cantidad);
             conteo_inventario.valida_codigoProduct();
         }
     },

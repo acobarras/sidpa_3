@@ -18,7 +18,7 @@ var crear_bobina = function () {
         if (id_tipo_articulo == 4) {
             var exepcion = ['id_productos'];
         } else {
-            var exepcion = ['id_productos','ancho'];
+            var exepcion = ['id_productos', 'ancho'];
         }
         var valida = validar_formulario(formu, exepcion);
         if (valida) {
@@ -57,22 +57,34 @@ var crear_bobina = function () {
 
 var valida_codigo_bobi = function () {
     $('#codigo_producto').on('change', function () {
-        var codigo = $(this).val();
+        var data = $(this).val();
+        var cant = data.split(';');
+        var codigo = cant['0'];
+        var ancho = cant['1'];
+        var metros = cant['2'];
+        $('#codigo_producto').val(codigo);
+        $('#ancho').attr('readonly', 'readonly');
+        $('#metro_lineales').attr('readonly', 'readonly');
         $.ajax({
             "url": `${PATH_NAME}/almacen/validar_codigo_tecno`,
             "type": 'POST',
             "data": { codigo },
             "success": function (respu) {
+                $('#ancho').removeAttr('readonly');
+                $('#metro_lineales').removeAttr('readonly');
                 if (respu.estado) {
                     if (respu.id_tipo_articulo == 4 || respu.id_tipo_articulo == 15) {
                         $('#id_producto').val(respu.id_producto);
                         $('#id_tipo_articulo').val(respu.id_tipo_articulo);
                         $('#respuesta').empty().html(respu.mensaje);
                         $('#btn_ingresar_bob').attr('data-valida', true);
+                        $('#ancho').val(ancho).change();
+                        $('#metro_lineales').val(metros).trigger('keyup');
                     } else {
                         $('#respuesta').empty().html("Este producto no pertenece a este modulo.");
                         $('#codigo_producto').focus();
                         $('#btn_ingresar_bob').attr('data-valida', false);
+
                     }
                 } else {
                     $('#respuesta').empty().html(respu.mensaje);
@@ -105,8 +117,8 @@ var valida_metros = function () {
 }
 
 var ubicacion = function () {
-    $('#ancho').on('change',function () {
+    $('#ancho').on('change', function () {
         var valor = $(this).val();
-       $('#ubicacion').val(valor); 
+        $('#ubicacion').val(valor);
     });
 }

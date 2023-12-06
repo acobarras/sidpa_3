@@ -220,7 +220,7 @@ class productosDAO extends GenericoDAO
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
-        return $resultado;   
+        return $resultado;
     }
     public function consulta_bobinas()
     {
@@ -228,12 +228,20 @@ class productosDAO extends GenericoDAO
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
-        return $resultado; 
-        
+        return $resultado;
     }
-    public function consulta_marcacion_bobinas($codigo) 
+    public function consulta_marcacion_bobinas($codigo)
     {
         $sql = "SELECT * FROM `productos` WHERE codigo_producto = '$codigo'";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    
+    public function consulta_cod_bobinas($cod_antiguo, $cod_nuevo)
+    {
+        $sql = "SELECT * FROM `productos` WHERE codigo_producto = '$cod_antiguo'OR codigo_producto = '$cod_nuevo'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);

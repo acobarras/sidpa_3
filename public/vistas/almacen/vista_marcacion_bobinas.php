@@ -9,6 +9,15 @@
                 <div class="row ">
                     <div class="col-lg-10 col-12">
                         <label for="codigo">Código Bobina:</label>
+                        <input type="text" autocomplete="off" class="form-control" placeholder="Codigo Bobina" name="codigo bobina" id="cod_bobina">
+                    </div>
+                    <div class="col-lg-2 col-12 d-flex justify-content-center m-auto">
+                        <div class="col-2 m-auto mt-3">
+                            <button type="button" id="consulta_cod_bobina" class="btn btn-success">Consultar</button>
+                        </div>
+                    </div>
+                    <!-- <div class="col-lg-10 col-12">
+                        <label for="codigo">Código Bobina:</label>
                         <select name="codigo" id="codigo" class="select_2" style="width: 100%;">
                             <option value="0" selected>Seleccione un material</option>
                             <?php
@@ -18,12 +27,12 @@
                             }
                             ?>
                         </select>
-                    </div>
-                    <div class="col-lg-2 col-12 d-flex justify-content-center m-auto">
+                    </div> -->
+                    <!-- <div class="col-lg-2 col-12 d-flex justify-content-center m-auto">
                         <div class="col-2 m-auto mt-3">
                             <button type="button" id="consulta" class="btn btn-success">Consultar</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <br>
                 <div class="col-lg-9 col-12 m-auto shadow-sm p-3 mb-5 bg-body-tertiary rounded" id="contenedor" style="display: none;">
@@ -88,7 +97,7 @@
                         <input type="hidden" class="id_persona" id="id_persona" name="id_persona" data-persona="<?= $valor_id_persona ?>"">
                         <!-- aqui va el operario  -->
                         <br>
-                            <button type="submit" class="btn btn-primary d-block m-auto" id="imprimir">Imprimir</button>
+                            <button type=" submit" class="btn btn-primary d-block m-auto" id="imprimir">Imprimir</button>
                         <br>
                         <div class="div_impresion"></div>
                     </form>
