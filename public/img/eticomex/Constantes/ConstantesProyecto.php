@@ -12,6 +12,7 @@ define('CORREO_SERV_CLIENTE', 'servicioalcliente@eticaribe.com.co'); //CORREO DE
 define('CORREO_ENTREGA', 'notificacion@eticaribe.com.co'); //CORREO DE ENTREGA 
 define('CORREO_COMPRAS_MA', 'paola.castaneda@acobarras.com'); //CORREO DE COMPRAS DE MATERIAL
 define('CORREO_COMPRAS_TEC', 'marcela.rodriguez@acobarras.com'); // CORREO DE COMPRAS DE TECNOLOGIA
+define('CORREO_AUX_COMPRAS', ''); // CORREO DE AUXILIAR COMPRAS DE TECNOLOGIA
 define('CLAVE_CORREOS', '@Notificacion2022'); //CLAVE DE ENVIO DE CORREOS
 define('HOST_CORREOS', 'smtp.titan.email'); //HOST PARA EL ENVIO DE CORREOS
 define('PLANTILLA_CONTABILIDAD', 'ETICOMEX'); //PLANTILLA DE CONTALIDAD

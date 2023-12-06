@@ -12,6 +12,7 @@ define('CORREO_SERV_CLIENTE', 'servicioalcliente@acobarras.com'); //CORREO DE SE
 define('CORREO_ENTREGA', 'soporte_entrega@acobarras.com'); //CORREO DE ENTREGA 
 define('CORREO_COMPRAS_MA', 'paola.castaneda@acobarras.com'); //CORREO DE COMPRAS DE MATERIAL
 define('CORREO_COMPRAS_TEC', 'marcela.rodriguez@acobarras.com'); // CORREO DE COMPRAS DE TECNOLOGIA
+define('CORREO_AUX_COMPRAS', 'aux.compras1@acobarras.com'); // CORREO DE AUXILIAR COMPRAS DE TECNOLOGIA
 define('CLAVE_CORREOS', '@acobarras123'); //CLAVE DE ENVIO DE CORREOS 
 define('HOST_CORREOS', 'smtp.gmail.com'); //HOST PARA EL ENVIO DE CORREOS
 define('PLANTILLA_CONTABILIDAD', 'ACOBARRAS SAS'); //PLANTILLA DE CONTALIDAD

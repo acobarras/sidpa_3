@@ -17,13 +17,16 @@ class productosDAO extends GenericoDAO
     public function consultar_productos($id_clase_articulo = '')
     {
         if ($id_clase_articulo == '') {
-            $sql = "SELECT * FROM productos AS t1 
+            $sql = "SELECT t1.*,t2.id_tipo_articulo,t2.nombre_articulo,t2.id_clase_articulo,t2.estado_articulo,t2.id_usuario,t2.fecha_crea AS fecha_tipo_articulo 
+            FROM productos AS t1 
             INNER JOIN tipo_articulo AS t2 ON t1.id_tipo_articulo = t2.id_tipo_articulo 
             INNER JOIN clase_articulo AS class_art ON t2.id_clase_articulo = class_art.id_clase_articulo";
         } else {
-            $sql = "SELECT * FROM productos AS t1 
+            $sql = "SELECT t1.*,t2.id_tipo_articulo,t2.nombre_articulo,t2.id_clase_articulo,t2.estado_articulo,t2.id_usuario,t2.fecha_crea 
+            AS fecha_tipo_articulo,class_art.* 
+            FROM productos AS t1 
             INNER JOIN tipo_articulo AS t2 ON t1.id_tipo_articulo = t2.id_tipo_articulo 
-            INNER JOIN clase_articulo AS class_art ON t2.id_clase_articulo = class_art.id_clase_articulo
+            INNER JOIN clase_articulo AS class_art ON t2.id_clase_articulo = class_art.id_clase_articulo 
             WHERE class_art.id_clase_articulo=" . $id_clase_articulo;
         }
         $sentencia = $this->cnn->prepare($sql);
