@@ -55,6 +55,7 @@ final class MarcacionBobinasControlador extends GenericoControlador
         if (!empty($consulta)) {
             $respu = $this->productosDAO->consulta_cod_bobinas($consulta[0]['cod_antiguo'], $consulta[0]['cod_nuevo']);
             $respu[0]->codigo_producto = $consulta[0]['cod_nuevo'];
+            $respu[0]->descripcion_productos = $consulta[0]['descripcion'];
         }
         echo json_encode($respu);
         return;
