@@ -30,7 +30,7 @@
                         <div class="mb-3 row">
                             <label for="ancho" class="col-sm-2 col-form-label fw-bold">Ancho material:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="ancho" id="ancho" readonly>
+                                <input type="text" class="form-control" name="ancho" id="ancho">
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <label for="id_persona" style="display: none;">Codigo Operario:</label>
-                        <input type="hidden" class="id_persona" id="id_persona" name="id_persona" data-persona="<?= $valor_id_persona ?>"">
+                        <input type="hidden" class="id_persona" id="id_persona" name="id_persona" data-persona="<?= $valor_id_persona ?>">
                         <!-- aqui va el operario  -->
                         <br>
                         <div>

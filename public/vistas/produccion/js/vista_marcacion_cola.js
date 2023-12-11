@@ -33,6 +33,7 @@ function consulta_op() {// falta poner el boton de procesando
                         $('#codigo').val(res.datos[0].material_op)
                         $('#ancho').val(res.datos[0].ancho_material)
                         $('#descripcion').val(res.datos[0].descripcion_productos)
+                        $('#lote').val(op);
                         $('.div_impresion').empty().html();
                     } else {
                         if ($('#contenedor').css('display') == 'block') {

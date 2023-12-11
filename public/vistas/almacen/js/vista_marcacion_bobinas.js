@@ -25,7 +25,9 @@ function consulta_cod_bobina() {
             var cant = data.split('|');
             cod_factura = cant['1'];
             lote = cant['2'];
-            ancho = cant['3'];
+            ancho = parseInt(cod_factura.substring(cod_factura.length - 4));
+            metrosCuadrados = cant['3'];
+            metros_lineales = ((1000*metrosCuadrados)/ancho)
             cod_factura = cod_factura.slice(0, -4);
             // CODIGO DE PRODUCTO DE OTROS
         } else {
@@ -55,6 +57,7 @@ function consulta_cod_bobina() {
                     $('#ancho').val(ancho);
                     $('#lote').val(lote);
                     $('#ml').val(metros_lineales);
+                    $('#cantidad').val(1);
                     $('.div_impresion').empty().html();
                 }
             }
@@ -215,6 +218,7 @@ function impresion_etiqueta() {
                             $('#operario_digitado').trigger("change")
                             $('#contenedor').css('display', 'none');
                             limpiar_formulario('formulario_bobinas', 'input');
+                            $('#cod_bobina').val('');
                         }
                     )
                 }
