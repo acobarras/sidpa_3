@@ -72,7 +72,7 @@ class MiClienteControlador extends GenericoControlador
         $clientes = [];
         if ($_SESSION['usuario']->getId_roll() != 1) {
             foreach ($clientes_proveedor as $value) {
-                $asesores = explode(",", $value->id_usuarios_asesor);
+                $asesores = explode(",", $value->id_usuarios_asesor ?? '');
 
                 if (in_array($_SESSION['usuario']->getId_persona(), $asesores)) {
                     // $clientes[] = $value;

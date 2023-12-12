@@ -4,12 +4,22 @@ var inventario_tecnologia = {
     init: function () {
         $('#id_usuario_tec').blur(inventario_tecnologia.valida_operario);
         $('#codigo_producto_tec').blur(inventario_tecnologia.valida_codigoProduct);
+        $('#codigo_producto_tec').change(inventario_tecnologia.cambio_cod);
         $('.envio_conteo_tec').on('click', inventario_tecnologia.validacion_form_conteo);
         inventario_tecnologia.cargar_tabla();
         $("#conteo_tecnologia").on('click', '.borrar', inventario_tecnologia.borrar_item);
         $('.registro_conteo_tec').on('click', inventario_tecnologia.registro_form_conteo);
         $('#ubicacion_tec').select2();
 
+    },
+    cambio_cod: function () {
+        var data = $("#codigo_producto_tec").val();
+        var cant = data.split(';');
+        var codigo = cant['0'];
+        var cantidad = cant['1'];
+        $('#codigo_producto_tec').val(codigo);
+        $('#entrada_tec').val(cantidad);
+        inventario_tecnologia.valida_codigoProduct();
     },
     valida_operario: function () {
         let newUsu = $('#id_usuario_tec').val().replace(/ /g, "");

@@ -62,7 +62,7 @@
                 ^FT430,46^A0N,28,28^FH\^FDN. Parte:^FS
                 ^FT428,145^A0N,28,28^FH\^FDDescripcion:^FS
                 ^FT426,250^A0N,28,28^FH\^FDCant:^FS
-                ^FT735,122^BQN,2,4
+                ^FT735,112^BQN,2,4
                 ^FH\^FDLA'.$_POST['formulario']['nparte'].';'.$_POST['formulario']['cantidad'].'^FS
                 ^FT430,73^AFN,27,15^FH\^FD'.$_POST['formulario']['nparte2'][0].'^FS
                 ^FT573,142^AFN,27,15^FH\^FD'.$_POST['formulario']['descripcion1'].'^FS
