@@ -143,6 +143,7 @@
                                 <th>Ancho</th>
                                 <th>Cantidad O.P.</th>
                                 <th>M2</th>
+                                <th>ML</th>
                                 <th>Fecha Proveedor</th>
                                 <th>Codigo Articulo</th>
                                 <th>core</th>

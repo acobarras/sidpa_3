@@ -82,8 +82,21 @@ var carga_tabla = function (form, url) {
                             return ancho_respu;
                         }
                     },
-                    { "data": "cant_op", render: $.fn.dataTable.render.number('.', ',', 0, '') },
-                    { "data": "m2", render: $.fn.dataTable.render.number('.', ',', 2, '') },
+                    { "data": "cant_op", render: $.fn.dataTable.render.number(',', '.', 0, '') },
+                    { "data": "m2", render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                    {
+                        "data": "ml", render: function (data, type, row) {
+                            var ancho_respu = row.ancho_op;
+                            if (row.ancho_confirmado != 0) {
+                                ancho_respu = row.ancho_confirmado;
+                            }
+                            var ml = 0;
+                            if (row.n_produccion != 0) {
+                                ml = row.m2/(ancho_respu/1000);
+                            }
+                            return $.fn.dataTable.render.number(',', '.', 2, '').display(ml);
+                        }
+                    },
                     {
                         "data": "fecha_provee", render: function (data, type, row) {
                             if (row.fecha_proveedor == '0000-00-00') {
