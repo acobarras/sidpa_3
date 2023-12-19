@@ -576,7 +576,7 @@ var consulta_metros_lineales = function (id_item_producir) {
     });
 }
 
-var agregar_metros_lineales_radio = function () {
+var agregar_metros_lineales_radio = function () {//OK
     $('.agregar_metros_lineales_radio').on('click', function () {
         var id = $(this).val();
         var estado_radio = $(this).attr('data-radio');//data radio
@@ -881,7 +881,7 @@ var inicio_trabajo_item = function () {
                 $('#data_row').val(JSON.stringify(data_envio));
                 $('#grabar_reporte_operario').val(JSON.stringify(data_maquina));
             } else {
-                iniciar_item_dk();
+                iniciar_item_dk(data_envio, id_persona_sesion, data_maquina);
             }
         }
     });
@@ -915,6 +915,7 @@ var grabar_produccion_pro_embo = function () {
         var data_items = JSON.parse($('#data_items').val());
         var data_row = JSON.parse($('#data_row').val());
         var data_envio = JSON.parse($('#data_envio').val());
+        var operario =  id_persona_sesion;
         if (datos_consulta == 1 || id_usuario_sesion == 8 || id_usuario_sesion == 13) {
             operario = $('#id_persona').val();
             if (operario == 0) {
@@ -1007,7 +1008,6 @@ var grabar_produccion_pro_embo = function () {
                 } else {
                     tabla_items_embo_dk(res.respu, data_row);
                 }
-                console.log(res);
             }
         });
     });
@@ -1104,7 +1104,6 @@ var reportar_embobinado_etiquetas = function (envio, reporte, id_persona_sesion,
         type: "POST",
         data: { envio, reporte, id_persona_sesion, data_maquina },
         success: function (res) {
-            console.log(res.respu);
             if (res.status == 1) {
                 $('#regresar').click();
                 q_maquinas.forEach(element => {

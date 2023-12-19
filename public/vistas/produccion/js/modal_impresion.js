@@ -38,13 +38,13 @@ var boton_imprime = function () {
             btn_procesando('boton_imprime');
             var sistema_operativo = navigator.platform;
             var eswindow = sistema_operativo.includes('Win')
-            var id_maquinas = $('.imprimir_trasavilidad').attr('data-id-m');
+            //var id_maquinas = $('.imprimir_trasavilidad').attr('data-id-m'); Esto no funciona por que trae la maquina de item producir 
             var id_usuario = $('#sesion').val()
             var tamano = $('#tamano').val();
             $.ajax({
                 type: "GET",
                 url: `${PATH_NAME}/produccion/impresoras_marcacion`,
-                data: { id_usuario: id_usuario, id_tamano: tamano, maquina: id_maquinas },
+                data: { id_usuario: id_usuario, id_tamano: tamano },
                 success: function (res) {
                     var resolucion = 200;
                     if (res == -1) {// no hay impresoras en base de datos

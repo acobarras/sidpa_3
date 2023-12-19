@@ -10,6 +10,8 @@ use MiApp\persistencia\dao\impresorasDAO;
 use MiApp\persistencia\dao\impresora_tamanoDAO;
 use MiApp\persistencia\dao\PersonaDAO;
 use MiApp\persistencia\dao\UsuarioDAO;
+use MiApp\persistencia\dao\ProgramacionOperarioDAO;
+
 
 class ImpresionEtiquetasControlador extends GenericoControlador
 {
@@ -20,6 +22,7 @@ class ImpresionEtiquetasControlador extends GenericoControlador
     private $impresora_tamanoDAO;
     private $PersonaDAO;
     private $UsuarioDAO;
+    private $ProgramacionOperarioDAO;
 
     public function __construct(&$cnn)
     {
@@ -33,6 +36,8 @@ class ImpresionEtiquetasControlador extends GenericoControlador
         $this->impresora_tamanoDAO = new impresora_tamanoDAO($cnn);
         $this->PersonaDAO = new PersonaDAO($cnn);
         $this->UsuarioDAO = new UsuarioDAO($cnn);
+        $this->ProgramacionOperarioDAO = new ProgramacionOperarioDAO($cnn);
+
     }
 
     public function vista_impresion_etiquetas()
@@ -79,11 +84,13 @@ class ImpresionEtiquetasControlador extends GenericoControlador
         header('Content-Type: application/json');
         $id_usuario = $_GET["id_usuario"];
         $id_tamano = $_GET['id_tamano'];
-
+        $persona = $_SESSION['usuario']->getId_persona();
+        $fecha = date('Y-m-d');
+        $maquina = $this->ProgramacionOperarioDAO->ConsultaPersonaFecha($persona, $fecha);
         $impresora = '';
 
-        if (isset($_GET['maquina'])) {
-            $id_maquina = $_GET['maquina'];
+        if (!empty($maquina)) {
+            $id_maquina = $maquina[0]->id_maquina;
             $impresora = $this->impresorasDAO->consulta_impresoras_maquina($id_maquina, $id_tamano);
         }
         if (empty($impresora)) {
