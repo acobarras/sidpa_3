@@ -8,6 +8,9 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="material-tab" data-bs-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="false">Tabla Cambio Material</a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="estado_op-tab" data-bs-toggle="tab" href="#estado_op" role="tab" aria-controls="estado_op" aria-selected="false">Modificar Estado O.P</a>
+                </li>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <!-- Primer link -->
@@ -104,6 +107,55 @@
                             </div>
                             <br>
                         </form>
+                    </div>
+                </div>
+                <!-- Tercer Link -->
+                <div class="tab-pane fade" id="estado_op" role="tabpanel" aria-labelledby="estado_op-tab">
+                    <form class="container" id="form_consulta_op">
+                        <div class="my-4 row text-center">
+                            <h1>Modificar Estado Orden Producción</h1>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="mb-3 col-6">
+                                <label for="n_produccion_cambio" class="form-label">Numero de Producción</label>
+                                <input type="text" class="form-control" name="n_produccion_cambio" id="n_produccion_cambio">
+                            </div>
+                            <div class="mb-3 col-2 pt-3">
+                                <button class="btn btn-primary" type="submit" id="consultar_op">
+                                    <i class="fa fa-plus-circle"></i> Consultar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <h5 class="text-danger text-center"><b>Nota:</b> Si desea eliminar el item de la O.P seleccionelo, si solo desea finalizar la O.P presione grabar</h5>
+                    <table id="tabla_op" class="table table-bordered table-responsive table-hover" cellspacing="0" width="100%">
+                        <thead style="background: #002b5f;color: white">
+                            <td>Orden Producción</td>
+                            <td>Nº Pedido</td>
+                            <td>Tamaña Etiqueta</td>
+                            <td>Material</td>
+                            <td>Maquina</td>
+                            <td>Turno Maquina</td>
+                            <td>Eliminar item op</td>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <br>
+                    <div class="mb-3 col-12 pt-3 text-center">
+                        <div class="col-4">
+                            <?php if ($_SESSION['usuario']->getId_usuario() == 1) { ?>
+                                <select id="select_estado_op" style="width: 100%;" class="form-select select_2" name="select_estado_op">
+                                    <option value="0">Elija el estado</option>
+                                    <?php foreach ($estados_item as $estado) { ?>
+                                        <option value="<?= $estado->id_estado_item_pedido ?>"><?= $estado->nombre_estado_item ?></option>
+                                    <?php } ?>
+                                </select>
+                            <?php } ?>
+                        </div>
+                        <input type="hidden" class="form-control" name="id_maquina" id="id_maquina">
+                        <button class="btn btn-success" type="submit" id="envia_datos">
+                            <i class="fa fa-plus-circle"></i> Grabar
+                        </button>
                     </div>
                 </div>
             </div>

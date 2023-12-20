@@ -3,6 +3,9 @@ $(document).ready(function () {
     consultar_orden();
     modificar_cantidad();
     consultar_material();
+    modificar_estado_op();
+    validar_checked();
+    editar_estado_item();
 });
 
 var numFormat = $.fn.dataTable.render.number('.', ',', 0, '').display;
@@ -134,6 +137,140 @@ var cambio_material_op = function (datos) {
                     }
                 }
             });
+        }
+    });
+}
+
+var selecciona = [];
+
+var modificar_estado_op = function () {
+    $('#form_consulta_op').submit(function (e) {
+        e.preventDefault();
+        // var obj_inicial = $('#consultar_op').html();
+        var form = $(this).serializeArray();
+        var valida = validar_formulario(form);
+        if (valida) {
+            // btn_procesando('consultar_op');
+            $.ajax({
+                url: `${PATH_NAME}/configuracion/modificar_estado_op`,
+                type: 'POST',
+                data: { form },
+                success: function (res) {
+                    selecciona = [];
+                    $('#id_maquina').val(res[0].id_maquina);
+                    var table = $("#tabla_op").DataTable({
+                        "data": res,
+                        "columns": [
+
+                            { "data": "n_produccion" },
+                            {
+                                "data": "pedido",
+                                render: function (data, type, row) {
+                                    return row.num_pedido + '-' + row.item;
+                                }
+                            },
+                            { "data": "descripcion_productos" },
+                            { "data": "material" },
+                            { "data": "nombre_maquina" },
+                            { "data": "turno_maquina" },
+                            {
+                                "data": "check",
+                                render: function (data, type, row) {
+                                    var check = `<div class="select_acob">
+                                    <input type="checkbox" class="validar_checked me-2">&nbsp;  
+                                </div>`;
+                                    return check;
+                                }
+                            },
+                        ],
+                    });
+
+                }
+            });
+        }
+    });
+}
+
+var validar_checked = function () {
+    $('#tabla_op tbody').on("click", "tr input.validar_checked", function () {
+        var data = $('#tabla_op').DataTable().row($(this).parents("tr")).data();
+        if ($(this).prop('checked') == true) {
+            var agrega = true
+            $('#select_estado_op').attr('disabled', true);
+            if (selecciona.length != 0) {
+                for (var a = 0; a < selecciona.length; a++) {
+                    agrega = data.id_pedido_item != selecciona[a].id_pedido_item
+                    if (!agrega) {
+                        return;
+                    }
+                }
+            }
+            if (agrega) {
+                selecciona.push({
+                    'id_pedido_item': data.id_pedido_item,
+                    'item': data.item,
+                    'id_pedido': data.id_pedido,
+                    'n_produccion': data.n_produccion,
+                    'total_items': data.total_items,
+                    'num_pedido': data.num_pedido,
+                });
+            }
+        } else {
+            for (var i = 0; i < selecciona.length; i++) {
+                if (data.id_pedido_item === selecciona[i].id_pedido_item) {
+                    selecciona.splice(i, 1);
+                }
+            }
+            if (selecciona.length == 0) {
+                $('#select_estado_op').attr('disabled', false);
+            }
+        }
+
+    });
+}
+
+var editar_estado_item = function () {
+    $('#envia_datos').on('click', function () {
+        var nuevo_estado = $('#select_estado_op option:selected').val();
+        var texto_estado = $('#select_estado_op option:selected').text();
+        if (nuevo_estado == 0) {
+            texto_estado = 'Fin Proceso';
+        }
+        var num_produccion = $('#n_produccion_cambio').val();
+        var id_maquina = $('#id_maquina').val();
+        if (selecciona.length == 0) {
+            alertify.confirm('Confirmación', 'Esta seguro que desea cambiar la O.P a ' + texto_estado,
+                function () {
+                    enviar_datos(texto_estado, nuevo_estado, num_produccion, id_maquina);
+                },
+                function () {
+                    alertify.error('Operacion Cancelada');
+                });
+        } else {
+            var cadena = '';
+            selecciona.forEach(element => {
+                cadena = cadena + element.num_pedido + '-' + element.item + ', ';
+            });
+            alertify.confirm('Confirmación', 'Esta seguro que desea eliminar los pedidos ' + cadena + 'de la O.P',
+                function () {
+                    enviar_datos(texto_estado, nuevo_estado, num_produccion, id_maquina);
+                },
+                function () {
+                    alertify.error('Operacion Cancelada');
+                });
+        }
+    })
+}
+
+var enviar_datos = function (texto_estado, nuevo_estado, num_produccion, id_maquina) {
+    $.ajax({
+        url: `${PATH_NAME}/configuracion/modificar_estado_orden`,
+        type: 'POST',
+        data: { selecciona, nuevo_estado, num_produccion, texto_estado, id_maquina },
+        success: function (res) {
+            console.log(res);
+            // $('#tabla_op').DataTable().ajax.reload();
+            // alertify.success('Orden Produccion Modificada correctamente');
         }
     });
 }
