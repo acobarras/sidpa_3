@@ -33,6 +33,30 @@ class SolicitudPrioritariaControlador extends GenericoControlador
             ]
         );
     }
+
+    public function modal_consulta_prioridad()
+    {
+        header('Content-Type:application/json');
+        $consulta_prioridades = $this->PrioridadesComercialDAO->consultar_prioridades();
+        $datos_prioridad = [];
+        if (!empty($consulta_prioridades)) {
+            foreach ($consulta_prioridades as $value) {
+                $areas = $this->AreaTrabajoDAO->consulta_area_usuario($value->id_user_recibe);
+                $id = explode(",", $value->id_user_recibe);
+                $value->areas_implicada = $areas;
+                $value->mensajes_prioridad = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $_SESSION['usuario']->getId_usuario(), 1);
+                if (in_array($_SESSION['usuario']->getId_usuario(), $id)) {
+                    $consulta_mensajes = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $_SESSION['usuario']->getId_usuario(), 2);
+                    if (empty($consulta_mensajes)) {
+                        array_push($datos_prioridad, $value);
+                    }
+                }
+            }
+        }
+        echo json_encode($datos_prioridad);
+        return;
+    }
+
     public function enviar_solicitud_prioritaria()
     {
         header('Content-Type:application/json');
@@ -191,5 +215,12 @@ class SolicitudPrioritariaControlador extends GenericoControlador
         }
         echo json_encode($prioridades);
         return;
+    }
+
+    public function vista_prioridades()
+    {
+        $this->view(
+            'inicio/modal_prioridades'
+        );
     }
 }

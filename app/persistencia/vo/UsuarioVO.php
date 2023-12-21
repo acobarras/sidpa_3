@@ -28,9 +28,9 @@ class UsuarioVO implements IGenericoVO
         return $this->apellido;
     }
 
-    function getCedula()
+    function getResPrioridad()
     {
-        return $this->cedula;
+        return $this->res_prioridad;
     }
 
     function getPasword()
@@ -83,9 +83,9 @@ class UsuarioVO implements IGenericoVO
         $this->apellido = $apellido;
     }
 
-    function setCedula($cedula)
+    function setResPrioridad($res_prioridad)
     {
-        $this->cedula = $cedula;
+        $this->res_prioridad = $res_prioridad;
     }
 
     function setPasword($pasword)
@@ -162,6 +162,7 @@ class UsuarioVO implements IGenericoVO
     private $nombres;
     private $apellidos;
     private $tipo_clave;
+    private $res_prioridad;
 
     function getTipo_clave()
     {
@@ -190,6 +191,7 @@ class UsuarioVO implements IGenericoVO
         $atributos['fecha_caduca'] = $this->fecha_caduca;
         $atributos['estado_usu'] = $this->estado;
         $atributos['fecha_crea'] = $this->fecha_crea;
+        $atributos['res_prioridad'] = $this->res_prioridad;
 
 
 

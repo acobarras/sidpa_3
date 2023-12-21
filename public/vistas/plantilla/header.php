@@ -191,8 +191,9 @@
                 <?php } ?>
             </div>
         </div>
-        <input type="hidden" id="data_prioridad" value='<?= json_encode($consulta_prioridades); ?>'>
-        <?php
+        <input type="hidden" id="data_prioridad" value='<?= $usuario->getResPrioridad(); ?>'>
+        <div id="vista_modal_final"></div>
+        <!-- <?php
             if ($modal) { ?>
             <div class="modal fade" id="prioridades" tabindex="-1" aria-labelledby="prioridadesLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
@@ -224,7 +225,7 @@
                     </form>
                 </div>
             </div>
-        <?php } ?>
+        <?php } ?> -->
         <?php
             if ($_SESSION['usuario']->getId_roll() == 11) {
                 if (!empty($chequeo)) {
