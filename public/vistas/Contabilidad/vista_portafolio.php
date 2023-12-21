@@ -1,5 +1,6 @@
 <div class="container-fluid mt-3 mb-3">
     <div class="recuadro">
+    <input type="hidden" value="<?= $_SESSION['usuario']->getId_roll() ?>" id="rol" >
         <div id="contenido" class="px-2 py-2 col-lg-12">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
