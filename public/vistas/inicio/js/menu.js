@@ -48,52 +48,70 @@ var cambio_contraseña_user = function () {
 
 var prioridades = function () {
     var data = JSON.parse($('#data_prioridad').val());
-    var tb_prioridades = $(`#tb_prioridades`).DataTable({
-        "data": data,
-        "columns": [
-            { "data": "id_prioridad" },
-            { "data": "mensaje" },
-            { "data": "nombre_empresa" },
-            {
-                "render": function (data, type, row) {
-                    if (row.pedido == 0) {
-                        return 'N/A';
-                    } else {
-                        return row.pedido;
-                    }
-                }
-            },
-            {
-                "render": function (data, type, row) {
-                    if (row.item == 0) {
-                        return 'N/A';
-                    } else {
-                        return row.item;
-                    }
-                }
-            },
-            { "data": "fecha_mensaje" },
-            {
-                "render": function (data, type, row) {
-                    return row.nombre + ' ' + row.apellido;
-                }
-            },
+    if (data == 1) {
+        $.get(`${PATH_NAME}/comercial/vista_prioridades`,
+            function (respu) {
+                $('#vista_modal_final').html(respu);
+                $('#prioridades').modal('show');
+                $.ajax({
+                    url: `${PATH_NAME}/modal_consulta_prioridad`,
+                    type: 'POST',
+                    success: function (res) {
+                        $('#cerrar_modal_prioridad').removeAttr('disabled', false);
+                        console.log(res);
+                        var tb_prioridades = $(`#tb_prioridades`).DataTable({
+                            "data": res,
+                            "columns": [
+                                { "data": "id_prioridad" },
+                                { "data": "mensaje" },
+                                { "data": "nombre_empresa" },
+                                {
+                                    "render": function (data, type, row) {
+                                        if (row.pedido == 0) {
+                                            return 'N/A';
+                                        } else {
+                                            return row.pedido;
+                                        }
+                                    }
+                                },
+                                {
+                                    "render": function (data, type, row) {
+                                        if (row.item == 0) {
+                                            return 'N/A';
+                                        } else {
+                                            return row.item;
+                                        }
+                                    }
+                                },
+                                { "data": "fecha_mensaje" },
+                                {
+                                    "render": function (data, type, row) {
+                                        return row.nombre + ' ' + row.apellido;
+                                    }
+                                },
 
-            {
-                "render": function (data, type, row) {
-                    botones = `
-                <center>
-                    <button type='button' title='responder' class='btn btn-info btn-circle responder'>
-                        <span class="fas fa-search"></span>
-                    </button>
-                <center>`;
-                    return botones;
-                }
-            },
-        ],
-    });
-    respuesta_prioridad('#tb_prioridades tbody', tb_prioridades);
+                                {
+                                    "render": function (data, type, row) {
+                                        botones = `
+                                    <center>
+                                        <button type='button' title='responder' class='btn btn-info btn-circle responder'>
+                                            <span class="fas fa-search"></span>
+                                        </button>
+                                    <center>`;
+                                        return botones;
+                                    }
+                                },
+                            ],
+                        });
+                        respuesta_prioridad('#tb_prioridades tbody', tb_prioridades);
+                        $('#mensaje_prioridad').html('<h3 class="text-success">¡Prioridades cargadas con éxito!</h3>')
+                    }
+                });
+            }
+        );
+    }
 }
+
 var detaConsulta = [];
 var respuesta_prioridad = function (tbody, table) {
     $(tbody).on("click", "button.responder", function () {

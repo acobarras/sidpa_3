@@ -47,6 +47,7 @@ class UsuarioDAO extends GenericoDAO
         $usuario->setApellidos($registro['apellidos']);
         $usuario->setId_persona($registro['id_persona']);
         $usuario->setTipo_clave($registro['tipo_clave']);
+        $usuario->setResPrioridad($registro['res_prioridad']);
         return $usuario;
     }
 
