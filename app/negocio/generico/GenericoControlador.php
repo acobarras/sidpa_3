@@ -98,25 +98,6 @@ abstract class GenericoControlador
         $id = $usuario->getId_persona();
         $parametro = 'inicio';
         $todas_hojas = array();
-        // CONSULTA PRIORIDADES
-        // $consulta_prioridades = $this->PrioridadesComercialDAO->consultar_prioridades();
-        // $datos_prioridad = [];
-        // $muestra = false;
-        // if (!empty($consulta_prioridades)) {
-        //     foreach ($consulta_prioridades as $value) {
-        //         $areas = $this->AreaTrabajoDAO->consulta_area_usuario($value->id_user_recibe);
-        //         $id = explode(",", $value->id_user_recibe);
-        //         $value->areas_implicada = $areas;
-        //         $value->mensajes_prioridad = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $usuario->getId_usuario(), 1);
-        //         if (in_array($usuario->getId_usuario(), $id)) {
-        //             $consulta_mensajes = $this->PrioridadesComercialDAO->consulta_mensajes($value->id_prioridad, $usuario->getId_usuario(), 2);
-        //             if (empty($consulta_mensajes)) {
-        //                 array_push($datos_prioridad, $value);
-        //                 $muestra = true;
-        //             }
-        //         }
-        //     }
-        // }
         // CONSULTA DIAS FESTIVOS
         $dias_festivos = $this->dias_festivosDAO->consultar_dias_festivos();
         $disableddates = '';
@@ -152,8 +133,6 @@ abstract class GenericoControlador
                     "id" => $id,
                     "dia_festivo" => $dia_festivo,
                     "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
-                    // "consulta_prioridades" => $datos_prioridad,
-                    // "modal" => $muestra,
                     "chequeo" => $chequeo,
                 ]
             );
@@ -171,8 +150,6 @@ abstract class GenericoControlador
                     "id" => $id,
                     "dia_festivos" => $dia_festivo,
                     "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
-                    // "consulta_prioridades" => $datos_prioridad,
-                    // "modal" => $muestra,
                     "chequeo" => $chequeo,
                 ]
             );
