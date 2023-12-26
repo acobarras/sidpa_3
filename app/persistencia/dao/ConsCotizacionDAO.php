@@ -58,43 +58,33 @@ class ConsCotizacionDAO extends GenericoDAO
         $dias_resta = RESTA_DIAS_PQR[$dia_semana];
         $letra_mes = PQR_MES[$mes_ano];
         $fecha_fin_mes = $fecha->format('Y-m-d');
-        $fecha_cierre = date("Y-m-d", strtotime($fecha_fin_mes . "- " . $dias_resta . " days"));
-        if ($fecha_dia == $fecha_cierre) {
-            $cambio_mes = new \DateTime(date("Y-m-d", strtotime($fecha_dia . "+ 1 month")));
-            $mes_nuevo = $cambio_mes->format('F');
-            $letra_mes = PQR_MES[$mes_nuevo];
-            $valida = 'PQR-' . $letra_mes . '01-' . $ano;
-            $existe = $this->GestionPqrDAO->valida_numero_pqr($valida);
-            if (empty($existe)) {
-                $num_pqr = 1;
-            } else {
-                $num_pqr = $num_pqr + 1;
-            }
-            $canbio_numero = $num_pqr;
-        } elseif ($fecha_dia >= $fecha_cierre) {
-            $cambio_mes = new \DateTime(date("Y-m-d", strtotime($fecha_dia . "+ 1 month")));
-            $mes_nuevo = $cambio_mes->format('F');
-            $letra_mes = PQR_MES[$mes_nuevo];
+        $fecha_cierre = $fecha_fin_mes;
+        if (FECHA_CIERRE_PQR) {
+            $fecha_cierre = date("Y-m-d", strtotime($fecha_fin_mes . "- " . $dias_resta . " days"));
+            if ($fecha_dia >= $fecha_cierre) {
+                $cambio_mes = new \DateTime(date("Y-m-d", strtotime($fecha_dia . "+ 1 month")));
+                $mes_nuevo = $cambio_mes->format('F');
+                $letra_mes = PQR_MES[$mes_nuevo];
+            } 
+        }
+        $valida = 'PQR-' . $letra_mes . '01-' . $ano;
+        $existe = $this->GestionPqrDAO->valida_numero_pqr($valida);
+        if (empty($existe)) {
+            $num_pqr = 1;
             $canbio_numero = $num_pqr + 1;
-            $num_pqr = $num_pqr + 1;
         } else {
-            $canbio_numero = $num_pqr + 1;
             $num_pqr = $num_pqr + 1;
+            $canbio_numero = $num_pqr;
         }
         $replazo = [1 => '01', 2 => '02', 3 => '03', 4 => '04', 5 => '05', 6 => '06', 7 => '07', 8 => '08', 9 => '09'];
         if ($num_pqr == 1 || $num_pqr == 2 || $num_pqr == 3 || $num_pqr == 4 || $num_pqr == 5 || $num_pqr == 6 || $num_pqr == 7 || $num_pqr == 8 || $num_pqr == 9) {
             $num_pqr = $replazo[$num_pqr];
         }
         $respu = 'PQR-' . $letra_mes . $num_pqr . '-' . $ano;
-        $creado = $this->GestionPqrDAO->valida_numero_pqr($respu);
-        $retorno = '';
-        if (empty($creado)) {
-            $retorno = $respu;
-            $edita_numero = ['numero_guardado' => $canbio_numero];
-            $condicion = 'id_consecutivo = 14';
-            $this->editar($edita_numero, $condicion);
-        }
-        return $retorno;
+        $edita_numero = ['numero_guardado' => $canbio_numero];
+        $condicion = 'id_consecutivo = 14';
+        $this->editar($edita_numero, $condicion);
+        return $respu;
     }
 
     public function consecutivoPedido($id_consecutivo)

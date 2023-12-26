@@ -1,6 +1,7 @@
 <?php
 
 const IVA = 0.16;
+const FECHA_CIERRE_PQR = false;
 const PORCENTAJE_SOBRE_CUPO = 0.20;
 const GAP_LATERAL = 3.5;
 const RESPONSABLE = '1013579582';
