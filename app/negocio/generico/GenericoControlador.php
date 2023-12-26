@@ -176,11 +176,6 @@ abstract class GenericoControlador
                 'status' => -1,
                 'msg' => 'la estructura del codigo es errada'
             ];
-            // foreach (HOMOLOGO as $value) {
-            //     if ($value['tipo_material'] == $datos_material[0]->id_tipo_material && $value['adh'] == $adh) {
-            //         $adh = $value['letra'];
-            //     }
-            // }
         } else {
             $datos_adh = $this->AdhesivoDAO->validar_adhesivo($adh);
             $tintas = Validacion::DesgloceCodigo($codigo_producto, 6, 2);
