@@ -201,12 +201,12 @@ class Orden_produccionControlador extends GenericoControlador
                     $editar_item = [
                         'n_produccion' => 0,
                     ];
-                    $condicion_item = 'id_pedido_item =' . $value->id_pedido_item;
+                    $condicion_item = 'id_pedido_item =' . $value['id_pedido_item'];
                     $item_edita = $this->PedidosItemDAO->editar($editar_item, $condicion_item);
                 }
                 $seguimiento_item_op = [
                     'num_produccion' => $datos['num_produccion'],
-                    'id_maquina',
+                    'id_maquina' => $datos['id_maquina'],
                     'id_persona' => $_SESSION['usuario']->getId_persona(),
                     'id_area' => 3, //area produccion
                     'id_actividad' => 104,
@@ -218,7 +218,7 @@ class Orden_produccionControlador extends GenericoControlador
                 $this->SeguimientoProduccionDAO->insertar($seguimiento_item_op);
 
                 $editar = [
-                    'n_produccion' => 14,
+                    'estado_item_producir' => 14,
                 ];
                 $condicion = 'num_produccion =' . $datos['num_produccion'];
                 $nuevo = $this->ItemProducirDAO->editar($editar, $condicion);
@@ -242,13 +242,13 @@ class Orden_produccionControlador extends GenericoControlador
                     $editar_item = [
                         'n_produccion' => 0,
                     ];
-                    $condicion_item = 'id_pedido_item =' . $value->id_pedido_item;
+                    $condicion_item = 'id_pedido_item =' . $value['id_pedido_item'];
                     $nuevo = $this->PedidosItemDAO->editar($editar_item, $condicion_item);
                 }
 
                 $seguimiento_item_op = [
                     'num_produccion' => $datos['num_produccion'],
-                    'id_maquina',
+                    'id_maquina' => $datos['id_maquina'],
                     'id_persona' => $_SESSION['usuario']->getId_persona(),
                     'id_area' => 3, //area produccion
                     'id_actividad' => 104,
