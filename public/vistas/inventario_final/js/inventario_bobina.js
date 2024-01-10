@@ -10,8 +10,8 @@ var inventario_bobinas = {
         inventario_bobinas.cargar_tabla();
         $("#conteo_bobinas").on('click', '.borrar', inventario_bobinas.borrar_item);
         $('.registro_conteo_bob').on('click', inventario_bobinas.registro_form_conteo);
-        $('#ancho_bob').keyup(inventario_bobinas.calcula_entrada);
-        $('#metros_bob').keyup(inventario_bobinas.calcula_entrada);
+        $('#ancho_bob').blur(inventario_bobinas.calcula_entrada);
+        $('#metros_bob').blur(inventario_bobinas.calcula_entrada);
         $('#ubicacion_bob').select2();
 
     },
@@ -25,6 +25,7 @@ var inventario_bobinas = {
         $('#ancho_bob').val(ancho);
         $('#metros_bob').val(metros);
         inventario_bobinas.valida_codigoProduct();
+        inventario_bobinas.calcula_entrada();
     },
     valida_operario: function () {
         let newUsu = $('#id_usuario_bob').val().replace(/ /g, "");
@@ -157,9 +158,11 @@ var inventario_bobinas = {
         } else {
             var respu = false;
             valida_storage.forEach(element => {
-                if (element.codigo_producto == datos.codigo_producto) {
+                if (element.codigo_producto == datos.codigo_producto && element.ancho == datos.ancho) {
                     var nuevo = parseFloat(element.entrada) + parseFloat(datos.entrada);
+                    var nuevometros = parseFloat(element.metros) + parseFloat(datos.metros);
                     element['entrada'] = nuevo;
+                    element['metros'] = nuevometros;
                     respu = true;
                 }
             });
@@ -188,7 +191,7 @@ var inventario_bobinas = {
             storage.forEach(element => {
                 $('#ubicacion_bob').val(element.ubicacion);
                 $('#id_usuario_bob').val(element.num_usuario);
-                $('#id_usuario_bob').on('click', inventario_bobinas.valida_operario);
+                // $('#id_usuario_bob').on('click', inventario_bobinas.valida_operario);
                 $('#id_usuario_bob').click();
                 if (element.estado == 1) {
                     $("#conteo_bob").prop("checked", true);

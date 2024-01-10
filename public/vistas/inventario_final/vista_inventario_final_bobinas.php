@@ -90,7 +90,7 @@
                                                     <td><b>Código Producto</b></td>
                                                     <td><b>Ancho</b></td>
                                                     <td><b>Metros</b></td>
-                                                    <td><b>Cantidad</b></td>
+                                                    <td><b>Metros cuadrados</b></td>
                                                     <td><b>Canasta</td>
                                             </thead>
                                             <tbody id="data_item_bob"></tbody>
