@@ -30,6 +30,13 @@ class ReporteControlador extends GenericoControlador
         header('Content-Type: application/json');
         $num_consulta = $_POST['formulario'][0]["value"];
         $year =  date("Y");
+        if (isset($_POST['formulario'][1]["value"])) {
+            $mes_actual = date("n");
+            $mes_consulta = $_POST['formulario'][1]["value"];
+            if ($mes_consulta > $mes_actual) {
+                $year =  date("Y") - 1;
+            }
+        }
         switch ($num_consulta) {
             case '1': // visitas
                 $mes = $_POST['formulario'][1]["value"];
@@ -76,8 +83,8 @@ class ReporteControlador extends GenericoControlador
             $apellido_usuario = $datos[0]->apellido_usuario;
             $imagen = $datos[0]->firma_cli;
             $recibido = $datos[0]->recibido;
-            for ($i=0; count($datos) > $i ; $i++) { 
-                $datos[$i] = get_object_vars($datos[$i]) ;
+            for ($i = 0; count($datos) > $i; $i++) {
+                $datos[$i] = get_object_vars($datos[$i]);
             };
             $respu = PDF::crea_remision_equipos($datos, $estado, $nombre_usuario, $sede, $nota, $apellido_usuario, $imagen, $recibido);
         }
