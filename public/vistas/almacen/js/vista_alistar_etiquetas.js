@@ -1,6 +1,7 @@
 $(document).ready(function () {
     tb_alistamiento_etiquetas();
     envio_alistamiento_checked();
+    ubicaciones();
 });
 
 var tb_alistamiento_etiquetas = function () {
@@ -89,9 +90,13 @@ var observaciones_ver = function (tbody, table) {
 
 }
 
+var UBICACIONES = [];
+
 var alistamiento_checked = function (tbody, table) {
     $(tbody).on('click', 'button.logistica_checked', function () {
         var data = table.row($(this).parents('tr')).data();
+        UBICACIONES = [];
+        cargar_span();
         $('#tipo_envio').val(1);// valor para saber si es un reporte parcial o completo "1" completo 
         $("#btn_reportar_factu_etiq").attr('data-id', JSON.stringify(data));
         if (data.alista_inv == 1 || data.cant_bodega == 0) {
@@ -101,6 +106,7 @@ var alistamiento_checked = function (tbody, table) {
         }
     });
 }
+
 var logistica_regresar_op = function (tbody, table) {
     $(tbody).on('click', 'button.logistica_regresar_op', function () {
         var data = table.row($(this).parents('tr')).data();
@@ -114,14 +120,55 @@ var logistica_regresar_op = function (tbody, table) {
     });
 }
 
+var ubicaciones = function () {
+    $('#ubicacion_materialmodal').on('change', function () {
+        var ubicacion = $('#ubicacion_materialmodal').val();
+        $('#ubicacion_materialmodal').val('**********');
+        var array = ubicacion.split(";");
+        if (array[0] != '!$' || array[1] != 'UBI') {
+            alertify.error('La ubicacion que esta tratando de ingresar no cumple');
+            $('#ubicacion_materialmodal').val('');
+            $('#ubicacion_materialmodal').focus();
+            return;
+        }
+        var ubicacion_com = array[2] + array[3];
+        $('#ubicacion_materialmodal').val('');
+
+        var agregar = UBICACIONES.find(element => element == ubicacion_com) ?? false;
+        if (!agregar) {
+            UBICACIONES.push(ubicacion_com);
+        } else {
+            alertify.error('Ya se cargo esta ubicacion');
+        }
+        cargar_span();
+    })
+}
+
+var cargar_span = function () {
+    var html = '';
+    UBICACIONES.forEach((element, a) => {
+        html += `${element} <button class="btn btn-danger btn-sm btn_eliminar" type="button" title="Eliminar Ubi" data-posicion="${a}"><i class="fas fa-trash-alt"></i></button><br>`
+    });
+    $('.span_ubi').html(html);
+    eliminar_ubi();
+}
+
+var eliminar_ubi = function () {
+    $('.btn_eliminar').on('click', function () {
+        var posicion = $(this).data('posicion');
+        UBICACIONES.splice(posicion, 1);
+        cargar_span();
+    })
+}
+
+
 var envio_alistamiento_checked = function () {
     $("#form_reporta_factu_etiq").on('submit', function (e) {
         e.preventDefault();
         var data = JSON.parse($("#btn_reportar_factu_etiq").attr('data-id'));
         var form = $(this).serializeArray();
         var form1 = $(this).serialize();
-        var excepcion = ['ubicacion_material'];
-        var valida = validar_formulario(form, excepcion);
+        var valida = validar_formulario(form);
         if (valida) {
             var obj_inicial = $(`#btn_reportar_factu_etiq`).html();
             btn_procesando(`btn_reportar_factu_etiq`);

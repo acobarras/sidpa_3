@@ -58,7 +58,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
             'almacen/vista_entrada_tecnologia',
             [
                 "proovedor" => $this->clientes_proveedorDAO->consultar_proovedor(),
-                //esta funcion trae el tipo de ubicasion de las tecnologias 
+                //esta funcion trae el tipo de ubicasion de las tecnologias
                 "ubicacion" => $this->ubicacionesDAO->tipo_producto_ubicaciones(3)
             ]
         );
@@ -188,10 +188,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
     {
         parent::cabecera();
         $this->view(
-            'almacen/vista_alistar_items',
-            [
-                "ubicacion_despacho" => $this->ubicacionesDAO->ubicacion_despacho()
-            ]
+            'almacen/vista_alistar_items'
         );
     }
     /*
@@ -266,7 +263,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
                 $this->EntregasLogisticaDAO->insertar($data);
             } else {
                 $nueva_cantidad = $_POST['salida'] + $valida_reporte[0]->cantidad_factura;
-                $ubicacion_material = $_POST['ubicacion_material'] + $valida_reporte[0]->ubicacion_material;
+                $ubicacion_material = $_POST['ubicacion_material'] + ',' + $valida_reporte[0]->ubicacion_material;
                 $data['cantidad_factura'] = $nueva_cantidad;
                 $data['ubicacion_material'] = $ubicacion_material;
                 $condicion = 'id_entrega=' . $valida_reporte[0]->id_entrega;
@@ -390,7 +387,6 @@ class AlmacenTecnologiaControlador extends GenericoControlador
             $data = [
                 'id_pedido_item' => $datos['datos_item'][0]['id_pedido_item'],
                 'cantidad_factura' => $_POST['salida'],
-                'ubicacion_material' => $_POST['ubicacion_material'],
                 'id_usuario' => $_SESSION['usuario']->getid_usuario(),
                 'estado' => 1,
                 'fecha_crea' => date('y-m-d'),
@@ -399,9 +395,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
             $this->EntregasLogisticaDAO->insertar($data);
         } else {
             $nueva_cantidad = $_POST['salida'] + $valida_reporte[0]->cantidad_factura;
-            $ubicacion_material = $_POST['ubicacion_material'] + $valida_reporte[0]->ubicacion_material;
             $data['cantidad_factura'] = $nueva_cantidad;
-            $data['ubicacion_material'] = $ubicacion_material;
             $condicion = 'id_entrega=' . $valida_reporte[0]->id_entrega;
             $this->EntregasLogisticaDAO->editar($data, $condicion);
         }

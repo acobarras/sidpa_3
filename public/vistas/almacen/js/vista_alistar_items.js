@@ -4,6 +4,7 @@ $(document).ready(function () {
     envio_cantidad_reproceso();
     envia();
     tablas();
+    ubicaciones();
 });
 
 var click = function () {
@@ -171,10 +172,13 @@ var envio_completo = function (tbody, table, reload, alistamiento) {
 
     });
 }
+var UBICACIONES = [];
 
 var tablas = function () {
     $('#dt_alistamiento_bod_completo, #dt_alistamiento_bod_incompleto').on('click', 'tr button.report_cant_factu', function () {
         $('#ubicacion').modal('show');
+        UBICACIONES = [];
+        cargar_span();
         var tablaDT = $(this).data('tabla');
         var alistamiento = $(this).attr('data_alistamiento');
         var data = $(`${tablaDT}`).DataTable().row($(this).parents("tr")).data();
@@ -184,13 +188,59 @@ var tablas = function () {
     })
 }
 
+var ubicaciones = function () {
+    $('#ubicacion_materialmodal').on('change', function () {
+        var ubicacion = $('#ubicacion_materialmodal').val();
+        $('#ubicacion_materialmodal').val('**********');
+        var array = ubicacion.split(";");
+        if (array[0] != '!$' || array[1] != 'UBI') {
+            alertify.error('La ubicacion que esta tratando de ingresar no cumple');
+            $('#ubicacion_materialmodal').val('');
+            $('#ubicacion_materialmodal').focus();
+            return;
+        }
+        var ubicacion_com = array[2] + array[3];
+        $('#ubicacion_materialmodal').val('');
+        var agregar = UBICACIONES.find(element => element == ubicacion_com) ?? false;
+        if (!agregar) {
+            UBICACIONES.push(ubicacion_com);
+        } else {
+            alertify.error('Ya se cargo esta ubicacion');
+        }
+        cargar_span();
+    })
+}
+
+var cargar_span = function () {
+    var html = '';
+    console.log(UBICACIONES);
+    UBICACIONES.forEach((element, a) => {
+        html += `${element} <button class="btn btn-danger btn-sm btn_eliminar" type="button" title="Eliminar Ubi" data-posicion="${a}"><i class="fas fa-trash-alt"></i></button><br>`
+    });
+    $('.span_ubi').html(html);
+    eliminar_ubi();
+}
+
+var eliminar_ubi = function () {
+    $('.btn_eliminar').on('click', function (e) {
+        e.preventDefault();
+        console.log('hola');
+        var posicion = $(this).data('posicion');
+        UBICACIONES.splice(posicion, 1);
+        cargar_span();
+    })
+}
+
 var envia = function () {
     $('#modal_ubica').on('click', function (e) {
         e.preventDefault();
         var data = $(this).data('item');
-        var ubicacion = $('#ubicacion_materialmodal').val();
+        if (UBICACIONES.length == 0) {
+            alertify.error('Tiene que colocar una ubicacion');
+            return;
+        }
         var obj_inicial = $(`#modal_ubica`).html();
-        data.ubicacion_material = ubicacion;
+        data.ubicacion_material = UBICACIONES.toString();
         btn_procesando_tabla(`modal_ubica`);
         $.ajax({
             url: `${PATH_NAME}/almacen/crea_entrega_logistica`,
@@ -239,7 +289,6 @@ var envio_cantidad_reproceso = function () {
     $(`#bt_reprocesar_item`).on('click', function () {
         var data = JSON.parse($(this).attr('data'));
         var cantidad = $("#cantidad").val();
-        var ubicacion_material = $("#ubicacion_material").val();
         if (cantidad == 0 || cantidad == '') {
             alertify.error('La cantidad no puede ser 0 o vacia.');
         } else {
@@ -250,7 +299,6 @@ var envio_cantidad_reproceso = function () {
                 btn_procesando(`bt_reprocesar_item`, obj_inicial, 1);
             } else {
                 data.salida = cantidad;
-                data.ubicacion_material = ubicacion_material;
                 $.ajax({
                     url: `${PATH_NAME}/almacen/reportar_cant_reproceso`,
                     type: "POST",

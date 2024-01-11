@@ -96,12 +96,8 @@
                                 </div>
                                 <div>
                                     <label for="ubicacion_material">Ubicación:</label>
-                                    <select class="form-control select_2" name="ubicacion_material" id="ubicacion_material" style="width: 100%;">
-                                        <option value="0"></option>
-                                        <?php foreach ($ubicacion_despacho as $ubicacion_despacho) { ?>
-                                            <option value="<?= $ubicacion_despacho->id ?>"><?= $ubicacion_despacho->nombre_ubicacion ?></option>
-                                        <?php } ?>
-                                    </select>
+                                    <input type="text" class="form-control" id="ubicacion_materialmodal" name="ubicacion_material">
+                                    <span class="text-primary">Las Ubicaciones seleccionadas son:</span><br><span class="text-danger span_ubi"></span>
                                 </div>
                             </div>
                         </div>

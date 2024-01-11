@@ -103,15 +103,6 @@
                                 <label for="cantidad" class="col-form-label">Cantidad:</label>
                                 <input type="text" class="form-control" id="cantidad" name="cantidad">
                             </div>
-                            <div>
-                                <label for="ubicacion_material">Ubicación:</label>
-                                <select class="form-control select_2" name="ubicacion_material" id="ubicacion_material" style="width: 100%;">
-                                    <option value="0"></option>
-                                    <?php foreach ($ubicacion_despacho as $ubicacion) { ?>
-                                        <option value="<?= $ubicacion->id ?>"><?= $ubicacion->nombre_ubicacion ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
                             <br>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
@@ -141,12 +132,8 @@
                         <form id="form_ubicacion">
                             <div>
                                 <label for="ubicacion_materialmodal">Ubicación:</label>
-                                <select class="form-control select_2" name="ubicacion_material" id="ubicacion_materialmodal" style="width: 100%;">
-                                    <option value="0"></option>
-                                    <?php foreach ($ubicacion_despacho as $value) { ?>
-                                        <option value="<?= $value->id ?>"><?= $value->nombre_ubicacion ?></option>
-                                    <?php } ?>
-                                </select>
+                                <input type="text" class="form-control" id="ubicacion_materialmodal" name="ubicacion_material">
+                                <span class="text-primary">Las Ubicaciones seleccionadas son:</span><br><span class="text-danger span_ubi"></span>
                             </div>
                             <br>
                             <div class="modal-footer">

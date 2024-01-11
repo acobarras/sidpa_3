@@ -43,10 +43,7 @@ class AlistaTecnologiaControlador extends GenericoControlador
     {
         parent::cabecera();
         $this->view(
-            'almacen/vista_alistar_tecnologia',
-            [
-                'ubicacion_despacho' => $this->ubicacionesDAO->ubicacion_despacho()
-            ]
+            'almacen/vista_alistar_tecnologia'
         );
     }
     public function reportar_facturacion()

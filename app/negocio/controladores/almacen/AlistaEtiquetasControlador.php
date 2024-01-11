@@ -54,10 +54,7 @@ class AlistaEtiquetasControlador extends GenericoControlador
         parent::cabecera();
 
         $this->view(
-            'almacen/vista_alistar_etiquetas',
-            [
-                'ubicacion_despacho' => $this->ubicacionesDAO->ubicacion_despacho()
-            ]
+            'almacen/vista_alistar_etiquetas'
         );
     }
     public function consultar_items_op()
