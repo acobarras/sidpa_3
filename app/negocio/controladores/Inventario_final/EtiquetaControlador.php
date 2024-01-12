@@ -39,7 +39,8 @@ class EtiquetaControlador extends GenericoControlador
     public function consultar_codigos()
     {
         header('Content-Type: application/json');
-        $producto = $this->productosDAO->consultar_productos_especifico($_POST['codigo']);
+        // EL 1 es bobinas e insumos, 2 son etiquetas, 3 es tecnologia
+        $producto = $this->productosDAO->consultar_productos_inv($_POST['tipo_producto']);
         echo json_encode($producto);
     }
     public function ValidarConteo()

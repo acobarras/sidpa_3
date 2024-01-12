@@ -35,11 +35,11 @@ class productosDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function consultar_productos_clase_articulo($clase)
+    public function consultar_productos_clase_articulo($clase, $condi = '')
     {
         $sql = "SELECT t1.*, t2.nombre_articulo FROM productos t1 
             INNER JOIN tipo_articulo t2 ON t1.id_tipo_articulo = t2.id_tipo_articulo 
-            WHERE t2.id_clase_articulo = '$clase'";
+            WHERE t2.id_clase_articulo = '$clase' $condi";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
@@ -241,10 +241,20 @@ class productosDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
-    
+
     public function consulta_cod_bobinas($cod_antiguo, $cod_nuevo)
     {
         $sql = "SELECT * FROM `productos` WHERE codigo_producto = '$cod_antiguo'OR codigo_producto = '$cod_nuevo'";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+    public function consultar_productos_inv($tipo_articulo)
+    {
+        $sql = "SELECT t1.id_productos,t1.codigo_producto,t1.descripcion_productos,t1.id_tipo_articulo,t2.nombre_articulo,t2.id_clase_articulo FROM productos t1 
+        INNER JOIN tipo_articulo t2 ON t2.id_tipo_articulo=t1.id_tipo_articulo 
+        WHERE t2.id_clase_articulo =$tipo_articulo AND t1.estado_producto!=0;";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);

@@ -51,7 +51,7 @@ class PrioridadesControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $formulario = Validacion::Decodifica($_POST['form']);
-        if ($formulario['id_prioridad'] == 0) {
+        if ($formulario['id_prioridad'] == 0 || $formulario['id_prioridad'] == '') {
             // CREACION POR PRIMERA VEZ
             $id_usuario = $_SESSION['usuario']->getId_usuario();
             $formulario = [
