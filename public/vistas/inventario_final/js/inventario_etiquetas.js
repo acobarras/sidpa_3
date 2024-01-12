@@ -1,3 +1,23 @@
+$(document).ready(function () {
+    consulta_productos_inv();
+    conteo_inventario.valida_operario();
+});
+
+var PRODUCTOS = [];
+var consulta_productos_inv = function () {
+    var tipo_producto = 2;
+    $('#cargando').css('display', 'block');
+    $.ajax({
+        url: `${PATH_NAME}/inventario_final/consultar_codigos`,
+        type: "POST",
+        data: { tipo_producto },
+        success: function (res) {
+            $('#cargando').css('display', 'none');
+            $('#myTabContent').removeClass('d-none');
+            PRODUCTOS = res;
+        }
+    });
+}
 var CanastaInventario = [];
 var estado = 0;
 
@@ -51,27 +71,21 @@ var conteo_inventario = {
             let entrada = codigo.substr(num_coma + 1);
             $('#entrada').val(entrada);
         }
-        $.ajax({
-            url: `${PATH_NAME}/inventario_final/consultar_codigos`,
-            type: "POST",
-            data: { codigo },
-            success: function (res) {
-                if (res == '') {
-                    $("#span_codigo_C").empty().css('color', 'red').html(`NO EXISTE ESTE CODIGO DE PRODUCTO!!`);
-                    $("#id_producto").val('');
-                } else {
-                    if (res[0].id_tipo_articulo == 1) {
-                        $("#id_producto").val(res[0].id_productos);
-                        $("#span_codigo_C").empty().css('color', 'blue').html(`CODIGO: ${res[0].descripcion_productos}`);
-                        $('#entrada').focus();
+        var existencia = PRODUCTOS.find(element => element.codigo_producto === newCod) ?? false;
+        if (existencia != false) {
+            if (existencia.id_tipo_articulo == 1) {
+                $("#id_producto").val(existencia.id_productos);
+                $("#span_codigo_C").empty().css('color', 'blue').html(`CODIGO: ${existencia.descripcion_productos}`);
+                $('#entrada').focus();
 
-                    } else {
-                        $("#span_codigo_C").empty().css('color', 'red').html(`ESTE CODIGO DE PRODUCTO NO PERTENECE A UNA ETIQUETA!!`);
-                        $("#id_producto").val('');
-                    }
-                }
+            } else {
+                $("#span_codigo_C").empty().css('color', 'red').html(`ESTE CODIGO DE PRODUCTO NO PERTENECE A UNA ETIQUETA!!`);
+                $("#id_producto").val('');
             }
-        });
+        } else {
+            $("#span_codigo_C").empty().css('color', 'red').html(`NO EXISTE ESTE CODIGO DE PRODUCTO!!`);
+            $("#id_producto").val('');
+        }
     },
     validacion_form_conteo: function () {
         var form_validation = $("#form_conteo").serializeArray();
@@ -168,7 +182,7 @@ var conteo_inventario = {
             storage.forEach(element => {
                 $("#ubicacion").val(element.ubicacion);
                 $('#id_usuario').val(element.num_usuario);
-                $('#id_usuario').on('click', conteo_inventario.valida_operario);
+                // $('#id_usuario').on('click', conteo_inventario.valida_operario);
                 $('#id_usuario').click();
                 if (element.estado == 1) {
                     $("#conteo").prop("checked", true);

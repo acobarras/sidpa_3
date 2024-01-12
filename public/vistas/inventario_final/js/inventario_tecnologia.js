@@ -1,5 +1,26 @@
+$(document).ready(function () {
+    consulta_productos_inv();
+    inventario_tecnologia.valida_operario();
+});
+
+var PRODUCTOS = [];
+var consulta_productos_inv = function () {
+    var tipo_producto = 3;
+    $('#cargando').css('display', 'block');
+    $.ajax({
+        url: `${PATH_NAME}/inventario_final/consultar_codigos`,
+        type: "POST",
+        data: { tipo_producto },
+        success: function (res) {
+            $('#cargando').css('display', 'none');
+            $('#myTabContent').removeClass('d-none');
+            PRODUCTOS = res;
+        }
+    });
+}
 var CanastaInventario = [];
 var estado = 0;
+
 var inventario_tecnologia = {
     init: function () {
         $('#id_usuario_tec').blur(inventario_tecnologia.valida_operario);
@@ -10,16 +31,17 @@ var inventario_tecnologia = {
         $("#conteo_tecnologia").on('click', '.borrar', inventario_tecnologia.borrar_item);
         $('.registro_conteo_tec').on('click', inventario_tecnologia.registro_form_conteo);
         $('#ubicacion_tec').select2();
-
     },
     cambio_cod: function () {
-        var data = $("#codigo_producto_tec").val();
-        var cant = data.split(';');
-        var codigo = cant['0'];
+        var codigo = $("#codigo_producto_tec").val();
+        var cant = codigo.split(';');
         var cantidad = cant['1'];
-        $('#codigo_producto_tec').val(codigo);
-        $('#entrada_tec').val(cantidad);
-        inventario_tecnologia.valida_codigoProduct();
+        let num_coma = codigo.indexOf(";");
+        if (num_coma != -1) {
+            $('#codigo_producto_tec').val(codigo.substr(0, num_coma));
+            $('#entrada_tec').val(cantidad);
+            inventario_tecnologia.valida_codigoProduct();
+        }
     },
     valida_operario: function () {
         let newUsu = $('#id_usuario_tec').val().replace(/ /g, "");
@@ -40,33 +62,29 @@ var inventario_tecnologia = {
                 }
             }
         });
-
     },
     valida_codigoProduct: function () {
         let newCod = ($('#codigo_producto_tec').val().replace(/ /g, "")).toUpperCase();
-        $('#codigo_producto_tec').val(newCod);
         let codigo = $("#codigo_producto_tec").val();
-        $.ajax({
-            url: `${PATH_NAME}/inventario_final/consultar_codigos`,
-            type: "POST",
-            data: { codigo },
-            success: function (res) {
-                if (res == '') {
-                    $("#codigo_producto_tec").focus();
-                    $("#span_codigo_CT").empty().css('color', 'red').html(`NO EXISTE ESTE CODIGO DE PRODUCTO!!`);
-                    $("#id_producto_tec").val('');
-                } else {
-                    if (res[0].id_tipo_articulo != 1 && res[0].id_tipo_articulo != 4) {
-                        $("#id_producto_tec").val(res[0].id_productos);
-                        $("#span_codigo_CT").empty().css('color', 'blue').html(`CODIGO: ${res[0].descripcion_productos}`);
-                    } else {
-                        $("#codigo_producto_tec").focus();
-                        $("#span_codigo_CT").empty().css('color', 'red').html(`ESTE CODIGO DE PRODUCTO NO PERTENECE A UNA TECNOLOGIA!!`);
-                        $("#id_producto_tec").val('');
-                    }
-                }
+        $('#codigo_producto_tec').val(newCod);
+        let num_coma = codigo.indexOf(";");
+        if (num_coma != -1) {
+            let entrada = codigo.substr(num_coma + 1);
+            $('#entrada').val(entrada);
+        }
+        var existencia = PRODUCTOS.find(element => element.codigo_producto === newCod) ?? false;
+        if (existencia != false) {
+            if (existencia.id_tipo_articulo != 1 && existencia.id_tipo_articulo != 4) {
+                $("#id_producto_tec").val(existencia.id_productos);
+                $("#span_codigo_CT").empty().css('color', 'blue').html(`CODIGO: ${existencia.descripcion_productos}`);
+            } else {
+                $("#span_codigo_CT").empty().css('color', 'red').html(`ESTE CODIGO DE PRODUCTO NO PERTENECE A UNA TECNOLOGIA!!`);
+                $("#id_producto_tec").val('');
             }
-        });
+        } else {
+            $("#span_codigo_CT").empty().css('color', 'red').html(`NO EXISTE ESTE CODIGO DE PRODUCTO!!`);
+            $("#id_producto_tec").val('');
+        }
     },
     validacion_form_conteo: function () {
         var form_validation = $("#form_conteo_tec").serializeArray();
@@ -111,8 +129,8 @@ var inventario_tecnologia = {
         }
     },
     agrega_local_storage: function () {
-        var obj_inicial = $(`#registro_conteo_tec`).html();
-        btn_procesando(`registro_conteo_tec`);
+        var obj_inicial = $(`#envio_conteo_tec`).html();
+        btn_procesando(`envio_conteo_tec`);
         var valida_storage = JSON.parse(localStorage.getItem('canasta_tec'));
         if (valida_storage != null) {
             $('#ubicacion_tec').attr('disabled', 'disabled')
@@ -147,13 +165,12 @@ var inventario_tecnologia = {
             }
         }
         localStorage.setItem('canasta_tec', JSON.stringify(CanastaInventario));
-        btn_procesando(`registro_conteo_tec`, obj_inicial, 1);
+        btn_procesando(`envio_conteo_tec`, obj_inicial, 1);
         inventario_tecnologia.cargar_tabla();
         $("#span_codigo_CT").empty();
         $("#codigo_producto_tec").val('');
         $("#entrada_tec").val('');
         $("#codigo_producto_tec").focus();
-
     },
     cargar_tabla: function () {
         var cadena = '';
@@ -166,7 +183,7 @@ var inventario_tecnologia = {
             storage.forEach(element => {
                 $('#ubicacion_tec').val(element.ubicacion);
                 $('#id_usuario_tec').val(element.num_usuario);
-                $('#id_usuario_tec').on('click', inventario_tecnologia.valida_operario);
+                // $('#id_usuario_tec').on('click', inventario_tecnologia.valida_operario);
                 $('#id_usuario_tec').click();
                 if (element.estado == 1) {
                     $("#conteo_tec").prop("checked", true);
@@ -191,14 +208,14 @@ var inventario_tecnologia = {
         }
     },
     permiso_verificacion: function () {
-        var obj_inicial = $(`#registro_conteo_tec`).html();
-        btn_procesando(`registro_conteo_tec`);
+        var obj_inicial = $(`#envio_conteo_tec`).html();
+        btn_procesando(`envio_conteo_tec`);
         $.ajax({
             url: `${PATH_NAME}/inventario_final/ValidarConteo`,
             type: "POST",
             data: { ubicacion: $('#ubicacion_tec').val() },
             success: function (res) {
-                btn_procesando(`registro_conteo_tec`, obj_inicial, 1);
+                btn_procesando(`envio_conteo_tec`, obj_inicial, 1);
 
                 if (res == '') {
                     $("#modal_no_verify_tec").modal("show");
@@ -214,14 +231,14 @@ var inventario_tecnologia = {
         });
     },
     permiso_conteo: function () {
-        var obj_inicial = $(`#registro_conteo_tec`).html();
-        btn_procesando(`registro_conteo_tec`);
+        var obj_inicial = $(`#envio_conteo_tec`).html();
+        btn_procesando(`envio_conteo_tec`);
         $.ajax({
             url: `${PATH_NAME}/inventario_final/ValidarConteo`,
             type: "POST",
             data: { ubicacion: $('#ubicacion_tec').val() },
             success: function (res) {
-                btn_procesando(`registro_conteo_tec`, obj_inicial, 1);
+                btn_procesando(`envio_conteo_tec`, obj_inicial, 1);
                 if (res == '') {
                     inventario_tecnologia.agrega_local_storage();
                 } else {
@@ -259,7 +276,6 @@ var inventario_tecnologia = {
             $("#span_operario_CT").empty();
             $('#ubicacion_tec').val(0).trigger('change');
             CanastaInventario = [];
-
         }
     },
     registro_form_conteo: function () {

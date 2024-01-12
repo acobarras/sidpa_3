@@ -6,7 +6,13 @@
                     <a class="nav-link active" id="etiquetas-tab" data-bs-toggle="tab" href="#etiquetas" role="tab" aria-controls="Etiquetas" aria-selected="true">Etiquetas</a>
                 </div>
             </nav>
-            <div class="tab-content" id="myTabContent">
+            <div id="cargando" class="text-center">
+                <button class="btn" disabled>
+                    <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                    <span role="status">Cargando...</span>
+                </button>
+            </div>
+            <div class="tab-content d-none" id="myTabContent">
                 <!-- Primer link -->
                 <div class="tab-pane fade show active" id="etiquetas" role="tabpanel" aria-labelledby="etiquetas-tab">
                     <br>
@@ -85,7 +91,7 @@
                                             </thead>
                                             <tbody id="data_item"></tbody>
                                         </table>
-                                    </div><br>                    
+                                    </div><br>
                                     <div class="d-grid gap-2 col-6 mx-auto">
                                         <button type="button" class="btn btn-success registro_conteo" id="registro_conteo">Registrar</button>
                                     </div>
@@ -113,7 +119,8 @@
             </div>
             <div class="modal-body">
                 <div class="container recuadro">
-                    <br><p class="text-center" id="text_modal"></p><br>
+                    <br>
+                    <p class="text-center" id="text_modal"></p><br>
                 </div>
             </div>
             <div class="modal-footer">

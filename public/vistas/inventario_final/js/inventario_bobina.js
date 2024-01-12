@@ -1,6 +1,27 @@
+$(document).ready(function () {
+    consulta_productos_inv();
+    inventario_bobinas.valida_operario();
+});
+
+var PRODUCTOS = [];
+var consulta_productos_inv = function () {
+    var tipo_producto = 1;
+    $('#cargando').css('display', 'block');
+    $.ajax({
+        url: `${PATH_NAME}/inventario_final/consultar_codigos`,
+        type: "POST",
+        data: { tipo_producto },
+        success: function (res) {
+            $('#cargando').css('display', 'none');
+            $('#myTabContent').removeClass('d-none');
+            $('#entrada_bob').attr('disabled', 'disabled');
+            PRODUCTOS = res;
+        }
+    });
+}
 var CanastaInventario = [];
 var estado = 0;
-$('#entrada_bob').attr('disabled', 'disabled');
+
 var inventario_bobinas = {
     init: function () {
         $('#id_usuario_bob').blur(inventario_bobinas.valida_operario);
@@ -13,7 +34,6 @@ var inventario_bobinas = {
         $('#ancho_bob').blur(inventario_bobinas.calcula_entrada);
         $('#metros_bob').blur(inventario_bobinas.calcula_entrada);
         $('#ubicacion_bob').select2();
-
     },
     cambio_cod: function () {
         var data = $("#codigo_producto_bob").val();
@@ -51,28 +71,20 @@ var inventario_bobinas = {
         let newCod = ($('#codigo_producto_bob').val().replace(/ /g, "")).toUpperCase();
         $('#codigo_producto_bob').val(newCod);
         let codigo = $("#codigo_producto_bob").val();
-        $.ajax({
-            url: `${PATH_NAME}/inventario_final/consultar_codigos`,
-            type: "POST",
-            data: { codigo },
-            success: function (res) {
-                if (res == '') {
-                    $("#codigo_producto_bob").focus();
-                    $("#span_codigo_CB").empty().css('color', 'red').html(`NO EXISTE ESTE CODIGO DE PRODUCTO!!`);
-                    $("#id_producto_bob").val('');
-                } else {
-                    if (res[0].id_tipo_articulo == 4 || res[0].id_tipo_articulo == 15) {
-                        $("#id_producto_bob").val(res[0].id_productos);
-                        $("#span_codigo_CB").empty().css('color', 'blue').html(`CODIGO: ${res[0].descripcion_productos}`);
+        var existencia = PRODUCTOS.find(element => element.codigo_producto === newCod) ?? false;
+        if (existencia != false) {
+            if (existencia.id_tipo_articulo == 4 || existencia.id_tipo_articulo == 15) {
+                $("#id_producto_bob").val(existencia.id_productos);
+                $("#span_codigo_CB").empty().css('color', 'blue').html(`CODIGO: ${existencia.descripcion_productos}`);
 
-                    } else {
-                        $("#codigo_producto_bob").focus();
-                        $("#span_codigo_CB").empty().css('color', 'red').html(`ESTE CODIGO DE PRODUCTO NO PERTENECE A UNA BOBINA!!`);
-                        $("#id_producto_bob").val('');
-                    }
-                }
+            } else {
+                $("#span_codigo_CB").empty().css('color', 'red').html(`ESTE CODIGO DE PRODUCTO NO PERTENECE A UNA BOBINA!!`);
+                $("#id_producto_bob").val('');
             }
-        });
+        } else {
+            $("#span_codigo_CB").empty().css('color', 'red').html(`NO EXISTE ESTE CODIGO DE PRODUCTO!!`);
+            $("#id_producto_bob").val('');
+        }
     },
     validacion_form_conteo: function () {
         var form_validation = $("#form_conteo_bob").serializeArray();

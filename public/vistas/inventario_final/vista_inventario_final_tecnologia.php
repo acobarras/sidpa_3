@@ -6,7 +6,13 @@
                     <a class="nav-link active" id="tecnologia-tab" data-bs-toggle="tab" href="#tecnologia" role="tab" aria-controls="tecnologia" aria-selected="true">Tecnología</a>
                 </div>
             </nav>
-            <div class="tab-content" id="myTabContent">
+            <div id="cargando" class="text-center">
+                <button class="btn" disabled>
+                    <span class="spinner-grow spinner-grow-sm" aria-hidden="true"></span>
+                    <span role="status">Cargando...</span>
+                </button>
+            </div>
+            <div class="tab-content d-none" id="myTabContent">
                 <!-- Primer link -->
                 <div class="tab-pane fade show active" id="tecnologia" role="tabpanel" aria-labelledby="tecnologia-tab">
                     <br>
@@ -76,8 +82,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="conteo_tecnologia" class=" table table-bordered table-hover 
-                            table-responsive-lg table-responsive-md" cellspacing="0" width="100%">
+                                        <table id="conteo_tecnologia" class=" table table-bordered table-hover table-responsive-lg table-responsive-md" cellspacing="0" width="100%">
                                             <thead class="bg-layout">
                                                 <tr class="">
                                                     <td><b>Código Producto</b></td>
