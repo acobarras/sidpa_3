@@ -76,8 +76,6 @@ var carga_tablas = function (data, maquina) {
             { "data": "mL_descontado", render: $.fn.dataTable.render.number('.', ',', 0, '') },
             {
                 "data": "opcion", render: function (data, type, row) {
-                    // console.log(FECHA_HOY);
-                    // console.log(HORA_HOY);
                     botones = `<button class="btn btn-info ver_op" data-ver="${row.id_maquina}" title="Ver O.P." ><i class="fa fa-search"></i></button> `;
                     if (datos_consulta == 1 && estados_activos.indexOf(row['estado_item_producir'])) { //row['estado_item_producir'] != 9) {
                         botones += `<button class="btn btn-warning reasignar" data-id="${row.id_maquina}" title="Reasignar M.Q" ><i class="fa fa-retweet"></i></button> `;
@@ -87,20 +85,7 @@ var carga_tablas = function (data, maquina) {
                     var fecha = fecha_antes.toLocaleDateString();
                     fecha = fecha.split("/");
                     var fecha_antigua = fecha[2] + "-0" + fecha[1] + "-" + fecha[0];
-                    if (HORA_HOY <= '06:10:00' && HORA_HOY >= '00:00:00') {
-                        if (row.fecha_produccion == FECHA_HOY || row.fecha_produccion == fecha_antigua) {
-                            if (row['estado_item_producir'] == 6 || row['estado_item_producir'] == 10) {//pasar Puesta a punto
-                                botones += `<button class="btn btn-primary puesta_punto" id="puesta_punto${row.id_item_producir}" data-puesta="${row.id_maquina}" title="Puesta Punto"><i class="fa fa-check"></i></button> `;
-                            }
-                            if (row['estado_item_producir'] == 7) {//pasar a inicio producción
-                                botones += `<button class="btn btn-success inicio_produccion" id="inicio_produc${row.id_item_producir}" inicio-produc="${row.id_maquina}" title="Inicio Producción"><i class="fa fa-check" ></i></button> `;
-                            }
-                            if (row['estado_item_producir'] == 9) {//pasar a inicio producción
-                                botones += `<button class="btn btn-danger pro_incompleta" id="produc_inco${row.id_item_producir}" produc-inco="${row.id_maquina}" title="Detener"><i class="fa fa-stop"></i></button>
-                                <button class="btn btn-success pro_completa" id="produc_comp${row.id_item_producir}" produc-comp="${row.id_maquina}" title="Completar"><i class="fa fa-check"></i></button>`;
-                            }
-                        }
-                    } else if (row.fecha_produccion == FECHA_HOY) {
+                    if ((row.fecha_produccion == FECHA_HOY) || ((row.fecha_produccion == fecha_antigua) && (HORA_HOY <= '06:10:00') && (HORA_HOY >= '00:00:00'))) {
                         if (row['estado_item_producir'] == 6 || row['estado_item_producir'] == 10) {//pasar Puesta a punto
                             botones += `<button class="btn btn-primary puesta_punto" id="puesta_punto${row.id_item_producir}" data-puesta="${row.id_maquina}" title="Puesta Punto"><i class="fa fa-check"></i></button> `;
                         }
@@ -109,7 +94,7 @@ var carga_tablas = function (data, maquina) {
                         }
                         if (row['estado_item_producir'] == 9) {//pasar a inicio producción
                             botones += `<button class="btn btn-danger pro_incompleta" id="produc_inco${row.id_item_producir}" produc-inco="${row.id_maquina}" title="Detener"><i class="fa fa-stop"></i></button>
-                            <button class="btn btn-success pro_completa" id="produc_comp${row.id_item_producir}" produc-comp="${row.id_maquina}" title="Completar"><i class="fa fa-check"></i></button>`;
+                                        <button class="btn btn-success pro_completa" id="produc_comp${row.id_item_producir}" produc-comp="${row.id_maquina}" title="Completar"><i class="fa fa-check"></i></button>`;
                         }
                     }
                     return botones;
