@@ -16,7 +16,8 @@ class GestionPqrDAO extends GenericoDAO
 
     public function valida_numero_pqr($num_pqr)
     {
-        $sql = "SELECT * FROM gestion_pqr WHERE num_pqr = '$num_pqr'";
+        //$sql = "SELECT * FROM gestion_pqr WHERE num_pqr = '$num_pqr'"; Esto lo cambiamos por que no funciona si eliminan la PQR 01 en algun momento 
+        $sql = "SELECT * FROM gestion_pqr WHERE num_pqr LIKE '$num_pqr'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
