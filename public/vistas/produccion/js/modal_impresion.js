@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    icono_impresion();//boton de area de trabajo
     imprimir_trasavilidad();
     cajas_impresion();
     boton_imprime();
@@ -44,7 +45,7 @@ var boton_imprime = function () {
             $.ajax({
                 type: "GET",
                 url: `${PATH_NAME}/produccion/impresoras_marcacion`,
-                data: { id_usuario: id_usuario, id_tamano: tamano },
+                data: { id_usuario: id_usuario, id_tamano: tamano, id_estacion_impre: $('#id_estacion_imp').val() },
                 success: function (res) {
                     var resolucion = 200;
                     if (res == -1) {// no hay impresoras en base de datos

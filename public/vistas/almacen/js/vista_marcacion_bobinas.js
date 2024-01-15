@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    icono_impresion();//boton de area de trabajo
     select_2();
     consulta_select_codigo();
     consultar_operario();
@@ -148,7 +149,7 @@ function impresion_etiqueta() {
             $.ajax({
                 type: "GET",
                 url: `${PATH_NAME}/produccion/impresoras_marcacion`,
-                data: { id_usuario: $('#sesion').val(), id_tamano: id_tamano },
+                data: { id_usuario: $('#sesion').val(), id_tamano: id_tamano, id_estacion_impre: $('#id_estacion_imp').val() },
                 success: function (res) {
                     var resolucion = 200;// para eticaribe es de 300 OJO
                     if (res == -1) {// no hay impresoras en base de datos

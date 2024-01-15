@@ -131,7 +131,11 @@
                 <!-- </div> -->
             </div>
         </nav>
-
+        <!-- ICONO DE IMPRESION -->
+        <div id="impresion" style="float:left;">
+            
+        </div>
+        <!-- ICONO DE IMPRESION -->
         <div id="menu_lateral" class="sidebar">
             <div class="row" style="padding: 15px">
                 <div class="col-lg-12">
@@ -194,7 +198,7 @@
         <input type="hidden" id="data_prioridad" value='<?= $usuario->getResPrioridad(); ?>'>
         <div id="vista_modal_final"></div>
         <!-- <?php
-            if ($modal) { ?>
+                if ($modal) { ?>
             <div class="modal fade" id="prioridades" tabindex="-1" aria-labelledby="prioridadesLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <form class="modal-content">

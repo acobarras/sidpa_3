@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    icono_impresion();//boton de area de trabajo
     select_2();
     consultar_pedido();
     mostrar_formulario();
@@ -113,7 +114,7 @@ var boton_imprime = function () {
             $.ajax({
                 type: "GET",
                 url: `${PATH_NAME}/produccion/impresoras_marcacion`,
-                data: { id_usuario: id_usuario, id_tamano: tamano, so: sistema_operativo },
+                data: { id_usuario: id_usuario, id_tamano: tamano, so: sistema_operativo, id_estacion_impre: $('#id_estacion_imp').val() },
                 success: function (res) {
                     var resolucion = 200;
                     if (res == -1) {// no hay impresoras en base de datos
@@ -133,17 +134,17 @@ var boton_imprime = function () {
                             formulario: form,
                         },
                         function (respu) {// recuerda que debemos porner condiciones por proyecto OJO
-                            if (IMPRESION_API === 1 && impresion_red == true ) { // esta es la condicion para imprimir directo o por controlador depende del proyecto
-                                var data_nombre = res['persona'][0]['nombres']+' '+res['persona'][0]['apellidos']
+                            if (IMPRESION_API === 1 && impresion_red == true) { // esta es la condicion para imprimir directo o por controlador depende del proyecto
+                                var data_nombre = res['persona'][0]['nombres'] + ' ' + res['persona'][0]['apellidos']
                                 var nombre = quitarTildes(data_nombre);
-                                const fin_impresion = "^XA ^LL00 ^LS0 ^FT32,53^A0N,33,36^FH\^FD FIN DE IMPRESION!^FS ^FT32,100^A0N,33,36^FH\^FD  "+ nombre +"^FS ^XZ";
-                                const zplData = respu  + fin_impresion;
+                                const fin_impresion = "^XA ^LL00 ^LS0 ^FT32,53^A0N,33,36^FH\^FD FIN DE IMPRESION!^FS ^FT32,100^A0N,33,36^FH\^FD  " + nombre + "^FS ^XZ";
+                                const zplData = respu + fin_impresion;
                                 const ip_impresora = datos_impresora[0]['ip'];
                                 const xhr = new XMLHttpRequest();
-        
-                                xhr.open('POST', SERVIDOR_IMPRESION+'/print', true);// esta es la ip del servidor de desarrollo el cual servira de alojamiento de la api
+
+                                xhr.open('POST', SERVIDOR_IMPRESION + '/print', true);// esta es la ip del servidor de desarrollo el cual servira de alojamiento de la api
                                 xhr.setRequestHeader('Content-Type', 'application/json');
-        
+
                                 xhr.onreadystatechange = function () {
                                     if (xhr.readyState === 4 && xhr.status === 200) {
                                         respuesta = JSON.parse(xhr.responseText);
@@ -168,13 +169,13 @@ var boton_imprime = function () {
                                         }
                                     );
                                 };
-        
+
                                 const data = JSON.stringify({ zplData: zplData, ip: ip_impresora });
                                 xhr.send(data);
                             } else if (impresion_red == false && eswindow == false && IMPRESION_API === 1) {
                                 btn_procesando('boton_imprime', obj_inicial, 1);
-                                alertify.alert('Alerta Impresoras', '¡No hay impresoras configuradas para esta área!', 
-                                function(){ alertify.success(''); });
+                                alertify.alert('Alerta Impresoras', '¡No hay impresoras configuradas para esta área!',
+                                    function () { alertify.success(''); });
                             } else {
                                 $('.div_impresion').empty().html(respu);
                                 var mode = 'iframe'; //popup

@@ -37,7 +37,6 @@ class ImpresionEtiquetasControlador extends GenericoControlador
         $this->PersonaDAO = new PersonaDAO($cnn);
         $this->UsuarioDAO = new UsuarioDAO($cnn);
         $this->ProgramacionOperarioDAO = new ProgramacionOperarioDAO($cnn);
-
     }
 
     public function vista_impresion_etiquetas()
@@ -83,26 +82,31 @@ class ImpresionEtiquetasControlador extends GenericoControlador
 
         header('Content-Type: application/json');
         $id_usuario = $_GET["id_usuario"];
+        $id_estacion = $_GET['id_estacion_impre'];
         $id_tamano = $_GET['id_tamano'];
         $persona = $_SESSION['usuario']->getId_persona();
         $fecha = date('Y-m-d');
         $maquina = $this->ProgramacionOperarioDAO->ConsultaPersonaFecha($persona, $fecha);
         $impresora = '';
 
+        // Esto es para poduccion cuando ya tienes una impresora por maquina 
         if (!empty($maquina)) {
             $id_maquina = $maquina[0]->id_maquina;
             $impresora = $this->impresorasDAO->consulta_impresoras_maquina($id_maquina, $id_tamano);
         }
+
+        // Esto seria cuando es por subarea
         if (empty($impresora)) {
-            $impresora = $this->impresorasDAO->impresoras_por_area($id_usuario, $id_tamano);
-            if (empty($impresora)) {// no encontramos impresoras
+            $impresora = $this->impresorasDAO->impresoras_subarea($id_estacion, $id_tamano);;
+            if (empty($impresora)) { // no encontramos impresoras
                 $error = -1;
                 echo json_encode($error);
                 return;
-            } 
-        } 
+            }
+        }
+
         // consulta nombre de operario
-        $id_persona = $this->UsuarioDAO->consultarIdPersona($id_usuario); 
+        $id_persona = $this->UsuarioDAO->consultarIdPersona($id_usuario);
         $datos_persona = $this->PersonaDAO->consultar_personas_id($id_persona[0]->id_persona);
         $data = [
             'impresora' => $impresora,

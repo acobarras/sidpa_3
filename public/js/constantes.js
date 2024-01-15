@@ -561,3 +561,52 @@ function quitarTildes(texto) {
         return mapaTildes[matched];
     });
 }
+
+function icono_impresion() {
+    var id_user = $('#sesion').val();
+    var boton_impresion = {
+        inicio: function () {
+            boton_impresion.ajax_areas()
+        },
+
+        ajax_areas: function () {
+            $.post(`${PATH_NAME}/impresion_area`, {
+                datos: { id_usuario: id_user }
+            },).done(function (respu) {
+                var html = ''
+                if (respu.status) {
+                    if (!(sessionStorage.getItem("estacion"))) {
+                        sessionStorage.setItem("estacion", respu.datos[0].id_estacion_impresion);
+                    }
+                    html +=
+                        `<input type="hidden" id="id_estacion_imp" name="id_estacion_imp" value="` + sessionStorage.getItem("estacion") + `">
+                        <div class="dropdown m-3 mb-0">
+                        <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Puesto de trabajo">
+                            <i class="fas fa-print"></i>
+                        </button> 
+                        <ul class="dropdown-menu">`
+                    respu.datos.forEach(elemento => {
+                        html += `<li><a class="dropdown-item area_impresion" value="` + elemento.id_estacion_impresion + `">` + elemento.nombre_subarea + `</a></li>`
+                    });
+                    html += `
+                        </ul>
+                    </div>`
+                } else {
+                    sessionStorage.setItem("estacion", 0);
+                    html += `<input type="hidden" id="id_estacion_imp" name="id_estacion_imp" value="` + sessionStorage.getItem("estacion") + `">`
+                }
+                $('#impresion').empty().html(html);
+                boton_impresion.selccion_area();
+            });
+        },
+
+        selccion_area: function () {
+            $('#impresion').on('click', '.area_impresion', function (e) {
+                var id_estacion = $(this).attr('value');
+                sessionStorage.setItem("estacion", id_estacion);
+                $('#id_estacion_imp').val(id_estacion);
+            })
+        }
+    }
+    boton_impresion.inicio()
+}

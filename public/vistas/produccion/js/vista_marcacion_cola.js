@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    icono_impresion();//boton de area de trabajo
     consulta_op();
     impresion_etiqueta();
     consultar_operario();
@@ -100,7 +101,7 @@ function impresion_etiqueta() {
             $.ajax({
                 type: "GET",
                 url: `${PATH_NAME}/produccion/impresoras_marcacion`,
-                data: { id_usuario: $('#sesion').val(), id_tamano: id_tamano },
+                data: { id_usuario: $('#sesion').val(), id_tamano: id_tamano, id_estacion_impre: $('#id_estacion_imp').val() },
                 success: function (res) {
                     var resolucion = 200;// para eticaribe es de 300 OJO
                     if (res == -1) {// no hay impresoras en base de datos
@@ -159,7 +160,7 @@ function impresion_etiqueta() {
                             } else if (impresion_red == false && eswindow == false && IMPRESION_API === 1) {
                                 alertify.alert('Alerta Impresoras', '¡No hay impresoras configuradas para esta área!',
                                     function () { alertify.success(''); });
-                                    btn_procesando('imprimir', obj_inicial, 1);
+                                btn_procesando('imprimir', obj_inicial, 1);
                             } else {
                                 $('.div_impresion').empty().html(respu);
                                 var mode = 'iframe'; //popup

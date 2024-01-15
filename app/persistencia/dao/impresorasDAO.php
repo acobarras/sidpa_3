@@ -4,13 +4,13 @@ namespace MiApp\persistencia\dao;
 
 use MiApp\persistencia\generico\GenericoDAO;
 
-final class impresorasDAO extends GenericoDAO 
+final class impresorasDAO extends GenericoDAO
 {
     public function __construct(&$cnn)
     {
         parent::__construct($cnn, 'impresoras');
     }
-    
+
     public function consulta_impresoras()
     {
         $sql = 'SELECT t1.*, t2.tamano 
@@ -22,9 +22,9 @@ final class impresorasDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function consulta_impresoras_maquina($id_maquina,$id_tamano)
+    public function consulta_impresoras_maquina($id_maquina, $id_tamano)
     {
-       // esto debe cambiar recuerda que es por estaciones 
+        // esto debe cambiar recuerda que es por estaciones 
         $sql = "SELECT t1.* 
         FROM impresoras t1
         INNER JOIN maquinas t2 ON t1.id_estacion = t2.estacion_impresora
@@ -35,7 +35,7 @@ final class impresorasDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function impresoras_por_area($id_usuario,$id_tamano)
+    public function impresoras_por_area($id_usuario, $id_tamano)
     {
         $sql = "SELECT t1.* 
         FROM impresoras t1 
@@ -58,6 +58,15 @@ final class impresorasDAO extends GenericoDAO
         return $resultado;
     }
 
-   
-
+    public function impresoras_subarea($id_estacion, $id_tamano)
+    {
+        $sql = "SELECT * 
+        FROM impresoras t1
+        INNER JOIN estaciones_impresion t2 ON t2.id_estacion = t1.id_estacion
+        WHERE t1.id_estacion = $id_estacion AND t1.id_impresora_tamano = $id_tamano";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
