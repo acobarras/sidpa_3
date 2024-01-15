@@ -96,6 +96,7 @@ class MiClienteControlador extends GenericoControlador
                 "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
                 "departamento" => $this->departamentoDAO->consultar_departamento(),
                 "ciudad" => $this->ciudadDAO->consultar_ciudad()
+
             ]
         );
     }
@@ -118,7 +119,7 @@ class MiClienteControlador extends GenericoControlador
         header('Content-Type: application/json');
         //Validar si el usuario es administrador  , muestra todos los clientes
         if ($_SESSION['usuario']->getId_roll() != 1) {
-            $clientes = $this->clientes_proveedorDAO->consultar_clientes_asesor($_SESSION['usuario']->getId_persona());
+            $clientes = $this->clientes_proveedorDAO->consultar_clientes_asesor($_SESSION['usuario']->getId_persona(), $_SESSION['usuario']->getId_usuario());
         } else {
             $clientes = $this->clientes_proveedorDAO->consultar_clientes();
         }
@@ -458,7 +459,7 @@ class MiClienteControlador extends GenericoControlador
             'Comercial/vista_pqr'
         );
     }
-   
+
     /*  
      * Función para validar precio autorizado
      */
