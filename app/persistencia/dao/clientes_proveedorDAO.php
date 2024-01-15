@@ -25,11 +25,11 @@ class clientes_proveedorDAO extends GenericoDAO
     public function consultar_clientes($roll = '')
     {
         if ($roll == 1) {
-            $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania 
-                FROM cliente_proveedor t1 
-                LEFT JOIN empresas t2 ON t1.pertenece = t2.id_empresa OR t1.pertenece = 0";
+            $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania,'0' AS bloqueo_pedido 
+            FROM cliente_proveedor t1 
+            LEFT JOIN empresas t2 ON t1.pertenece = t2.id_empresa OR t1.pertenece = 0;";
         } else {
-            $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania 
+            $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania,'0' AS bloqueo_pedido
                 FROM cliente_proveedor t1 
                 LEFT JOIN empresas t2 ON t1.pertenece = t2.id_empresa OR t1.pertenece = 0
                 WHERE t1.estado_cli_prov != 0";
@@ -40,11 +40,12 @@ class clientes_proveedorDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function consultar_clientes_asesor($id_persona)
+    public function consultar_clientes_asesor($id_persona, $id_usuario = '')
     {
-        $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania
+        $sql = "SELECT t1.*, (CASE WHEN t1.pertenece != 0 THEN t2.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania,t3.bloqueo_pedido
             FROM cliente_proveedor t1 
             LEFT JOIN empresas t2 ON t1.pertenece = t2.id_empresa OR t1.pertenece = 0
+            INNER JOIN usuarios t3 ON t3.id_usuario=$id_usuario
             WHERE id_usuarios_asesor LIKE '%$id_persona%'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();

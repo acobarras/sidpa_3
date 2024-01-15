@@ -89,7 +89,7 @@ var carga_tabla_clientes_asesor = function () {
             {
                 "render": function (data, type, row) {
                     var res = '';
-                    if (INVENTARIO == 1) {
+                    if (INVENTARIO == 1 && row.bloqueo_pedido == 0) {
                         res = `<center>\n\
                         <button type='button' class='btn btn-success btn-circle  rounded-circle ver_crear_pedidos_cli' title='Nuevo Pedido' id='crear_pedidos_cli${row.id_cli_prov}'><span class='fa fa-list-alt'></span></button>\n\
                         <center>`;
