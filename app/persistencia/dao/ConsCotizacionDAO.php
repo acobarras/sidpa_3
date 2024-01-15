@@ -67,8 +67,14 @@ class ConsCotizacionDAO extends GenericoDAO
                 $letra_mes = PQR_MES[$mes_nuevo];
             } 
         }
-        $valida = 'PQR-' . $letra_mes . '01-' . $ano;
+        // $valida = 'PQR-' . $letra_mes . '01-' . $ano;
+        // $existe = $this->GestionPqrDAO->valida_numero_pqr($valida);
+
+        // Esto lo cambiamos por que no funciona si eliminan la PQR 01 en algún momento 
+        $valida = '%' . $letra_mes . '%-' . $ano;
         $existe = $this->GestionPqrDAO->valida_numero_pqr($valida);
+        // ============================================================================
+
         if (empty($existe)) {
             $num_pqr = 1;
             $canbio_numero = $num_pqr + 1;
