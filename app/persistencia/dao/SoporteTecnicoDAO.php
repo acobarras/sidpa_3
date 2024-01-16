@@ -156,11 +156,12 @@ class SoporteTecnicoDAO extends GenericoDAO
     // consultas de vista reportes 
     public function consulta_casospendientes()
     {
-        $sql = "SELECT t1.num_consecutivo, t1.tipo_cobro, t1.fecha_agendamiento, t1.estado, t1.fecha_crea, t2.nombre_estado_soporte, t3.nombre_empresa
+        $sql = "SELECT t1.num_consecutivo, t1.tipo_cobro, t1.fecha_agendamiento, t1.estado, t1.fecha_crea, t2.nombre_estado_soporte, t3.nombre_empresa, t1.id_direccion, CASE WHEN t1.id_direccion != 0 THEN t4.direccion ELSE 'sin dirección' END AS direccion
         FROM diagnostico_soporte_tecnico t1
         INNER JOIN estado_soporte t2 ON t1.estado = t2.id_estado_soporte
         INNER JOIN cliente_proveedor t3 ON t1.id_cli_prov = t3.id_cli_prov
-        WHERE NOT estado = 14";
+        LEFT JOIN direccion t4 ON t1.id_direccion = t4.id_direccion
+        WHERE NOT t1.estado = 14";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
@@ -169,11 +170,13 @@ class SoporteTecnicoDAO extends GenericoDAO
 
     public function consulta_reportecomisiones($id_tecnico, $mes, $year)
     {
-        $sql = "SELECT t1.id_usuario, t1.id_actividad_area, t1.fecha_crea,t1.id_seguimiento, t1.observacion, t4.nombre_empresa, t4.nit, t2.*, t3.*
+        $sql = "SELECT t1.id_usuario, t1.id_actividad_area, t1.fecha_crea,t1.id_seguimiento, t1.observacion, t4.nombre_empresa, t4.nit, t2.*, t3.*,
+        CASE WHEN t3.id_direccion != 0 THEN t5.direccion ELSE 'sin dirección' END AS direccion
         FROM seguimiento_diag_soporte t1
         LEFT JOIN diagnostico_item t2 ON t1.id_diagnostico = t2.id_diagnostico AND t1.item = t2.item
         INNER JOIN diagnostico_soporte_tecnico t3 ON t1.id_diagnostico = t3.id_diagnostico
         INNER JOIN cliente_proveedor t4 ON t3.id_cli_prov = t4.id_cli_prov
+        LEFT JOIN direccion t5 ON t3.id_direccion = t5.id_direccion
         WHERE ((t1.id_actividad_area = 78 AND t3.visita_laboratorio = 2 AND t1.observacion LIKE '%REPUESTO 1') OR t1.id_actividad_area IN (82,84,89,99)) AND t1.id_usuario = $id_tecnico AND MONTH(t1.fecha_crea) = $mes AND YEAR(t1.fecha_crea) = $year;";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
@@ -242,6 +245,33 @@ class SoporteTecnicoDAO extends GenericoDAO
         INNER JOIN diagnostico_item t7 ON t1.id_diagnostico = t7.id_diagnostico
         LEFT JOIN usuarios t8 ON t1.id_usuario_visita = t8.id_persona
         WHERE t1.id_diagnostico = $num_remision";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
+
+    public function consulta_soporte_clientes($id_cliente, $mes, $year) {
+        $sql = "SELECT t1.id_diagnostico, t1.num_consecutivo, t1.fecha_agendamiento, t1.id_usuario_visita, t1.fecha_crea, 
+        t2.fecha_ingreso, t2.item, t2.equipo, t2.serial_equipo, t2.procedimiento,
+        t3.nit, t3.dig_verificacion, t3.nombre_empresa,
+        CASE WHEN t1.id_direccion != 0 THEN t4.direccion ELSE 'sin dirección' END AS direccion
+        FROM diagnostico_soporte_tecnico t1
+        INNER JOIN diagnostico_item t2 ON t1.id_diagnostico = t2.id_diagnostico
+        INNER JOIN cliente_proveedor t3 ON t1.id_cli_prov = t3.id_cli_prov
+        INNER JOIN direccion t4 ON t4.id_direccion = t1.id_direccion
+        WHERE t3.id_cli_prov = $id_cliente AND MONTH(t1.fecha_crea) = $mes AND YEAR(t1.fecha_crea) = $year";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
+
+    public function consulta_soporte_clientes_seguimiento($id_diagnostico, $item) {
+        $sql = "SELECT t1.*, CONCAT (t2.nombre, ' ', t2.apellido) nombre_usuario
+        FROM seguimiento_diag_soporte t1
+        INNER JOIN usuarios t2 ON t1.id_usuario = t2.id_usuario
+        WHERE id_diagnostico = $id_diagnostico AND item IN (0,$item);";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);

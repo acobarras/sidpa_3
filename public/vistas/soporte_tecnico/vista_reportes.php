@@ -7,6 +7,7 @@
                     <a class="nav-link " id="indicador_autorizaciones-tab" data-bs-toggle="tab" href="#indicador_autorizaciones" role="tab" aria-controls="indicador_autorizaciones" aria-selected="true">Indicador autorizaciones</a>
                     <a class="nav-link " id="consolidado_pendientes-tab" data-bs-toggle="tab" href="#consolidado_pendientes" role="tab" aria-controls="consolidado_pendientes" aria-selected="true">Consolidado casos pendientes</a>
                     <a class="nav-link " id="comisiones-tab" data-bs-toggle="tab" href="#comisiones" role="tab" aria-controls="comisiones" aria-selected="true">Reporte de comisiones</a>
+                    <a class="nav-link " id="cliente-tab" data-bs-toggle="tab" href="#cliente" role="tab" aria-controls="cliente" aria-selected="true">Reporte por cliente</a>
                     <a class="nav-link " id="descargas-tab" data-bs-toggle="tab" href="#descargas" role="tab" aria-controls="descargas" aria-selected="true">Descargas</a>
                 </div>
             </div>
@@ -20,24 +21,25 @@
                         <h1 class="col-md-12 col-md-offset-4 ">Indicador visitas agendadas</h1>
                     </div>
                     <div class="recuadro col-md-8 col-12 text-center d-block m-auto p-1">
-                        <form  class="m-3" id="form_visitas">
+                        <form class="m-3" id="form_visitas">
                             <input type="hidden" name="consulta" value="1">
                             <div class="input-group mb-3">
                                 <label for="mes_visitas" class="input-group-text">Mes: </label>
-                                <select class="form-control" name="mes_visitas" id="mes_visitas">
+                                <select class="form-control" name="mes" id="mes_visitas">
                                     <option value="0" selected>Selecciona el mes</option>
                                     <?php $i = 1;
                                     foreach (MES_ESP as $mes) { ?>
                                         <option value="<?= $i ?>"><?= $mes ?></option>
-                                    <?php $i++;} ?>
+                                    <?php $i++;
+                                    } ?>
                                 </select>
-                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>                                
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
                             </div>
                         </form>
                     </div>
                     <div class="table-responsive">
                         <div class="container-fluid">
-                            <table style="background: white; margin-left: 0px;" id="tb_indicador_visitas"  class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
+                            <table style="background: white; margin-left: 0px;" id="tb_indicador_visitas" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
                                 <thead style="background:#0d1b50;color:white">
                                     <tr>
                                         <th>Diagnostico</th>
@@ -66,20 +68,21 @@
                             <input type="hidden" name="consulta" value="2">
                             <div class="input-group mb-3">
                                 <label for="mes_autorizaciones" class="input-group-text">Mes: </label>
-                                <select class="form-control" name="mes_autorizaciones" id="mes_autorizaciones">
+                                <select class="form-control" name="mes" id="mes_autorizaciones">
                                     <option value="0" selected>Selecciona el mes</option>
                                     <?php $i = 1;
                                     foreach (MES_ESP as $mes) { ?>
                                         <option value="<?= $i ?>"><?= $mes ?></option>
-                                    <?php $i++;} ?>
+                                    <?php $i++;
+                                    } ?>
                                 </select>
-                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>                                
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
                             </div>
                         </form>
                     </div>
                     <div class="table-responsive">
                         <div class="container-fluid">
-                            <table style="background: white; margin-left: 0px;" id="tb_indicador_autorizacion"  class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
+                            <table style="background: white; margin-left: 0px;" id="tb_indicador_autorizacion" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
                                 <thead style="background:#0d1b50;color:white">
                                     <tr>
                                         <th>Diagnostico</th>
@@ -104,7 +107,7 @@
                         <div class="mb-3 text-center row ">
                             <h1 class="col-md-12 col-md-offset-4 ">Consolidado casos pendientes</h1>
                         </div>
-                        <table style="background: white; margin-left: 0px;" id="tb_consolidado"  class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
+                        <table style="background: white; margin-left: 0px;" id="tb_consolidado" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
                             <thead style="background:#0d1b50;color:white">
                                 <tr>
                                     <th>Diagnostico</th>
@@ -125,26 +128,27 @@
                         <h1 class="col-md-12 col-md-offset-4 ">Reporte comisiones</h1>
                     </div>
                     <div class="recuadro col-md-9 col-12 text-center d-block m-auto p-1">
-                        <form  class="m-3" id="form_comisiones">
+                        <form class="m-3" id="form_comisiones">
                             <input type="hidden" name="consulta" value="4">
                             <div class="input-group mb-3">
                                 <label for="mes_comisiones" class="input-group-text">Mes: </label>
-                                <select class="form-control" name="mes_comisiones" id="mes_comisiones">
+                                <select class="form-control" name="mes" id="mes_comisiones">
                                     <option value="0" selected>Selecciona el mes</option>
                                     <?php $i = 1;
                                     foreach (MES_ESP as $mes) { ?>
                                         <option value="<?= $i ?>"><?= $mes ?></option>
-                                    <?php $i++;} ?>
+                                    <?php $i++;
+                                    } ?>
                                 </select>
                                 <label for="id_persona_reparacion" class="input-group-text">Técnico: </label>
                                 <select class="form-control" name="id_persona_reparacion" id="id_persona_reparacion"></select>
-                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>                                
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
                             </div>
                         </form>
                     </div>
                     <div class="table-responsive">
                         <div class="container-fluid">
-                            <table style="background: white; margin-left: 0px;" id="tb_comisiones"  class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
+                            <table style="background: white; margin-left: 0px;" id="tb_comisiones" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
                                 <thead style="background:#0d1b50;color:white">
                                     <tr>
                                         <th>Fecha</th>
@@ -163,6 +167,57 @@
                 </div>
             </div>
             <!-- pestañas 5 -->
+            <div class="tab-pane fade show" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
+                <div class="container-fluid">
+                    <br>
+                    <div class="mb-3 text-center row ">
+                        <h1 class="col-md-12 col-md-offset-4 ">Reporte por cliente</h1>
+                    </div>
+                    <div class="recuadro col-md-10 col-12 text-center d-block m-auto p-1">
+                        <form class="m-3" id="form_cliente">
+                            <input type="hidden" name="consulta" value="5">
+                            <div class="input-group mb-3">
+                                <label for="mes_cliente" class="input-group-text">Mes: </label>
+                                <select class="form-control" name="mes" id="mes_cliente">
+                                    <option value="0" selected>Selecciona el mes</option>
+                                    <?php $i = 1;
+                                    foreach (MES_ESP as $mes) { ?>
+                                        <option value="<?= $i ?>"><?= $mes ?></option>
+                                    <?php $i++;
+                                    } ?>
+                                </select>
+                                <label for="id_cliente" class="input-group-text">Cliente: </label>
+                                <select class="form-control select_2" name="id_cliente" id="id_cliente" style="width: 50%;">
+                                    <option value="0" selected>Selecciona el cliente</option>
+                                    <?php
+                                    foreach ($clientes as $cliente) { ?>
+                                        <option value="<?= $cliente->id_cli_prov ?>"><?= $cliente->nit ?> || <?= $cliente->nombre_empresa ?></option>
+                                    <?php
+                                    } ?>
+                                </select>
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <table style="background: white; margin-left: 0px;" id="tb_clientes" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
+                        <thead style="background:#0d1b50;color:white">
+                            <tr>
+                                <th>Fecha</th><!-- concateno las fechas  -->
+                                <th>Diagnostico</th>
+                                <th>Item</th>
+                                <th>Nombre Empresa</th><!-- concateno el nit y la direccion -->
+                                <th>Modelo</th>
+                                <th>Serial</th>
+                                <th>Procedimiento</th>
+                                <th>Detalles</th>
+                                <!-- <th>Tipo Impacto</th> -->
+                            </tr>
+                        </thead>
+                    </table>
+                    <br><br>
+                </div>
+            </div>
+            <!-- pestañas 6 -->
             <div class="tab-pane fade show" id="descargas" role="tabpanel" aria-labelledby="descargas-tab">
                 <div class="container-fluid">
                     <br>
@@ -217,4 +272,3 @@
 <script src="<?= PUBLICO ?>/vistas/soporte_tecnico/js/vista_reportes.js"></script>
 <script src="<?= PUBLICO ?>/vistas/soporte_tecnico/js/ejecucion_reparacion.js"></script>
 <script src="<?= PUBLICO ?>/vistas/configuracion/js/vista_descargar_pdf.js"></script>
-
