@@ -51,7 +51,7 @@ class HistorialPedidoControlador extends GenericoControlador
         parent::cabecera();
         // print_r($_SESSION['usuario']->getId_roll());
         if ($_SESSION['usuario']->getId_roll() != 8 && $_SESSION['usuario']->getId_roll() != 1) {
-            $clientes = $this->clientes_proveedorDAO->consultar_clientes_asesor($_SESSION['usuario']->getId_persona());
+            $clientes = $this->clientes_proveedorDAO->consultar_clientes_asesor($_SESSION['usuario']->getId_persona(), $_SESSION['usuario']->getId_usuario());
         } else {
             $clientes = $this->clientes_proveedorDAO->consultar_clientes();
         }
