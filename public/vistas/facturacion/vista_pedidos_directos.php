@@ -23,6 +23,14 @@
                                             <button type="submit" class="btn btn-success col-3">Crea Pedido <i class="fas fa-check"></i></button>
                                         </div>
                                     </div>
+                                    <div class="row d-none" id="botones_crea">
+                                        <span class="text-center text-danger" id="span_estado"></span>
+                                        <br>
+                                        <div class="col-md-6 col-12 input-group mb-3 m-auto justify-content-center">
+                                            <button type="button" id="crear_cliente" class="btn btn-success col-3 d-none" data-bs-toggle="modal" data-bs-target="#creacion_cliente">Crea Cliente <i class="fas fa-user"></i></button>&nbsp;&nbsp;
+                                            <button type="button" id="crear_direccion" class="btn btn-primary col-3 d-none" data-bs-toggle="modal" data-bs-target="#creacion_direc">Crea dirección <i class="fas fa-map-marked-alt"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                             <br>
@@ -273,6 +281,199 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------------------------- MODAL CLIENTE --------------------------------------------->
+<div class="modal fade" id="creacion_cliente" role="dialog" aria-labelledby="examplecreacion_cliente" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header header_aco">
+                <div class="img_modal">
+                    <p> </p>
+                </div>
+                <h3 class="modal-title" id="examplecreacion_cliente">Formulario Creacion Cliente</h3>
+                <i class="bi bi-x cerrar" data-bs-dismiss="modal" style="font-size: 26px;"></i>
+            </div>
+            <div class="modal-body">
+                <div class="recuadro">
+                    <div class="container-fluid">
+                        <form id="form_creacion_cliente">
+                            <div class="row">
+                                <div class="mb-3 col-6">
+                                    <label for="tipo_documento" class="form-label">Tipo de documento : </label>
+                                    <select class="form-control select_2" style="width: 100%" name="tipo_documento" id="tipo_documento">
+                                        <option value="0"></option>
+                                        <?php foreach ($documento as $doc) { ?>
+                                            <option value="<?= $doc->id_tipo_documento ?>"><?= $doc->nombre_documento ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-8">
+                                    <label for="nit" class="form-label">Número de documento : </label>
+                                    <input class="form-control" name="nit" id="nit" />
+                                </div>
+                                <div class="mb-3 col-4">
+                                    <label for="dig_verificacion" class="form-label">Digito de Verificación : </label>
+                                    <input class="form-control" name="dig_verificacion" id="dig_verificacion" />
+                                </div>
+                                <div class="mb-3 col-12">
+                                    <label for="nombre_empresa" class="form-label">Razón Social : </label>
+                                    <input type="text" class="form-control" name="nombre_empresa" id="nombre_empresa" />
+                                </div>
+                                <div class="mb-3 col-8">
+                                    <label for="id_usuarios_asesor" class="form-label">Asesores : </label>
+                                    <select class="form-control select_2" multiple style="width: 100%;" name="id_usuarios_asesor" id="id_usuarios_asesor">
+                                        <option value="0"></option>
+                                        <?php foreach ($asesores as $usuario) { ?>
+                                            <option value="<?= $usuario->id_persona ?>"><?= $usuario->nombre . " " . $usuario->apellido ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" value="1" name="tipo_cli_prov">
+                            <input type="hidden" value="1" name="forma_pago">
+                            <input type="hidden" value="0" name="dias_dados">
+                            <input type="hidden" value="1" name="pertenece">
+                            <input type="hidden" value="3" name="lista_precio">
+                            <input type="hidden" value="0" name="cupo_cliente">
+                            <input type="hidden" value="0" name="dias_max_mora">
+                            <input type="hidden" value="0" name="tipo_prove">
+                            <input type="hidden" value="1" name="logo_etiqueta">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="crear_cliente">Crear</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-------------------------------------------------- MODAL DIRECCION --------------------------------------------->
+<div class="modal fade" id="creacion_direc" role="dialog" aria-labelledby="examplecreacion_direc" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header header_aco">
+                <div class="img_modal">
+                    <p> </p>
+                </div>
+                <h3 class="modal-title" id="examplecreacion_direc">Formulario Creacion Dirección</h3>
+                <i class="bi bi-x cerrar" data-bs-dismiss="modal" style="font-size: 26px;"></i>
+            </div>
+            <div class="modal-body">
+                <div class="recuadro">
+                    <div class="container-fluid">
+                        <form id="form_creacion_direc">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" name="id_cli_prov" id="id_cli_prov">
+                                        <label for="nombre_empresa" class="col-form-label">Nombre Cliente:</label>
+                                        <input type="text" class="form-control" name="nombre_empresa" id="nombre_empresa_dir" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="id_pais" class="col-form-label">País:</label>
+                                        <select id="id_pais" name="id_pais" class="form-select select_2" aria-label="Default select example" style="width:100%">
+                                            <option value="0">Selecciona un Pais</option>
+                                            <?php foreach ($paises as $pais) { ?>
+                                                <option value="<?= $pais->id_pais ?>"><?= $pais->nombre ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="id_departamento" class="col-form-label">Departamento:</label>
+                                        <select id="id_departamento" name="id_departamento" class="form-select select_2" aria-label="Default select example" style="width:100%">
+                                            <option value="0">Selecciona un Departamento</option>
+                                            <?php foreach ($departamento as $departamento) { ?>
+                                                <option value="<?= $departamento->id_departamento ?>"><?= $departamento->nombre ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="id_ciudad" class="col-form-label">Ciudad:</label>
+                                        <select id="id_ciudad" name="id_ciudad" class="form-select select_2" aria-label="Default select example" style="width:100%">
+                                            <option value="0">Selecciona una Ciudad</option>
+                                            <?php foreach ($ciudad as $ciudad) { ?>
+                                                <option value="<?= $ciudad->id_ciudad ?>"><?= $ciudad->nombre ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="telefono" class="col-form-label">Télefono:</label>
+                                        <input type="number" class="form-control" id="telefono" name="telefono">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="celular" class="col-form-label">Celular:</label>
+                                        <input type="text" class="form-control" id="celular" name="celular">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="email" class="col-form-label">Email:</label>
+                                        <input type="text" class="form-control" id="email" name="email">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="cargo" class="col-form-label">Cargo:</label>
+                                        <input type="text" class="form-control" id="cargo" name="cargo">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="contacto" class="col-form-label">Contacto:</label>
+                                        <textarea cols="2" class="form-control" id="contacto" name="contacto"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="direccion" class="col-form-label">Dirección:</label>
+                                        <textarea cols="5" class="form-control" id="direccion" name="direccion"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="direccion" class="col-form-label">Link Google Maps:</label>
+                                        <input type="text" class="form-control" id="link_maps" name="link_maps">
+
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="horario" class="col-form-label">Horario Atención:</label>
+                                        <input type="text" class="form-control" id="horario" name="horario">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="recor_dia_cierre" class="col-form-label">Recordatorio dia Cierre:</label>
+                                        <textarea type="text" class="form-control" id="recor_dia_cierre" name="recor_dia_cierre"></textarea>
+                                    </div>
+                                </div>
+                                <input hidden="true" id="ruta" name="ruta" value="7">
+                                <input hidden="true" type="text" name="id_usuario" name="id_usuario" value="<?= $_SESSION['usuario']->getId_usuario() ?>" />
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary btn-sm" id="crear_direccion">Cear</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

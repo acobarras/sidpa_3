@@ -7,7 +7,8 @@ $(document).ready(function () {
     agrega_productos_storage();
     elimina_items();
     crea_pedido_directo_galan();
-
+    crear_cliente();
+    crear_direccion();
 });
 
 var crea_pedido_directo = function () {
@@ -22,41 +23,142 @@ var crea_pedido_directo = function () {
                 type: "POST",
                 data: form,
                 success: function (res) {
-                    var direc = res[0].direccion;
-                    if (direc === null) {
-                        alertify.alert('No hay direcciones', 'Este cliente no posee ninguna direccion. Por favor agregar una direccion',
-                            function () {
-                                $("#nit_empresa").val('');
-                            }).set({
-                                'label': 'Aceptar',
-                                'transitionOff': true
-                            });
+                    if (res == '') {
+                        $('#botones_crea').removeClass('d-none');
+                        $('#crear_cliente').removeClass('d-none');
+                        $('#crear_direccion').removeClass('d-none');
+                        $('#crear_direccion').attr('disabled', 'disabled');
+                        $('#span_estado').html('El cliente no existe, por favor realice la creacion de este.');
+                        $(".NuevoPEDIDO").css('display', 'none');
                     } else {
-                        if (res != '') {
+                        if (res[0].direccion == '') {
+                            $('#botones_crea').removeClass('d-none');
+                            $('#crear_cliente').addClass('d-none');
+                            $('#crear_direccion').removeClass('d-none');
+                            $('#crear_direccion').removeAttr('disabled');
+                            $('#span_estado').html('El cliente no tiene direcciones, por favor realice la creacion de esta.');
+                            $(".NuevoPEDIDO").css('display', 'none');
+                            $('#nombre_empresa_dir').val(res[0].nombre_empresa);
+                            $('#id_cli_prov').val(res[0].id_cli_prov);
+                        } else {
+                            $('#botones_crea').addClass('d-none');
+                            $('#crear_cliente').addClass('d-none');
+                            $('#crear_direccion').addClass('d-none');
+                            $('#span_estado').html('');
                             if (!$(".NuevoPEDIDO").is(":visible")) {
                                 $(".NuevoPEDIDO").css('display', 'block');
                             }
-                            $("#nombre_cliente").empty().html(res[0].nombre_empresa);
-                            $("#nit_cliente").empty().html(res[0].nit);
-                            $("#id_cliv_provP").val(res[0].id_cli_prov);
-                            var direccion = `<option info-dir='${JSON.stringify(res[0].direccion)}' value="${res[0].direccion['id_direccion']}">${res[0].direccion['direccion']}</option>`;
-                            $("#id_direccionC").empty().html(direccion);
-                            $("#id_direccionCC").empty().html(direccion);
-                            $("#id_direccionC").change();
+                            cargar_data(res);
                             carga_tabla_productos(res[0].id_cli_prov);
                             valores_sin_iva(res[0].id_cli_prov);
                             crea_producto_nuevo(res[0].id_cli_prov);
                             consecutivo_documento(res[0].pertenece);
-                        } else {
-                            if ($(".NuevoPEDIDO").is(":visible")) {
-                                $(".NuevoPEDIDO").css('display', 'none');
-                            }
                         }
+                    }
+                    // var direc = res[0].direccion;
+                    // if (direc === null) {
+                    //     alertify.alert('No hay direcciones', 'Este cliente no posee ninguna direccion. Por favor agregar una direccion',
+                    //         function () {
+                    //             $("#nit_empresa").val('');
+                    //         }).set({
+                    //             'label': 'Aceptar',
+                    //             'transitionOff': true
+                    //         });
+                    // } else {
+                    //     if (res != '') {
+                    //         if (!$(".NuevoPEDIDO").is(":visible")) {
+                    //             $(".NuevoPEDIDO").css('display', 'block');
+                    //         }
+                    //         $("#nombre_cliente").empty().html(res[0].nombre_empresa);
+                    //         $("#nit_cliente").empty().html(res[0].nit);
+                    //         $("#id_cliv_provP").val(res[0].id_cli_prov);
+                    //         var direccion = `<option info-dir='${JSON.stringify(res[0].direccion)}' value="${res[0].direccion['id_direccion']}">${res[0].direccion['direccion']}</option>`;
+                    //         $("#id_direccionC").empty().html(direccion);
+                    //         $("#id_direccionCC").empty().html(direccion);
+                    //         $("#id_direccionC").change();
+                    //         carga_tabla_productos(res[0].id_cli_prov);
+                    //         valores_sin_iva(res[0].id_cli_prov);
+                    //         crea_producto_nuevo(res[0].id_cli_prov);
+                    //         consecutivo_documento(res[0].pertenece);
+                    //     } else {
+                    //         if ($(".NuevoPEDIDO").is(":visible")) {
+                    //             $(".NuevoPEDIDO").css('display', 'none');
+                    //         }
+                    //     }
+                    // }
+                }
+            });
+        }
+    });
+}
+
+var crear_cliente = function () {
+    $("#form_creacion_cliente").on('submit', function (e) {
+        e.preventDefault();
+        var form = $(this).serializeArray();
+        var exception = ['tipo_cli_prov', 'forma_pago', 'dias_dados', 'pertenece', 'lista_precio', 'cupo_cliente', 'dias_max_mora', 'tipo_prove', 'logo_etiqueta'];
+        var valida = validar_formulario(form, exception);
+        if (valida) {
+            form = $(this).serialize();
+            var id_usuarios_asesor = $('#id_usuarios_asesor').val();
+            if ($('#id_usuarios_asesor').val() == '') {
+                alertify.error('El campo Asesores se requiere almenos un asesor para continuar');
+                return;
+            }
+            var envio = {
+                'form': form,
+                'id_usuarios_asesor': id_usuarios_asesor
+            };
+            $.ajax({
+                "url": `${PATH_NAME}/configuracion/insertar_cliente`,
+                "type": 'POST',
+                "data": envio,
+                "success": function (respuesta) {
+                    $('#crear_direccion').removeClass('d-none');
+                    $('#crear_direccion').removeAttr('disabled');
+                    var nombre_empresa = $('#nombre_empresa').val();
+                    $('#creacion_direc').modal('show');
+                    $('#creacion_cliente').modal('hide');
+                    $('#crear_cliente').attr('disabled', 'disabled');
+                    $('#nombre_empresa_dir').val(nombre_empresa);
+                    $('#id_cli_prov').val(respuesta.id);
+                }
+            });
+        }
+    });
+}
+
+var crear_direccion = function () {
+    $("#form_creacion_direc").on('submit', function (e) {
+        e.preventDefault();
+        var form = $(this).serializeArray();
+        var exception = ['id_cli_prov', 'recor_dia_cierre'];
+        var valida = validar_formulario(form, exception);
+        if (valida) {
+            $.ajax({
+                "url": `${PATH_NAME}/comercial/crear_dir_clientes`,
+                "type": 'POST',
+                "data": form,
+                "success": function (respuesta) {
+                    if (respuesta.status == true) {
+                        $('#creacion_direc').modal('hide');
+                        $('#botones_crea').addClass('d-none');
+                        $("#crea_pedido_directo").trigger('submit');
                     }
                 }
             });
         }
     });
+}
+
+var cargar_data = function (res) {
+    $("#nombre_cliente").empty().html(res[0].nombre_empresa);
+    $("#nit_cliente").empty().html(res[0].nit);
+    $("#id_cliv_provP").val(res[0].id_cli_prov);
+    var direccion = `<option info-dir='${JSON.stringify(res[0].direccion)}' value="${res[0].direccion['id_direccion']}">${res[0].direccion['direccion']}</option>`;
+    $("#id_direccionC").empty().html(direccion);
+    $("#id_direccionCC").empty().html(direccion);
+    $("#id_direccionC").change();
 }
 
 var carga_direccion = function () {
@@ -442,6 +544,8 @@ var crea_producto_nuevo = function (id_cli_prov) {
 
                     $('#cantidad').val(res[0].cantidad_minima);
                     $("#add_producto").attr('data-product', JSON.stringify(res[0]));
+                    $('#valor_venta').empty().html(res[0].precio_venta);
+                    $('#valor_Autoriza').empty().html(res[0].precio_autorizado);
                     var productos_disp = '<option value="0">Seleccione un producto</option>';
                     res.forEach(element => {
                         productos_disp /*html*/ += `<option selected value='${JSON.stringify(element)}'>
@@ -461,18 +565,15 @@ var crea_pedido_directo_galan = function () {
         e.preventDefault();
         var form = $(this).serializeArray();
         var exception = ['data_product', 'id_ruta_embobinado', 'id_core', 'presentacion', 'moneda', 'precio_venta', 'cantidad_minima', 'cantidad_agrega', 'observaciones'];
-
         var validar = validar_formulario(form, exception);
         if (validar) {
             var id_cliv_prov = $("#id_cliv_provP").val();
             var storage = JSON.parse(localStorage.getItem('productos_pedido' + id_cliv_prov));
             if (storage != null && storage.length != 0) { //valida que l local storage no este vacio o nulo
                 $("#data_product").val(JSON.stringify(storage));
-
                 var obj_inicial = $('#btn_crear_pedido').html();
                 btn_procesando('btn_crear_pedido');
                 form = $(this).serializeArray();
-
                 $.ajax({
                     url: `${PATH_NAME}/facturacion/crear_pedido_directo`,
                     method: 'POST',
@@ -481,37 +582,47 @@ var crea_pedido_directo_galan = function () {
                         if (res.status == 1) {
                             alertify.success(res.msg);
                             var lista_empaque = res.num_lista_empaque;
-                            $.ajax({
-                                url: `${PATH_NAME}/configuracion/generar_pdf_lista_empaque`,
-                                type: 'POST',
-                                data: { lista_empaque },
-                                xhrFields: {
-                                    responseType: 'blob'
+                            var totaliza = '';
+                            alertify.confirm('Alerta SIDPA', 'Desea totalizar el documento?',
+                                function () {
+                                    totaliza = 1;
+                                    generar_pdf_lista_empaque(lista_empaque, totaliza, id_cliv_prov);
                                 },
-                                success: function (regreso) {
-                                    var a = document.createElement('a');
-                                    var url = window.URL.createObjectURL(regreso);
-                                    a.href = url;
-                                    a.download = lista_empaque + '_lista_empaque.pdf';
-                                    a.click();
-                                    window.URL.revokeObjectURL(url);
-                                    localStorage.removeItem('productos_pedido' + id_cliv_prov);
-                                    btn_procesando('btn_crear_pedido', obj_inicial, 1);
-                                    location.reload();
+                                function () {
+                                    totaliza = 2;
+                                    generar_pdf_lista_empaque(lista_empaque, totaliza, id_cliv_prov);
 
-                                }
-                            });
+                                }).set('labels', { ok: 'Si', cancel: 'No' });
                         } else {
                             alertify.error(res.msg);
                             btn_procesando('btn_crear_pedido', obj_inicial, 1);
-
                         }
-
                     }
                 });
             } else {
                 alertify.error(`¡¡No hay productos agregados!!`);
             }
+        }
+    });
+}
+
+var generar_pdf_lista_empaque = function (lista_empaque, totaliza, id_cliv_prov) {
+    $.ajax({
+        url: `${PATH_NAME}/configuracion/generar_pdf_lista_empaque`,
+        type: 'POST',
+        data: { lista_empaque, totaliza },
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function (regreso) {
+            var a = document.createElement('a');
+            var url = window.URL.createObjectURL(regreso);
+            a.href = url;
+            a.download = lista_empaque + '_lista_empaque.pdf';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            localStorage.removeItem('productos_pedido' + id_cliv_prov);
+            location.reload();
         }
     });
 }

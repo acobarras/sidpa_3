@@ -18,10 +18,11 @@ use MiApp\persistencia\dao\ActividadAreaDAO;
 use MiApp\persistencia\dao\SeguimientoOpDAO;
 use MiApp\persistencia\dao\control_facturacionDAO;
 use MiApp\persistencia\dao\EntregasLogisticaDAO;
-
-
-
-
+use MiApp\persistencia\dao\TipoDocumentoDAO;
+use MiApp\persistencia\dao\UsuarioDAO;
+use MiApp\persistencia\dao\paisDAO;
+use MiApp\persistencia\dao\departamentoDAO;
+use MiApp\persistencia\dao\ciudadDAO;
 
 class PendidosDirectosControlador extends GenericoControlador
 {
@@ -39,6 +40,11 @@ class PendidosDirectosControlador extends GenericoControlador
     private $SeguimientoOpDAO;
     private $control_facturacionDAO;
     private $EntregasLogisticaDAO;
+    private $TipoDocumentoDAO;
+    private $UsuarioDAO;
+    private $paisDAO;
+    private $departamentoDAO;
+    private $ciudadDAO;
 
     public function __construct(&$cnn)
     {
@@ -59,6 +65,11 @@ class PendidosDirectosControlador extends GenericoControlador
         $this->SeguimientoOpDAO = new SeguimientoOpDAO($cnn);
         $this->control_facturacionDAO = new control_facturacionDAO($cnn);
         $this->EntregasLogisticaDAO = new EntregasLogisticaDAO($cnn);
+        $this->TipoDocumentoDAO = new TipoDocumentoDAO($cnn);
+        $this->UsuarioDAO = new UsuarioDAO($cnn);
+        $this->paisDAO = new paisDAO($cnn);
+        $this->departamentoDAO = new departamentoDAO($cnn);
+        $this->ciudadDAO = new ciudadDAO($cnn);
     }
 
     public function vista_pedidos_directos()
@@ -73,8 +84,12 @@ class PendidosDirectosControlador extends GenericoControlador
                 "ruta_em" => $this->ruta_embobinadoDAO->consultar_ruta_embobinado(),
                 "core" => $this->coreDAO->consultar_core(),
                 "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
-                "usuario" => $_SESSION['usuario']->getnombres() . " " . $_SESSION['usuario']->getapellidos()
-
+                "usuario" => $_SESSION['usuario']->getnombres() . " " . $_SESSION['usuario']->getapellidos(),
+                "documento" => $this->TipoDocumentoDAO->consultar_tipo_documento(),
+                "asesores" => $this->UsuarioDAO->consultar_roll(4),
+                "paises" => $this->paisDAO->consultar_pais(),
+                "departamento" => $this->departamentoDAO->consultar_departamento(),
+                "ciudad" => $this->ciudadDAO->consultar_ciudad()
             ]
         );
     }
@@ -85,11 +100,11 @@ class PendidosDirectosControlador extends GenericoControlador
         $cliente = $this->clientes_proveedorDAO->consultar_nit_clientes($_POST['nit']);
         if (!empty($cliente)) {
             $direccion = $this->direccionDAO->consulta_direccion_cliente($_POST['nit']);
-            if (!empty($direccion) ) {
+            if (!empty($direccion)) {
                 $cliente[0]->direccion = $direccion[0];
             } else {
                 $cliente[0]->direccion = [];
-            }            
+            }
         } else {
             $cliente = [];
         }
