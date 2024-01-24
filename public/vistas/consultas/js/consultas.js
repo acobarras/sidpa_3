@@ -623,7 +623,7 @@ var consulta_ubi_pedido = function () {
                                 { "data": "orden_compra" },
                                 { "data": "codigo" },
                                 { "data": "cantidad_factura" },
-                                { "data": "nombre_ubicacion" },
+                                { "data": "ubicacion_material" },
 
                             ],
                         });

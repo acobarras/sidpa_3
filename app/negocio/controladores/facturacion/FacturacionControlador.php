@@ -242,6 +242,7 @@ class FacturacionControlador extends GenericoControlador
                 'tipo_documento' => $tipo_documento,
                 'usuario_facturacion' => $_SESSION['usuario']->getnombres() . " " . $_SESSION['usuario']->getapellidos(),
                 'total_documento' => $total_documento,
+                'iva' => $datos_cabecera[0]->iva,
             ];
             if ($tipo_documento === '6') {
                 $respu = PDF::cuentaCobroPdf($cabecera, $items_factura);

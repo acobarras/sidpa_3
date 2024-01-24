@@ -247,6 +247,7 @@ var envia = function () {
             type: "POST",
             data: data,
             success: function (res) {
+                UBICACIONES = [];
                 $(`${data.tabla_dt}`).DataTable().ajax.reload(function () {
                     btn_procesando_tabla(`modal_ubica`, obj_inicial, 1);
                     alertify.success(`${res} CORRECTAMENTE.`);

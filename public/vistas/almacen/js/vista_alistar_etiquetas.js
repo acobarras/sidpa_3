@@ -161,6 +161,8 @@ var eliminar_ubi = function () {
     })
 }
 
+// !$ñUBIñDESñ002ñ$UBI
+// !$;UBI;DES;002;$UBI
 
 var envio_alistamiento_checked = function () {
     $("#form_reporta_factu_etiq").on('submit', function (e) {
@@ -168,8 +170,13 @@ var envio_alistamiento_checked = function () {
         var data = JSON.parse($("#btn_reportar_factu_etiq").attr('data-id'));
         var form = $(this).serializeArray();
         var form1 = $(this).serialize();
-        var valida = validar_formulario(form);
+        var excepcion = ['ubicacion_materialmodal'];
+        var valida = validar_formulario(form, excepcion);
         if (valida) {
+            if (UBICACIONES.length == 0) {
+                alertify.error('Se necesita una ubicacion');
+                return;
+            }
             var obj_inicial = $(`#btn_reportar_factu_etiq`).html();
             btn_procesando(`btn_reportar_factu_etiq`);
             $.ajax({
@@ -177,6 +184,7 @@ var envio_alistamiento_checked = function () {
                 type: 'POST',
                 data: { form1, data },
                 success: function (res) {
+                    UBICACIONES = [];
                     if (res.status == 1) {
                         $("#dt_alistamiento_etiquetas").DataTable().ajax.reload(function () {
                             $("#logistica_checked_etiq_Modal").modal('hide');
