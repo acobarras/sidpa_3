@@ -170,7 +170,7 @@ var envio_alistamiento_checked = function () {
         var data = JSON.parse($("#btn_reportar_factu_etiq").attr('data-id'));
         var form = $(this).serializeArray();
         var form1 = $(this).serialize();
-        var excepcion = ['ubicacion_materialmodal'];
+        var excepcion = ['ubicacion_materialmodal','ubicacion_material'];
         var valida = validar_formulario(form, excepcion);
         if (valida) {
             if (UBICACIONES.length == 0) {
