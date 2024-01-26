@@ -15,6 +15,7 @@ var crea_items = function () {
         var valida = validar_formulario(form, exepcion);
         if (valida) {
             var descrip = $("#btn_ingresar_eti").attr('data-valida');
+            var total_ubicacion = $('option:selected', "#ubicacion").attr('data-total');
             if (descrip == 'true') {
                 var items = {
                     documento: 'Memorando Interno Entrega',
@@ -38,14 +39,26 @@ var crea_items = function () {
                     storage.push(items);
                 } else {
                     var respu = false;
+                    var actualizado = false;
                     storage.forEach(element => {
                         if (element.id_producto == items.id_producto) {
-                            var nuevo = parseInt(element.salida) + parseInt(items.salida);
-                            element['salida'] = nuevo;
-                            respu = true;
+                            if (element.ubicacion == items.ubicacion) {
+                                var nuevo = parseInt(element.salida) + parseInt(items.salida);
+                                if (nuevo < total_ubicacion) {
+                                    element['salida'] = nuevo;
+                                } else {
+                                    alertify.error('La cantidad colocada supera la cantidad de la ubicacion');
+                                }
+                                respu = true;
+                                actualizado = true;
+                            } else {
+                                respu = false;
+                            }
+                        } else {
+                            respu = false;
                         }
                     });
-                    if (!respu) {
+                    if (!respu && !actualizado) {
                         storage.push(items);
                     }
                 }
@@ -55,9 +68,8 @@ var crea_items = function () {
                 limpiar_formulario('etiqueta', 'input');
                 limpiar_formulario('etiqueta', 'select');
                 $(`#respuesta`).empty().html('');
+                $(`#valor_ubicacion`).empty().html('');
                 // $(`#ubicacion`).html('');
-
-
             } else {
                 alertify.error('el codigo no valido');
             }
@@ -73,6 +85,7 @@ var crea_tabla = function () {
         "columns": [
             { "data": "codigo_producto" },
             { "data": "salida" },
+            { "data": "ubicacion" },
             { "data": "descripcion" },
             { "data": "cav" },
             { "data": "cor" },
@@ -83,7 +96,7 @@ var crea_tabla = function () {
                 "orderable": false,
                 render: function (data, type, row) {
                     return `<center>
-                                <button class="btn btn-danger btn-sm borrar" data-id="${row.codigo_producto}" type="button" title="elimina"><i class="far fa-trash-alt"></i></button>
+                                <button class="btn btn-danger btn-sm borrar" data-id="${row.codigo_producto}" data-ubi="${row.ubicacion}" type="button" title="elimina"><i class="far fa-trash-alt"></i></button>
                             </center>`;
                 }
             }
@@ -95,9 +108,10 @@ var crea_tabla = function () {
 var borrar_item = function () {
     $('.borrar').on('click', function () {
         var id = $(this).attr('data-id');
+        var ubicacion = $(this).attr('data-ubi');
         let storage = JSON.parse(localStorage.getItem('items_memorando_entrega'));
         storage.forEach(element => {
-            if (element.codigo_producto == id) {
+            if (element.codigo_producto == id && element.ubicacion == ubicacion) {
                 var index = storage.indexOf(element);
                 if (index > -1) {
                     storage.splice(index, 1);
@@ -128,6 +142,7 @@ var validar_codigo_etiq = function () {
                         $('#btn_ingresar_eti').attr('data-valida', true);
                         ubicacion_producto(respu.ubicacion);
                         calculo_ubicacion();
+                        mostrar_span();
                     }
                 } else {
                     $('#respuesta').empty().html(respu.mensaje);
@@ -151,8 +166,15 @@ var ubicacion_producto = function (ubicaciones) {
     $('#ubicacion').select2();
 }
 
+var mostrar_span = function () {
+    $('#ubicacion').on('change', function () {
+        var total = $('option:selected', this).attr('data-total');
+        $('#valor_ubicacion').html('La cantidad de esta ubicacion es:' + total);
+    })
+}
+
 var calculo_ubicacion = function () {
-    $('#salida').on('keyup', function () {
+    $('#salida').on('change', function () {
         var total = $(this).val();
         var elegido = $('#ubicacion').val();
         var elegido_2 = elegido.replace(/ /g, "");
@@ -193,15 +215,15 @@ var genera_documento = function () {
                 responseType: 'blob'
             },
             success: function (regreso) {
-                btn_procesando('crea_salida_inv', obj_inicial, 1);
-                localStorage.removeItem('items_memorando_entrega');
-                location.reload();
-                var a = document.createElement('a');
-                var url = window.URL.createObjectURL(regreso);
-                a.href = url;
-                a.download = 'memorando_interno_entrega.pdf';
-                a.click();
-                window.URL.revokeObjectURL(url);
+                    btn_procesando('crea_salida_inv', obj_inicial, 1);
+                    localStorage.removeItem('items_memorando_entrega');
+                    location.reload();
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(regreso);
+                    a.href = url;
+                    a.download = 'memorando_interno_entrega.pdf';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
             }
         });
     });

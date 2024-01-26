@@ -41,7 +41,7 @@
                         </div>
                         <br />
                         <div class="container">
-                            <form id="etiqueta">                            
+                            <form id="etiqueta">
                                 <div class="mb-3 row">
                                     <label for="codigo_producto" class="col-sm-2 col-form-ablel fw-bold">Codigo Producto:</label>
                                     <div class="col-sm-10">
@@ -71,8 +71,9 @@
                                 <div class="mb-3 row">
                                     <label for="ubicacion" class="col-sm-2 col-form-ablel fw-bold">Ubicación</label>
                                     <div class="col-sm-10" id="select_ubicacion">
-                                    <select class="form-control col-8 select_2" style="width: 100%;"></select>
+                                        <select class="form-control col-8 select_2" style="width: 100%;"></select>
                                     </div>
+                                    <span class="text-center text-success" id="valor_ubicacion"><b></b></span>
                                 </div>
                                 <div class="mb-3 row">
                                     <label for="salida" class="col-sm-2 col-form-ablel fw-bold">Cantidad a sacar:</label>
@@ -121,6 +122,7 @@
                     <tr>
                         <th>Código </th>
                         <th>Cantidad </th>
+                        <th>Ubicacion </th>
                         <th>Descripcción </th>
                         <th>Cav</th>
                         <th>Cor</th>
