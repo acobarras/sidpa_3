@@ -32,16 +32,16 @@ class ConsultasDetalladaControlador extends GenericoControlador
     public function vista_consulta_detallada()
     {
         parent::cabecera();
-        
+
         if ($_SESSION['usuario']->getId_roll() == 4) {
-            $cliente = $this->clientes_proveedorDAO->consultar_clientes_asesor($_SESSION['usuario']->getId_persona());
-        }else{
+            $cliente = $this->clientes_proveedorDAO->consultar_clientes_asesor($_SESSION['usuario']->getId_persona(), $_SESSION['usuario']->getId_usuario());
+        } else {
             $cliente = $this->clientes_proveedorDAO->consultar_clientes();
         }
-        
+
         $this->view(
             'consultas/vista_consulta_detallada',
-            [                
+            [
                 "clientes" => $cliente
             ]
         );
@@ -54,8 +54,8 @@ class ConsultasDetalladaControlador extends GenericoControlador
         $id_persona = $_SESSION['usuario']->getId_persona();
         $id_rol = $_SESSION['usuario']->getId_roll();
         if ($id_rol == 4) {
-            $condicion = 'AND t2.id_persona ='.$id_persona;
-        }else{
+            $condicion = 'AND t2.id_persona =' . $id_persona;
+        } else {
             $condicion = '';
         }
         if ($datos['fecha'] == 1) {
@@ -111,8 +111,8 @@ class ConsultasDetalladaControlador extends GenericoControlador
         $id_rol = $_SESSION['usuario']->getId_roll();
         $texto = $datos['codigo_producto'];
         if ($id_rol == 4) {
-            $condicion = "t1.codigo = '$texto' AND t2.id_persona =".$id_persona;
-        }else{
+            $condicion = "t1.codigo = '$texto' AND t2.id_persona =" . $id_persona;
+        } else {
             $condicion = "t1.codigo = '$texto'";
         }
         $respu = $this->PedidosItemDAO->ConsultaDetallePedido($condicion);
@@ -163,8 +163,8 @@ class ConsultasDetalladaControlador extends GenericoControlador
         $id_persona = $_SESSION['usuario']->getId_persona();
         $id_rol = $_SESSION['usuario']->getId_roll();
         if ($id_rol == 4) {
-            $condicion = "t2.num_pedido = " . $datos['numero_pedido'] . " AND t2.id_persona = ".$id_persona;
-        }else{
+            $condicion = "t2.num_pedido = " . $datos['numero_pedido'] . " AND t2.id_persona = " . $id_persona;
+        } else {
             $condicion = "t2.num_pedido = " . $datos['numero_pedido'];
         }
         $respu = $this->PedidosItemDAO->ConsultaDetallePedido($condicion);
@@ -212,7 +212,7 @@ class ConsultasDetalladaControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $datos = $_POST['form'];
-        $texto= implode(', ', $datos);
+        $texto = implode(', ', $datos);
         $condicion = "t2.id_cli_prov in($texto)";
         $respu = $this->PedidosItemDAO->ConsultaDetallePedido($condicion);
         foreach ($respu as $value) {
