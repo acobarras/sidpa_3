@@ -16,6 +16,8 @@ $(document).ready(function () {
     cambio_per_respuesta();
 });
 
+var ejecutar = true;
+
 var listar_usuarios = function () {
     $.ajax({
         url: `${PATH_NAME}/configuracion/consultar_modulo_usuarios`,
@@ -228,7 +230,10 @@ var permisos_usuario = function () {
             ],
         });
         $('.link_carga').attr('data-usuario', data.id_usuario);
-        permiso_eliminar("#tabla_permisos_usuario tbody", tabla);
+        if (ejecutar) {
+            permiso_eliminar("#tabla_permisos_usuario tbody", tabla);
+            ejecutar = false;
+        }
         $('#inicio-tab').click();
     });
 }
@@ -244,7 +249,8 @@ var boton_regresar = function () {
 var permiso_eliminar = function (tbody, table) {
     $(tbody).on("click", "button.elimina", function (e) {
         e.preventDefault();// Detiene la recarga
-        var data = table.row($(this).parents("tr")).data();
+        // var data = table.row($(this).parents("tr")).data();
+        var data = $('#tabla_permisos_usuario').DataTable().row($(this).parents("tr")).data();
         var form = data.id_permisos;
         $.ajax({
             url: `${PATH_NAME}/configuracion/eliminar_permisos_usuario`,
