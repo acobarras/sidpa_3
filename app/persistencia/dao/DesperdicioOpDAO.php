@@ -115,8 +115,7 @@ class DesperdicioOpDAO extends GenericoDAO
 
     public function metros_lineales_productividad($id_persona, $fecha_desde, $fecha_hasta)
     {
-        $sql = "SELECT SUM(ml_empleado)as total_ml FROM `desperdicio_op` 
-        WHERE id_persona=$id_persona AND SUBSTRING_INDEX(fecha_crea,' ',1) >='$fecha_desde' AND SUBSTRING_INDEX(fecha_crea,' ',1)<='$fecha_hasta'";
+        $sql = "SELECT SUM(CASE WHEN t2.tipo_maquina = 3 AND t1.cantidad_etiquetas != 0 THEN t1.ml_empleado WHEN t2.tipo_maquina !=3 THEN t1.ml_empleado END)as total_ml FROM desperdicio_op t1 INNER JOIN maquinas t2 ON t1.maquina = t2.id_maquina WHERE id_persona = $id_persona AND SUBSTRING_INDEX(fecha_crea,' ',1) >='$fecha_desde' AND SUBSTRING_INDEX(fecha_crea,' ',1)<='$fecha_desde'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -124,7 +123,7 @@ class DesperdicioOpDAO extends GenericoDAO
     }
     public function detalles_productividad($id_persona, $fecha_desde, $fecha_hasta)
     {
-        $sql = "SELECT t1.*,t2.nombre_maquina,t2.tipo_maquina,t3.turno_hora,t3.horario_turno, DAY(t1.fecha_crea) AS dia,SUM(t1.ml_empleado) AS total_dia,t4.nombres,t4.apellidos 
+        $sql = "SELECT t1.*,t2.nombre_maquina,t2.tipo_maquina,t3.turno_hora,t3.horario_turno, DAY(t1.fecha_crea) AS dia,SUM(CASE WHEN t2.tipo_maquina = 3 AND t1.cantidad_etiquetas != 0 THEN t1.ml_empleado WHEN t2.tipo_maquina !=3 THEN t1.ml_empleado END) AS total_dia,t4.nombres,t4.apellidos 
         FROM desperdicio_op t1 
         INNER JOIN maquinas t2 ON t1.maquina=t2.id_maquina 
         LEFT JOIN programacion_operario t3 ON SUBSTRING_INDEX(t1.fecha_crea,' ',1)=t3.fecha_program AND t1.id_persona=t3.id_persona
