@@ -105,8 +105,10 @@ class DesperdicioOpDAO extends GenericoDAO
 
     public function EtiqOperarioTroq($num_op, $id_operario)
     {
-        $sql = "SELECT SUM(cantidad_etiquetas)as total_etiquetas FROM desperdicio_op 
-        WHERE num_produccion= $num_op AND id_operario_troquela = $id_operario";
+        $sql = "SELECT SUM(t1.cantidad_etiquetas)as total_etiquetas 
+            FROM desperdicio_op t1 
+            INNER JOIN maquinas t2 ON t1.maquina = t2.id_maquina 
+            WHERE t1.num_produccion = $num_op AND IF (t2.tipo_maquina = 3, t1.id_persona, t1.id_operario_troquela) = $id_operario";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
