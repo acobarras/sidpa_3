@@ -58,6 +58,7 @@ class DesperdicioOperarioControlador extends GenericoControlador
             $datos_ml_operario = $this->MetrosLinealesDAO->metros_lineales_operario_op($respu_p->id_item_producir);
             foreach ($datos_ml_operario as $value) {
                 $value->num_produccion = $respu_p->num_produccion;
+                $value->mL_total = $respu_p->mL_total;
                 $value->tamanio_etiq = $respu_p->tamanio_etiq;
                 $value->precio_mp = $respu_p->precio_material;
                 $e[] = $value;
@@ -102,27 +103,30 @@ class DesperdicioOperarioControlador extends GenericoControlador
             $calculo->porcentaje_desperdicio = $porcentaje_desperdicio;
             $calculo->precio_desperdicio = $precio_desperdicio;
         }
+        $indice = $result;
         //Se dejan los datos del indicador en una variable aparte
         $indicador = [];
-        foreach ($result as $indica) {
+        foreach ($indice as $indica) {
             if ($indica->total_etiquetas != '') {
-                $repeat = false;
-                for ($i = 0; $i < count($indicador); $i++) {
-                    if ($indicador[$i]->id_persona == $indica->id_persona) {
-                        $indicador[$i]->m2_desperdicio += $indica->m2_desperdicio;
-                        $indicador[$i]->m2_item += $indica->m2_item;
-                        $indicador[$i]->ml_usados += $indica->ml_usados;
-                        $indicador[$i]->porcentaje_desperdicio += $indica->porcentaje_desperdicio;
-                        $indicador[$i]->precio_desperdicio += $indica->precio_desperdicio;
-                        $indicador[$i]->total_etiquetas += $indica->total_etiquetas;
+                foreach ($indicador as &$value) {
+                    $repeat = false;
+                    if ($indica->id_persona == $value->id_persona) {
+                        $value->m2_desperdicio += $indica->m2_desperdicio;
+                        $value->m2_item += $indica->m2_item;
+                        $value->ml_usados += $indica->ml_usados;
+                        $value->porcentaje_desperdicio += $indica->porcentaje_desperdicio;
+                        $value->precio_desperdicio += $indica->precio_desperdicio;
+                        $value->total_etiquetas += $indica->total_etiquetas;
                         $repeat = true;
                         break;
                     }
                 }
-                if ($repeat == false)
-                $indicador[] = $indica;
+            }
+            if (!$repeat) {
+                $indicador[] = clone $indica;
             }
         }
+
 
         $respu = [
             'datos_indicador' => $result,
