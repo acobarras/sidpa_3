@@ -100,6 +100,7 @@ abstract class GenericoControlador
         $todas_hojas = array();
         // CONSULTA DIAS FESTIVOS
         $dias_festivos = $this->dias_festivosDAO->consultar_dias_festivos();
+        $prioridades_mostrar = $this->PrioridadesComercialDAO->mostrar_modal_prio($usuario->getId_usuario());
         $disableddates = '';
         for ($i = 0; $i < count($dias_festivos); $i++) {
             $disableddates .= $dias_festivos[$i]->fecha_dia . ' ';
@@ -134,6 +135,7 @@ abstract class GenericoControlador
                     "dia_festivo" => $dia_festivo,
                     "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
                     "chequeo" => $chequeo,
+                    "prioridades_mostrar" => $prioridades_mostrar,
                 ]
             );
         } else {
@@ -151,6 +153,7 @@ abstract class GenericoControlador
                     "dia_festivos" => $dia_festivo,
                     "trm" => $this->trmDAO->ConsultaUltimoRegistro(),
                     "chequeo" => $chequeo,
+                    "prioridades_mostrar" => $prioridades_mostrar,
                 ]
             );
         }

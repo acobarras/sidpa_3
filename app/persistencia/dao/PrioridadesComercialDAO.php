@@ -60,6 +60,16 @@ class PrioridadesComercialDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
+    function mostrar_modal_prio($id_usuario)
+    {
+        $sql = "SELECT t1.id_prioridad FROM prioridades_comercial t1 
+        LEFT JOIN seguimiento_prioridades t2 ON t1.id_prioridad = t2.id_prioridad AND t2.id_usuario = $id_usuario 
+        WHERE (t1.id_user_recibe LIKE '$id_usuario,%' OR  t1.id_user_recibe LIKE '%,$id_usuario,%' OR t1.id_user_recibe LIKE '%,$id_usuario' OR t1.id_user_recibe = '$id_usuario') AND t2.id_usuario IS NULL AND t1.estado != 2;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 
     function consulta_cant_mensajes($id_prioridad)
     {

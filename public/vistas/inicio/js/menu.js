@@ -2,10 +2,17 @@ $(document).ready(function () {
     mostrar_menu();
     modal_contrasena();
     cambio_contraseña_user();
-    prioridades();
-    $("#prioridades").modal("show");
     $("#chequeo").modal("show");
+    mostrar_modal();
 });
+
+var mostrar_modal = function () {
+    var mostrar = $('#mostrar_modal').val();
+    if (mostrar) {
+        prioridades();
+        $("#prioridades").modal("show");
+    }
+}
 
 // FUNCIÓN PARA DESPLEGAR MENU GLOBAL (SIDEBAR) LATERAL .
 var mostrar_menu = function () {
@@ -58,7 +65,6 @@ var prioridades = function () {
                     type: 'POST',
                     success: function (res) {
                         $('#cerrar_modal_prioridad').removeAttr('disabled', false);
-                        console.log(res);
                         var tb_prioridades = $(`#tb_prioridades`).DataTable({
                             "data": res,
                             "columns": [

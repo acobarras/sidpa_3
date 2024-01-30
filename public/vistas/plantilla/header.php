@@ -133,7 +133,7 @@
         </nav>
         <!-- ICONO DE IMPRESION -->
         <div id="impresion" style="float:left;">
-            
+
         </div>
         <!-- ICONO DE IMPRESION -->
         <div id="menu_lateral" class="sidebar">
@@ -195,11 +195,12 @@
                 <?php } ?>
             </div>
         </div>
-        <input type="hidden" id="data_prioridad" value='<?= $usuario->getResPrioridad(); ?>'>
-        <div id="vista_modal_final"></div>
-        <!-- <?php
-                if ($modal) { ?>
-            <div class="modal fade" id="prioridades" tabindex="-1" aria-labelledby="prioridadesLabel" aria-hidden="true">
+        <input type="hidden" id="mostrar_modal" value="<?= !empty($prioridades_mostrar) ?>">
+        <?php
+            if (!empty($prioridades_mostrar)) { ?>
+            <input type="hidden" id="data_prioridad" value='<?= $usuario->getResPrioridad(); ?>'>
+            <div id="vista_modal_final"></div>
+            <!-- <div class="modal fade" id="prioridades" tabindex="-1" aria-labelledby="prioridadesLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <form class="modal-content">
                         <div class="modal-header header_aco">
@@ -228,8 +229,8 @@
                         </div>
                     </form>
                 </div>
-            </div>
-        <?php } ?> -->
+            </div> -->
+        <?php } ?>
         <?php
             if ($_SESSION['usuario']->getId_roll() == 11) {
                 if (!empty($chequeo)) {
