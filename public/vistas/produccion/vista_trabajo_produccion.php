@@ -214,9 +214,23 @@
                         <span class="respu_consulta"></span>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="troquel">
                     <label for="num_troquel" class="form-label">Numero Troquel : </label>
                     <input autocomplete="off" type="text" class="form-control" name="num_troquel" id="num_troquel">
+                </div>
+                <div id="radio_completo" class="justify-content-center m-2" style="display: none;">
+                    <div class="form-check col-md-3 col-12">
+                        <input class="form-check-input m-1 cierre_item" type="radio" name="cierre_item" id="cierre_item1" value="1" checked>
+                        <label class="form-check-label" for="cierre_item1">
+                            Cierre completo
+                        </label>
+                    </div>
+                    <div class="form-check col-md-3 col-12">
+                        <input class="form-check-input m-1 cierre_item" type="radio" name="cierre_item" id="cierre_item2" value="2">
+                        <label class="form-check-label" for="cierre_item2">
+                            Cierre parcial
+                        </label>
+                    </div>
                 </div>
                 <div id="detencion" style="display: none;">
                     <div class="mb-3">

@@ -193,23 +193,56 @@ class MaquinasProduccionControlador extends GenericoControlador
     public function produccion_comp_incomp()
     {
         header('Content-Type: application/json');
+
+        // datos que siempre llegan 
         $datos = $_POST['envio'];
         $operario = $datos['operario'];
         $motivo_detencion = $datos['detencion'];
-        $materiales = $datos['datos_material']; // Son los anchos entregados
         $data_row = $datos['data_row']; //Son los datos de Item_producir
-        $id_item_producir = $datos['id_item_producir'];
         $parcial_o_total = $datos['parcial_total'];
-        if ($parcial_o_total == 1) { // Se oprimio el boton de produccion completa o terminada
+
+        if ($parcial_o_total == 1) { // reporte completo 
+            $materiales = $datos['datos_material']; // Son los anchos entregados
+            $id_item_producir = $datos['id_item_producir'];
             $cons_actividad_area = 7;
             $motivo_detencion = 'PENDIENTE PROGRAMACIÓN EMBOBINADO';
             $estado_item_producir = 11;
             $grabar_pedido_item = true;
-        } else { // Se oprime el boton produccion incompleta
+            foreach ($materiales as $value) {
+                // Insertar metros lineales utilizados
+                $inser_ml_usados = [
+                    'id_item_producir' => $id_item_producir,
+                    'ancho' => $value['ancho'],
+                    'codigo_material' => $value['codigo_material'],
+                    'metros_lineales' => 0,
+                    'ml_usados' => $value['ml'],
+                    'num_troquel' => $datos['num_troquel'],
+                    'estado_ml' => 1,
+                    'id_persona' => $operario,
+                    'fecha_crea' => date('Y-m-d H:i:s'),
+                ];
+                $id_ml_insertado = $this->MetrosLinealesDAO->insertar($inser_ml_usados);
+                // Insertar desperdicio_op 
+                $inserta_desperdicio_op = [
+                    'num_produccion' => $data_row['num_produccion'],
+                    'id_persona' => $operario,
+                    'ml_empleado' => $value['ml'],
+                    'maquina' => $data_row['id_maquina'],
+                    'cantidad_etiquetas' => 0,
+                    'id_pedido_item' => 0,
+                    'id_metros_lineales' => $id_ml_insertado['id'],
+                    'motivo' => 1,
+                    'fecha_crea' => date('Y-m-d H:i:s'),
+                ];
+                $desperdicio = $this->DesperdicioOpDAO->insertar($inserta_desperdicio_op);
+            }
+        } else { // reporte incompleto 
             $cons_actividad_area = 8;
             $estado_item_producir = 10;
+            $id_item_producir = $datos['data_row']['id_item_producir'];
             $grabar_pedido_item = false;
         }
+
         $area_actividad = $this->ActividadAreaDAO->consultar_id_actividad_area($cons_actividad_area);
         $id_actividad_area = $area_actividad[0]->id_actividad_area;
         $id_area_trabajo = $area_actividad[0]->id_area_trabajo;
@@ -230,35 +263,7 @@ class MaquinasProduccionControlador extends GenericoControlador
             'hora_crea' => date('H:i:s')
         ];
         $this->SeguimientoProduccionDAO->insertar($inser_seguimiento_produccion);
-        foreach ($materiales as $value) {
-            // Insertar metros lineales utilizados
-            $inser_ml_usados = [
-                'id_item_producir' => $id_item_producir,
-                'ancho' => $value['ancho'],
-                'codigo_material' => $value['codigo_material'],
-                'metros_lineales' => 0,
-                'ml_usados' => $value['ml'],
-                'num_troquel' => $datos['num_troquel'],
-                'estado_ml' => 1,
-                'id_persona' => $operario,
-                'fecha_crea' => date('Y-m-d H:i:s'),
-            ];
-            $id_ml_insertado = $this->MetrosLinealesDAO->insertar($inser_ml_usados);
-            // Insertar desperdicio_op 
-            $inserta_desperdicio_op = [
-                'num_produccion' => $data_row['num_produccion'],
-                'id_persona' => $operario,
-                'ml_empleado' => $value['ml'],
-                'maquina' => $data_row['id_maquina'],
-                'cantidad_etiquetas' => 0,
-                'id_pedido_item' => 0,
-                'id_metros_lineales' => $id_ml_insertado['id'],
-                'motivo' => 1,
-                'fecha_crea' => date('Y-m-d H:i:s'),
-            ];
-            $this->DesperdicioOpDAO->insertar($inserta_desperdicio_op);
-        }
-        // Si parcial_o_total es 1 boton verde se cambia el estado a pedidos_item a 15
+
         if ($grabar_pedido_item) {
             $item_op = $this->PedidosItemDAO->ConsultaNumeroPedidoOp($data_row['num_produccion']);
             foreach ($item_op as $res_item_op) {
@@ -312,8 +317,100 @@ class MaquinasProduccionControlador extends GenericoControlador
     public function cambiar_estado_pedido_item()
     {
         header('Content-Type: application/json');
-        $id_pedido_item = $_POST['id_pedido_item'];
-        $editar_pedido_item = ['id_estado_item_pedido' => 15];
+
+        $datos = $_POST['envio'];
+        $tipo_cierre = $datos['tipo_cierre'];
+        $operario = $datos['operario'];
+        $materiales = $datos['datos_material']; // Son los anchos entregados
+        $data_itemProducir = $datos['data_row']["data_op"];
+        $data_pedidosItem =  $datos['data_row']["data_item"];
+        $id_item_producir = $datos['id_item_producir'];
+
+
+        if ($tipo_cierre == 1) { // completo
+            // ============= CONSULTA ITEMS FALTANTES ============
+            $items = $this->PedidosItemDAO->item_pendientes_troquelado($data_itemProducir['num_produccion']);
+            $num_items = count($items);
+            if ($num_items <= 1) { // si solo queda un item retornamos con un mensaje 
+                $res = -1;
+                echo json_encode($res);
+                return;
+            }
+
+            // ========== Seguimiento completos ===================
+            $cons_actividad_area = 105; //TROQUELADO ÍTEM TERMINADO 
+            $motivo_detencion = 'PEDIDO ITEM: ' . $data_pedidosItem['num_pedido'] . '-' . $data_pedidosItem['item'] . ' TROQUELADO';
+
+            // ====================== Estado del item ================ 
+            $editar_pedido_item = ['id_estado_item_pedido' => 15];
+        } else { // incompleto 
+            // ========== Seguimiento incompletos ===================
+            $cons_actividad_area = 8; //Producción Sin Terminar
+            $motivo_detencion = $datos['detencion'];
+
+            // ====================== Estado del item ================
+            $editar_pedido_item = ['id_estado_item_pedido' => 10];  //Producción Sin Terminar
+            // //================== Editar orden de produccion ==============
+            $estado_item_producir = 10; // En Turno Producción
+            $edita_item_producir = ['estado_item_producir' => $estado_item_producir];
+            $condicion_item_producir = 'id_item_producir =' . $id_item_producir;
+            $this->ItemProducirDAO->editar($edita_item_producir, $condicion_item_producir);
+        }
+
+
+
+
+        $area_actividad = $this->ActividadAreaDAO->consultar_id_actividad_area($cons_actividad_area);
+        $id_actividad_area = $area_actividad[0]->id_actividad_area;
+        $id_area_trabajo = $area_actividad[0]->id_area_trabajo;
+
+        // Insertar en seguimiento produccion
+        $inser_seguimiento_produccion = [
+            'num_produccion' => $data_itemProducir['num_produccion'],
+            'id_maquina' => $data_itemProducir['id_maquina'],
+            'id_persona' => $operario,
+            'id_area' => $id_area_trabajo,
+            'id_actividad' => $id_actividad_area,
+            'observacion_op' => $motivo_detencion,
+            'estado_produccion' => 1,
+            'fecha_crea' => date('Y-m-d'),
+            'hora_crea' => date('H:i:s')
+        ];
+        $this->SeguimientoProduccionDAO->insertar($inser_seguimiento_produccion);
+
+        // ============= METROS LINEALES ===============
+        foreach ($materiales as $value) {
+            // Insertar metros lineales utilizados
+            $inser_ml_usados = [
+                'id_item_producir' => $id_item_producir,
+                'ancho' => $value['ancho'],
+                'codigo_material' => $value['codigo_material'],
+                'metros_lineales' => 0,
+                'ml_usados' => $value['ml'],
+                'num_troquel' => $datos['num_troquel'],
+                'estado_ml' => 1,
+                'id_persona' => $operario,
+                'fecha_crea' => date('Y-m-d H:i:s'),
+            ];
+            $id_ml_insertado = $this->MetrosLinealesDAO->insertar($inser_ml_usados);
+            // Insertar desperdicio_op 
+            $inserta_desperdicio_op = [
+                'num_produccion' => $data_itemProducir['num_produccion'],
+                'id_persona' => $operario,
+                'ml_empleado' => $value['ml'],
+                'maquina' => $data_itemProducir['id_maquina'],
+                'cantidad_etiquetas' => 0,
+                'id_pedido_item' => 0,
+                'id_metros_lineales' => $id_ml_insertado['id'],
+                'motivo' => 1,
+                'fecha_crea' => date('Y-m-d H:i:s'),
+            ];
+            $this->DesperdicioOpDAO->insertar($inserta_desperdicio_op);
+        }
+
+        // ==================== CAMBIO DE ESTADO PEDIDO ITEM  ===========
+        $id_pedido_item = $data_pedidosItem["id_pedido_item"];
+        // $editar_pedido_item = ['id_estado_item_pedido' => 15];
         $condicion_pedido_item = 'id_pedido_item =' . $id_pedido_item;
         $this->PedidosItemDAO->editar($editar_pedido_item, $condicion_pedido_item);
         $respu = $this->consultar_trabajo_maquinas();

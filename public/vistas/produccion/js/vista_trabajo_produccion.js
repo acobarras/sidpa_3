@@ -1,5 +1,6 @@
 // 0bcc9ad9aa77a206964b5eed87efad49
 $(document).ready(function () {
+    icono_impresion();//boton de area de trabajo
     trabajo_maquinas();
     select_2();
     $(".datepicker").datepicker();
@@ -10,13 +11,13 @@ $(document).ready(function () {
     validar_operario();
     cerrar_modal();
     envio_datos();
+    cierre_items();
 });
 
 var carga_funcion = function () {
     reasignar(); //Se carga la funcion por primera vez despues de que se crean las tablas
     boton_puesta_punto(); //Se carga la funcion por primera vez despues de que se crean las tablas
     boton_inicio_produccion(); //Se carga la funcion por primera vez despues de que se crean las tablas
-    pro_incompleta();
     pro_completa();
     consulta_seguimiento();
 }
@@ -76,7 +77,7 @@ var carga_tablas = function (data, maquina) {
             { "data": "mL_descontado", render: $.fn.dataTable.render.number('.', ',', 0, '') },
             {
                 "data": "opcion", render: function (data, type, row) {
-                    botones = `<button class="btn btn-info ver_op" data-ver="${row.id_maquina}" title="Ver O.P." ><i class="fa fa-search"></i></button> `;
+                    botones = `<button class="btn btn-info ver_op" data-ver = "${row.id_maquina}" data-fecha = "${row.fecha_produccion}" title="Ver O.P." ><i class="fa fa-search"></i></button> `;
                     if (datos_consulta == 1 && estados_activos.indexOf(row['estado_item_producir'])) { //row['estado_item_producir'] != 9) {
                         botones += `<button class="btn btn-warning reasignar" data-id="${row.id_maquina}" title="Reasignar M.Q" ><i class="fa fa-retweet"></i></button> `;
                     }
@@ -90,11 +91,10 @@ var carga_tablas = function (data, maquina) {
                             botones += `<button class="btn btn-primary puesta_punto" id="puesta_punto${row.id_item_producir}" data-puesta="${row.id_maquina}" title="Puesta Punto"><i class="fa fa-check"></i></button> `;
                         }
                         if (row['estado_item_producir'] == 7) {//pasar a inicio producción
-                            botones += `<button class="btn btn-success inicio_produccion" id="inicio_produc${row.id_item_producir}" inicio-produc="${row.id_maquina}" title="Inicio Producción"><i class="fa fa-check" ></i></button> `;
+                            botones += `<button class="btn btn-secondary inicio_produccion" id="inicio_produc${row.id_item_producir}" inicio-produc="${row.id_maquina}" title="Inicio Producción"><i class="fa fa-check" ></i></button> `;
                         }
                         if (row['estado_item_producir'] == 9) {//pasar a inicio producción
-                            botones += `<button class="btn btn-danger pro_incompleta" id="produc_inco${row.id_item_producir}" produc-inco="${row.id_maquina}" title="Detener"><i class="fa fa-stop"></i></button>
-                                        <button class="btn btn-success pro_completa" id="produc_comp${row.id_item_producir}" produc-comp="${row.id_maquina}" title="Completar"><i class="fa fa-check"></i></button>`;
+                            botones += `<button class="btn btn-success pro_completa" id="produc_comp${row.id_item_producir}" produc-comp="${row.id_maquina}" title="Completar"><i class="fa fa-check"></i></button>`;
                         }
                     }
                     return botones;
@@ -139,7 +139,9 @@ var detailRows = []; //Cunado se requiere poder ver mas de
 var consulta_seguimiento = function (tbody, table) {
     $('.ver_op').on('click', function () {
         var dato = $(this).attr('data-ver');
+        var fecha = $(this).data('fecha');
         var data_row = $(`#tabla_maquina_produccion${dato}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
+        var data_row1 = JSON.stringify(data_row)
         var tr = $(this).closest('tr');
         var row = $(`#tabla_maquina_produccion${dato}`).DataTable().row(tr);
         var idx = $.inArray(tr.attr('id'), detailRows);
@@ -177,8 +179,8 @@ var consulta_seguimiento = function (tbody, table) {
                     {
                         data: "boton1", render: function (data, type, row) {
                             boton = '';
-                            if (data_row.estado_item_producir == 9 && row.id_estado_item_pedido == 10) {
-                                boton += `<button class="btn btn-primary btn-circle cambiar_estado_item" data-item="${row.id_pedido_item}" title="Listo"><i class="fa fa-clipboard-check"></i></button>`;
+                            if (data_row.estado_item_producir == 9 && row.id_estado_item_pedido == 10 && fecha == FECHA_HOY) {// se agrega fecha hoy para que solo se pueda cerrar el item de lo que esta programado 
+                                boton += `<button class="m-1 btn btn-primary btn-circle cambiar_estado_item" data-item="${row.id_pedido_item}" data-op='${JSON.stringify(data_row)}' title="Listo"><i class="fa fa-clipboard-check"></i></button>`;
                             }
                             boton += `<button class="btn btn-success ver_ficha" data_produ="${row.codigo}" title="Ficha Tecnica"><i class="fas fa-eye"></i></button>`;
                             return boton;
@@ -225,23 +227,45 @@ var ver_ficha = function (tbody, table) {
     })
 }
 
-var cambiar_estado_item = function (tbody, table) {
+function cambiar_estado_item(tbody, table) {
     $(tbody).on('click', `tr button.cambiar_estado_item`, function (e) {
-        // e.preventDefault();
+        e.preventDefault();
         var data = table.row($(this).parents("tr")).data();
-        var id_pedido_item = data.id_pedido_item;
-        $.ajax({
-            url: `${PATH_NAME}/produccion/cambiar_estado_pedido_item`,
-            type: 'POST',
-            data: { id_pedido_item },
-            success: function (res) {
-                q_maquinas.forEach(element => {
-                    carga_tablas(res, element.id_maquina);
-                });
-                carga_funcion();
-            }
-        });
+        var data_op = $(this).data('op');
+        var data_completa = { data_item: data, data_op: data_op };
+        $('#grabar_produccion').attr('disabled', true);
+        $('.respu_consulta').empty().html();
+        $('.codigo_operario').val('');
+        $('#ProduccionModal').modal('show');
+        $('#ProduccionModalLabel').empty().html(`Cierre ITEM Orden De Producción: <span style="color:orange">${data.n_produccion}</span> | Pedido Item: ${data.num_pedido}-${data.item} `);
+        $('#tabla_datos_metros_lineales').css('display', '')
+        if (datos_consulta == 1 || id_usuario_sesion == 8 || id_usuario_sesion == 13) {
+            $('#requiere_operario').css('display', '');
+        } else {
+            $('#requiere_operario').css('display', 'none');
+        }
+        $('#data_row').val(JSON.stringify(data_completa));
+        $('#troquel').css('display', '');
+        $('#detencion').css('display', 'none');
+        $('#radio_completo').css('display', 'flex');
+        document.querySelector('#cierre_item1').checked = true;
+        consulta_metros_lineales(data_op.id_item_producir);
+        $('#boton_ejecuta').val(5);// creo que este boton es para enviar el ajax
+
+    })
+}
+
+function cierre_items() {
+    $('.cierre_item').change(function (e) {
+        e.preventDefault();
+        var cierre_item_tipo = $(this).val();
+        if (cierre_item_tipo == 1) {// cierre completo
+            $('#detencion').css('display', 'none');
+        } else if (cierre_item_tipo == 2) {// cierre parcial
+            $('#detencion').css('display', '');
+        }
     });
+
 }
 
 var reasignar = function () {
@@ -484,31 +508,6 @@ var activa_inicio_produccion = function (data, usuario) {
     });
 }
 
-// Boton produccion incompleta
-
-var pro_incompleta = function () {
-    $('.pro_incompleta').on('click', function () {
-        $('#grabar_produccion').attr('disabled', true);
-        $('.respu_consulta').empty().html();
-        $('.codigo_operario').val('');
-        var maquina = $(this).attr('produc-inco');
-        var data = $(`#tabla_maquina_produccion${maquina}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
-        obj_inicial = $(`#produc_inco${data.id_item_producir}`).html();
-        item = data.id_item_producir;
-        // btn_procesando_tabla(`produc_inco${data.id_item_producir}`);
-        $('#ProduccionModal').modal('show');
-        $('#ProduccionModalLabel').empty().html(`Cierre PARCIAL Orden De Producción: <span style="color:darkred">${data.num_produccion}</span> | ${data.nombre_maquina} `);
-        if (datos_consulta == 1 || id_usuario_sesion == 8 || id_usuario_sesion == 13) {
-            $('#requiere_operario').css('display', '');
-        } else {
-            $('#requiere_operario').css('display', 'none');
-        }
-        $('#detencion').css('display', '');
-        $('#data_row').val(JSON.stringify(data));
-        consulta_metros_lineales(data.id_item_producir);
-        $('#boton_ejecuta').val(3);
-    });
-}
 
 var pro_completa = function () {
     $('.pro_completa').on('click', function () {
@@ -519,21 +518,26 @@ var pro_completa = function () {
         var data = $(`#tabla_maquina_produccion${maquina}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
         obj_inicial = $(`#produc_inco${data.id_item_producir}`).html();
         item = data.id_item_producir;
-        // btn_procesando_tabla(`produc_inco${data.id_item_producir}`);
+        btn_procesando_tabla(`produc_inco${data.id_item_producir}`);
         $('#ProduccionModal').modal('show');
         $('#ProduccionModalLabel').empty().html(`Cierre TOTAL Orden De Producción: <span style="color:darkred">${data.num_produccion}</span> | ${data.nombre_maquina}`);
+        $('#tabla_datos_metros_lineales').css('display', '')
         if (datos_consulta == 1 || id_usuario_sesion == 8 || id_usuario_sesion == 13) {
             $('#requiere_operario').css('display', '');
         } else {
             $('#requiere_operario').css('display', 'none');
         }
         $('#detencion').css('display', 'none');
+        $('#troquel').css('display', '');
         $('#data_row').val(JSON.stringify(data));
+        $('#radio_completo').css('display', 'none');
+        document.querySelector('#cierre_item1').checked = true;
         consulta_metros_lineales(data.id_item_producir);
         $('#boton_ejecuta').val(4);
     });
 }
 
+// Esta es la funcion que debo odificar para que no saquen mas del material que hay cargado
 var consulta_metros_lineales = function (id_item_producir) {
     $.ajax({
         url: `${PATH_NAME}/produccion/consultar_metros_lineales_op`,
@@ -599,8 +603,18 @@ var agregar_metros_lineales_radio = function () {
     });
 }
 
+
+
 var envio_datos = function () {
     $('#grabar_produccion').on('click', function () {
+        var valor = $('#boton_ejecuta').val();
+        var tipo_cierre = $('.cierre_item:checked').val() // valor del cirre 1 = completo 2 = incompleto
+        /*boton 5 tiene 2 casos 
+        A-> SI ES 5 Y 1 cirrre completo del item 
+        b-> SI ES 5 Y 2 cierre incompleto del item 
+        c -> si es 4 CIERRE COMPLETO  */
+
+        // ======================== Datos para todos los casos =====================
         var data_row = JSON.parse($('#data_row').val());
         var operario = id_persona_sesion;
         if (datos_consulta == 1 || id_usuario_sesion == 8 || id_usuario_sesion == 13) {
@@ -611,15 +625,12 @@ var envio_datos = function () {
                 return;
             }
         }
-        var num_troquel = $('#num_troquel').val();
-        if (num_troquel == '' || num_troquel == 0) {
-            alertify.error('se requiere numero del troquel utilizado para continuar.');
-            $('#num_troquel').focus();
-            return;
-        }
         var detencion = '';
         var parcial_total = 1;
-        if ($('#boton_ejecuta').val() == 3) {
+        // ===========================================================================
+
+        if (tipo_cierre == 2) { // cierre incompleto
+            // =============== Solo se habilita para el 3 ================================
             if ($('#observacion_op').val() == '' || $('#observacion_op').val() == 0) {
                 alertify.error('se requiere motivo detención para continuar');
                 $('#observacion_op').focus();
@@ -627,72 +638,229 @@ var envio_datos = function () {
             }
             parcial_total = 2;
             detencion = $('#observacion_op').val();
+
+            // ===========================================================================
         }
-        var data_envio = [];
-        // Traigo la data de la table creada
-        var data = $("#tabla_datos_metros_lineales").DataTable().rows().data();
-        var id_item_producir = data[0].id_item_producir;
-        // Recorro la tabla validando que se diligencie en su totalidad
-        var dato_tabla = $("#tabla_datos_metros_lineales").DataTable().rows().nodes();
-        var mensaje = '';
-        $.each(dato_tabla, function (index, value) {
-            var p = $(this).find('input').val();
-            var estado_radio = RadioElegidoAttr(`material${p}`, 'data-radio');
-            var codigo_material = '';
-            if (estado_radio == 'ninguno') {
-            } else {
-                var dato_ml_usados = $(this).find('td').eq(2).html();
-                if (estado_radio == 0) {
-                    dato_ml_usados = $(`#uso${p}`).val();
-                    if (dato_ml_usados == 0 || dato_ml_usados == '') {
-                        mensaje = 'Se requiere los metros lineales usados';
-                        $(`#uso${p}`).focus();
-                        return;
-                    }
-                }
-                codigo_material = $(this).find('td').eq(0).html();
-                ancho = $(this).find('td').eq(1).html();
-                data_carga = {
-                    'codigo_material': codigo_material,
-                    'ancho': ancho,
-                    'ml': dato_ml_usados,
-                };
-                data_envio.push(data_carga);
+        if (valor == 4 || valor == 5) {
+            // ============== Se habilita el troquel en el 4 y 5 =========================
+            var num_troquel = $('#num_troquel').val();
+            if (num_troquel == '' || num_troquel == 0) {
+                alertify.error('se requiere numero del troquel utilizado para continuar.');
+                $('#num_troquel').focus();
+                return;
             }
-        });
-        if (mensaje == '' && data_envio == '') {
-            mensaje = 'Se debe elegir el material utilizado.';
-            alertify.error(mensaje);
-            return;
-        }
-        if (mensaje != '') {
-            alertify.error(mensaje);
-            return;
+            // ===========================================================================
+            // ================ Tabla de metros lineales solo para 4 y 5 =================
+            var data_envio = [];
+            // Traigo la data de la table creada
+            var data = $("#tabla_datos_metros_lineales").DataTable().rows().data();
+            var id_item_producir = data[0].id_item_producir;
+            // Recorro la tabla validando que se diligencie en su totalidad
+            var dato_tabla = $("#tabla_datos_metros_lineales").DataTable().rows().nodes();
+            var mensaje = '';
+            $.each(dato_tabla, function (index, value) {
+                var p = $(this).find('input').val();
+                var estado_radio = RadioElegidoAttr(`material${p}`, 'data-radio');
+                var codigo_material = '';
+                if (estado_radio == 'ninguno') {
+                } else {
+                    var dato_ml_usados = $(this).find('td').eq(2).html();
+                    metros_lineales_existentes = $(this).find('td').eq(2).html();
+                    if (estado_radio == 0) {
+                        dato_ml_usados = $(`#uso${p}`).val();
+                        if (dato_ml_usados == 0 || dato_ml_usados == '') {
+                            mensaje = 'Se requiere los metros lineales usados';
+                            $(`#uso${p}`).focus();
+                            return;
+                        } else if (metros_lineales_existentes < dato_ml_usados) { //aqui podemos mirar que no sea mayor que lo que ya tiene 
+                            mensaje = 'Los metros lineales usados no pueden ser mayor a los cargados';
+                            $(`#uso${p}`).focus();
+                            return;
+                        }
+                        
+                    }
+                    codigo_material = $(this).find('td').eq(0).html();
+                    ancho = $(this).find('td').eq(1).html();
+                    data_carga = {
+                        'codigo_material': codigo_material,
+                        'ancho': ancho,
+                        'ml': dato_ml_usados,
+                    };
+                    data_envio.push(data_carga);
+                }
+            });
+            if (mensaje == '' && data_envio == '') {
+                mensaje = 'Se debe elegir el material utilizado.';
+                alertify.error(mensaje);
+                return;
+            }
+            if (mensaje != '') {
+                alertify.error(mensaje);
+                return;
+            }
+            // ======================================================================
+
         }
         var obj_inicial = $('#grabar_produccion').html();
         btn_procesando('grabar_produccion');
-        // Envio los datos para realizar el cambio del estado y reporte de seguimiento en las tablas necesarias
+
         envio = {
             'operario': operario,
             'detencion': detencion,
             'datos_material': data_envio,
-            'id_item_producir': id_item_producir,
+            'id_item_producir': id_item_producir,// este viene de la tabla de metros lineales
             'data_row': data_row,
-            'parcial_total': parcial_total,
+            'parcial_total': parcial_total,//2 incompleto
             'num_troquel': num_troquel,
+            'tipo_cierre': tipo_cierre
         };
-        $.ajax({
-            url: `${PATH_NAME}/produccion/produccion_comp_incomp`,
-            type: "POST",
-            data: { envio },
-            success: function (res) {
-                q_maquinas.forEach(element => {
-                    carga_tablas(res, element.id_maquina);
-                });
-                carga_funcion();
-                $('#ProduccionModal').modal('toggle');
-                btn_procesando('grabar_produccion', obj_inicial, 1);
-            }
-        });
+
+
+        //================================ Aqui ponemos la funcion de cierre por item =====================
+        if (valor == 5) {// envia a la funcion que cierra cada item completo e incompleto
+            var item = data_row.data_item.num_pedido + '-' + data_row.data_item.item;
+            var op = data_row.data_op.num_produccion;
+            $.ajax({
+                url: `${PATH_NAME}/produccion/cambiar_estado_pedido_item`,
+                type: 'POST',
+                data: { envio },
+                success: function (res) {
+                    if (res == -1) {
+                        alertify.alert('Cerrar Orden', '¡Solo queda un item, por favor cirre la orden completa!', function () {
+                            alertify.error('Cancelado');
+                            $('#ProduccionModal').modal('toggle');
+                            btn_procesando('grabar_produccion', obj_inicial, 1);
+                        });
+                    } else {
+                        q_maquinas.forEach(element => {
+                            carga_tablas(res, element.id_maquina);
+                        });
+                        carga_funcion();
+                        btn_procesando('grabar_produccion', obj_inicial, 1);
+                        impresion_etiquetas_op(op, item, operario);
+                        $('#ProduccionModal').modal('toggle');
+
+                    }
+                }
+            });
+
+            // ================================================================================================
+        } else { // caso del 4 cuando es completa toda la orden
+            var item = 'N/A';
+            var op = data_row.num_produccion;
+            $.ajax({
+                url: `${PATH_NAME}/produccion/produccion_comp_incomp`,
+                type: "POST",
+                data: { envio },
+                success: function (res) {
+                    q_maquinas.forEach(element => {
+                        carga_tablas(res, element.id_maquina);
+                    });
+                    carga_funcion();
+                    impresion_etiquetas_op(op, item, operario);
+                    $('#ProduccionModal').modal('toggle');
+                    btn_procesando('grabar_produccion', obj_inicial, 1);
+                }
+            });
+
+        }
     });
+}
+
+function impresion_etiquetas_op(op, item, id_operario) {
+    //             // =================== Impresion de etiqueta ================
+    $('.div_impresion').empty().html('');
+    alertify.alert('Impresión de etiquetas',
+        `<div class="mb-3 row">
+                 <label for="cantidad" class="col-sm-6 col-form-label fw-bold">Cantidad Etiquetas:</label>
+                 <div class="col-sm-6">
+                     <input type="number" class="form-control" name="cantidad" id="cantidad">
+                 </div>
+                 <div class="div_impresion"></div>
+                 </div>`,
+        function () {
+            var cantidad = $('#cantidad').val();
+            if (cantidad === '' || cantidad <= 0) {
+                $('#cantidad').focus();
+                return false
+            } else {
+                var sistema_operativo = navigator.platform;
+                var eswindow = sistema_operativo.includes('Win')
+                var id_tamano = 3;
+                $.ajax({
+                    type: "GET",
+                    url: `${PATH_NAME}/produccion/impresoras_marcacion`,
+                    data: { id_usuario: $('#sesion').val(), id_tamano: id_tamano, id_estacion_impre: $('#id_estacion_imp').val() },
+                    success: function (res) {
+                        var resolucion = 200;// para eticaribe es de 300 OJO
+                        if (res == -1) {// no hay impresoras en base de datos
+                            impresion_red = false
+                        } else {
+                            impresion_red = true
+                            var datos_impresora = res['impresora'];
+                            resolucion = datos_impresora[0]['resolucion'];
+                        }
+
+                        $.post(`${PATH_NAME}/produccion/impresion_etiquetas_troquelado`,
+                            {
+                                resolucion: resolucion,
+                                data: { op: op, cantidad: cantidad, item: item, id_persona_sesion: id_operario },
+                            },
+                            function (respu) {
+                                if (IMPRESION_API === 1 && impresion_red == true) { // esta es la condicion para imprimir directo o por controlador depende del proyecto
+
+                                    const zplData = respu;
+                                    const ip_impresora = datos_impresora[0]['ip'];
+                                    const xhr = new XMLHttpRequest();
+
+                                    xhr.open('POST', SERVIDOR_IMPRESION + '/print', true);// esta es la ip del servidor de desarrollo el cual servira de alojamiento de la api
+                                    xhr.setRequestHeader('Content-Type', 'application/json');
+
+                                    xhr.onreadystatechange = function () {
+                                        if (xhr.readyState === 4 && xhr.status === 200) {
+                                            respuesta = JSON.parse(xhr.responseText);
+                                            if (respuesta.status == 1) {
+                                                alertify.success('Impresión enviada a la estación ' + datos_impresora[0]['id_estacion'])
+                                            } else {
+                                                alertify.alert('Error de impresión', '¡Verifica la conexión de la impresora!',
+                                                    function () {
+                                                        window.open('https://' + ip_impresora, "_blank")// abrimos la impresora en otra pestaña para ver si esta conectada
+                                                        btn_procesando('imprimir', obj_inicial, 1);
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    };
+                                    xhr.onerror = function (e) {// esta funcion la utilizo cuando no tenemos respuesta del servidor; puede ser por dos razones; no esta corriendo la api o no se han aceptado los certificados autofirmados
+                                        alertify.alert('Error de servidor', '¡Verifica el servidor de impresión!',
+                                            function () {
+                                                window.open(SERVIDOR_IMPRESION, "_blank")// abrimos el servidor en otra pestaña para que acepten el certificado SSL
+                                                btn_procesando('imprimir', obj_inicial, 1);
+                                            }
+                                        );
+                                    };
+
+                                    const data = JSON.stringify({ zplData: zplData, ip: ip_impresora });
+                                    xhr.send(data);
+                                } else if (impresion_red == false && eswindow == false && IMPRESION_API === 1) {
+                                    alertify.alert('Alerta Impresoras', '¡No hay impresoras configuradas para esta área!',
+                                        function () { alertify.success(''); });
+                                } else {
+                                    $('.div_impresion').empty().html(respu);
+                                    var mode = 'iframe'; //popup
+                                    var close = mode == "popup";
+                                    var options = { mode: mode, popClose: close };
+                                    $("div.div_impresion").printArea(options);
+                                }
+
+                            }
+                        )
+                    }
+                })
+            }
+        }).set({
+            'closable': false,
+            'label': 'imprimir',
+            'closableByDimmer': false
+        });
 }
