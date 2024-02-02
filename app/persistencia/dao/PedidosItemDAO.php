@@ -204,8 +204,10 @@ class PedidosItemDAO extends GenericoDAO
 
     public function AvanceOp($op)
     {
-        $sql = "SELECT t2.* FROM pedidos_item t1 
+        $sql = "SELECT t2.*, t3.ancho_op 
+            FROM pedidos_item t1 
             INNER JOIN productos t2 ON t1.codigo = t2.codigo_producto 
+            INNER JOIN item_producir t3 ON t1.n_produccion = t3.num_produccion 
             WHERE t1.n_produccion = '$op' LIMIT 1";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();

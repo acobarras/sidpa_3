@@ -87,9 +87,11 @@ class DesperdicioOperarioControlador extends GenericoControlador
             $ancho = Validacion::ReemplazaCaracter($porciones[0], ',', '.');
             $ancho = ($ancho + GAP_LATERAL) / 1000;
             $alto = $avance[0]->avance / 1000;
+            $ancho_op = $avance[0]->ancho_op;
             $m2_etiquetas = $ancho * $alto;
             $teorico_etiq = $calculo->m2_item / $m2_etiquetas;
             $m2_desperdicio = ($teorico_etiq - $calculo->total_etiquetas) * $m2_etiquetas;
+            $ml_desperdicio = ($m2_desperdicio / $ancho_op)*1000;
             $porcentaje_desperdicio = ($m2_desperdicio / $calculo->m2_item) * 100;
             $precio_desperdicio = $calculo->precio_mp * $m2_desperdicio;
             if ($calculo->total_etiquetas == '') {
@@ -102,6 +104,8 @@ class DesperdicioOperarioControlador extends GenericoControlador
             $calculo->avance = $avance[0]->avance;
             $calculo->porcentaje_desperdicio = $porcentaje_desperdicio;
             $calculo->precio_desperdicio = $precio_desperdicio;
+            $calculo->ml_desperdicio = $ml_desperdicio;
+            $calculo->ancho_op = $ancho_op;
         }
         $indice = $result;
         //Se dejan los datos del indicador en una variable aparte

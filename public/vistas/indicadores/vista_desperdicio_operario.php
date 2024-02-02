@@ -80,10 +80,12 @@
                                             <th>Operario</th>
                                             <th>Tamaño<br>Etiqueta</th>
                                             <th>Material</th>
+                                            <th>Ancho</th>
                                             <th>m<br>Utilizados</th>
                                             <th>Q. Etiquetas</th>
                                             <th>m<sup style="color: white;">2</sup><br>Utilizados</th>
                                             <th>m<sup style="color: white;">2</sup><br>Desperdicio</th>
+                                            <th>ml<br>Desperdicio</th>
                                             <th>%<br />Desperdicio</th>
                                             <th>$<br>M.P.</th>
                                             <th>$<br>Desperdicio</th>
