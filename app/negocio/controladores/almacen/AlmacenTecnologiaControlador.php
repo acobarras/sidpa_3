@@ -264,8 +264,13 @@ class AlmacenTecnologiaControlador extends GenericoControlador
             } else {
                 $nueva_cantidad = $_POST['salida'] + $valida_reporte[0]->cantidad_factura;
                 $ubicacion_material = $_POST['ubicacion_material'] . ',' . $valida_reporte[0]->ubicacion_material;
+                if ($ubicacion_material == '') {
+                    $nueva_ubicacion = $_POST['ubicacion_material'];
+                } else {
+                    $nueva_ubicacion =  $ubicacion_material . ',' . $_POST['ubicacion_material'];
+                }
+                $data['ubicacion_material'] = $nueva_ubicacion;
                 $data['cantidad_factura'] = $nueva_cantidad;
-                $data['ubicacion_material'] = $ubicacion_material;
                 $condicion = 'id_entrega=' . $valida_reporte[0]->id_entrega;
                 $this->EntregasLogisticaDAO->editar($data, $condicion);
             }

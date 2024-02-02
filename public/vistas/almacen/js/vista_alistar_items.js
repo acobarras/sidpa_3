@@ -91,7 +91,7 @@ var alistamiento_items_completos = function () {
                         boton_reproceso = `<button class="btn btn-warning btn-sm item_en_reproceso" title="Enviar a Reproceso" id="item_en_reproceso${row['id_ingresotec']}"><i class="fas fa-sync"></i></button>`;
                     }
                     return `<div>\n\
-                                <button class="btn btn-primary btn-sm logistica_checked" title="Ubicacion Items" id="id_logistica_checked${row['id_ingresotec']}"><i class="fas fa-search"></i></button>\n\
+                                <button class="btn btn-primary btn-sm logistica_checked" data-tabla="#dt_alistamiento_bod_completo" title="Ubicacion Items" id="id_logistica_checked${row['id_ingresotec']}"><i class="fas fa-search"></i></button>\n\
                                 ${boton_alistar}
                                 ${boton_reproceso}
                             </div>`;
@@ -101,7 +101,6 @@ var alistamiento_items_completos = function () {
         ],
     });
     logistica_checked_completo('#dt_alistamiento_bod_completo tbody', table);
-    // envio_completo('#dt_alistamiento_bod_completo tbody', table, '#dt_alistamiento_bod_completo', 2);// el segundo parametro es el tipo de alistamiento en este caso 2 "alistamiento completo".
     enviar_reproceso('#dt_alistamiento_bod_completo tbody', table, '#dt_alistamiento_bod_completo', 4);// el tercer parametro es para poder recargar la tabla despues de la accion y el cuarto parametro es el tipo de alistamiento 4 "reproceso completo"
     reportar_cant_reproceso('#dt_alistamiento_bod_completo tbody', table);
 }
@@ -125,18 +124,18 @@ var tabla_ver_producto = function (data) {
     return respu;
 }
 var logistica_checked_completo = function (tbody, table) {
-    $(tbody).on('click', 'tr button.logistica_checked', function () {
+    $('#dt_alistamiento_bod_completo, #dt_alistamiento_bod_incompleto').on('click', 'tr button.logistica_checked', function () {
+        var tablaDT = $(this).data('tabla');
+        var data = $(`${tablaDT}`).DataTable().row($(this).parents("tr")).data();
         var tr = $(this).closest('tr');
         var row = table.row(tr);
         var idx = $.inArray(tr.attr('id'), detailProd);
         if (row.child.isShown()) {
             tr.removeClass('details');
             row.child.hide();
-
             // Eliminar de la matriz 'abierta'
             detailProd.splice(idx, 1);
         } else {
-            var data = table.row($(this).parents("tr")).data();
             tr.addClass('details');
             row.child(tabla_ver_producto(data)).show();
             var documento = data.documento;
@@ -157,7 +156,6 @@ var logistica_checked_completo = function (tbody, table) {
                             return input;
                         }
                     },
-                    // { "data": "salida" },
                 ]
             });
             if (idx === -1) {
@@ -166,25 +164,23 @@ var logistica_checked_completo = function (tbody, table) {
         }
     });
 }
-var envio_completo = function (tbody, table, reload, alistamiento) {
-    $(tbody).on('click', 'tr button.report_cant_factu', function () {
-        //envia(data, alistamiento, reload);
 
-    });
-}
 var UBICACIONES = [];
-
+var DATOS_TABLA = [];
 var tablas = function () {
     $('#dt_alistamiento_bod_completo, #dt_alistamiento_bod_incompleto').on('click', 'tr button.report_cant_factu', function () {
         $('#ubicacion').modal('show');
         UBICACIONES = [];
+        if (DATOS_TABLA.length != 0 || DATOS_TABLA != '') {
+            DATOS_TABLA = [];
+        }
         cargar_span();
         var tablaDT = $(this).data('tabla');
         var alistamiento = $(this).attr('data_alistamiento');
         var data = $(`${tablaDT}`).DataTable().row($(this).parents("tr")).data();
         data.alistamiento = alistamiento;// llega como atributo
         data.tabla_dt = tablaDT;
-        $('#modal_ubica').attr('data-item', JSON.stringify(data));
+        DATOS_TABLA = data;
     })
 }
 
@@ -213,7 +209,6 @@ var ubicaciones = function () {
 
 var cargar_span = function () {
     var html = '';
-    console.log(UBICACIONES);
     UBICACIONES.forEach((element, a) => {
         html += `${element} <button class="btn btn-danger btn-sm btn_eliminar" type="button" title="Eliminar Ubi" data-posicion="${a}"><i class="fas fa-trash-alt"></i></button><br>`
     });
@@ -224,7 +219,6 @@ var cargar_span = function () {
 var eliminar_ubi = function () {
     $('.btn_eliminar').on('click', function (e) {
         e.preventDefault();
-        console.log('hola');
         var posicion = $(this).data('posicion');
         UBICACIONES.splice(posicion, 1);
         cargar_span();
@@ -234,7 +228,7 @@ var eliminar_ubi = function () {
 var envia = function () {
     $('#modal_ubica').on('click', function (e) {
         e.preventDefault();
-        var data = $(this).data('item');
+        var data = DATOS_TABLA;
         if (UBICACIONES.length == 0) {
             alertify.error('Tiene que colocar una ubicacion');
             return;
@@ -263,6 +257,7 @@ var enviar_reproceso = function (tbody, table, reload, alistamiento) {
         var obj_inicial = $(`#item_en_reproceso${data['id_ingresotec']}`).html();
         btn_procesando_tabla(`item_en_reproceso${data['id_ingresotec']}`);
         data.alistamiento = alistamiento;
+        $("div.div_impresion").empty().html('');
         $.ajax({
             url: `${PATH_NAME}/almacen/creacion_reproceso_logistica`,
             type: "POST",
@@ -271,9 +266,12 @@ var enviar_reproceso = function (tbody, table, reload, alistamiento) {
                 $(reload).DataTable().ajax.reload(function () {
                     btn_procesando_tabla(`item_en_reproceso${data['id_ingresotec']}`, obj_inicial, 1);
                     alertify.success(`${res.observacion} CORRECTAMENTE.`);
-                    $("div.div_impresion").empty().html(res.etiqueta);
-                    $("div.div_impresion").printArea();
-                    $("div.div_impresion").addClass('d-none');
+                    $('div.div_impresion').empty().html(res.etiqueta);
+                    var mode = 'iframe'; //popup
+                    var close = mode == "popup";
+                    var options = { mode: mode, popClose: close };
+                    $("div.div_impresion").printArea(options);
+                    $("div.div_impresion").empty().html('');
                 });
             }
         });
@@ -402,7 +400,7 @@ var alistamiento_items_incompletos = function () {
 
                     }
                     return `<div>
-                                <button class="btn btn-primary btn-sm logistica_checked" title="Ubicacion Items" id="id_logistica_checked${row['id_ingresotec']}"><i class="fas fa-search"></i></button>\n\
+                                <button class="btn btn-primary btn-sm logistica_checked" data-tabla="#dt_alistamiento_bod_incompleto" title="Ubicacion Items" id="id_logistica_checked${row['id_ingresotec']}"><i class="fas fa-search"></i></button>\n\
                                 ${boton_alistar}
                                 ${boton_reproceso}
                             </div>`;
@@ -410,8 +408,7 @@ var alistamiento_items_incompletos = function () {
             }
         ],
     });
-    logistica_checked_completo('#dt_alistamiento_bod_incompleto', table1);
-    // envio_completo('#dt_alistamiento_bod_incompleto tbody', table1, '#dt_alistamiento_bod_incompleto', 3);// el segundo parametro es el tipo de alistamiento en este caso 2 "alistamiento completo".
+    logistica_checked_completo('#dt_alistamiento_bod_incompleto tbody', table1);
     enviar_reproceso('#dt_alistamiento_bod_incompleto tbody', table1, '#dt_alistamiento_bod_incompleto', 5);// el tercer parametro es para poder recargar la tabla despues de la accion y el cuarto parametro es el tipo de alistamiento 5 "reproceso incompleto"
     reportar_cant_reproceso('#dt_alistamiento_bod_incompleto tbody', table1);
 }
@@ -469,7 +466,6 @@ var alistamiento_items_bobina = function () {
                     return `<div>
                                 <button class="btn btn-primary btn-sm consulta_inventario" title="Consulta Inventario"><i class="fas fa-search"></i></button>\n\
                                 </div>`;
-                    // <button class="btn btn-success btn-sm envio_compras" title="Enviar a compras"><i class="fas fa-cart-plus"></i></button>\n\
                 }
             }
         ],
@@ -598,8 +594,6 @@ var consulta_ubicacion_inventario = function (tbody, table, data_princi) {
         if (row.child.isShown()) {
             tr.removeClass('details');
             row.child.hide();
-
-            // Eliminar de la matriz 'abierta'
             detailProd_ubi_bobi.splice(idx, 1);
         } else {
             var data = table.row($(this).parents("tr")).data();
