@@ -49,7 +49,7 @@ class AlistaTecnologiaControlador extends GenericoControlador
     public function reportar_facturacion()
     {
         header('Content-Type: application/json'); //convierte a json
-        $form = Validacion::Decodifica($_POST['form1']);
+        $form = $_POST['form1'];
         $data = $_POST['data'];
         /* Registrar entregas_logistica tabla */
         $obj['id_usuario'] = $_SESSION['usuario']->getId_usuario();
@@ -63,8 +63,13 @@ class AlistaTecnologiaControlador extends GenericoControlador
         if (!empty($item_facturacion)) {
             $cantidad_lista = $item_facturacion[0]->cantidad_factura;
             $ubicacion_material = $item_facturacion[0]->ubicacion_material;
+            if ($ubicacion_material == '') {
+                $nueva_ubicacion = $form['ubicacion_material'];
+            } else {
+                $nueva_ubicacion =  $ubicacion_material . ',' . $form['ubicacion_material'];
+            }
+            $obj['ubicacion_material'] = $nueva_ubicacion;
             $obj['cantidad_factura'] = $form['cantidad_factura'] + $cantidad_lista;
-            $obj['ubicacion_material'] = $form['ubicacion_material'] . ',' . $ubicacion_material;
             $condicion_entrega = 'id_entrega =' . $item_facturacion[0]->id_entrega;
             $this->EntregasLogisticaDAO->editar($obj, $condicion_entrega);
         } else {

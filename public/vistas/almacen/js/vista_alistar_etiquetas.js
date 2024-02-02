@@ -169,8 +169,8 @@ var envio_alistamiento_checked = function () {
         e.preventDefault();
         var data = JSON.parse($("#btn_reportar_factu_etiq").attr('data-id'));
         var form = $(this).serializeArray();
-        var form1 = $(this).serialize();
-        var excepcion = ['ubicacion_materialmodal','ubicacion_material'];
+        var form1 = form.reduce(function (a, z) { a[z.name] = z.value; return a; }, {});
+        var excepcion = ['ubicacion_materialmodal', 'ubicacion_material'];
         var valida = validar_formulario(form, excepcion);
         if (valida) {
             if (UBICACIONES.length == 0) {
@@ -179,6 +179,7 @@ var envio_alistamiento_checked = function () {
             }
             var obj_inicial = $(`#btn_reportar_factu_etiq`).html();
             btn_procesando(`btn_reportar_factu_etiq`);
+            form1.ubicacion_material = UBICACIONES.toString();
             $.ajax({
                 url: `${PATH_NAME}/almacen/reportar_facturacion_etiq`,
                 type: 'POST',
