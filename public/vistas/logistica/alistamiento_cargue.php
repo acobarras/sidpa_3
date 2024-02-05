@@ -42,6 +42,7 @@
                     <thead style="background: #002b5f;color: white">
                         <tr>
                             <th>Cliente</th>
+                            <th>Dirección</th>
                             <th>N° Pedido</th>
                             <th>Item</th>
                             <th>Codigo</th>

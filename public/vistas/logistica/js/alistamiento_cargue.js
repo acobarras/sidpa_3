@@ -119,6 +119,7 @@ var generar_doc = function () {
                     }],
                     "columns": [
                         { data: "nombre_empresa" },
+                        { data: "direccion" },
                         { data: "num_pedido" },
                         { data: "item" },
                         { data: "codigo" },
