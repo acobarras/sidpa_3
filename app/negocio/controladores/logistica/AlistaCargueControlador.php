@@ -53,6 +53,7 @@ class AlistaCargueControlador extends GenericoControlador
                 $data1 = array(
                     'nombre_empresa' => $pedido['nombre_empresa'],
                     'num_pedido' => $pedido['num_pedido'],
+                    'direccion' => $pedido['direccion'],
                     'item' => $item->item,
                     'codigo' => $item->codigo,
                     'descripcion_productos' => $item->descripcion_productos,
