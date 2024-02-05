@@ -120,4 +120,12 @@ class ImpresionEtiquetasControlador extends GenericoControlador
     {
         $this->zpl('impresion_etiquetas_marcacion');
     }
+
+    public function impresion_etiquetas_troquelado()
+    {
+        $id_persona = $_POST['data']['id_persona_sesion'];
+        $datos_persona = $this->PersonaDAO->consultar_personas_id($id_persona);
+        $_POST['datos_persona'] = $datos_persona;
+        $this->zpl('etiqueta_marcacion_troquelado');
+    }
 }

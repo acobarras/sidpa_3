@@ -349,4 +349,12 @@ class PedidosItemDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function item_pendientes_troquelado($num_op)  {
+        
+        $sql = "SELECT * FROM `pedidos_item` WHERE n_produccion = $num_op AND id_estado_item_pedido = 10";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
