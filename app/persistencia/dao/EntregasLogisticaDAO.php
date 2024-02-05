@@ -209,4 +209,88 @@ class EntregasLogisticaDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+
+    public function consultar_pedidos_alista()
+    {
+        $sql = "SELECT 
+        t2.id_pedido,t1.num_pedido, t1.nombre_empresa, t1.forma_pago, t1.orden_compra, t1.difer_mas, t1.difer_menos, t1.difer_ext, t1.porcentaje, t1.fecha_compromiso, t1.direccion, t1.celular, t1.contacto,t1.nombre_ruta, t1.ruta ,t2.cantidad_items, t2.alistar, t2.items_estado17
+    FROM (
+       
+        SELECT t2.num_pedido, t3.nombre_empresa, t2.orden_compra, t2.difer_mas, t2.difer_menos, t2.difer_ext, t2.porcentaje, t2.fecha_compromiso, t4.direccion, t4.celular, t4.contacto,t4.ruta,t3.forma_pago,t6.nombre_ruta
+        FROM entrada_tecnologia t1 
+        INNER JOIN pedidos t2 ON SUBSTRING_INDEX(t1.documento,'-',1) = t2.num_pedido
+        INNER JOIN cliente_proveedor t3 ON t3.id_cli_prov = t2.id_cli_prov
+        INNER JOIN direccion t4 ON t2.id_dire_entre = t4.id_direccion
+        INNER JOIN pedidos_item t5 ON t2.id_pedido = t5.id_pedido
+        INNER JOIN ruta_entrega t6 ON t6.id_ruta=t4.ruta
+        WHERE t1.estado_inv IN (2,4) AND t1.documento LIKE '%-%' GROUP BY t2.num_pedido
+    
+        UNION
+    
+        SELECT t2.num_pedido, t3.nombre_empresa, t2.orden_compra, t2.difer_mas, t2.difer_menos, t2.difer_ext, t2.porcentaje, t2.fecha_compromiso, t4.direccion, t4.celular, t4.contacto,t4.ruta,t3.forma_pago,t5.nombre_ruta
+        FROM pedidos_item t1
+        INNER JOIN pedidos t2 ON t1.id_pedido = t2.id_pedido
+        INNER JOIN cliente_proveedor t3 ON t3.id_cli_prov = t2.id_cli_prov
+        INNER JOIN direccion t4 ON t4.id_direccion = t2.id_dire_entre
+        INNER JOIN ruta_entrega t5 ON t5.id_ruta=t4.ruta
+        WHERE t1.id_estado_item_pedido = 16 GROUP BY t2.num_pedido
+    
+        UNION
+    
+        SELECT t3.num_pedido, t4.nombre_empresa, t3.orden_compra, t3.difer_mas, t3.difer_menos, t3.difer_ext, t3.porcentaje, t3.fecha_compromiso, t5.direccion,t5.celular,t5.contacto,t5.ruta,t4.forma_pago,t6.nombre_ruta
+        FROM entregas_logistica t1 
+        INNER JOIN pedidos_item t2 ON t2.id_pedido_item = t1.id_pedido_item
+        INNER JOIN pedidos t3 ON t3.id_pedido = t2.id_pedido
+        INNER JOIN cliente_proveedor t4 ON t4.id_cli_prov = t3.id_cli_prov
+        INNER JOIN direccion t5 ON t5.id_direccion = t3.id_dire_entre
+        INNER JOIN ruta_entrega t6 ON t6.id_ruta=t5.ruta
+        WHERE t1.estado = 1 GROUP BY t3.num_pedido
+    ) AS t1
+    INNER JOIN (
+        
+        SELECT t3.id_pedido, t3.num_pedido, COUNT(t2.item) AS cantidad_items, 
+               CASE WHEN SUM(CASE WHEN t2.id_estado_item_pedido IN (17,16) THEN 1 ELSE 0 END) = COUNT(t2.item) THEN 'COMPLETO' ELSE 'INCOMPLETO' END AS alistar, 
+               GROUP_CONCAT(CASE WHEN t2.id_estado_item_pedido IN (17,16) THEN t2.item END) AS items_estado17
+        FROM pedidos t3 
+        INNER JOIN pedidos_item t2 ON t3.id_pedido = t2.id_pedido 
+        GROUP BY t3.id_pedido 
+        HAVING alistar = 'COMPLETO'
+    ) AS t2 ON t1.num_pedido = t2.num_pedido;";
+
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
+
+    public function consulta_items_alista($id_pedido)
+    {
+        $sql = "SELECT t1.ubicacion, t1.salida AS cantidad_pendiente, 'ALISTAMIENTO' AS modulo, t2.num_pedido, t2.id_pedido, t3.item, t3.codigo, t3.Cant_solicitada,t4.descripcion_productos
+        FROM entrada_tecnologia t1
+        INNER JOIN pedidos t2 ON t2.num_pedido = SUBSTRING_INDEX(t1.documento,'-',1)  
+        INNER JOIN pedidos_item t3 ON t3.id_pedido = t2.id_pedido
+        INNER JOIN productos t4 ON t4.codigo_producto=t3.codigo
+        WHERE t1.documento LIKE '%$id_pedido-%' AND  SUBSTRING_INDEX(t1.documento,'-',-1) = t3.item AND t1.estado_inv !=1
+        
+        UNION
+        
+        SELECT 'NO APLICA' AS ubicacion, t4.cant_op AS cantidad_pendiente, 'VALIDACION LOGISTICA' AS modulo, t5.num_pedido, t4.id_pedido, t4.item, t4.codigo, t4.Cant_solicitada,t6.descripcion_productos
+        FROM pedidos_item t4
+        INNER JOIN pedidos t5 on t5.id_pedido = t4.id_pedido
+        INNER JOIN productos t6 ON t6.codigo_producto=t4.codigo
+        WHERE t5.num_pedido = $id_pedido AND t4.id_estado_item_pedido =16
+        
+        UNION
+        
+        SELECT t6.ubicacion_material AS ubicacion,t6.cantidad_factura AS cantidad_pendiente,'PENDIENTE POR FACTURAR' AS modulo,t8.num_pedido,t7.id_pedido,t7.item,t7.codigo,t7.Cant_solicitada,t9.descripcion_productos
+        FROM entregas_logistica t6
+        INNER JOIN pedidos_item t7 ON t7.id_pedido_item = t6.id_pedido_item
+        INNER JOIN pedidos t8 ON t8.id_pedido = t7.id_pedido
+        INNER JOIN productos t9 ON t9.codigo_producto=t7.codigo
+        WHERE t6.estado = 1 AND t8.num_pedido = $id_pedido;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }
