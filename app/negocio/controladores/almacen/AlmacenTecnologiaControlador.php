@@ -199,35 +199,35 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         header('Content-Type: application/json');
         $completo = $_GET['data'];
         $items_bodega = $this->entrada_tecnologiaDAO->consultar_items_pendientes_bodega($completo);
-        foreach ($items_bodega as $value) {
-            $caracter = "-";
-            $posicion_coincidencia = strpos($value->documento, $caracter);
-            $num_pedido = substr($value->documento, 0, $posicion_coincidencia);
-            $item = substr($value->documento, ($posicion_coincidencia + 1));
-            $pedido = $this->PedidosDAO->consultar_descarga_pedido($num_pedido); //nos sirve esta funcion para consultar
-            $id_pedido = 0;
-            foreach ($pedido as $value1) {
-                $pedidos_item = $this->PedidosItemDAO->ConsultaIdPedido($value1->id_pedido); //nos sirve esta funcion para consultar
-                $id_pedido = $pedidos_item[0]->id_pedido;
-                $value->fecha_compromiso = $value1->fecha_compromiso;
-                $value->nombre_empresa = $pedidos_item[0]->nombre_empresa;
-                $value->ruta =  RUTA_ENTREGA[$pedidos_item[0]->ruta];
-                $value->nombre_estado_item =  $value->nombre_estado;
-                $value->difer_mas = $value1->difer_mas;
-                $value->difer_menos = $value1->difer_menos;
-                $value->difer_ext = $value1->difer_ext;
-                $value->porcentaje = $value1->porcentaje;
-                $value->num_pedido = $num_pedido;
-            }
-            $datos_alistar = $this->PedidosItemDAO->ConsultaIdPedidoIdItem($id_pedido, $item);
-            $value->datos_item = $datos_alistar;
-            if ($value->estado_inv == 4 || $value->estado_inv == 5) {
-                $estado_inventario = $value->estado_inv;
-            } else {
-                $estado_inventario = $value->estado_inv;
-            }
-            $value->estado_inv = $estado_inventario;
-        }
+        // foreach ($items_bodega as $value) {
+        //     $caracter = "-";
+        //     $posicion_coincidencia = strpos($value->documento, $caracter);
+        //     $num_pedido = substr($value->documento, 0, $posicion_coincidencia);
+        //     $item = substr($value->documento, ($posicion_coincidencia + 1));
+        //     $pedido = $this->PedidosDAO->consultar_descarga_pedido($num_pedido); //nos sirve esta funcion para consultar
+        //     $id_pedido = 0;
+        //     foreach ($pedido as $value1) {
+        //         $pedidos_item = $this->PedidosItemDAO->ConsultaIdPedido($value1->id_pedido); //nos sirve esta funcion para consultar
+        //         $id_pedido = $pedidos_item[0]->id_pedido;
+        //         $value->fecha_compromiso = $value1->fecha_compromiso;
+        //         $value->nombre_empresa = $pedidos_item[0]->nombre_empresa;
+        //         $value->ruta =  RUTA_ENTREGA[$pedidos_item[0]->ruta];
+        //         $value->nombre_estado_item =  $value->nombre_estado;
+        //         $value->difer_mas = $value1->difer_mas;
+        //         $value->difer_menos = $value1->difer_menos;
+        //         $value->difer_ext = $value1->difer_ext;
+        //         $value->porcentaje = $value1->porcentaje;
+        //         $value->num_pedido = $num_pedido;
+        //     }
+        //     $datos_alistar = $this->PedidosItemDAO->ConsultaIdPedidoIdItem($id_pedido, $item);
+        //     $value->datos_item = $datos_alistar;
+        //     if ($value->estado_inv == 4 || $value->estado_inv == 5) {
+        //         $estado_inventario = $value->estado_inv;
+        //     } else {
+        //         $estado_inventario = $value->estado_inv;
+        //     }
+        //     $value->estado_inv = $estado_inventario;
+        // }
         $data['data'] = $items_bodega;
         echo json_encode($data);
     }
@@ -236,10 +236,10 @@ class AlmacenTecnologiaControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $datos = $_POST;
-        $valida_reporte = $this->EntregasLogisticaDAO->valida_edicion_item($datos['datos_item'][0]['id_pedido_item']);
+        $valida_reporte = $this->EntregasLogisticaDAO->valida_edicion_item($datos['id_pedido_item']);
         $impresion_variable = false;
         // validacion de informacion variable 
-        $codigo = $datos['datos_item'][0]["codigo"];
+        $codigo = $datos["codigo"];
         $caracter = "-";
         $posicion_coincidencia = strpos($codigo, $caracter);
         $tinta_codigo = substr($codigo, ($posicion_coincidencia + 6), 2);
@@ -252,7 +252,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         if ($impresion_variable === false) { // Reportamos a facturación cuando no es impresion varibale 
             if (empty($valida_reporte)) {
                 $data = [
-                    'id_pedido_item' => $datos['datos_item'][0]['id_pedido_item'],
+                    'id_pedido_item' => $datos['id_pedido_item'],
                     'cantidad_factura' => $_POST['salida'],
                     'ubicacion_material' => $_POST['ubicacion_material'],
                     'id_usuario' => $_SESSION['usuario']->getid_usuario(),
@@ -286,7 +286,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
             'id_area' => 1,
             'id_actividad' => 17,
             'pedido' => $_POST['num_pedido'],
-            'item' => $datos['datos_item'][0]['item'],
+            'item' => $datos['item'],
             'observacion' => $observacion,
             'estado' => 1,
             'id_usuario' => $_SESSION['usuario']->getid_usuario(),
@@ -387,10 +387,10 @@ class AlmacenTecnologiaControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $datos = $_POST;
-        $valida_reporte = $this->EntregasLogisticaDAO->valida_edicion_item($datos['datos_item'][0]['id_pedido_item']);
+        $valida_reporte = $this->EntregasLogisticaDAO->valida_edicion_item($datos['id_pedido_item']);
         if (empty($valida_reporte)) {
             $data = [
-                'id_pedido_item' => $datos['datos_item'][0]['id_pedido_item'],
+                'id_pedido_item' => $datos['id_pedido_item'],
                 'cantidad_factura' => $_POST['salida'],
                 'id_usuario' => $_SESSION['usuario']->getid_usuario(),
                 'estado' => 1,
@@ -414,7 +414,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
             'id_area' => 1,
             'id_actividad' => 17,
             'pedido' => $_POST['num_pedido'],
-            'item' => $datos['datos_item'][0]['item'],
+            'item' => $datos['item'],
             'observacion' => $observacion,
             'estado' => 1,
             'id_usuario' => $_SESSION['usuario']->getid_usuario(),

@@ -80,12 +80,26 @@ class entrada_tecnologiaDAO extends GenericoDAO
     }
     public function consultar_items_pendientes_bodega($parametro)
     {
-        $sql = "SELECT t1.id_ingresotec, t1.documento, t1.codigo_producto,t1.estado_inv ,SUM(t1.salida) AS salida, t3.nombre_articulo,t3.id_clase_articulo,t2.descripcion_productos,t4.nombre_estado 
-            FROM entrada_tecnologia AS t1 
-            INNER JOIN productos AS t2 ON t1.id_productos=t2.id_productos 
-            INNER JOIN tipo_articulo AS t3 ON t2.id_tipo_articulo=t3.id_tipo_articulo 
-            INNER JOIN estados_alistamiento AS t4 ON t1.estado_inv=t4.id 
-            WHERE t1.estado_inv in ($parametro) AND t3.id_clase_articulo!=1 GROUP BY t1.documento";
+        $sql = "SELECT t5.id_pedido, t5.fecha_compromiso, t7.nombre_empresa, t9.nombre_ruta AS ruta, t10.nombre_estado_item, t5.difer_mas, t5.difer_menos, t5.difer_ext, t5.porcentaje, t1.id_ingresotec, t1.documento, t1.codigo_producto, t1.estado_inv ,SUM(t1.salida) AS salida, t3.nombre_articulo,t3.id_clase_articulo,t2.descripcion_productos,t4.nombre_estado, t5.num_pedido, t6.core, t11.nombre_core, t6.cant_x,t12.nombre_clase_articulo AS grupo,t6.n_produccion,t6.id_pedido_item,t6.item,t6.codigo
+        FROM entrada_tecnologia AS t1 
+        INNER JOIN productos AS t2 ON t1.id_productos=t2.id_productos 
+        INNER JOIN tipo_articulo AS t3 ON t2.id_tipo_articulo=t3.id_tipo_articulo 
+        INNER JOIN estados_alistamiento AS t4 ON t1.estado_inv=t4.id 
+        INNER JOIN pedidos t5 ON t5.num_pedido = SUBSTRING_INDEX(t1.documento,'-',1)
+        INNER JOIN pedidos_item t6 ON t6.id_pedido = t5.id_pedido
+        INNER JOIN cliente_proveedor t7 on t7.id_cli_prov = t5.id_cli_prov
+        INNER JOIN direccion t8 ON t8.id_direccion = t5.id_dire_entre
+        INNER JOIN ruta_entrega t9 ON t9.id_ruta = t8.ruta
+        INNER JOIN estado_item_pedido t10 ON t10.id_estado_item_pedido = t6.id_estado_item_pedido
+        INNER JOIN core t11 ON t6.core = t11.id_core
+        INNER JOIN clase_articulo t12 ON t3.id_clase_articulo = t12.id_clase_articulo
+        WHERE t1.estado_inv in ($parametro) AND t3.id_clase_articulo!=1 AND t1.documento LIKE '%-%' AND SUBSTRING_INDEX(t1.documento,'-',-1) = t6.item  GROUP BY t1.documento;";
+        // $sql = "SELECT t1.id_ingresotec, t1.documento, t1.codigo_producto,t1.estado_inv ,SUM(t1.salida) AS salida, t3.nombre_articulo,t3.id_clase_articulo,t2.descripcion_productos,t4.nombre_estado 
+        //     FROM entrada_tecnologia AS t1 
+        //     INNER JOIN productos AS t2 ON t1.id_productos=t2.id_productos 
+        //     INNER JOIN tipo_articulo AS t3 ON t2.id_tipo_articulo=t3.id_tipo_articulo 
+        //     INNER JOIN estados_alistamiento AS t4 ON t1.estado_inv=t4.id 
+        //     WHERE t1.estado_inv in ($parametro) AND t3.id_clase_articulo!=1 GROUP BY t1.documento";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
@@ -161,6 +175,6 @@ class entrada_tecnologiaDAO extends GenericoDAO
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
-        return $resultado;    
+        return $resultado;
     }
 }

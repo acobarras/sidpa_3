@@ -43,7 +43,8 @@ var alistamiento_items_completos = function () {
                     if (row['difer_ext'] == 1) {
                         array.push('<b> Ext </b>');
                     }
-                    if (row['datos_item'][0]['grupo'] == 'TECNOLOGIA') {
+                    // if (row['datos_item'][0]['grupo'] == 'TECNOLOGIA') {
+                    if (row['grupo'] == 'TECNOLOGIA') {
                         array = [];
                         row['porcentaje'] = '';
                     }
@@ -57,10 +58,12 @@ var alistamiento_items_completos = function () {
             },
             {
                 "data": "n_produccion", render: (data, type, row) => {
-                    if (row['datos_item'][0]['n_produccion'] == 0) {
+                    // if (row['datos_item'][0]['n_produccion'] == 0) {
+                    if (row['n_produccion'] == 0) {
                         return `Terceros`;
                     }
-                    return `<b>${row['datos_item'][0]['n_produccion']}</b>`;
+                    // return `<b>${row['datos_item'][0]['n_produccion']}</b>`;
+                    return `<b>${row['n_produccion']}</b>`;
                 }
             },
             {
@@ -70,12 +73,14 @@ var alistamiento_items_completos = function () {
             },
             {
                 "data": "nombre_core", render: (data, type, row) => {
-                    return row['datos_item'][0]['nombre_core'];
+                    // return row['datos_item'][0]['nombre_core'];
+                    return row['nombre_core'];
                 }
             },
             {
                 "data": "cant_x", render: (data, type, row) => {
-                    var cantidad_x = row['datos_item'][0]['cant_x'];
+                    // var cantidad_x = row['datos_item'][0]['cant_x'];
+                    var cantidad_x = row['cant_x'];
                     return $.fn.dataTable.render.number('.', ',', 0, '').display(cantidad_x);
                 }
             },
@@ -351,7 +356,8 @@ var alistamiento_items_incompletos = function () {
                     if (row['difer_ext'] == 1) {
                         array.push('<b> Ext </b>');
                     }
-                    if (row['datos_item'][0]['grupo'] == 'TECNOLOGIA') {
+                    // if (row['datos_item'][0]['grupo'] == 'TECNOLOGIA') {
+                    if (row['grupo'] == 'TECNOLOGIA') {
                         array = [];
                         row['porcentaje'] = '';
                     }
@@ -365,10 +371,12 @@ var alistamiento_items_incompletos = function () {
             },
             {
                 "data": "n_produccion", render: (data, type, row) => {
-                    if (row['datos_item'][0]['n_produccion'] == 0) {
+                    // if (row['datos_item'][0]['n_produccion'] == 0) {
+                    if (row['n_produccion'] == 0) {
                         return `Terceros`;
                     }
-                    return `<b>${row['datos_item'][0]['n_produccion']}</b>`;
+                    // return `<b>${row['datos_item'][0]['n_produccion']}</b>`;
+                    return `<b>${row['n_produccion']}</b>`;
                 }
             },
             {
@@ -378,12 +386,14 @@ var alistamiento_items_incompletos = function () {
             },
             {
                 "data": "nombre_core", render: (data, type, row) => {
-                    return row['datos_item'][0]['nombre_core'];
+                    // return row['datos_item'][0]['nombre_core'];
+                    return row['nombre_core'];
                 }
             },
             {
                 "data": "cant_x", render: (data, type, row) => {
-                    var cantidad_x = row['datos_item'][0]['cant_x'];
+                    // var cantidad_x = row['datos_item'][0]['cant_x'];
+                    var cantidad_x = row['cant_x'];
                     return $.fn.dataTable.render.number('.', ',', 0, '').display(cantidad_x);
                 }
             },
