@@ -644,4 +644,62 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         $data['data'] = $producto;
         echo json_encode($data);
     }
+    // función de cambio de ubicaciones 
+    public function producto_alistamiento()
+    {
+        header('Content-Type: application/json');
+        $consulta = $_POST['consulta'];
+        $checked = $_POST['valores'];
+        if ($consulta == 1) { // consulta de pedidos en alistamiento
+            $enalistamiento = [];
+            foreach ($checked as $key => $value) {
+                $alistamiento = $this->entrada_tecnologiaDAO->consulta_alistamiento_ubicacion($value['ubicacion'], $value['id_productos']);
+                if (!empty($alistamiento)) {
+                    array_push($enalistamiento, $alistamiento);
+                }
+            }
+            echo json_encode($enalistamiento);
+        } else if ($consulta == 2) { // cambio de ubicacion 
+            $nueva_ubi = $_POST['ubicacion_nueva'];
+            $ubicacion_valida = $this->ubicacionesDAO->valida_ubicacion($nueva_ubi);
+            if (empty($ubicacion_valida)) {
+                $respuesta =
+                    [
+                        'status' => false,
+                        'msg' => 'Esta ubicación no existe'
+                    ];
+            } else if ($ubicacion_valida[0]->estado == 2) {
+                $respuesta =
+                    [
+                        'status' => false,
+                        'msg' => 'Esta ubicación esta inactiva'
+                    ];
+            } else if ($ubicacion_valida[0]->nombre_ubicacion == $checked[0]["ubicacion"]) {
+                $respuesta =
+                    [
+                        'status' => false,
+                        'msg' => 'Debe escribir una ubicación nueva, no la misma en la que se encuentra el producto actualmente'
+                    ];
+            } else if ($ubicacion_valida[0]->tipo_producto == $checked[0]["id_tipo_articulo"]) { //falta saber de que tipo es el articulo que se quiere cambiar
+                $respuesta =
+                    [
+                        'status' => false,
+                        'msg' => 'Esta ubicación es para otro tipo de producto, solo puede cambiar el producto para una ubicación del mismo tipo'
+                    ];
+            } else {
+                foreach ($checked as $key => $value) {
+                    $data['ubicacion'] = $ubicacion_valida[0]->nombre_ubicacion;
+                    $condicion = "ubicacion = '" . $value["ubicacion"] . "' AND id_productos = " . $value["id_productos"];
+                    $cambio_ubicacion = $this->entrada_tecnologiaDAO->editar($data, $condicion);
+                }
+                $respuesta['status'] = $cambio_ubicacion;
+                if ($cambio_ubicacion) {
+                    $respuesta['msg'] = 'Ubicación cambiada con exito';
+                } else {
+                    $respuesta['msg'] = 'Ocurrio un error intenta de nuevo';
+                }
+            }
+            echo json_encode($respuesta);
+        }
+    }
 }

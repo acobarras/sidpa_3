@@ -42,6 +42,7 @@ final class ConsultaCodigosControlador extends GenericoControlador
     public function busqueda_codigo()
     {
         header('Content-Type: application/json');
+        // var_dump($_GET);
         $condicion = "WHERE t1.id_tipo_articulo = 1  AND t1.estado_producto = 1  AND t1.codigo_producto NOT LIKE '%SERVICIO%' AND t1.ubi_troquel NOT LIKE '%EXTERNO%'";
         // condiciones dependiendo de lo que agregen 
         if ($_GET['ancho'] != '') {
@@ -51,7 +52,7 @@ final class ConsultaCodigosControlador extends GenericoControlador
             $condicion .= "AND t1.codigo_producto LIKE '%X" . $_GET['alto'] . "-%' ";
         };
         if ($_GET['cavidad'] != '') {
-            $condicion .= " AND t1.codigo_producto LIKE '%" . $_GET['cavidad'] . "0____' ";
+            $condicion .= " AND t1.codigo_producto LIKE '%-____" . $_GET['cavidad'] . "%' ";
         };
         if ($_GET['color'] != '') {
             $condicion .= " AND t1.descripcion_productos LIKE '%" . $_GET['color'] . "%' ";

@@ -270,9 +270,26 @@
                                             <td><b>Código <i class="fa fa-qrcode"></i></b></td>
                                             <td><b>Descripción</td>
                                             <td><b>Cantidad</td>
+                                            <td><b>Accion</td>
                                         </tr>
                                     </thead>
                                 </table>
+                            </div>
+                        </div>
+                        <div id="btn_cambio_ubicacion" class="m-auto p-2 justify-content-center" style="display: none;">
+                            <button class="btn btn-success" type="button" id='btn_cambio'> <i class="fas fa-exchange-alt"></i> Cambiar Ubicación</button>
+                        </div>
+                        <!-- modal de cambio de ubicacion  -->
+                        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" id='modal_cambio_ubicacion'>
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="titulo_modal"></h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="contenido_modal"></div>
+                                    <div class="modal-footer" id="modal_footer"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

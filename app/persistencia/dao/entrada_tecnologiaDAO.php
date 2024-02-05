@@ -93,7 +93,7 @@ class entrada_tecnologiaDAO extends GenericoDAO
     }
     public function consulta_producto_ubicacion($id)
     {
-        $sql = "SELECT t1.ubicacion,t2.codigo_producto,t2.descripcion_productos,sum(t1.entrada) - sum(t1.salida) AS cantidad  
+        $sql = "SELECT t1.ubicacion, t2.id_productos, t2.id_tipo_articulo, t2.codigo_producto,t2.descripcion_productos,sum(t1.entrada) - sum(t1.salida) AS cantidad  
             FROM entrada_tecnologia t1
             INNER JOIN productos t2 ON t1.id_productos= t2.id_productos
             WHERE ubicacion = '$id' GROUP BY t2.id_productos ";
@@ -151,5 +151,16 @@ class entrada_tecnologiaDAO extends GenericoDAO
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
         return $resultado;
+    }
+
+    public function consulta_alistamiento_ubicacion($ubicacion, $id_producto)
+    {
+        $sql = "SELECT t1.ubicacion, t1.id_productos, t1.codigo_producto
+        FROM entrada_tecnologia t1
+        WHERE t1.ubicacion = '$ubicacion' AND t1.id_productos = $id_producto AND t1.estado_inv = 2";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;    
     }
 }
