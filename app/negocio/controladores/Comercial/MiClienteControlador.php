@@ -440,12 +440,14 @@ class MiClienteControlador extends GenericoControlador
     {
         if ($id_tipo_articulo == 2) {
             $correo = CORREO_COMPRAS_MA; // correo del encargado de aprobacion de precios
+            $correo2 = ''; // correo del encargado de aprobacion de precios
         } else {
             $correo = CORREO_COMPRAS_TEC; // correo del encargado de aprobacion de precios
+            $correo2 = CORREO_AUX_COMPRAS; // correo del encargado de aprobacion de precios
         }
         $producto = $this->cliente_productoDAO->cliente_producto_id($id_clien_produc);
         $user = $this->UsuarioDAO->consultarIdUsuario($producto[0]->id_usuario);
-        $correo = Envio_Correo::envio_correo_aprobacion_precio($producto, $user, $correo);
+        $correo = Envio_Correo::envio_correo_aprobacion_precio($producto, $user, $correo, $correo2);
     }
 
     /*  

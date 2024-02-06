@@ -117,7 +117,8 @@ class FechaOpControlador extends GenericoControlador
                         $persona = $this->PersonaDAO->consultar_personas_id($fecha_programada[0]->id_persona);
                         $asesor = $persona[0]->correo; //'desarrollo@acobarras.com';
                         $cliente = $fecha_programada[0]->email; //'edwin.rios@acobarras.com';
-                        // Envio_Correo::correo_confirmacion_fecha_compromiso($fecha_programada, $fecha_compro, $cliente, $asesor);
+                       //EL GIT QUE HICE COMENTO ESTA LINEA 
+                       Envio_Correo::correo_confirmacion_fecha_compromiso($fecha_programada, $fecha_compro, $cliente, $asesor);
                     }
                 }
                 //registrar seguimiento del item 

@@ -78,7 +78,7 @@ class Envio_Correo
         $subject = "Solicitud " . $TipoCompra . " " . $data->nombre_empresa;
         self::php_miler($html, $remite, $subject, $correo, $correo2);
     }
-    public static function envio_correo_aprobacion_precio($data, $user, $correo)
+    public static function envio_correo_aprobacion_precio($data, $user, $correo, $correo2)
     {
         $html = '
         <!DOCTYPE html>
@@ -145,7 +145,7 @@ class Envio_Correo
                                 </html>';
         $remite = 'Verificación de Precio ' . $data[0]->nombre_empresa . ' Sidpa';
         $subject = 'Solicitud Verificación de Precio ' . $data[0]->nombre_empresa;
-        return self::php_miler($html, $remite, $subject, $correo);
+        return self::php_miler($html, $remite, $subject, $correo, $correo2);
     }
 
     public static function correo_confimacion_pedido_client($data, $user, $cliente, $items)
