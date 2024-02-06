@@ -114,7 +114,7 @@ class TecnologiaControlador extends GenericoControlador
                 $persona = $this->PersonaDAO->consultar_personas_id($info_correo[0]->id_persona);
                 $asesor = $persona[0]->correo;
                 $cliente = $info_correo[0]->email;
-                Envio_Correo::correo_confirmacion_fecha_compromiso($info_correo, $fecha_compro, $cliente, $asesor);
+                // Envio_Correo::correo_confirmacion_fecha_compromiso($info_correo, $fecha_compro, $cliente, $asesor);
             }
             if ($value['id_clase_articulo'] == 2) {
                 $seguimiento_op['id_area'] = 5;

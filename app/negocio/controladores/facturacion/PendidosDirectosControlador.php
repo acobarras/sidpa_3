@@ -20,9 +20,9 @@ use MiApp\persistencia\dao\control_facturacionDAO;
 use MiApp\persistencia\dao\EntregasLogisticaDAO;
 use MiApp\persistencia\dao\TipoDocumentoDAO;
 use MiApp\persistencia\dao\UsuarioDAO;
-use MiApp\persistencia\dao\paisDAO;
-use MiApp\persistencia\dao\departamentoDAO;
-use MiApp\persistencia\dao\ciudadDAO;
+use MiApp\persistencia\dao\PaisDAO;
+use MiApp\persistencia\dao\DepartamentoDAO;
+use MiApp\persistencia\dao\CiudadDAO;
 
 class PendidosDirectosControlador extends GenericoControlador
 {
@@ -42,9 +42,9 @@ class PendidosDirectosControlador extends GenericoControlador
     private $EntregasLogisticaDAO;
     private $TipoDocumentoDAO;
     private $UsuarioDAO;
-    private $paisDAO;
-    private $departamentoDAO;
-    private $ciudadDAO;
+    private $PaisDAO;
+    private $DepartamentoDAO;
+    private $CiudadDAO;
 
     public function __construct(&$cnn)
     {
@@ -67,9 +67,9 @@ class PendidosDirectosControlador extends GenericoControlador
         $this->EntregasLogisticaDAO = new EntregasLogisticaDAO($cnn);
         $this->TipoDocumentoDAO = new TipoDocumentoDAO($cnn);
         $this->UsuarioDAO = new UsuarioDAO($cnn);
-        $this->paisDAO = new paisDAO($cnn);
-        $this->departamentoDAO = new departamentoDAO($cnn);
-        $this->ciudadDAO = new ciudadDAO($cnn);
+        $this->PaisDAO = new PaisDAO($cnn);
+        $this->DepartamentoDAO = new DepartamentoDAO($cnn);
+        $this->CiudadDAO = new CiudadDAO($cnn);
     }
 
     public function vista_pedidos_directos()
@@ -87,9 +87,9 @@ class PendidosDirectosControlador extends GenericoControlador
                 "usuario" => $_SESSION['usuario']->getnombres() . " " . $_SESSION['usuario']->getapellidos(),
                 "documento" => $this->TipoDocumentoDAO->consultar_tipo_documento(),
                 "asesores" => $this->UsuarioDAO->consultar_roll(4),
-                "paises" => $this->paisDAO->consultar_pais(),
-                "departamento" => $this->departamentoDAO->consultar_departamento(),
-                "ciudad" => $this->ciudadDAO->consultar_ciudad()
+                "paises" => $this->PaisDAO->consultar_pais(),
+                "departamento" => $this->DepartamentoDAO->consultar_departamento(),
+                "ciudad" => $this->CiudadDAO->consultar_ciudad()
             ]
         );
     }
