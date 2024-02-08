@@ -180,7 +180,8 @@ var consulta_seguimiento = function (tbody, table) {
                         data: "boton1", render: function (data, type, row) {
                             boton = '';
                             if (data_row.estado_item_producir == 9 && row.id_estado_item_pedido == 10 && fecha == FECHA_HOY) {// se agrega fecha hoy para que solo se pueda cerrar el item de lo que esta programado 
-                                boton += `<button class="m-1 btn btn-primary btn-circle cambiar_estado_item" data-item="${row.id_pedido_item}" data-op='${JSON.stringify(data_row)}' title="Listo"><i class="fa fa-clipboard-check"></i></button>`;
+                                boton += `<button class="m-1 btn btn-primary btn-circle cambiar_estado_item" data-item="${row.id_pedido_item}" data-op='${JSON.stringify(data_row)}' title="Listo"><i class="fa fa-clipboard-check"></i></button>
+                                <button class="m-1 btn btn-info btn-circle imprimir_eti" title="Imprimir"><i class="fas fa-print"></i></button>`;
                             }
                             boton += `<button class="btn btn-success ver_ficha" data_produ="${row.codigo}" title="Ficha Tecnica"><i class="fas fa-eye"></i></button>`;
                             return boton;
@@ -192,6 +193,7 @@ var consulta_seguimiento = function (tbody, table) {
                 detailRows.push(tr.attr('id'));
             }
             cambiar_estado_item(`#tabla-item-op${data_row.id_item_producir} tbody`, tabla_2);
+            boton_imprimir(`#tabla-item-op${data_row.id_item_producir} tbody`, tabla_2);//regresar aqui imprimir
             ver_ficha(`#tabla-item-op${data_row.id_item_producir} tbody`, tabla_2);
         }
     });
@@ -677,7 +679,7 @@ var envio_datos = function () {
                             $(`#uso${p}`).focus();
                             return;
                         }
-                        
+
                     }
                     codigo_material = $(this).find('td').eq(0).html();
                     ancho = $(this).find('td').eq(1).html();
@@ -737,7 +739,6 @@ var envio_datos = function () {
                         });
                         carga_funcion();
                         btn_procesando('grabar_produccion', obj_inicial, 1);
-                        impresion_etiquetas_op(op, item, operario);
                         $('#ProduccionModal').modal('toggle');
 
                     }
@@ -757,7 +758,6 @@ var envio_datos = function () {
                         carga_tablas(res, element.id_maquina);
                     });
                     carga_funcion();
-                    impresion_etiquetas_op(op, item, operario);
                     $('#ProduccionModal').modal('toggle');
                     btn_procesando('grabar_produccion', obj_inicial, 1);
                 }
@@ -767,21 +767,50 @@ var envio_datos = function () {
     });
 }
 
-function impresion_etiquetas_op(op, item, id_operario) {
-    //             // =================== Impresion de etiqueta ================
+function impresion_etiquetas_op(op, item, id_operario = '') { // falta poner el operario :(
+    // =================== Impresion de etiqueta ================
     $('.div_impresion').empty().html('');
+    alertify.alert().destroy();
+    var html_impresion = ``
+    if (id_operario == '' && (datos_consulta == 1 || id_usuario_sesion == 8 || id_usuario_sesion == 13)) {
+        html_impresion = `<div class="mb-3 row">
+            <label for="cantidad" class="col-sm-6 col-form-label fw-bold">Cantidad Etiquetas:</label>
+            <div class="col-sm-6 p-1">
+                <input type="number" class="form-control" name="cantidad" id="cantidad">
+            </div>
+            <label for="operario_imp" class="col-sm-6 col-form-label fw-bold">Código Operario:</label>
+            <div class="col-sm-6 p-1">
+                <input type="password" class="form-control codigo_operario" name="operario_imp" id="operario_imp">
+            </div>
+            <div class="mb-3">
+                <span class="respu_consulta"></span>
+            </div>
+            <div class="div_impresion"></div>
+        </div>`
+        id_operario = ''
+        $('#id_persona').val('') 
+    } else {
+        html_impresion = `<div class="mb-3 row">
+        <label for="cantidad" class="col-sm-6 col-form-label fw-bold">Cantidad Etiquetas:</label>
+        <div class="col-sm-6">
+        <input type="number" class="form-control" name="cantidad" id="cantidad">
+        </div>
+        <div class="div_impresion"></div>
+        </div>`
+        id_operario = id_persona_sesion
+    }
     alertify.alert('Impresión de etiquetas',
-        `<div class="mb-3 row">
-                 <label for="cantidad" class="col-sm-6 col-form-label fw-bold">Cantidad Etiquetas:</label>
-                 <div class="col-sm-6">
-                     <input type="number" class="form-control" name="cantidad" id="cantidad">
-                 </div>
-                 <div class="div_impresion"></div>
-                 </div>`,
+        html_impresion,
         function () {
+            if (id_operario == '' && (datos_consulta == 1 || id_usuario_sesion == 8 || id_usuario_sesion == 13)) {
+                id_operario = $('#id_persona').val();
+            }
             var cantidad = $('#cantidad').val();
             if (cantidad === '' || cantidad <= 0) {
                 $('#cantidad').focus();
+                return false
+            } if (id_operario == '' && ($('#id_persona').val() == '')) {
+                $('#operario_imp').focus();
                 return false
             } else {
                 var sistema_operativo = navigator.platform;
@@ -861,6 +890,17 @@ function impresion_etiquetas_op(op, item, id_operario) {
         }).set({
             'closable': false,
             'label': 'imprimir',
-            'closableByDimmer': false
+            'closableByDimmer': false,
+            onfocus: function () { consulta_operario() }
         });
 }
+// ============= Arreglo boton de impresion ========================
+function boton_imprimir(tbody, table) {
+    $(tbody).on('click', `tr button.imprimir_eti`, function (e) {
+        e.preventDefault();
+        var data = table.row($(this).parents("tr")).data();
+        var op = data.n_produccion
+        var item = data.item
+        impresion_etiquetas_op(op, item);// esta funcion se traslada a un boton (Y)
+    })
+} 
