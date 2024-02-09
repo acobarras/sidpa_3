@@ -61,45 +61,49 @@ class CierreDiagControlador extends GenericoControlador
         header('Content-Type: application/json');
         $estado_item = '11,15,16,17';
         $datos_items = $this->SoporteItemDAO->consultar_aprobacion($estado_item, '');
-        $sentencia = 'AND t1.num_acta = 0';
-        foreach ($datos_items as $value) {
-            $repuestos = $this->SoporteItemDAO->consultar_repuestos_item($value->id_diagnostico, $value->item, $sentencia);
-            $value->repuestos = $repuestos;
-        }
         $res['data'] = $datos_items;
         echo json_encode($res);
         return;
     }
 
-    public function generar_acta() {
+    public function generar_acta()
+    {
         header('Content-Type: application/json');
         // SE ADELANTA EL CONSECUTIVO DEL NUMERO DE ACTA
         $observaciones = $_POST['observaciones'];
         $data = $_POST['data'];
+        // ============== esta parte la trasladamos para evitar basura en la consulta principal
+        $sentencia = 'AND t1.num_acta = 0';
+        foreach ($data as $clave => $value) {
+            $repuestos = $this->SoporteItemDAO->consultar_repuestos_item($value['id_diagnostico'], $value['item'], $sentencia);
+            $repuestos = json_decode(json_encode($repuestos), true);
+            $data[$clave]['repuestos'] = $repuestos;
+        }
+        // ====================================================================================
         $estado_genera_pedido = $_POST['estado'];
         $num_acta = $this->ConsCotizacionDAO->consultar_cons_especifico(17);
         $nuevo_cons = $num_acta[0]->numero_guardado + 1;
         $estado_item = 14;
         $edita_acta = [
-                'numero_guardado' => $nuevo_cons
-            ];
-            $condicion_acta = 'id_consecutivo = 17';
-            $this->ConsCotizacionDAO->editar($edita_acta, $condicion_acta);    
+            'numero_guardado' => $nuevo_cons
+        ];
+        $condicion_acta = 'id_consecutivo = 17';
+        $this->ConsCotizacionDAO->editar($edita_acta, $condicion_acta);
         switch ($estado_genera_pedido) {
             case '1': //(1-acta y pedido)
                 $iva = $_POST['iva'];
                 $estado_cotiza = 8;
                 $respu = CierreDiagControlador::crear_pedido_soporte($data, $estado_item, $estado_cotiza, $num_acta[0]->numero_guardado, $iva, $observaciones);
                 break;
-            case '2'://(2-actaDSR y cambio estados)
+            case '2': //(2-actaDSR y cambio estados)
                 $estado_cotiza = 7;
                 $respu = CierreDiagControlador::cambiar_estado_cierre($data, $estado_item, $estado_cotiza, $num_acta[0]->numero_guardado);
                 break;
-            case '3'://(3-acta y cambio estados)
+            case '3': //(3-acta y cambio estados)
                 $estado_cotiza = 8; // FIN DE PROCESO
                 $respu = CierreDiagControlador::cambiar_estado_cierre($data, $estado_item, $estado_cotiza, $num_acta[0]->numero_guardado);
                 break;
-            default: 
+            default:
                 $respu = [
                     'status' => -1,
                     'msg' => 'Error de estados'
@@ -110,7 +114,7 @@ class CierreDiagControlador extends GenericoControlador
         return;
     }
 
-    public function crear_pedido_soporte($data, $estado_item, $estado_cotiza, $num_acta, $iva, $observaciones ='')
+    public function crear_pedido_soporte($data, $estado_item, $estado_cotiza, $num_acta, $iva, $observaciones = '')
     {
         header('Content-Type: application/json');
         // SE IDENTIFICA A QUE EMPRESA PERTENECE EL CLIENTE
@@ -153,7 +157,7 @@ class CierreDiagControlador extends GenericoControlador
             'difer_menos' => 0,
             'difer_ext' => 1,
             'iva' => $iva, //PREGUNTAR CUANDO EL IVA VENGA EN 1,2
-            'observaciones' => 'Este N° de pedido pertenece al diagnostico soporte N°' . $data[0]['num_consecutivo'] . '. Por favor solicitar al area de soporte los respectivos documentos. '.$observaciones,
+            'observaciones' => 'Este N° de pedido pertenece al diagnostico soporte N°' . $data[0]['num_consecutivo'] . '. Por favor solicitar al area de soporte los respectivos documentos. ' . $observaciones,
             'total_etiq' => 0,
             'total_tec' => $total_tecn,
             'id_estado_pedido' => 4,
@@ -166,7 +170,7 @@ class CierreDiagControlador extends GenericoControlador
         $cons_pedido = $this->PedidosDAO->consulta_pedidos($parametro); //consultamos la tabla pedido
         $id_pedido = $respu['id'];
         $actividad_area = $this->ActividadAreaDAO->consultar_id_actividad_area(75);
-        
+
         $crea_items_pedido = [];
         $crea_seguimiento_items = [];
         $crea_control_facturas = [];
@@ -176,6 +180,7 @@ class CierreDiagControlador extends GenericoControlador
         $ConsultaUltimoRegistro = $this->trmDAO->ConsultaUltimoRegistro();
         $trm = $ConsultaUltimoRegistro[0]->valor_trm;
         // SE RECORRE LA DATA PARA REALIZAR EL CAMBIO DE ESTADO DEL DIAGNOSTICO
+        $items_pedido = 1; // se crea esta variable para los pedido
         foreach ($data as $val) {
 
             // SE REGISTRA EL SEGUIMIENTO
@@ -200,13 +205,13 @@ class CierreDiagControlador extends GenericoControlador
                     $modificacion_cotiza = $this->CotizacionItemSoporteDAO->editar($formulario_cotiza, $condicion);
                 }
             }
-            foreach ($val['repuestos'] as  $product) {
+            foreach ($val['repuestos'] as $product) {
                 $product['num_pedido'] = $num_pedido; //asignamos a cada producto el numero de pedido asignado
                 //$product['id_pedido'] = $id_pedido; //asignamos a cada producto el numero de pedido asignado.
                 $product['fecha_crea_p'] = date('Y-m-d'); //asignamos a cada producto la fecha del pedido.
                 $product['fecha_compro_pedido'] = date('Y-m-d');
                 $total_item = floatval($product['valor']) * floatval($product['cantidad']);
-    
+
                 if ($product['moneda'] == 2) {
                     $total_item = (floatval($product['valor']) * floatval($trm)) * floatval($product['cantidad']);
                 }
@@ -233,14 +238,14 @@ class CierreDiagControlador extends GenericoControlador
                     ];
                     $cliente_producto = $this->cliente_productoDAO->insertar($crear_cliente_produc);
                     $id_cliente_producto = $cliente_producto['id'];
-                }   else {
+                } else {
                     $cliente_producto = $consultar_cliente_produc;
                     $id_cliente_producto = $cliente_producto[0]->id_clien_produc;
                 }
                 // SE REGISTRA EN LA BASE DE DATOS EN LA TABLA PEDIDO ITEM
                 $crea_items_pedido = [
                     'id_pedido' =>  $id_pedido,
-                    'item' => $val['item'],
+                    'item' => $items_pedido, 
                     'id_clien_produc' => $id_cliente_producto,
                     'codigo' => $product['codigo_producto'],
                     'Cant_solicitada' => $product['cantidad'],
@@ -266,15 +271,15 @@ class CierreDiagControlador extends GenericoControlador
                     'id_area' => $actividad_area[0]->id_area_trabajo,
                     'id_actividad' => $actividad_area[0]->id_actividad_area,
                     'pedido' =>  $product['num_pedido'],
-                    'item' => $val['item'],
+                    'item' => $items_pedido,
                     'observacion' => $actividad_area[0]->nombre_actividad_area,
                     'estado' => 1,
                     'id_usuario' => 10,
                     'fecha_crea' =>  date('Y-m-d'),
                     'hora_crea' =>  date('H:i:s'),
                 ];
-                $seguimientoOP= $this->SeguimientoOpDAO->insertar($crea_seguimiento_items);
-                $crea_entregas_logostica =[
+                $seguimientoOP = $this->SeguimientoOpDAO->insertar($crea_seguimiento_items);
+                $crea_entregas_logostica = [
                     'id_pedido_item' =>  $respu['id'],
                     'cantidad_factura' => $crea_items_pedido['Cant_solicitada'],
                     'id_usuario' => 79,
@@ -284,6 +289,8 @@ class CierreDiagControlador extends GenericoControlador
                     'hora_crea' => date('H:i:s'),
                 ];
                 $entregas_log = $this->EntregasLogisticaDAO->insertar($crea_entregas_logostica);
+                $items_pedido += 1;
+
             }
         }
         if ($crea_entregas_logostica != '') {
@@ -304,7 +311,7 @@ class CierreDiagControlador extends GenericoControlador
                 'estado' => $estado_item,
             ];
             $condicion = 'id_diagnostico_item =' . $id_diagnostico_item;
-            $modificacion = $this->SoporteItemDAO->editar($formulario_item, $condicion);//diagnostico_item
+            $modificacion = $this->SoporteItemDAO->editar($formulario_item, $condicion); //diagnostico_item
 
             // SE REGISTRA EL SEGUIMIENTO
             $id_actividad = 83; //DIAGNOSTICO CERRADO CON ACTA ENTREGA          

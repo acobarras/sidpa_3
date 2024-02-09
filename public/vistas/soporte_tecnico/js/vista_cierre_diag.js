@@ -1,81 +1,62 @@
 $(document).ready(function () {
     consultar_datos_item();
 });
+var consultar_datos_item = function () { // esto es mejor cambiarlo 
+    var tabla = $("#tabla_cierre_diag").DataTable({
+        "ajax": {
+            "url": `${PATH_NAME}/soporte_tecnico/consultar_datos_cierre`,
+            "type": "GET",
+        }, "columns": [
+            {
+                "render": function (data, type, row) {
+                    return `${row.id_diagnostico}-${row.item}`
+                },
 
-var consultar_datos_item = function () {
-    $.ajax({
-        url: `${PATH_NAME}/soporte_tecnico/consultar_datos_cierre`,
-        type: "GET",
-        success: function (res) {
-            var table = $("#tabla_cierre_diag").DataTable({
-                "data": res['data'],
-                "columns": [
-                    {
-                        "render": function (data, type, row) {
-                            return `${row.id_diagnostico}-${row.item}`
-                        },
-
-                    },
-                    { "data": "num_consecutivo" },
-                    { "data": "nombre_empresa" },
-                    { "data": "item" },
-                    { "data": "equipo" },
-                    { "data": "serial_equipo" },
-                    { "data": "nombre_estado_soporte" },
-                    {
-                        "render": function (data, type, row) {
-                            return `<center>
+            },
+            { "data": "num_consecutivo" },
+            { "data": "nombre_empresa" },
+            { "data": "item" },
+            { "data": "equipo" },
+            { "data": "serial_equipo" },
+            { "data": "nombre_estado_soporte" },
+            {
+                "render": function (data, type, row) {
+                    return `<center>
                             <div class="select_acob text-center">
                             <input type="checkbox" class="items_selec" id="diagnostico${row.id_diagnostico}" name='diagnostico${row.id_diagnostico}' value="${row.item}">
                             </div>
                             <center>`;
-                        }
-                    }
-                ]
-            });
-            validar_check();
-            generar_acta();
-        }
+                }
+            }
+        ]
     });
+    validar_check();
+    generar_acta();
 }
 
 var array_item = [];
-var validar_check = function () {
+function validar_check() { //ok
     $('#tabla_cierre_diag tbody').on("click", "tr input.items_selec", function () {
         var data = $('#tabla_cierre_diag').DataTable().row($(this).parents("tr")).data();
         var id_diagnostico = data['id_diagnostico'];
-        var estado_item = data['estado_item'];
-        if ($(this).prop('checked') == true) {
-            if (array_item.length === 0) {
-                array_item.push(data);
+        array_item = [];
+        var alerta = false
+        $('.items_selec:checked').each(function () {
+            var data1 = $('#tabla_cierre_diag').DataTable().row($(this).parents("tr")).data();
+            if (data1['id_diagnostico'] == id_diagnostico) {
+                array_item.push(data1);// Agregar los valores al array
             } else {
-                array_item.forEach(element => {
-                    if (element.id_diagnostico == id_diagnostico) {
-                        if (element.estado_item == estado_item) {
-                            array_item.push(data);
-                        } else {
-                            $(this).prop('checked', false);
-                            alertify.error("Los items seleccionados no pertenecen al mismo estado");
-                            return;
-                        }
-                    } else {
-                        $(this).prop('checked', false);
-                        alertify.error("Los items seleccionados no pertenecen al mismo diagnostico");
-                        return;
-                    }
-                })
+                $(this).prop('checked', false);
+                alerta = true
             }
-        } else {
-            for (var i = 0; i < array_item.length; i++) {
-                if (array_item[i].item === data.item) {
-                    array_item.splice(i, 1);
-                }
-            }
-        }
-    });
+        });
+        console.log(array_item);
+        if (alerta) alertify.error('¡Los items seleccionados no pertenecen al mismo diagnostico!')
+    })
 }
 
-var generar_acta = function () {
+
+var generar_acta = function () { // falta el boton de procesado
     $('#generar_acta').on("click", function () {
         var cant_item_array = array_item.length;
         if (cant_item_array === 0) {
@@ -117,12 +98,15 @@ var generar_acta = function () {
 }
 // La variable estado es para saber si toca crear un pedido o no 
 var enviar_datos_acta = function (iva, estado, observaciones = '') {// estos estado estado para el pedido (1-acta y pedido)(2-actaDSR y cambio estados)(3-acta y cambio estados)
+    var obj_inicial = $('#generar_acta').html();
+    btn_procesando('generar_acta');
     var data = array_item;
     $.ajax({
         "url": `${PATH_NAME}/soporte_tecnico/generar_acta`,
         "type": 'POST',
-        "data": { data, iva, estado, observaciones},
+        "data": { data, iva, estado, observaciones },
         success: function (res) {
+            btn_procesando('generar_acta', obj_inicial, 1);
             var num_acta = res.num_acta;
             var num_pedido = res.num_pedido;
             generar_pdf_acta(num_pedido, num_acta);
@@ -134,7 +118,7 @@ var generar_pdf_acta = function (num_pedido, num_acta) {// estos estados son del
     $.ajax({
         "url": `${PATH_NAME}/soporte_tecnico/generar_pdf_acta`,
         "type": 'POST',
-        "data": { num_acta},
+        "data": { num_acta },
         xhrFields: {
             responseType: 'blob'
         },

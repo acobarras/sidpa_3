@@ -96,4 +96,13 @@ class SoporteItemDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+
+    public function items_ingresados($id_diagnostico)
+    {
+        $sql = "SELECT COUNT(id_diagnostico) AS contador FROM `diagnostico_item` WHERE id_diagnostico = $id_diagnostico";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

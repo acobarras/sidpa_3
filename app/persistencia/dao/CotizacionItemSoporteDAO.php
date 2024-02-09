@@ -18,9 +18,11 @@ class CotizacionItemSoporteDAO extends GenericoDAO
         if ($estado == 1) {
             $tabla = ',t9.*';
             $condicion = 'INNER JOIN diagnostico_item t9 ON t9.item = t1.item AND t9.id_diagnostico = t1.id_diagnostico';
+            $condicion_2 = 'AND t1.estado != 7';
         } else {
             $tabla = '';
             $condicion = '';
+            $condicion_2 = '';
         }
         $sql = "SELECT t1.*,t2.num_consecutivo,t3.nombre_empresa,t5.contacto,t5.cargo,t6.nombre AS nombre_pais,t7.nombre AS nombre_departa,t8.nombre AS nombre_ciudad, t3.forma_pago $tabla
         FROM cotizacion_item_soporte t1
@@ -31,7 +33,7 @@ class CotizacionItemSoporteDAO extends GenericoDAO
         INNER JOIN departamento t7 ON t7.id_departamento = t5.id_departamento 
         INNER JOIN ciudad t8 ON t8.id_ciudad = t5.id_ciudad 
         $condicion
-        WHERE t1.num_cotizacion = $num_cotizacion GROUP BY t1.item";
+        WHERE t1.num_cotizacion = $num_cotizacion $condicion_2 GROUP BY t1.item";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);

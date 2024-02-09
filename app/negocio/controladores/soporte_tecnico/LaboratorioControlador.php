@@ -53,46 +53,45 @@ class LaboratorioControlador extends GenericoControlador
             'estado' => $estado_diagnostico,
         ];
         $resultado = $this->SoporteTecnicoDAO->editar($formulario, $condicion);
+        $contador = $this->SoporteItemDAO->items_ingresados($datos[0]['id_diagnostico']);
+        $contador = $contador[0]->contador + 1;
 
-        $numero = count($datos);
-        $contador = 0;
         $usuario = $_SESSION['usuario']->getid_usuario();
         $user = $this->UsuarioDAO->consultarIdUsuario($usuario);
         $nombre_usuario = $user[0]->nombre;
         $apellido_usuario = $user[0]->apellido;
-        foreach ($datos as $value) {
-            if ($contador <= $numero) {
-                $contador = $contador + 1;
-                if ($_POST['estado'] == 1) {
-                    $id_actividad = 77;//INGRESO DE EQUIPOS LABORATORIO
-                    $observacion = 'INGRESO DE EQUIPOS LABORATORIO';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos[0]['id_diagnostico'], $contador, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
-                } else {
-                    $id_actividad = 89;//INGRESO DE EQUIPOS VISITA
-                    $observacion = 'INGRESO DE EQUIPOS VISITA';
-                    $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos[0]['id_diagnostico'], $contador, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
-                }
-                $formulario = [
-                    'id_diagnostico' => $value['id_diagnostico'],
-                    'num_consecutivo' => $value['num_consecutivo'],
-                    'item' => $contador,
-                    'sede' => $sede,
-                    'fecha_ingreso' => $value['fecha_ingreso'],
-                    'id_cli_prov' => $value['id_cli_prov'],
-                    'equipo' => $value['equipo'],
-                    'serial_equipo' => $value['serial_equipo'],
-                    'procedimiento' => $value['procedimiento'],
-                    'accesorios' => $value['accesorios'],
-                    'id_persona_reparacion' => 0,
-                    'fecha_ejecucion' => '0000-00-00',
-                    'id_persona_recibe' => $_SESSION['usuario']->getid_usuario(),
-                    'estado' => 9,// cambio de 1 a 9 pendiente cotización
-                    'firma_cli' => $imagen,
-                    'fecha_crea' => date('Y-m-d'),
-                    'hora_crea' => date('H:i:s'),
-                ];
+        foreach ($datos as $clave => $value) {
+            if ($_POST['estado'] == 1) {
+                $id_actividad = 77; //INGRESO DE EQUIPOS LABORATORIO
+                $observacion = 'INGRESO DE EQUIPOS LABORATORIO';
+                $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos[0]['id_diagnostico'], $contador, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
+            } else {
+                $id_actividad = 89; //INGRESO DE EQUIPOS VISITA
+                $observacion = 'INGRESO DE EQUIPOS VISITA';
+                $seguimiento = GenericoControlador::agrega_seguimiento_diag($datos[0]['id_diagnostico'], $contador, $id_actividad, $observacion, $_SESSION['usuario']->getid_usuario());
             }
+            $formulario = [
+                'id_diagnostico' => $value['id_diagnostico'],
+                'num_consecutivo' => $value['num_consecutivo'],
+                'item' => $contador,
+                'sede' => $sede,
+                'fecha_ingreso' => $value['fecha_ingreso'],
+                'id_cli_prov' => $value['id_cli_prov'],
+                'equipo' => $value['equipo'],
+                'serial_equipo' => $value['serial_equipo'],
+                'procedimiento' => $value['procedimiento'],
+                'accesorios' => $value['accesorios'],
+                'id_persona_reparacion' => 0,
+                'fecha_ejecucion' => '0000-00-00',
+                'id_persona_recibe' => $_SESSION['usuario']->getid_usuario(),
+                'estado' => 9, // cambio de 1 a 9 pendiente cotización
+                'firma_cli' => $imagen,
+                'fecha_crea' => date('Y-m-d'),
+                'hora_crea' => date('H:i:s'),
+            ];
+            //}
             $agregar_item = $this->SoporteItemDAO->insertar($formulario);
+            $contador =+ 1;
         }
         if ($agregar_item['status'] == 1) {
             $estado = $_POST['estado'];
@@ -104,24 +103,24 @@ class LaboratorioControlador extends GenericoControlador
         }
         return $respu;
     }
-    
+
     public function impresion_etiqueta_equipo()
     {
         header('Content-Type: application/json');
         $consecutivo = $_POST['consecutivo'];
         $datos = $_POST['datos'];
-        if ($datos === "consultar" ) {
+        if ($datos === "consultar") {
             $datos = $this->SoporteTecnicoDAO->reimpresion_etiquetas($consecutivo);
             if ($datos === []) {
                 $item = 0;
                 $empresa = '';
                 $fecha = '';
-            }else{
+            } else {
                 $empresa = $datos[0]->nombre_empresa;
                 $fecha = $datos[0]->fecha_crea;
                 $item = $datos[0]->cantidad_item;
             }
-        }else{
+        } else {
             $empresa = $datos[0]['nombre_empresa'];
             $fecha = $datos[0]['fecha_ingreso'];
             $item = count($datos);
@@ -137,30 +136,30 @@ class LaboratorioControlador extends GenericoControlador
         $respu = [];
         for ($i = 1; $i <= $item; $i++) {
             $prueba =
-                "^XA".
-                "^FT38,24^A0N,23,24^FH\^FD".NOMBRE_EMPRESA."^FS".
-                "^FT79,53^A0N,23,24^FH\^FD".$consecutivo. "|"  .$i. "^FS".
-                "^FT20,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS".
-                "^FT12,152^A0N,25,24^FH\^FD" .$nombre2. "^FS".
-                "^FT12,120^A0N,25,24^FH\^FD" .$nombre1. "^FS".
-                "^FO3,91^GB249,72,4^FS".
-                "^FT1,191^A0N,28,28^FH\^FDFecha: " .$fecha. "^FS".
+                "^XA" .
+                "^FT38,24^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
+                "^FT79,53^A0N,23,24^FH\^FD" . $consecutivo . "|"  . $i . "^FS" .
+                "^FT20,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS" .
+                "^FT12,152^A0N,25,24^FH\^FD" . $nombre2 . "^FS" .
+                "^FT12,120^A0N,25,24^FH\^FD" . $nombre1 . "^FS" .
+                "^FO3,91^GB249,72,4^FS" .
+                "^FT1,191^A0N,28,28^FH\^FDFecha: " . $fecha . "^FS" .
 
-                "^FT318,24^A0N,23,24^FH\^FD" .NOMBRE_EMPRESA. "^FS".
-                "^FT359,53^A0N,23,24^FH\^FD" .$consecutivo. "|" .$i. "^FS".
-                "^FT300,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS".
-                "^FT292,152^A0N,25,24^FH\^FD" .$nombre2. "^FS".
-                "^FT292,120^A0N,25,24^FH\^FD".$nombre1."^FS".
-                "^FO283,91^GB249,72,4^FS".
-                "^FT281,191^A0N,28,28^FH\^FDFecha: " .$fecha. "^FS".
+                "^FT318,24^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
+                "^FT359,53^A0N,23,24^FH\^FD" . $consecutivo . "|" . $i . "^FS" .
+                "^FT300,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS" .
+                "^FT292,152^A0N,25,24^FH\^FD" . $nombre2 . "^FS" .
+                "^FT292,120^A0N,25,24^FH\^FD" . $nombre1 . "^FS" .
+                "^FO283,91^GB249,72,4^FS" .
+                "^FT281,191^A0N,28,28^FH\^FDFecha: " . $fecha . "^FS" .
 
-                "^FT597,24^A0N,23,24^FH\^FD" .NOMBRE_EMPRESA. "^FS".
-                "^FT638,53^A0N,23,24^FH\^FD" .$consecutivo. "|" .$i. "^FS".
-                "^FT579,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS".
-                "^FT571,152^A0N,25,24^FH\^FD" .$nombre2. "^FS".
-                "^FT571,120^A0N,25,24^FH\^FD".$nombre1."^FS".
-                "^FO562,91^GB249,72,4^FS".
-                "^FT560,191^A0N,28,28^FH\^FDFecha: " .$fecha. "^FS".
+                "^FT597,24^A0N,23,24^FH\^FD" . NOMBRE_EMPRESA . "^FS" .
+                "^FT638,53^A0N,23,24^FH\^FD" . $consecutivo . "|" . $i . "^FS" .
+                "^FT579,84^A0N,25,24^FH\^FDPropiedad del cliente:^FS" .
+                "^FT571,152^A0N,25,24^FH\^FD" . $nombre2 . "^FS" .
+                "^FT571,120^A0N,25,24^FH\^FD" . $nombre1 . "^FS" .
+                "^FO562,91^GB249,72,4^FS" .
+                "^FT560,191^A0N,28,28^FH\^FDFecha: " . $fecha . "^FS" .
                 "^PQ1,0,1,Y^XZ";
             array_push($respu, $prueba);
         }
