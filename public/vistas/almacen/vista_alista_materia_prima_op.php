@@ -13,7 +13,7 @@
                     <h3 class="text-center fw-bold">Alistamiento de Materia Prima O.P</h3>
                     <br>
                     <div class="TablaOrden">
-                        <table id="dt_alista_ordenes_produccion" style="background: white" class="table table-hover table-condensed table-bordered table-responsive-md  table-responsive-lg" cellspacing="0" width="100%">
+                        <table id="dt_alista_ordenes_produccion" style="background: white" class="table table-hover table-condensed table-bordered table-responsive-md table-responsive-lg" cellspacing="0" width="100%">
                             <thead style="background:#0d1b50;color:white">
                                 <tr>
                                     <td style="text-align: center">Fecha Compromiso</td>
@@ -26,6 +26,8 @@
                                     <td>ML Total</td>
                                     <td>ML Alistados</td>
                                     <td>Material </td>
+                                    <td>Ubicación Troquel</td>
+                                    <td>Ubicación Ficha</td>
                                     <td>Fecha Proveedor</td>
                                     <td>Orden Compra</td>
                                     <td>Fecha Producción</td>
@@ -212,7 +214,7 @@
                                                 <select class="form-control select_2" name="ubicacion">
                                                     <option value="0"></option>
                                                     <?php foreach ($ubicacion as $ubi) { ?>
-                                                        <option value="<?= intval($ubi->ancho)?>"><?= intval($ubi->ancho) ?></option>
+                                                        <option value="<?= intval($ubi->ancho) ?>"><?= intval($ubi->ancho) ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -281,7 +283,7 @@
                 <div class="img_modal">
                     <p> </p>
                 </div>
-                <h3 class="modal-title" id="exampleModalLabel">Motivos | Orden de Producción : <b id="ordenPP" ></b> <span id="id_maquinap"></span></h3>
+                <h3 class="modal-title" id="exampleModalLabel">Motivos | Orden de Producción : <b id="ordenPP"></b> <span id="id_maquinap"></span></h3>
                 <i class="bi bi-x cerrar" data-bs-dismiss="modal" style="font-size: 26px;"></i>
             </div>
             <div class="modal-body">

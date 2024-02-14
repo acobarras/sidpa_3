@@ -10,9 +10,14 @@ $(document).ready(function () {
     alertify.set('notifier', 'position', 'bottom-left');
 });
 
+
 var pendiente_alistamiento_mp_op = function () {
+    var paso = 1;
+    if (DOS_MODULOS) {
+        paso = 2;
+    }
     var table = $('#dt_alista_ordenes_produccion').DataTable({
-        "ajax": `${PATH_NAME}/almacen/consultar_pendientes_mp_op`,
+        "ajax": `${PATH_NAME}/almacen/consultar_pendientes_mp_op?paso=${paso}`,
         "columns": [
             { "data": "fecha_comp" },
             { "data": "num_produccion" },
@@ -37,9 +42,9 @@ var pendiente_alistamiento_mp_op = function () {
                 "data": "mL_descontado", render: function (date, type, row) {
                     if (row.mL_descontado > 0) {
                         return `${row.mL_descontado}
-                        <button type="button" class="btn btn-info materiales" title="Modal_materiales">
-                        <i class="fa fa-ring"></i>
-                      </button>`;
+                                    <button type="button" class="btn btn-info materiales" title="Modal_materiales">
+                                    <i class="fa fa-ring"></i>
+                                  </button>`;
                     }
                     return row.mL_descontado;
                 }
@@ -55,6 +60,8 @@ var pendiente_alistamiento_mp_op = function () {
                     }
                 }
             },
+            { "data": "ubi_troquel" },
+            { "data": "ficha_tecnica" },
             {
                 "data": "fecha_proveedor",
                 render: function (data, type, row) {
@@ -78,19 +85,22 @@ var pendiente_alistamiento_mp_op = function () {
                 render: function (data, type, row) {
                     var producirOrden = '';
                     var alistar_material = '';
-                    var descargarPDF = `<button class="btn btn-sm  btn-warning descargarPDF" id="descargarPDF${row.id_item_producir}"type="button" title="Descargar PDF"><i class="fa fa-download boton_cambioO' + row['id_item_producir'] + '"></i></button>`;
-                    if (parseInt(row.mL_descontado) >= parseInt(row.mL_total)) {
+                    var descargarPDF = '';
+                    if (!DOS_MODULOS) {
+                        descargarPDF = `<button class="btn btn-sm  btn-warning descargarPDF" id="descargarPDF${row.id_item_producir}"type="button" title="Descargar PDF"><i class="fa fa-download boton_cambioO' + row['id_item_producir'] + '"></i></button>`;
+                    }
+                    if (parseInt(row.mL_descontado) >= parseInt(row.mL_total) || DOS_MODULOS) {
                         producirOrden = `<button class="btn btn-sm btn-success producirOrden" id="btn_producirOrden${row.id_item_producir}" title="Producir"><i class="fa fa-check"></i></button>`;
                     } else {
                         alistar_material = `<button style="margin-top:2px;margin-right: -2px; background-color:#A65BEE;color:white;" class="btn btn-sm alistar_material" type="button" title="Alistamiento"><i class="fa fa-check"></i></button>`;
                     }
                     return `<center>
-                                <button class="btn btn-sm btn-info verOrden" type="button"data-bs-toggle="collapse" data-bs-target=".InfoOrden" aria-expanded="false" aria-controls="collapseExample" title="Ver O.P."><i class="fa fa-search"></i></button>
-                                ${descargarPDF}
-                                ${producirOrden}
-                                ${alistar_material}
-                                <button  class="btn btn-sm btn-danger motivosOP" type="button" data-bs-toggle="modal" data-bs-target="#Modal_motivos"  title="Motivos"><i class="fa fa-times"></i></button>\n\
-                            </center>`;
+                                            <button class="btn btn-sm btn-info verOrden" type="button"data-bs-toggle="collapse" data-bs-target=".InfoOrden" aria-expanded="false" aria-controls="collapseExample" title="Ver O.P."><i class="fa fa-search"></i></button>
+                                            ${descargarPDF}
+                                            ${producirOrden}
+                                            ${alistar_material}
+                                            <button  class="btn btn-sm btn-danger motivosOP" type="button" data-bs-toggle="modal" data-bs-target="#Modal_motivos"  title="Motivos"><i class="fa fa-times"></i></button>\n\
+                                        </center>`;
                 }
             }
         ],
@@ -101,8 +111,8 @@ var pendiente_alistamiento_mp_op = function () {
     descargarOrdenes('#dt_alista_ordenes_produccion tbody', table);
     alistar_material(table);
     motivosOP(table); //mostrar dinamicamente un modal con la informacion correspondiente
-
 };
+
 /**
  * Funcion para cargar y ocultar el formulario de inventario
  */
@@ -440,7 +450,7 @@ var ok_material_completo = function () {
                 m2 += parseFloat(element.m2);
             });
             var ml_alistados_total = ml + parseFloat(data_op.mL_descontado);//sumamos toda la cantidad alistadas todo en metros lineales
-            var m2_solicitados = (parseFloat(data_op.mL_total)*parseFloat(data_op.ancho_op))/1000;
+            var m2_solicitados = (parseFloat(data_op.mL_total) * parseFloat(data_op.ancho_op)) / 1000;
             var m2_alistados_total = m2 + parseFloat(data_op.m2_inicial);//sumamos toda la cantidad alistadas todo en metros lineales
             if (m2_alistados_total >= m2_solicitados) {
                 $(".div_imprimir_etiqueta").css('display', '');
@@ -581,7 +591,7 @@ var motivosOP = function (table) {
  * 
  * validar los input del modal del boton rojo
  */
- var validar_check = function () {
+var validar_check = function () {
     /**
      * Sin ficha tecnica
      */

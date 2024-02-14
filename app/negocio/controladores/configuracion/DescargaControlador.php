@@ -103,6 +103,11 @@ class DescargaControlador extends GenericoControlador
     {
         header('Content-type: application/pdf');
         $num_produccion = $_REQUEST['orden_produccion'];
+        if (isset($_POST['reporte'])) {
+            $editar = ['descarga_pdf' => 1];
+            $condicion = 'num_produccion =' . $num_produccion;
+            $this->ItemProducirDAO->editar($editar, $condicion);
+        }
         //consultar items de la orden de porduccion 
         $items = $this->PedidosItemDAO->ConsultaNumeroPedidoOp($num_produccion);
         $num_pqr = '';
