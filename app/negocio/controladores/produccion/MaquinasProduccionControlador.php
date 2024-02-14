@@ -95,7 +95,7 @@ class MaquinasProduccionControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $estado = '4,5,6,7,8,9,10';
-        $op = $this->ItemProducirDAO->consultar_maquina_produccion($estado);
+        $op = $this->ItemProducirDAO->consultar_maquina_produccion2($estado);
         $data = $op;
         echo json_encode($data);
     }

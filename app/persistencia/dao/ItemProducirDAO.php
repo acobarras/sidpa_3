@@ -87,6 +87,20 @@ class ItemProducirDAO extends GenericoDAO
         return $resultado;
     }
 
+    public function consultar_maquina_produccion2($estado)
+    {
+        $sql = "SELECT t1.*, t2.id_maquina, t2.nombre_maquina, t3.nombre_estado 
+            FROM item_producir t1 
+            INNER JOIN maquinas t2 ON t1.maquina = t2.id_maquina
+            INNER JOIN estado_item_producir t3 ON t1.estado_item_producir = t3.id_estado_item_producir
+            WHERE t1.estado_item_producir IN ($estado)";
+
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
+        return $resultado;
+    }
+
     public function ConsultaFechaProduccion($fecha_desde, $fecha_hasta)
     {
         $sql = "SELECT * FROM item_producir 
