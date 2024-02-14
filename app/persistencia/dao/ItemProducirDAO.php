@@ -71,11 +71,15 @@ class ItemProducirDAO extends GenericoDAO
     public function consultar_maquina_produccion($estado)
     {
 
-        $sql = "SELECT t1.*, t2.id_maquina, t2.nombre_maquina, t3.nombre_estado 
+        $sql = "SELECT t1.*, t2.id_maquina, t2.nombre_maquina, t3.nombre_estado, t5.ubi_troquel, 
+        IF (t5.ficha_tecnica_produc IS NULL , t6.ficha_tecnica, t5.ficha_tecnica_produc) AS ficha_tecnica
             FROM item_producir t1 
             INNER JOIN maquinas t2 ON t1.maquina = t2.id_maquina
             INNER JOIN estado_item_producir t3 ON t1.estado_item_producir = t3.id_estado_item_producir
-            WHERE t1.estado_item_producir IN ($estado)";
+            INNER JOIN pedidos_item t4 ON t1.num_produccion = t4.n_produccion 
+            INNER JOIN productos t5 ON t4.codigo = t5.codigo_producto
+            INNER JOIN cliente_producto t6 ON t4.id_clien_produc = t6.id_clien_produc
+            WHERE t1.estado_item_producir IN ($estado) GROUP BY t1.id_item_producir";
 
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
@@ -126,7 +130,8 @@ class ItemProducirDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function consulta_marcacion_cola($num_op) {
+    public function consulta_marcacion_cola($num_op)
+    {
         $sql = "SELECT t1.num_produccion, 
         (CASE WHEN t1.material_solicitado = '' THEN t1.material ELSE t1.material_solicitado END) AS material_op, 
         (CASE WHEN t1.ancho_confirmado = '0' THEN t1.ancho_op ELSE t1.ancho_confirmado END) AS ancho_material, 

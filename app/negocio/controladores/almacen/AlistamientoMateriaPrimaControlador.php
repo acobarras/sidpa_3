@@ -56,7 +56,7 @@ class AlistamientoMateriaPrimaControlador extends GenericoControlador
         $this->view(
             'almacen/vista_alista_materia_prima_op',
             [
-               "ubicacion" => $this->entrada_tecnologiaDAO->consultar_ubicacion_bobina_ancho()
+                "ubicacion" => $this->entrada_tecnologiaDAO->consultar_ubicacion_bobina_ancho()
             ]
         );
     }
@@ -65,7 +65,12 @@ class AlistamientoMateriaPrimaControlador extends GenericoControlador
     {
         header('Content-Type: application/json'); //convierte a json
         $sesion = parent::validarSesion();
-        $op = $this->ItemProducirDAO->consultar_maquina_produccion('4,5');
+        $paso = $_GET['paso'];
+        $estados = '15,5';
+        if ($paso == 1) {
+            $estados = '4';
+        }
+        $op = $this->ItemProducirDAO->consultar_maquina_produccion($estados);
         foreach ($op as $valores) {
             $valores->materiales = $this->MetrosLinealesDAO->consultar_metros_lineales_especificos($valores->id_item_producir);
         }
@@ -119,8 +124,8 @@ class AlistamientoMateriaPrimaControlador extends GenericoControlador
         $Segu_Prod['fecha_crea'] = date('Y-m-d');
         $Segu_Prod['hora_crea'] = date('H:i:s');
         $this->SeguimientoProduccionDAO->insertar($Segu_Prod);
-        
-        
+
+
         //ENVIAR A 6 "EN TURNO DE PRODUCCION" EN ITEM PRODUCIR
         $condicion = ' num_produccion =' . $_POST['num_produccion'];
         $item_p['estado_item_producir'] = 6;
@@ -274,8 +279,8 @@ class AlistamientoMateriaPrimaControlador extends GenericoControlador
 
         //REGISTRAR SEGUIMIENTO PRODUCCION
         $segui_prod['num_produccion'] = $arrayorden['num_produccion'];
-        $segui_prod['id_area'] = 3; //produccion
-        $segui_prod['id_actividad'] = 10; //en turno de producir
+        $segui_prod['id_area'] = 1; //produccion
+        $segui_prod['id_actividad'] = 35; //en turno de producir
         $segui_prod['id_maquina'] = $_POST['maquina'];
         $segui_prod['observacion_op'] = '';
         $segui_prod['estado_produccion'] = 1;
@@ -312,6 +317,28 @@ class AlistamientoMateriaPrimaControlador extends GenericoControlador
         $_POST['id_productos'];
         $ubicacion = $this->ubicacionesDAO->tabla_ubicaciones();
         echo json_encode($ubicacion);
+        return;
+    }
+
+    public function editar_estado_op()
+    {
+        header('Content-Type: application/json');
+        $data = $_POST['data'];
+        $editar = ['estado_item_producir' => 15];
+        $condicion = 'id_item_producir =' . $data['id_item_producir'];
+        $this->ItemProducirDAO->editar($editar,$condicion);
+        //REGISTRAR SEGUIMIENTO PRODUCCION
+        $segui_prod['num_produccion'] = $data['num_produccion'];
+        $segui_prod['id_area'] = 3; //produccion
+        $segui_prod['id_actividad'] = 104; //en turno de producir
+        $segui_prod['id_maquina'] = $data['maquina'];
+        $segui_prod['observacion_op'] = 'PROGRAMADO PARA PRE-PRENSA';
+        $segui_prod['estado_produccion'] = 1;
+        $segui_prod['id_persona'] = $_SESSION['usuario']->getId_persona();
+        $segui_prod['fecha_crea'] = date('Y-m-d');
+        $segui_prod['hora_crea'] = date('H:i:s');
+        $respu = $this->SeguimientoProduccionDAO->insertar($segui_prod);
+        echo json_encode($respu);
         return;
     }
 }

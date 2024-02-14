@@ -117,7 +117,7 @@ class DesperdicioOpDAO extends GenericoDAO
 
     public function metros_lineales_productividad($id_persona, $fecha_desde, $fecha_hasta)
     {
-        $sql = "SELECT SUM(CASE WHEN t2.tipo_maquina = 3 AND t1.cantidad_etiquetas != 0 THEN t1.ml_empleado WHEN t2.tipo_maquina !=3 THEN t1.ml_empleado END)as total_ml FROM desperdicio_op t1 INNER JOIN maquinas t2 ON t1.maquina = t2.id_maquina WHERE id_persona = $id_persona AND SUBSTRING_INDEX(fecha_crea,' ',1) >='$fecha_desde' AND SUBSTRING_INDEX(fecha_crea,' ',1)<='$fecha_desde'";
+        $sql = "SELECT SUM(CASE WHEN t2.tipo_maquina = 3 AND t1.cantidad_etiquetas != 0 THEN t1.ml_empleado WHEN t2.tipo_maquina !=3 THEN t1.ml_empleado END)as total_ml FROM desperdicio_op t1 INNER JOIN maquinas t2 ON t1.maquina = t2.id_maquina WHERE id_persona = $id_persona AND SUBSTRING_INDEX(fecha_crea,' ',1) >='$fecha_desde' AND SUBSTRING_INDEX(fecha_crea,' ',1)<='$fecha_hasta'";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);
