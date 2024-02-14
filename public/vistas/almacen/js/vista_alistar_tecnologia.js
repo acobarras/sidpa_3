@@ -212,7 +212,7 @@ var envio_alistamiento_checked = function () {
                     'labels': { ok: 'Si', cancel: 'No' }
                 });
             } else {
-                var condicion = 2;
+                var condicion = 1;
                 envio_ajax(form1, data, condicion, obj_inicial);
             }
         }

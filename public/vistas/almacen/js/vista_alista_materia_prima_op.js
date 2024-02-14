@@ -455,7 +455,7 @@ var ok_material_completo = function () {
             if (m2_alistados_total >= m2_solicitados) {
                 $(".div_imprimir_etiqueta").css('display', '');
                 $('.div_alista_material').toggle(500);
-                var maquina = data_op.maquina;
+                var maquina = data_op.nombre_maquina;
                 var ancho = ancho;
                 var num_produccion = data_op.num_produccion;
                 var material = material;
@@ -531,7 +531,7 @@ var parcial_material_inconpleto = function () {
         var obj_inicial = $('#btn_parcial_alista').html();
         btn_procesando_tabla('btn_parcial_alista');
         var num_produccion = data_op.num_produccion
-        var maquina = data_op.maquina
+        var maquina = data_op.nombre_maquina
         $.ajax({
             url: `${PATH_NAME}/almacen/agrega_material_completo`,
             type: "POST",
