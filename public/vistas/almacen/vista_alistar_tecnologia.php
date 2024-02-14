@@ -90,12 +90,17 @@
                         <div class="recuadro">
                             <div id="contenido" class="px-2 py-2 col-lg-12">
                                 <input type="hidden" name="tipo_envio" id="tipo_envio">
-                                <div>
+                                <div class="mt-3">
                                     <label for="precio_autorizado">Cantidad Reporte:</label>
                                     <input type="text" class="form-control" name="cantidad_factura" id="cantidad_factura">
                                 </div>
-                                <div>
-                                    <label for="ubicacion_material">Ubicación:</label>
+                                <div class="alert alert-primary d-none mt-3" id="div_ubicacion_inv">
+                                    <label>Ubicaciones estimadas a descontar:</label>
+                                    <br>
+                                    <span class="text-danger justify-content-center ubicacion_inv" id="text_ubicacion_inv"></span>
+                                </div>
+                                <div class="mt-3">
+                                    <label for="ubicacion_material">Ubicación de Despacho:</label>
                                     <input type="text" class="form-control" id="ubicacion_materialmodal" name="ubicacion_material">
                                     <span class="text-primary">Las Ubicaciones seleccionadas son:</span><br><span class="text-danger span_ubi"></span>
                                 </div>

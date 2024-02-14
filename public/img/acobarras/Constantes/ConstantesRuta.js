@@ -14,3 +14,4 @@ const FAC_ELECTRONICA = 1; // 1 para realizar el ingreso de portafolio con lecto
 const IMPRESION_API = 1;// 1 ACTIVO 0 INACTIVO
 const SERVIDOR_IMPRESION = 'https://192.168.2.41:3000';// Este es un servidor local que se configura para gestionar las impresion 
 const DOS_MODULOS = true;
+const REQ_UBICACION = true;

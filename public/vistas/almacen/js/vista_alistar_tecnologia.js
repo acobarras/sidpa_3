@@ -20,7 +20,7 @@ var tb_alistamiento_tecnologia = function () {
             }
         },
         columns: [
-            { "data": "fecha_compromiso" },
+            { "data": "fecha_compromiso", "visible": false },
             { "data": "nombre_empresa" },
             { "data": "orden_compra" },
             { "data": "codigo" },
@@ -64,6 +64,7 @@ var tb_alistamiento_tecnologia = function () {
     alistamiento_checked('#dt_alistamiento_tecnologia tbody', table);
     observaciones_ver('#dt_alistamiento_tecnologia tbody', table);
 }
+
 var observaciones_ver = function (tbody, table) {
     $(tbody).on('click', 'button.observaciones_ver', function () {
         var data = table.row($(this).parents('tr')).data();
@@ -73,21 +74,67 @@ var observaciones_ver = function (tbody, table) {
 }
 
 var UBICACIONES = [];
-
+var DATOS_TABLA = [];
+var ejecutar = false;
 var alistamiento_checked = function (tbody, table) {
     $(tbody).on('click', 'button.logistica_checked', function () {
         var data = table.row($(this).parents('tr')).data();
         UBICACIONES = [];
+        if (DATOS_TABLA.length != 0 || DATOS_TABLA != '') {
+            DATOS_TABLA = [];
+        }
+        DATOS_TABLA = data;
         cargar_span();
         $('#tipo_envio').val(1);// valor para saber si es un reporte parcial o completo "1" completo 
         $("#btn_reportar_factu").attr('data-id', JSON.stringify(data));
         if (data.alista_inv == 1 || data.cant_bodega == 0) {
             $("#logistica_checked_Modal").modal('show');
+            $('#btn_reportar_factu').attr('disabled', 'disabled');
+            $('#cantidad_factura').val('')
+            $('#text_ubicacion_inv').empty().html('');
+            if (!ejecutar) {
+                consultar_ubicacion();
+            }
         } else {
             alertify.error("Se debe realizar primero el alistamiento de bodega.");
         }
     });
 
+}
+var consultar_ubicacion = function () {
+    $('#cantidad_factura').on('change', function () {
+        ejecutar = true;
+        var data = DATOS_TABLA;
+        var cantidad = $(this).val();
+        var codigo = data.codigo;
+        var id_producto = data.id_producto;
+        var num_pedido = data.num_pedido;
+        var item = data.item;
+        var cant_total = (parseInt(cantidad) + parseInt(data.cant_bodega));
+        $('#div_ubicacion_inv').removeClass('d-none');
+        if (cant_total > data.Cant_solicitada) {
+            alertify.error('La cantidad digitada, supera la cantidad solicitada');
+            $('#cantidad_factura').val(0);
+            $('#cantidad_factura').empty().html('');
+            $('#text_ubicacion_inv').empty().html('');
+            $('#btn_reportar_factu').attr('disabled', 'disabled');
+            return;
+        }
+        $.ajax({
+            url: `${PATH_NAME}/almacen/consulta_tec_inventario`,
+            type: 'POST',
+            data: { codigo, cantidad, id_producto, num_pedido, item },
+            success: function (res) {
+                if (res.status == -1) {
+                    $('#text_ubicacion_inv').empty().html(res.msg);
+                    $('#btn_reportar_factu').attr('disabled', 'disabled');
+                } else {
+                    $('#btn_reportar_factu').removeAttr('disabled');
+                    $('#text_ubicacion_inv').empty().html(res.msg);
+                }
+            }
+        });
+    })
 }
 
 var ubicaciones = function () {
@@ -141,36 +188,58 @@ var envio_alistamiento_checked = function () {
         var excepcion = ['ubicacion_material'];
         var valida = validar_formulario(form, excepcion);
         if (valida) {
-            if (UBICACIONES.length == 0) {
-                alertify.error('Se necesita una ubicacion');
-                return;
+            form1.ubicacion_material = 0;
+            if (REQ_UBICACION) {
+                if (UBICACIONES.length == 0) {
+                    alertify.error('Tiene que colocar una ubicacion');
+                    return;
+                }
+                form1.ubicacion_material = UBICACIONES.toString();
             }
             var obj_inicial = $(`#btn_reportar_factu`).html();
             btn_procesando(`btn_reportar_factu`);
-            form1.ubicacion_material = UBICACIONES.toString();
-            $.ajax({
-                url: `${PATH_NAME}/almacen/reportar_facturacion`,
-                type: 'POST',
-                data: { form1, data },
-                success: function (res) {
-                    UBICACIONES = [];
-                    if (res.status == 1) {
-                        $("#dt_alistamiento_tecnologia").DataTable().ajax.reload(function () {
-                            $("#logistica_checked_Modal").modal('hide');
-                            btn_procesando(`btn_reportar_factu`, obj_inicial, 1);
-                            $("#form_reporta_factu")[0].reset();
-                            alertify.success(res.msg);
-                        });
-                    } else {
-                        $("#dt_alistamiento_tecnologia").DataTable().ajax.reload(function () {
-                            btn_procesando(`btn_reportar_factu`, obj_inicial, 1);
-                            alertify.error(res.msg);
-                        });
+            if (SESION == 1) {
+                alertify.confirm(`ALERTA SIDPA`, `¿Desea descontar del inventario?`, function () {
+                    var condicion = 1;
+                    envio_ajax(form1, data, condicion, obj_inicial);
 
-                    }
-                }
-            });
+                }, function () {
+                    var condicion = 2;
+                    envio_ajax(form1, data, condicion, obj_inicial);
+
+                }).set({
+                    'closable': false,
+                    'labels': { ok: 'Si', cancel: 'No' }
+                });
+            } else {
+                var condicion = 2;
+                envio_ajax(form1, data, condicion, obj_inicial);
+            }
         }
     });
+}
+var envio_ajax = function (form1, data, condi, obj_inicial) {
+    // var obj_inicial = $(`#btn_reportar_factu`).html();
+    $.ajax({
+        url: `${PATH_NAME}/almacen/reportar_facturacion`,
+        type: 'POST',
+        data: { form1, data, condi },
+        success: function (res) {
+            UBICACIONES = [];
+            if (res.status == 1) {
+                $("#dt_alistamiento_tecnologia").DataTable().ajax.reload(function () {
+                    $("#logistica_checked_Modal").modal('hide');
+                    btn_procesando(`btn_reportar_factu`, obj_inicial, 1);
+                    $("#form_reporta_factu")[0].reset();
+                    alertify.success(res.msg);
+                });
+            } else {
+                $("#dt_alistamiento_tecnologia").DataTable().ajax.reload(function () {
+                    btn_procesando(`btn_reportar_factu`, obj_inicial, 1);
+                    alertify.error(res.msg);
+                });
 
+            }
+        }
+    });
 }

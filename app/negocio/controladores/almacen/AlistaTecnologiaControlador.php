@@ -46,11 +46,110 @@ class AlistaTecnologiaControlador extends GenericoControlador
             'almacen/vista_alistar_tecnologia'
         );
     }
+
+    public function consulta_tec_inventario()
+    {
+        header('Content-Type: application/json');
+        $cantidad_req = $_POST['cantidad'];
+        $cons_ubica = $this->entrada_tecnologiaDAO->consultar_seguimiento_producto($_POST['id_producto']);
+        $mensaje = '';
+        if (empty($cons_ubica) || count($cons_ubica) == 0) {
+            $respu = [
+                'msg' => 'El producto seleccionado no tiene inventario disponible. Por favor, carga inventario para poder realizar el reporte correspondiente',
+                'status' => -1
+            ];
+        } else {
+            $conteo_inv = 0;
+            foreach ($cons_ubica as $ubicacion) {
+                if ($cantidad_req > 0) {
+                    if ($ubicacion->total > 0) {
+                        if ($cantidad_req <= $ubicacion->total) {
+                            $salida = $cantidad_req;
+                        } else {
+                            $salida = $ubicacion->total;
+                        }
+                        $conteo_inv += $ubicacion->total;
+                        if ($mensaje == '') {
+                            $mensaje = $ubicacion->ubicacion . '(' . $salida . ')';
+                        } else {
+                            $mensaje = $mensaje . ', ' . $ubicacion->ubicacion . '(' . $salida . ')';
+                        }
+                    }
+                }
+            }
+            if ($conteo_inv >= floatval($cantidad_req)) {
+                $respu = [
+                    'msg' => $mensaje,
+                    'status' => 1
+                ];
+            } else {
+                $respu = [
+                    'msg' => 'La cantidad digitada supera la cantidad del inventario. En inventario hay:' . $conteo_inv,
+                    'status' => -1,
+                ];
+            }
+        }
+        echo json_encode($respu);
+        return;
+    }
+
     public function reportar_facturacion()
     {
         header('Content-Type: application/json'); //convierte a json
         $form = $_POST['form1'];
         $data = $_POST['data'];
+        $condicion = $_POST['condi'];
+        $cantidad_req = $form['cantidad_factura'];
+        // DESCONTAR DEL INVENTARIO
+        $cons_ubica = $this->entrada_tecnologiaDAO->consultar_seguimiento_producto($data['id_producto']);
+        if (empty($cons_ubica)) {
+            $respu = [
+                'msg' => 'Lo sentimos, la mercancia ya fue descontada',
+                'status' => -1
+            ];
+            echo json_encode($respu);
+            return;
+        } else {
+            $conteo_inv = 0;
+            foreach ($cons_ubica as $ubicacion) {
+                if ($cantidad_req > 0) {
+                    if ($ubicacion->total > 0) {
+                        if ($cantidad_req <= $ubicacion->total) { //se decuenta porque en la ubicacion esta la cantidad requerida    
+                            $salida = $cantidad_req;
+                            $cantidad_req = $cantidad_req - $cantidad_req;
+                        } else { //descuenta de esa ubicacion y sigue buscando
+                            $salida = $ubicacion->total;
+                            $cantidad_req = $cantidad_req - $ubicacion->total;
+                        }
+                        $data_descuento[] = [
+                            'documento' => $data['num_pedido'] . "-" . $data['item'],
+                            'ubicacion' => $ubicacion->ubicacion,
+                            'codigo_producto' => $data['codigo'],
+                            'id_productos' => $data['id_producto'],
+                            'salida' => $salida,
+                            'estado_inv' => 1,
+                            'fecha_crea' => date('Y-m-d H:i:s'),
+                            'fecha_alista' => date('Y-m-d H:i:s'),
+                            'id_usuario' => $_SESSION['usuario']->getId_usuario()
+                        ];
+                    }
+                }
+            }
+            if ($conteo_inv >= floatval($cantidad_req)) {
+                if ($condicion == 1) {
+                    foreach ($data_descuento as $items) {
+                        $this->entrada_tecnologiaDAO->insertar($items);
+                    }
+                }
+            } else {
+                $respu = [
+                    'msg' => 'Lo sentimos parte de la mercancia ya fue alistada.En inventario quedan:' . $conteo_inv,
+                    'status' => -1,
+                ];
+                echo json_encode($respu);
+                return;
+            }
+        }
         /* Registrar entregas_logistica tabla */
         $obj['id_usuario'] = $_SESSION['usuario']->getId_usuario();
         $obj['fecha_crea'] = date('Y-m-d');

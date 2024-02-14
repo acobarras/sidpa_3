@@ -234,12 +234,16 @@ var envia = function () {
     $('#modal_ubica').on('click', function (e) {
         e.preventDefault();
         var data = DATOS_TABLA;
-        if (UBICACIONES.length == 0) {
-            alertify.error('Tiene que colocar una ubicacion');
-            return;
+        data.ubicacion_material = 0;
+        if (REQ_UBICACION) {
+            if (UBICACIONES.length == 0) {
+                alertify.error('Tiene que colocar una ubicacion');
+                return;
+            }
+            data.ubicacion_material = UBICACIONES.toString();
         }
+        // COMENTAR ESTA PARTE CUANDO ES ETICARIBE Y ETICOMEX
         var obj_inicial = $(`#modal_ubica`).html();
-        data.ubicacion_material = UBICACIONES.toString();
         btn_procesando_tabla(`modal_ubica`);
         $.ajax({
             url: `${PATH_NAME}/almacen/crea_entrega_logistica`,
