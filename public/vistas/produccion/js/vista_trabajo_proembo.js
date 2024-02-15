@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    trabajo_maquinas();
+    pestana_activa();
     select_2();
     $(".datepicker").datepicker();
     consultar_turnos();
@@ -17,11 +17,22 @@ $(document).ready(function () {
     grabar_reporte_etiquetas();
 });
 
+$('.pestana_maquina').on('click', function () {
+    pestana_activa();
+});
+
+var pestana_activa = function () {
+    $('.nav li a').each(function (index) {
+        if ($(this).hasClass('active')) {
+            var datos = $(this).attr('id-maquina');
+            trabajo_maquinas(datos);
+        }
+    });
+}
+
 var carga_funcion = function () {
-    reasignar(); //Se carga la funcion por primera vez despues de que se crean las tablas
     boton_puesta_punto(); //Se carga la funcion por primera vez despues de que se crean las tablas
     boton_inicio_produccion(); //Se carga la funcion por primera vez despues de que se crean las tablas
-    consulta_seguimiento();
     consulta_reporte();
     ver_ficha();
 }
@@ -32,28 +43,20 @@ var id_persona_sesion = $('#id_persona_sesion').val();
 var id_usuario_sesion = $('#id_usuario_sesion').val();
 var estados_activos = ['4', '5', '6', '7', '10', '15'];//,8,9];
 
-var trabajo_maquinas = function () {
+var trabajo_maquinas = function (id_maquina) {
     $.ajax({
-        url: `${PATH_NAME}/produccion/consultar_trabajo_pro_embo`,
+        url: `${PATH_NAME}/produccion/consultar_trabajo_pro_embo?id_maquina=${id_maquina}`,
         type: 'GET',
         success: function (res) {
-            q_maquinas.forEach(element => {
-                carga_tablas(res, element.id_maquina);
-            });
+            carga_tablas(res, id_maquina);
             carga_funcion();
         }
     });
 }
 
 var carga_tablas = function (data, maquina) {
-    var data_tabla = [];
-    data.forEach(element => {
-        if (element.id_maquina == maquina) {
-            data_tabla.push(element);
-        }
-    });
     var table = $(`#tabla_maquina_produccion${maquina}`).DataTable({
-        "data": data_tabla,
+        "data": data,
         "order": [
             [1, "asc"],
             [2, "asc"]
@@ -122,7 +125,8 @@ var carga_tablas = function (data, maquina) {
             }
         ],
     });
-
+    consulta_seguimiento(`#tabla_maquina_produccion${maquina} tbody`);
+    reasignar(`#tabla_maquina_produccion${maquina} tbody`); //Se carga la funcion por primera vez despues de que se crean las tablas
 }
 
 function format(d) {
@@ -157,7 +161,7 @@ function format(d) {
 var detailRows = []; //Cunado se requiere poder ver mas de 
 
 var consulta_seguimiento = function (tbody, table) {
-    $('.ver_op').on('click', function () {
+    $(tbody).on('click', `tr button.ver_op`, function () {
         var dato = $(this).attr('data-ver');
         var data_row = $(`#tabla_maquina_produccion${dato}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
         var tr = $(this).closest('tr');
@@ -240,8 +244,8 @@ var ver_ficha = function (tbody, table) {
     })
 }
 
-var reasignar = function () {
-    $('.reasignar').on('click', function () {
+var reasignar = function (tbody) {
+    $(tbody).on('click', `tr button.reasignar`, function () {
         var dato = $(this).attr('data-id');
         var data = $(`#tabla_maquina_produccion${dato}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
         if (data.estado_item_producir == 15) {
@@ -392,10 +396,7 @@ var generar_cambio_maquina = function () {
             type: "POST",
             data: datos,
             success: function (res) {
-                q_maquinas.forEach(element => {
-                    carga_tablas(res, element.id_maquina);
-                });
-                carga_funcion();
+                pestana_activa();
                 $('#CambioMaquinaModal').modal('toggle');
             }
         });
@@ -424,9 +425,7 @@ var generar_cambio_maquina_embo = function () {
             type: "POST",
             data: datos,
             success: function (res) {
-                q_maquinas.forEach(element => {
-                    carga_tablas(res, element.id_maquina);
-                });
+                pestana_activa();
                 carga_funcion();
                 $('#CambioMaquinaEmboModal').modal('toggle');
             }
@@ -512,9 +511,7 @@ var activa_puesta_punto = function (data, usuario) {
         type: "POST",
         data: { data, usuario, estado_item_producir, id_actividad_area },
         success: function (res) {
-            q_maquinas.forEach(element => {
-                carga_tablas(res, element.id_maquina);
-            });
+            pestana_activa();
             carga_funcion();
         }
     });
@@ -639,9 +636,7 @@ var activa_inicio_produccion = function (data, usuario) {
         type: "POST",
         data: { data, usuario, estado_item_producir, id_actividad_area },
         success: function (res) {
-            q_maquinas.forEach(element => {
-                carga_tablas(res, element.id_maquina);
-            });
+            pestana_activa();
             carga_funcion();
         }
     });
@@ -653,9 +648,7 @@ var activa_inicio_embobinado = function (data, id_persona_sesion) {
         type: "POST",
         data: { data, id_persona_sesion },
         success: function (res) {
-            q_maquinas.forEach(element => {
-                carga_tablas(res, element.id_maquina);
-            });
+            pestana_activa();
             carga_funcion();
         }
     });
@@ -996,9 +989,7 @@ var grabar_produccion_pro_embo = function () {
                 $('#ProduccionModal').modal('toggle');
                 if (res.status == 1) {
                     $('#regresar').click();
-                    q_maquinas.forEach(element => {
-                        carga_tablas(res.respu, element.id_maquina);
-                    });
+                    pestana_activa();
                     carga_funcion();
                 } else {
                     tabla_items_embo_dk(res.respu, data_row);
@@ -1101,9 +1092,7 @@ var reportar_embobinado_etiquetas = function (envio, reporte, id_persona_sesion,
         success: function (res) {
             if (res.status == 1) {
                 $('#regresar').click();
-                q_maquinas.forEach(element => {
-                    carga_tablas(res.respu, element.id_maquina);
-                });
+                pestana_activa();
                 carga_funcion();
             } else {
                 tabla_items_embo_dk(res.respu, data_maquina);

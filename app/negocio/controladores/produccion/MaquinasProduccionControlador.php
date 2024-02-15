@@ -91,11 +91,14 @@ class MaquinasProduccionControlador extends GenericoControlador
         );
     }
 
-    public function consultar_trabajo_maquinas()
+    public function consultar_trabajo_maquinas($id_maquina = '')
     {
         header('Content-Type: application/json');
+        if ($id_maquina == '') {
+            $id_maquina = $_GET['id_maquina'];
+        }
         $estado = '4,5,6,7,8,9,10';
-        $op = $this->ItemProducirDAO->consultar_maquina_produccion2($estado);
+        $op = $this->ItemProducirDAO->consultar_maquina_produccion2($estado,$id_maquina);
         $data = $op;
         echo json_encode($data);
     }
@@ -137,7 +140,7 @@ class MaquinasProduccionControlador extends GenericoControlador
                 }
             }
         }
-        $respu = $this->consultar_trabajo_maquinas();
+        $respu = $this->consultar_trabajo_maquinas($id_maquina);
         return $respu;
     }
 
@@ -177,7 +180,7 @@ class MaquinasProduccionControlador extends GenericoControlador
             'hora_crea' => date('H:i:s'),
         ];
         $this->SeguimientoProduccionDAO->insertar($seguimiento_produccion);
-        $respu = $this->consultar_trabajo_maquinas();
+        $respu = $this->consultar_trabajo_maquinas($data['id_maquina']);
         return $respu;
     }
 
@@ -274,7 +277,7 @@ class MaquinasProduccionControlador extends GenericoControlador
                 }
             }
         }
-        $respu = $this->consultar_trabajo_maquinas();
+        $respu = $this->consultar_trabajo_maquinas($data_row['id_maquina']);
         return $respu;
     }
 
@@ -413,7 +416,7 @@ class MaquinasProduccionControlador extends GenericoControlador
         // $editar_pedido_item = ['id_estado_item_pedido' => 15];
         $condicion_pedido_item = 'id_pedido_item =' . $id_pedido_item;
         $this->PedidosItemDAO->editar($editar_pedido_item, $condicion_pedido_item);
-        $respu = $this->consultar_trabajo_maquinas();
+        $respu = $this->consultar_trabajo_maquinas($data_itemProducir['id_maquina']);
         return $respu;
     }
 }

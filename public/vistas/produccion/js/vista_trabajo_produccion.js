@@ -1,7 +1,6 @@
-// 0bcc9ad9aa77a206964b5eed87efad49
 $(document).ready(function () {
     icono_impresion();//boton de area de trabajo
-    trabajo_maquinas();
+    pestana_activa();
     select_2();
     $(".datepicker").datepicker();
     consultar_turnos();
@@ -14,12 +13,23 @@ $(document).ready(function () {
     cierre_items();
 });
 
+$('.pestana_maquina').on('click', function () {
+    pestana_activa();
+});
+
+var pestana_activa = function () {
+    $('.nav li a').each(function (index) {
+        if ($(this).hasClass('active')) {
+            var datos = $(this).attr('id-maquina');
+            trabajo_maquinas(datos);
+        }
+    });
+}
+
 var carga_funcion = function () {
-    reasignar(); //Se carga la funcion por primera vez despues de que se crean las tablas
     boton_puesta_punto(); //Se carga la funcion por primera vez despues de que se crean las tablas
     boton_inicio_produccion(); //Se carga la funcion por primera vez despues de que se crean las tablas
     pro_completa();
-    consulta_seguimiento();
 }
 
 var datos_consulta = $('#datos_consulta').val();
@@ -28,28 +38,20 @@ var id_persona_sesion = $('#id_persona_sesion').val();
 var id_usuario_sesion = $('#id_usuario_sesion').val();
 var estados_activos = ['4', '5', '6', '7', '10'];//,8,9];
 
-var trabajo_maquinas = function () {
+var trabajo_maquinas = function (id_maquina) {
     $.ajax({
-        url: `${PATH_NAME}/produccion/consultar_trabajo_maquinas`,
+        url: `${PATH_NAME}/produccion/consultar_trabajo_maquinas?id_maquina=${id_maquina}`,
         type: 'GET',
         success: function (res) {
-            q_maquinas.forEach(element => {
-                carga_tablas(res, element.id_maquina);
-            });
+            carga_tablas(res, id_maquina);
             carga_funcion();
         }
     });
 }
 
 var carga_tablas = function (data, maquina) {
-    var data_tabla = [];
-    data.forEach(element => {
-        if (element.id_maquina == maquina) {
-            data_tabla.push(element);
-        }
-    });
     var table = $(`#tabla_maquina_produccion${maquina}`).DataTable({
-        "data": data_tabla,
+        "data": data,
         "order": [
             [1, "asc"],
             [2, "asc"]
@@ -77,7 +79,7 @@ var carga_tablas = function (data, maquina) {
             { "data": "mL_descontado", render: $.fn.dataTable.render.number('.', ',', 0, '') },
             {
                 "data": "opcion", render: function (data, type, row) {
-                    botones = `<button class="btn btn-info ver_op" data-ver = "${row.id_maquina}" data-fecha = "${row.fecha_produccion}" title="Ver O.P." ><i class="fa fa-search"></i></button> `;
+                    botones = `<button class="btn btn-info ver_op" data-ver="${row.id_maquina}" data-fecha="${row.fecha_produccion}" title="Ver O.P." ><i class="fa fa-search"></i></button> `;
                     if (datos_consulta == 1 && estados_activos.indexOf(row['estado_item_producir'])) { //row['estado_item_producir'] != 9) {
                         botones += `<button class="btn btn-warning reasignar" data-id="${row.id_maquina}" title="Reasignar M.Q" ><i class="fa fa-retweet"></i></button> `;
                     }
@@ -102,7 +104,8 @@ var carga_tablas = function (data, maquina) {
             }
         ],
     });
-
+    consulta_seguimiento(`#tabla_maquina_produccion${maquina} tbody`);
+    reasignar(`#tabla_maquina_produccion${maquina} tbody`); //Se carga la funcion por primera vez despues de que se crean las tablas
 }
 
 function format(d) {
@@ -137,7 +140,7 @@ function format(d) {
 var detailRows = []; //Cunado se requiere poder ver mas de 
 
 var consulta_seguimiento = function (tbody, table) {
-    $('.ver_op').on('click', function () {
+    $(tbody).on('click', `tr button.ver_op`, function () {
         var dato = $(this).attr('data-ver');
         var fecha = $(this).data('fecha');
         var data_row = $(`#tabla_maquina_produccion${dato}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
@@ -270,8 +273,8 @@ function cierre_items() {
 
 }
 
-var reasignar = function () {
-    $('.reasignar').on('click', function () {
+var reasignar = function (tbody) {
+        $(tbody).on('click', `tr button.reasignar`, function () {
         var dato = $(this).attr('data-id');
         var data = $(`#tabla_maquina_produccion${dato}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
 
@@ -369,9 +372,7 @@ var generar_cambio_maquina = function () {
             type: "POST",
             data: datos,
             success: function (res) {
-                q_maquinas.forEach(element => {
-                    carga_tablas(res, element.id_maquina);
-                });
+                pestana_activa();
                 carga_funcion();
                 $('#CambioMaquinaModal').modal('toggle');
             }
@@ -463,9 +464,7 @@ var activa_puesta_punto = function (data, usuario) {
         type: "POST",
         data: { data, usuario, estado_item_producir, id_actividad_area },
         success: function (res) {
-            q_maquinas.forEach(element => {
-                carga_tablas(res, element.id_maquina);
-            });
+            pestana_activa();
             carga_funcion();
         }
     });
@@ -502,9 +501,7 @@ var activa_inicio_produccion = function (data, usuario) {
         type: "POST",
         data: { data, usuario, estado_item_producir, id_actividad_area },
         success: function (res) {
-            q_maquinas.forEach(element => {
-                carga_tablas(res, element.id_maquina);
-            });
+            pestana_activa();
             carga_funcion();
         }
     });
@@ -734,9 +731,7 @@ var envio_datos = function () {
                             btn_procesando('grabar_produccion', obj_inicial, 1);
                         });
                     } else {
-                        q_maquinas.forEach(element => {
-                            carga_tablas(res, element.id_maquina);
-                        });
+                        pestana_activa();
                         carga_funcion();
                         btn_procesando('grabar_produccion', obj_inicial, 1);
                         $('#ProduccionModal').modal('toggle');
@@ -754,9 +749,7 @@ var envio_datos = function () {
                 type: "POST",
                 data: { envio },
                 success: function (res) {
-                    q_maquinas.forEach(element => {
-                        carga_tablas(res, element.id_maquina);
-                    });
+                    pestana_activa();
                     carga_funcion();
                     $('#ProduccionModal').modal('toggle');
                     btn_procesando('grabar_produccion', obj_inicial, 1);
@@ -788,7 +781,7 @@ function impresion_etiquetas_op(op, item, id_operario = '') { // falta poner el 
             <div class="div_impresion"></div>
         </div>`
         id_operario = ''
-        $('#id_persona').val('') 
+        $('#id_persona').val('')
     } else {
         html_impresion = `<div class="mb-3 row">
         <label for="cantidad" class="col-sm-6 col-form-label fw-bold">Cantidad Etiquetas:</label>

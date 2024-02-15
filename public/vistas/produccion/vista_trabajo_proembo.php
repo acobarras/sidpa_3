@@ -22,7 +22,7 @@
                     }
                 ?>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link <?= $activa ?>" id="<?= $id_item ?>-tab" data-bs-toggle="tab" href="#<?= $id_item ?>" role="tab" aria-controls="<?= $id_item ?>" aria-selected="true"><?= $mq_pro->nombre_maquina ?></a>
+                        <a class="nav-link <?= $activa ?> pestana_maquina" id="<?= $id_item ?>-tab" data-bs-toggle="tab" href="#<?= $id_item ?>" role="tab" aria-controls="<?= $id_item ?>" id-maquina="<?= $mq_pro->id_maquina ?>" aria-selected="true"><?= $mq_pro->nombre_maquina ?></a>
                     </li>
                 <?php } ?>
             </ul>
