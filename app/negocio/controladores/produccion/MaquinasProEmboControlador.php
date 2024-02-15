@@ -40,7 +40,7 @@ class MaquinasProEmboControlador extends GenericoControlador
     private $SeguimientoOpDAO;
     private $impresora_tamanoDAO;
     private $impresorasDAO;
-    
+
 
     public function __construct(&$cnn)
     {
@@ -110,16 +110,19 @@ class MaquinasProEmboControlador extends GenericoControlador
         $this->view('produccion/modal_impresion');
     }
 
-    public function consultar_trabajo_pro_embo($respu = '')
+    public function consultar_trabajo_pro_embo($respu = '', $id_maquina = '')
     {
         header('Content-Type: application/json');
+        if ($id_maquina == '') {
+            $id_maquina = $_GET['id_maquina'];
+        }
         $estado = '4,5,6,7,8,9,10,12';
         $estados_cambio = array(
             12 => '15',
             13 => '16',
             14 => '14',
         );
-        $op = $this->ItemProducirDAO->consultar_maquina_produccion($estado);
+        $op = $this->ItemProducirDAO->consultar_maquina_produccion2($estado, $id_maquina);
         $embobinado = $this->MaquinaEmbobinadoDAO->embobinado_maquinas_dk();
         foreach ($op as $value) {
             foreach ($embobinado as $cambio) {
@@ -168,7 +171,7 @@ class MaquinasProEmboControlador extends GenericoControlador
             'hora_crea' => date('H:i:s'),
         ];
         $this->SeguimientoProduccionDAO->insertar($seguimiento_produccion);
-        $respu = $this->consultar_trabajo_pro_embo();
+        $respu = $this->consultar_trabajo_pro_embo('', $data['id_maquina']);
         return $respu;
     }
 
@@ -191,7 +194,7 @@ class MaquinasProEmboControlador extends GenericoControlador
         foreach ($respu as $value) {
             $cavidad_cliente = Validacion::DesgloceCodigo($value->codigo, 5, 1);
             $value->cav_cliente = $cavidad_cliente;
-            $documento = $value->num_pedido."-".$value->item;
+            $documento = $value->num_pedido . "-" . $value->item;
             $etiq_bodega = $this->entrada_tecnologiaDAO->salida_producto($documento);
             $value->salida_bodega = $etiq_bodega[0]->salida_bodega;
             $datos_reporte = $this->DesperdicioOpDAO->etiquetas_pedido_item($value->id_pedido_item);
@@ -236,7 +239,7 @@ class MaquinasProEmboControlador extends GenericoControlador
                 }
             }
         }
-        $respu = $this->consultar_trabajo_pro_embo();
+        $respu = $this->consultar_trabajo_pro_embo('', $id_maquina);
         return $respu;
     }
 
@@ -292,7 +295,7 @@ class MaquinasProEmboControlador extends GenericoControlador
                 }
             }
         }
-        $respu = $this->consultar_trabajo_pro_embo();
+        $respu = $this->consultar_trabajo_pro_embo('', $id_maquina);
         return $respu;
     }
 
@@ -321,7 +324,7 @@ class MaquinasProEmboControlador extends GenericoControlador
             'hora_crea' => date('H:i:s'),
         ];
         $this->SeguimientoProduccionDAO->insertar($seguimiento_produccion);
-        $respu = $this->consultar_trabajo_pro_embo();
+        $respu = $this->consultar_trabajo_pro_embo('', $data['id_maquina']);
         return $respu;
     }
 
@@ -360,7 +363,7 @@ class MaquinasProEmboControlador extends GenericoControlador
             ];
             $condicion_pedidos_item = 'id_pedido_item =' . $value['id_pedido_item'];
             $this->PedidosItemDAO->editar($edita_pedidos_item, $condicion_pedidos_item);
-            if($value['estado_envio'] == 2) {
+            if ($value['estado_envio'] == 2) {
                 $insertar_seguimiento_item = [
                     'id_persona' => $operario,
                     'id_area' => 2,
@@ -464,7 +467,7 @@ class MaquinasProEmboControlador extends GenericoControlador
                 'respu' => $k
             ];
         } else {
-            $json = $this->consultar_trabajo_pro_embo(1);
+            $json = $this->consultar_trabajo_pro_embo(1, $datos['data_row']['id_maquina']);
             $k = (array)json_decode($json, true);
             $retorno = [
                 'status' => 1,
@@ -521,7 +524,7 @@ class MaquinasProEmboControlador extends GenericoControlador
             ];
             $condicion_pedido_item = 'id_pedido_item =' . $repor['id_pedido_item'];
             $this->PedidosItemDAO->editar($edita_pedido_item, $condicion_pedido_item);
-            if($repor['estado_envio'] == 2) {
+            if ($repor['estado_envio'] == 2) {
                 $insertar_seguimiento_item = [
                     'id_persona' => $id_persona_sesion,
                     'id_area' => 2,
@@ -598,7 +601,7 @@ class MaquinasProEmboControlador extends GenericoControlador
                 'hora_crea' => date('H:i:s'),
             ];
             $this->SeguimientoProduccionDAO->insertar($seguimiento_produccion);
-            $json = $this->consultar_trabajo_pro_embo(1);
+            $json = $this->consultar_trabajo_pro_embo(1, $data_maquina['maquina']);
             $k = (array)json_decode($json, true);
             $respu_total = [
                 'status' => 1,
