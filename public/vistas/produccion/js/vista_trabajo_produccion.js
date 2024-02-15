@@ -671,7 +671,7 @@ var envio_datos = function () {
                             mensaje = 'Se requiere los metros lineales usados';
                             $(`#uso${p}`).focus();
                             return;
-                        } else if (metros_lineales_existentes < dato_ml_usados) { //aqui podemos mirar que no sea mayor que lo que ya tiene 
+                        } else if (parseInt(metros_lineales_existentes) < parseInt(dato_ml_usados)) { //aqui podemos mirar que no sea mayor que lo que ya tiene 
                             mensaje = 'Los metros lineales usados no pueden ser mayor a los cargados';
                             $(`#uso${p}`).focus();
                             return;

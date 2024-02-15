@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    icono_impresion();//boton de area de trabajo
     pestana_activa();
     select_2();
     $(".datepicker").datepicker();

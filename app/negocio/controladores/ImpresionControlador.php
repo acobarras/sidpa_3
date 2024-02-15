@@ -28,15 +28,19 @@ class ImpresionControlador extends GenericoControlador
         if ($id_roll == 1) {
             $condicion = '';
         } else {
-            $area = $this->AreaTrabajoDAO->consulta_area_usuario($id_usuario);
-            if ($area[0]->id_area_trabajo == 3 && $id_roll != 12) {
-                $condicion = 'WHERE t4.id_usuario = 0'; // no debe aparecer nada 
-            } else {
+            $area = $this->AreaTrabajoDAO->consulta_area_usuario($id_usuario); // hay que tener en cuenta el null pra eticaribe
+            if (empty($area)) {
                 $condicion = "WHERE t4.id_usuario = $id_usuario";
+            } else {
+                if ($area[0]->id_area_trabajo == 3 && $id_roll != 12) {
+                    $condicion = 'WHERE t4.id_usuario = 0'; // no debe aparecer nada 
+                } else {
+                    $condicion = "WHERE t4.id_usuario = $id_usuario";
+                }
             }
         }
 
-        $subareas = $this->SubareaImpresionDAO->subareas_usuario( $condicion);
+        $subareas = $this->SubareaImpresionDAO->subareas_usuario($condicion);
         $status = (!empty($subareas));
         $respuesta = [
             'status' => $status,

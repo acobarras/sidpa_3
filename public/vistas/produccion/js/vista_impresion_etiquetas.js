@@ -46,7 +46,7 @@ var consulta_operario = function () {
 }
 
 var consultar_pedido = function () {
-    $('.num_pedio').on('change', function () {
+    $('.num_pedio').on('blur', function () {
         var num_pedido = $(this).val();
         $.ajax({
             type: "POST",
