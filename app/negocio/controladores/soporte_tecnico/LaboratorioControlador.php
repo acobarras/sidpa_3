@@ -56,6 +56,7 @@ class LaboratorioControlador extends GenericoControlador
         $contador = $this->SoporteItemDAO->items_ingresados($datos[0]['id_diagnostico']);
         $contador = $contador[0]->contador + 1;
 
+
         $usuario = $_SESSION['usuario']->getid_usuario();
         $user = $this->UsuarioDAO->consultarIdUsuario($usuario);
         $nombre_usuario = $user[0]->nombre;
@@ -91,8 +92,9 @@ class LaboratorioControlador extends GenericoControlador
             ];
             //}
             $agregar_item = $this->SoporteItemDAO->insertar($formulario);
-            $contador =+ 1;
+            ++$contador ;
         }
+        return;
         if ($agregar_item['status'] == 1) {
             $estado = $_POST['estado'];
             if ($imagen == 2) {

@@ -147,7 +147,8 @@ var valida_factura = function () {
                 data: form,
                 success: function (res) {
                     $("#num_factura").empty().html(res.num_factura);
-                    if (res.status == 1) { //status 1 si encuentra una factura                      
+                    if (res.status == 1) { //status 1 si encuentra una factura
+                        $("#id_usuarios_asesor").html('');    // se agrega esto para que no se peque el asesor                   
                         consulta_asesores(res.id_usuarios_asesor, res.id_persona, 'id_usuarios_asesor'); // consulta los asesores de el cliente provedor
                         $("#crea").empty().html(''); // quita contenido del id
                         if (!$(".consulta_factura_tg").is(":visible")) { // valida si el formulario esta abierto
@@ -420,6 +421,7 @@ var envio_factura_ajax = function (form, obj_inicial) {
         data: form,
         success: function (res) {
             btn_procesando(`acepta_factu`, obj_inicial, 1);
+            $("#id_usuarios_asesor").html(''); // Se agrega para evitar errores
             if (res.status == -1) { //status -1 ya se relaciono esta factura
                 alertify.error(res.msg);
             } else {

@@ -4,7 +4,7 @@
         <div id="contenido" class="px-2 py-2 col-lg-12">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-link active" id="valida_factura-tab" data-bs-toggle="tab" href="#valida_factura" role="tab" aria-controls="valida_factura" aria-selected="true">Pedido Item</a>
+                    <a class="nav-link active" id="valida_factura-tab" data-bs-toggle="tab" href="#valida_factura" role="tab" aria-controls="valida_factura" aria-selected="true">Ingreso Facturas</a>
                     <?php
                     foreach ($pertenece as $value) { ?>
                         <a class="nav-link cambio_port" nombre_tabla="tabla_empresa<?= $value->id_empresa ?>" id_empresa="<?= $value->id_empresa ?>" id="empresa_<?= $value->id_empresa ?>-tab" data-bs-toggle="tab" href="#empresa_<?= $value->id_empresa ?>" role="tab" aria-controls="empresa_<?= $value->id_empresa ?>" aria-selected="true"><?= $value->nombre_compania ?></a>
@@ -146,10 +146,10 @@
                                     <label for="total_factura" class="form-label">Total Factura :</label>
                                     <input type="text" class="form-control" name="total_factura" id="total_factura_modifi">
                                 </div>
-                                <div class="col-12 text-center">
-                                    <button type="submit" class="btn  btn-success col-2" id="acepta_factu">Aceptar Factura</button>
-                                </div>
                             </form>
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn  btn-success col-2" id="acepta_factu">Aceptar Factura</button>
+                            </div>
                             <br>
                         </div>
                     </div>
