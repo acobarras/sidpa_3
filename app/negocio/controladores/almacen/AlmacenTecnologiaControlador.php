@@ -238,15 +238,20 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         $datos = $_POST;
         $valida_reporte = $this->EntregasLogisticaDAO->valida_edicion_item($datos['id_pedido_item']);
         $impresion_variable = false;
-        // validacion de informacion variable 
         $codigo = $datos["codigo"];
-        $caracter = "-";
-        $posicion_coincidencia = strpos($codigo, $caracter);
-        $tinta_codigo = substr($codigo, ($posicion_coincidencia + 6), 2);
-        $tintas = $this->TintasDAO->consultar_tintas_valiables();
-        foreach ($tintas as $tinta) {
-            if ($tinta_codigo == $tinta->numeros) {
-                $impresion_variable = true;
+        // validamos antes que no sea un codigo de tecnologia
+        $consulta_codigo = $this->productosDAO->ConsultaProductoCodigo($codigo);
+        $tipo_articulo = $consulta_codigo[0]->id_clase_articulo;
+        if ($tipo_articulo != 3 ) {
+            // validacion de informacion variable 
+            $caracter = "-";
+            $posicion_coincidencia = strpos($codigo, $caracter);
+            $tinta_codigo = substr($codigo, ($posicion_coincidencia + 6), 2);
+            $tintas = $this->TintasDAO->consultar_tintas_valiables();
+            foreach ($tintas as $tinta) {
+                if ($tinta_codigo == $tinta->numeros) {
+                    $impresion_variable = true;
+                }
             }
         }
         if ($impresion_variable === false) { // Reportamos a facturación cuando no es impresion varibale 

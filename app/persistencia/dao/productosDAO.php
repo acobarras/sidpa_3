@@ -202,7 +202,7 @@ class productosDAO extends GenericoDAO
     public function cons_prod_codigo($codigo)
     {
         $sql = "SELECT * FROM productos 
-            WHERE codigo_producto LIKE '%$codigo%' ORDER BY id_productos DESC LIMIT 1";
+            WHERE codigo_producto LIKE '%$codigo%' ORDER BY codigo_producto DESC LIMIT 1";// ORDER BY codigo_producto DESC LIMIT 1 se asumio que se crearia en orden, no necesariamente 
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);

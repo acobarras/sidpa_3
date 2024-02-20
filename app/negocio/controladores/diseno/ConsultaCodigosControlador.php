@@ -43,7 +43,7 @@ final class ConsultaCodigosControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         // var_dump($_GET);
-        $condicion = "WHERE t1.id_tipo_articulo = 1  AND t1.estado_producto = 1  AND t1.codigo_producto NOT LIKE '%SERVICIO%' AND t1.ubi_troquel NOT LIKE '%EXTERNO%'";
+        $condicion = "WHERE t1.id_tipo_articulo = 1  AND t1.estado_producto = 1  AND t1.codigo_producto NOT LIKE '%SERVICIO%' ";
         // condiciones dependiendo de lo que agregen 
         if ($_GET['ancho'] != '') {
             $condicion .= "AND t1.codigo_producto LIKE '" . $_GET['ancho'] . "X%' ";
