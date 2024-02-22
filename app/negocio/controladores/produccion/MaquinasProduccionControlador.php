@@ -97,8 +97,11 @@ class MaquinasProduccionControlador extends GenericoControlador
         if ($id_maquina == '') {
             $id_maquina = $_GET['id_maquina'];
         }
-        $estado = '4,5,6,7,8,9,10';
-        $op = $this->ItemProducirDAO->consultar_maquina_produccion2($estado,$id_maquina);
+        $estado = '6,7,8,9,10';
+        if($_SESSION['usuario']->getId_roll() == 1 || $_SESSION['usuario']->getId_usuario() == 69){
+            $estado = '15,5,6,7,8,9,10';
+        }
+        $op = $this->ItemProducirDAO->consultar_maquina_produccion2($estado, $id_maquina);
         $data = $op;
         echo json_encode($data);
     }
@@ -119,12 +122,15 @@ class MaquinasProduccionControlador extends GenericoControlador
         $fecha_produccion = $_POST['fecha_produccion'];
         $id_maquina = $_POST['id_maquina'];
         $turno = $_POST['turno'];
+        $motivo_cambio = $_POST['motivo_cambio'];
+        $num_produccion = $_POST['num_produccion'];
         $id_item_producir = $_POST['id_item_producir'];
         //crear array para modificar la orden de produccion 
         $item_producir = [
             'maquina' => $id_maquina,
             'fecha_produccion' => $fecha_produccion,
             'turno_maquina' => $turno,
+            'motivo_cambio' => $motivo_cambio,
         ];
         $condicion_item_p = 'id_item_producir =' . $id_item_producir;
         $this->ItemProducirDAO->editar($item_producir, $condicion_item_p);
@@ -139,6 +145,12 @@ class MaquinasProduccionControlador extends GenericoControlador
                     $turno = $maquina_up['turno_maquina'];
                 }
             }
+        }
+        if ($motivo_cambio != '') {
+            $data = $this->ItemProducirDAO->consultar_item_producir_num($num_produccion);
+            $correo1 = 'jefe.produccion@acobarras.com';
+            $correo2 = 'produccionflexo@acobarras.com';
+            Envio_Correo::correo_cambio_turno_produccion($data, $motivo_cambio, $fecha_produccion,$correo1,$correo2);
         }
         $respu = $this->consultar_trabajo_maquinas($id_maquina);
         return $respu;

@@ -121,6 +121,10 @@
                     <label class="col-form-label">Fecha producción:</label>
                     <input type="text" class="form-control datepicker turno_maquina" id="fecha_produccion_data">
                 </div>
+                <div class="mb-3 d-none" id="div_motivo_cambio">
+                    <label class="col-form-label">Motivo Cambio:</label>
+                    <input type="text" class="form-control" data-row0="" id="motivo_cambio">
+                </div>
                 <h4 style="text-align: center">TURNOS</h4>
                 <div class=" table-responsive">
                     <table id="fecha_turno_maquina_data" class="table table-hover table-bordered" cellspacing="0" width="100%">

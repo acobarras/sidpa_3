@@ -644,6 +644,53 @@ class Envio_Correo
         return self::php_miler($body, $remite, $subject, $correo, $correo2 = '');
     }
 
+    public static function correo_cambio_turno_produccion($data, $motivo_cambio, $fecha_produccion, $correo1,$correo2)
+    {
+
+        $html = '
+        <!DOCTYPE html>
+        <html>
+            <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=" utf-8">
+            </head>
+            
+            <body>
+            <div style="width: 900px; justify-content: center;
+            align-items: center;">
+            <div style="background-color: #001c85; ">
+            <br><br>
+            <div style="width: 800px;  margin:0px auto;">
+            <img src="' . IMG_CORREO . '" style="width: 300px;" alt="Logo_empresa">
+            <br><br>
+            <div style="background-color: white; padding:30px">
+            <div style="width:639px; font-size:25px;">
+                                    <br>
+                                    <h4 style="font-weight: 900;color: #737679;">¡Buen día!</h4>
+                                    <h6 style="color: #5f6368;font-weight: 200;">Se informa que la orden de producción N.° ' . $data[0]->num_produccion . ' se encontraba programada para producir el dia ' . date('d/m/Y', strtotime($data[0]->fecha_produccion)) . '. Dicha orden fue reasignada con el siguiente motivo reportado: <b>' . $motivo_cambio . '</b><br><br>Este cambio se realizó el día ' . date('d/m/Y h:i:s a') . '.Y fue reasignado para el día '.date('d/m/Y', strtotime($fecha_produccion)).'.</h6>
+                                </div>
+                                <div style="width:639px; font-size:25px;">
+                                    <h6 style="color: #5f6368;font-weight: 200;">Si el motivo implica demora en el tiempo de entrega, por favor informe a los asesores comerciales correspondientes.</h6>
+                                    <h6 style="color: #5f6368;font-weight: 200;">' . NOMBRE_EMPRESA . '</h6>
+                                </div>
+                            </div>
+                                <br><br>
+                        </div>
+                    </div>
+                </body>
+            </html>';
+        $html .= "</b><br>
+            <br>
+            <br>
+            <br>
+            <br>
+            ******ESTE CORREO ES AUTOMÁTICO, FAVOR NO RESPONDER ******
+          </div>";
+        $remite = 'Cambio turno producción' . $data[0]->num_produccion . ' Sidpa';
+        $subject = 'Información cambio de turno O.P. N° ' . $data[0]->num_produccion;
+        $correo = self::php_miler($html, $remite, $subject, $correo1, $correo2);
+        return $correo;
+    }
+
     public static function pruebas()
     {
         $correo = 'mateorozotorres0420028@gmail.com';
@@ -659,7 +706,7 @@ class Envio_Correo
     public static function php_miler($html, $remite, $subject, $correo, $correo2 = "", $adjunto = "")
     {
         if (MODO_PRUEBA) {
-            $correo = 'desarrollo@acobarras.com';
+            $correo = 'edwin.rios@acobarras.com';
             $correo2 = '';
         }
         set_time_limit(2400);

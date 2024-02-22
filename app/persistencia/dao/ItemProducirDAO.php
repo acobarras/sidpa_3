@@ -93,7 +93,8 @@ class ItemProducirDAO extends GenericoDAO
             FROM item_producir t1 
             INNER JOIN maquinas t2 ON t1.maquina = t2.id_maquina
             INNER JOIN estado_item_producir t3 ON t1.estado_item_producir = t3.id_estado_item_producir
-            WHERE t1.estado_item_producir IN ($estado) AND t2.id_maquina = $id_maquina";
+            WHERE t1.estado_item_producir IN ($estado) AND t2.id_maquina = $id_maquina 
+            ORDER BY t1.fecha_produccion ASC, t1.turno_maquina ASC";
 
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
