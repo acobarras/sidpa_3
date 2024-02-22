@@ -29,3 +29,5 @@ define('DIAS_CHEQUEO_VEHICULO', '31');
 define('DIRECCION_EMPRESA', 'Autopista Medellin - Bogota Parque la Florida Km 1 Parque Industrial Rosalinda, Bodega 37, Cota, Cundinamarca');
 define('DECIMALES', '3');
 define('MONEDA', 'Mxn $');
+define('CORREO_JEFE_PRODUCCION', 'producciongrafica@eticomex.mx'); //CORREO DE JEFE PRODUCCION
+define('CORREO_AUXI_PRODUCCION', ''); //CORREO DE AUXILIAR PRODUCCION

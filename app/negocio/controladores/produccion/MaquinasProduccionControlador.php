@@ -148,8 +148,8 @@ class MaquinasProduccionControlador extends GenericoControlador
         }
         if ($motivo_cambio != '') {
             $data = $this->ItemProducirDAO->consultar_item_producir_num($num_produccion);
-            $correo1 = 'jefe.produccion@acobarras.com';
-            $correo2 = 'produccionflexo@acobarras.com';
+            $correo1 = CORREO_JEFE_PRODUCCION;
+            $correo2 = CORREO_AUXI_PRODUCCION;
             Envio_Correo::correo_cambio_turno_produccion($data, $motivo_cambio, $fecha_produccion,$correo1,$correo2);
         }
         $respu = $this->consultar_trabajo_maquinas($id_maquina);
