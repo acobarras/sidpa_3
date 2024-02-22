@@ -274,16 +274,23 @@ function cierre_items() {
 }
 
 var reasignar = function (tbody) {
-        $(tbody).on('click', `tr button.reasignar`, function () {
+    $(tbody).on('click', `tr button.reasignar`, function () {
         var dato = $(this).attr('data-id');
+        var numeroFila = $(this).closest('tr').index();
+        var rowData = $(`#tabla_maquina_produccion${dato}`).DataTable().row(0).data();
         var data = $(`#tabla_maquina_produccion${dato}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
-
+        if (numeroFila == 0) {
+            $('#div_motivo_cambio').removeClass('d-none');
+        } else {
+            $('#div_motivo_cambio').addClass('d-none');
+        }
         $('#CambioMaquinaModal').modal('show');
         $('#num_produccion_data').empty().html(data.num_produccion);
         $('#turno_data').val(data.turno_maquina);
         $('#fecha_produccion_data').val(data.fecha_produccion);
         $('#maquina_data').val(data.id_maquina).trigger('change');
         $('#generar_cambio_maquina').attr('data-id', JSON.stringify(data));
+        $('#motivo_cambio').attr('data-row0', JSON.stringify(rowData));
     });
 }
 
@@ -355,16 +362,32 @@ var generar_cambio_maquina = function () {
         var fecha_produccion = $('#fecha_produccion_data').val();
         var id_maquina = $('#maquina_data').val();
         var turno = $('#turno_data').val();
+        var motivo_cambio = $('#motivo_cambio').val();
         var data = JSON.parse($('#generar_cambio_maquina').attr('data-id'));
-        if (data.fecha_produccion == fecha_produccion && data.id_maquina == id_maquina) {
+        var dataRow0 = JSON.parse($('#motivo_cambio').attr('data-row0'));
+        if (data.fecha_produccion == fecha_produccion && data.id_maquina == id_maquina && data.turno_maquina == turno) {
             alertify.error('No realizo ningun cambio');
             $('#CambioMaquinaModal').modal('toggle');
+            return;
+        }
+        if (data.num_produccion == dataRow0.num_produccion && motivo_cambio == '') {
+            alertify.error('Lo sentimos, no puede cambiar de turno este ítem sin un motivo.');
+            return;
+        }
+        if (data.motivo_cambio != '') {
+            alertify.error('Lo sentimos, este ítem ya tiene un motivo y no puede ser movido de nuevo.');
+            return;
+        }
+        if (turno <= dataRow0.turno_maquina && fecha_produccion == dataRow0.fecha_produccion) {
+            alertify.error('Lo sentimos, la primera posición no se puede utilizar en el mismo día.');
             return;
         }
         var datos = {
             'fecha_produccion': fecha_produccion,
             'id_maquina': id_maquina,
             'turno': turno,
+            'motivo_cambio': motivo_cambio,
+            'num_produccion': data.num_produccion,
             'id_item_producir': data.id_item_producir
         }
         $.ajax({
@@ -375,6 +398,7 @@ var generar_cambio_maquina = function () {
                 pestana_activa();
                 carga_funcion();
                 $('#CambioMaquinaModal').modal('toggle');
+                $('#motivo_cambio').val('');
             }
         });
     });
@@ -385,6 +409,11 @@ var item;
 var boton_puesta_punto = function () {
     $('.puesta_punto').on('click', function () {
         var maquina = $(this).attr('data-puesta');
+        var numeroFila = $(this).closest('tr').index();
+        if (numeroFila != 0) {
+            alertify.error('Lo sentimos no puede iniciar un trabajo sin haber finalizado el anterior');
+            return;
+        }
         $('.respu_consulta').empty().html();
         var data = $(`#tabla_maquina_produccion${maquina}`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
         obj_inicial = $(`#puesta_punto${data.id_item_producir}`).html();
