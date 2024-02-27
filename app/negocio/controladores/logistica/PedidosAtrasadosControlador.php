@@ -51,15 +51,16 @@ class PedidosAtrasadosControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $items = $this->PedidosDAO->consulta_items_idpedido($_POST['data']['id_pedido']);
-        foreach ($items as $value) {
-            $value->pedido = $_POST['data']['num_pedido'];
-            $reporte_fac = $this->EntregasLogisticaDAO->registro_entregas_logistica($value->id_pedido_item);
-            if (empty($reporte_fac)) {
-                $value->cant_reportada = '0';
-            } else {
-                $value->cant_reportada = $reporte_fac[0]->cantidad_factura;
-            }
-        }
+
+        // foreach ($items as $value) {
+        //     $value->pedido = $_POST['data']['num_pedido'];
+        //     $reporte_fac = $this->EntregasLogisticaDAO->registro_entregas_logistica($value->id_pedido_item);
+        //     if (empty($reporte_fac)) {
+        //         $value->cant_reportada = '0';
+        //     } else {
+        //         $value->cant_reportada = $reporte_fac[0]->cantidad_factura;
+        //     }
+        // }
         echo json_encode($items);
         return;
     }

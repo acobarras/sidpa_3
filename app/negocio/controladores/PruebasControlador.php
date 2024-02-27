@@ -366,5 +366,16 @@ class PruebasControlador extends GenericoControlador
         //     }
         // }
 
+        /*Consulta de cuentas de cobro eticaribe
+        SELECT t1.tipo_documento, t4.num_factura, t4.num_lista_empaque, t3.num_pedido, CONCAT(t7.nombres, " ", t7.apellidos) AS asesor , t5.nit ,t5.nombre_empresa, t6.codigo_producto, t6.descripcion_productos,t1.cantidad_factura, t2.Cant_solicitada,t3.orden_compra, t2.n_produccion, t2.v_unidad, t2.total,t4.fecha_crea
+        FROM entregas_logistica t1
+        INNER JOIN pedidos_item t2 ON t1.id_pedido_item = t2.id_pedido_item
+        INNER JOIN pedidos t3 ON t2.id_pedido = t3.id_pedido
+        INNER JOIN control_facturas t4 ON t4.id_control_factura = t1.id_factura
+        INNER JOIN cliente_proveedor t5 ON t3.id_cli_prov = t5.id_cli_prov
+        INNER JOIN productos t6 ON t2.codigo = t6.codigo_producto
+        INNER JOIN persona t7 ON t3.id_persona = t7.id_persona
+        WHERE t1.tipo_documento = 'CC' ORDER BY t4.num_factura; */
+
     }
 }

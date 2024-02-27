@@ -180,5 +180,80 @@
     </div>
 </div>
 
+<!-- Modal para Reasignar la maquina de Produccion -->
+
+<div class="modal fade" id="CambioMaquinaModal" aria-labelledby="CambioMaquinaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="form_cambio_maquina">
+            <div class="modal-header header_aco">
+                <div class="img_modal mx-2 ">
+                    <p> </p>
+                </div>
+                <h5 class="modal-title" id="CambioMaquinaModalLabel">Cambio Maquina Producción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <h1 class="col-form-label">Número producción: <span style="color:red" id="num_produccion_data"></span></h1>
+                </div>
+                <div class="mb-3 row">
+                    <div class="col-6">
+                        <label class="col-form-label">Maquina:</label>
+                        <select id="maquina_data" class="form-control select_2 turno_maquina" style="width: 100%">
+                            <option value="0"></option>
+                            <?php foreach ($maquinas as $maquina) {
+                                if ($maquina->tipo_maquina == 1 || $maquina->tipo_maquina == 3) {
+                            ?>
+                                    <option value="<?= $maquina->id_maquina ?>"> <?= $maquina->nombre_maquina ?></option>
+                            <?php }
+                            } ?>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="col-form-label">Turno:</label>
+                        <input type="number" class="form-control" id="turno_data" placeholder="Ingrese Turno">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-form-label">Fecha producción:</label>
+                    <input type="text" class="form-control datepicker turno_maquina" id="fecha_produccion_data">
+                </div>
+                <h4 style="text-align: center">TURNOS</h4>
+                <div class=" table-responsive">
+                    <table id="fecha_turno_maquina_data" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Maquina</th>
+                                <th>TURNO</th>
+                                <th>Núm O.P.</th>
+                                <th>mL total</th>
+                                <th>Tamaño etiq</th>
+                                <th>Cantidad </th>
+                                <th>Material</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3">Total Ml</td>
+                                <td></td>
+                                <td>Total Q</td>
+                                <td></td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tfoot>
+                        <tbody></tbody>
+                    </table>
+                    <br>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+                <button type="button" class="btn btn-primary" id="generar_cambio_maquina" data-id="">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php include PUBLICO . '/vistas/plantilla/footer.php'; ?>
 <script src="<?= PUBLICO ?>/vistas/produccion/js/vista_programar_alistamiento.js"></script>

@@ -35,6 +35,7 @@ class Archivo
     public static function subirImagen($imagen, $nombre, $ubicacion)
     {
         $ext = str_replace('application/', '', $imagen['type']);
+        $ext = str_replace('image/', '', $ext);
         if ($ext == 'image/png') {
             $ext = 'png';
         }

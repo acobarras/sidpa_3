@@ -1070,7 +1070,7 @@ class PDF
                 <img id="vertical" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/vertical_cotiza_visita.png">
             </div>
             <footer>
-                <img id="imgpie" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/pie_cotiza_visita.jpg">
+                <img id="imgpie" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/pie_cotiza_visita.jpg"> 
             </footer> 
             <div class="titulo">
                 <h4 class="fecha">Fecha: ' . $fecha . '</h4>
@@ -1255,7 +1255,7 @@ class PDF
                     <img id="vertical" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/vertical_cotiza_visita.png">
                 </div>
                 <footer>
-                    <img id="imgpie" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/pie_cotiza_visita.jpg">
+                    <img id="imgpie" src="' . CARPETA_IMG . PROYECTO . '/img_pdf/pie_acta_visita.jpg">
                 </footer> 
                 <div class="titulo">
                     <h4 class="fecha">Fecha: ' . $fecha . '</h4>

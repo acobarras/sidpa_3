@@ -146,10 +146,10 @@
                                     <label for="total_factura" class="form-label">Total Factura :</label>
                                     <input type="text" class="form-control" name="total_factura" id="total_factura_modifi">
                                 </div>
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn  btn-success col-2" id="acepta_factu">Aceptar Factura</button>
+                                </div>
                             </form>
-                            <div class="col-12 text-center">
-                                <button type="submit" class="btn  btn-success col-2" id="acepta_factu">Aceptar Factura</button>
-                            </div>
                             <br>
                         </div>
                     </div>

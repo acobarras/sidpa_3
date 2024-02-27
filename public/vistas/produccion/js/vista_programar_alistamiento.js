@@ -5,6 +5,8 @@ $(document).ready(function () {
     descargarOrdenes();
     alistar_material();
     ok_material_completo();
+    consultar_turnos();
+    generar_cambio_maquina();
     liberarop();
     if (!DOS_MODULOS) {
         $('#contenido').addClass('d-none');
@@ -98,6 +100,7 @@ var pendiente_alistamiento_mp_op = function () {
                     }
                     return `<center>
                                 <button class="btn btn-sm btn-info verOrden" type="button"data-bs-toggle="collapse" data-bs-target=".InfoOrden" aria-expanded="false" aria-controls="collapseExample" title="Ver O.P."><i class="fa fa-search"></i></button>
+                                <button class="btn btn-sm btn-secondary reasignar" data-id="${row.id_maquina}" title="Reasignar M.Q" ><i class="fa fa-retweet"></i></button> 
                                 ${descargarPDF}
                                 ${producirOrden}
                                 ${alistar_material}
@@ -108,7 +111,118 @@ var pendiente_alistamiento_mp_op = function () {
             }
         ],
     });
+    reasignar(`#dt_alista_ordenes_produccion, tbody`); //Se carga la funcion por primera vez despues de que se crean las tablas
 
+}
+
+//----------------------------------------- Agregar boton reasignar -------------------------------------
+var reasignar = function (tbody) {
+    $(tbody).on('click', `tr button.reasignar`, function () {
+    var dato = $(this).attr('data-id');
+    var data = $(`#dt_alista_ordenes_produccion`).DataTable().row($(this).parents("tr")).data(); //capturar valores de la fila seleccionada
+
+    $('#CambioMaquinaModal').modal('show');
+    $('#num_produccion_data').empty().html(data.num_produccion);
+    $('#turno_data').val(data.turno_maquina);
+    $('#fecha_produccion_data').val(data.fecha_produccion);
+    $('#maquina_data').val(data.id_maquina).trigger('change');
+    $('#generar_cambio_maquina').attr('data-id', JSON.stringify(data));
+});
+}
+
+var consultar_turnos = function () {
+    $('.turno_maquina').change(function () {
+        if ($('#fecha_produccion_data').val() == '') {
+            console.log('campo vacio');
+            return;
+        }
+        if ($('#maquina_data').val() == '') {
+            console.log('campo vacio');
+            return;
+        }
+        var fecha_produccion = $('#fecha_produccion_data').val();
+        var id_maquina = $('#maquina_data').val();
+        $.ajax({
+            url: `${PATH_NAME}/produccion/consultar_turno_maquina`,
+            type: 'POST',
+            data: {
+                fecha_produccion: fecha_produccion,
+                id_maquina: id_maquina
+            },
+            success: function (res) {
+                $(`#fecha_turno_maquina_data`).DataTable({
+                    "data": res,
+                    "columns": [
+                        { "data": "nombre_maquina" },
+                        { "data": "turno_maquina" },
+                        { "data": "num_produccion" },
+                        { "data": "mL_total", render: $.fn.dataTable.render.number('.', ',', 2, '') },
+                        { "data": "tamanio_etiq" },
+                        { "data": "cant_op", render: $.fn.dataTable.render.number('.', ',', 0, '') },
+                        {
+                            "data": "mate", render: function (data, type, row) {
+                                var respu = row.material;
+                                if (row.material_solicitado != '') {
+                                    respu = row.material_solicitado;
+                                }
+                                return respu;
+                            }
+                        },
+                        { "data": "nombre_estado" },
+                    ],
+                    "footerCallback": function (row, data, start, end, display) {
+                        ml = this.api()
+                            .column(3)//numero de columna a sumar
+                            .data()
+                            .reduce(function (a, b) {
+                                return parseInt(a) + parseInt(b);
+                            }, 0);
+                        cantida_etiq = this.api()
+                            .column(5)//numero de columna a sumar
+                            .data()
+                            .reduce(function (a, b) {
+                                return parseInt(a) + parseInt(b);
+                            }, 0);
+                        var numFormat = $.fn.dataTable.render.number('.', ',', 2, '').display;
+                        $(this.api().column(3).footer()).html(numFormat(ml));
+                        $(this.api().column(5).footer()).html(numFormat(cantida_etiq));
+                    }
+                });
+            }
+        });
+    });
+}
+
+var generar_cambio_maquina = function () {
+    $('#generar_cambio_maquina').on('click', function () {
+        var fecha_produccion = $('#fecha_produccion_data').val();
+        var id_maquina = $('#maquina_data').val();
+        var turno = $('#turno_data').val();
+        var data = JSON.parse($('#generar_cambio_maquina').attr('data-id'));
+        if (data.fecha_produccion == fecha_produccion && data.id_maquina == id_maquina  && data.turno == turno) {
+            alertify.error('No realizo ningun cambio');
+            $('#CambioMaquinaModal').modal('toggle');
+            return;
+        }
+        var obj_inicial = $('#generar_cambio_maquina').html();
+        btn_procesando('generar_cambio_maquina');
+        var datos = {
+            'fecha_produccion': fecha_produccion,
+            'id_maquina': id_maquina,
+            'turno': turno,
+            'id_item_producir': data.id_item_producir
+        }
+        $.ajax({
+            url: `${PATH_NAME}/produccion/cambiar_op_maquina`,
+            type: "POST",
+            data: datos,
+            success: function (res) {
+                btn_procesando('generar_cambio_maquina', obj_inicial, 1);
+                $('#CambioMaquinaModal').modal('toggle');
+                $("#dt_alista_ordenes_produccion").DataTable().ajax.reload();
+            }
+        });
+    });
 }
 
 // --------------------------------------- boton azul metros lineales alistados ---------------------
