@@ -16,6 +16,7 @@ use MiApp\persistencia\dao\SeguimientoOpDAO;
 use MiApp\persistencia\dao\clientes_proveedorDAO;
 use MiApp\persistencia\dao\PedidosItemDAO;
 use MiApp\persistencia\dao\EmpresasDAO;
+use MiApp\persistencia\dao\productosDAO;
 
 class FacturacionControlador extends GenericoControlador
 {
@@ -31,6 +32,7 @@ class FacturacionControlador extends GenericoControlador
     private $clientes_proveedorDAO;
     private $PedidosItemDAO;
     private $EmpresasDAO;
+    private $productosDAO;
 
     public function __construct(&$cnn)
     {
@@ -49,6 +51,7 @@ class FacturacionControlador extends GenericoControlador
         $this->clientes_proveedorDAO = new clientes_proveedorDAO($cnn);
         $this->PedidosItemDAO = new PedidosItemDAO($cnn);
         $this->EmpresasDAO = new EmpresasDAO($cnn);
+        $this->productosDAO = new productosDAO($cnn);
     }
 
     public function vista_pendiente_facturacion()
@@ -298,6 +301,16 @@ class FacturacionControlador extends GenericoControlador
             ];
         }
         echo json_encode($respu);
+        return;
+    }
+
+    public function  consulta_codigo_consumo()
+    {
+        header('Content-Type: application/json');
+        $codigo = $_GET['codigo'];
+        $condicion = "WHERE t1.codigo_producto LIKE '%" . $codigo . "%' AND t1.estado_producto = 1";
+        $producto = $this->productosDAO->busqueda_codigos_comercial($condicion);
+        echo json_encode($tabla['data'] = $producto);
         return;
     }
 }

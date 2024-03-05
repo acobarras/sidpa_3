@@ -5,6 +5,7 @@ $(document).ready(function () {
     descarga_pedido();
     lista_de_empaque();
     alertify.set('notifier', 'position', 'bottom-left');
+    consulta_codigo();
 });
 
 var tabla_pendientes_facturar = function () {
@@ -427,3 +428,25 @@ var envio_datos_documento = function (envio, obj_inicial, storage) {
     });
 }
 
+function consulta_codigo() {
+    $('#icono_busqueda').on('click', function (e) {
+        var codigo = $('#codigo_con').val()
+        if (codigo == '') {
+            alertify.error('¡Debe ingresar el código de la etiqueta requerida!')
+            return;
+        }
+        var table = $('#table_codigos_consumo').DataTable({
+            ajax: {
+                "url": `${PATH_NAME}/facturacion/consulta_codigo_consumo`,
+                "type": "GET",
+                "data": { "codigo": codigo },
+                "dataSrc":""
+            },
+            "columns": [
+                { "data": "codigo_producto" },
+                { "data": "descripcion_productos" },
+                { "data": "consumo"},
+            ],
+        });
+    })
+}

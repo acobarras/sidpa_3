@@ -232,7 +232,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         echo json_encode($data);
     }
 
-    public function crea_entrega_logistica()
+    public function crea_entrega_logistica() //aqui
     {
         header('Content-Type: application/json');
         $datos = $_POST;
@@ -242,7 +242,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         // validamos antes que no sea un codigo de tecnologia
         $consulta_codigo = $this->productosDAO->ConsultaProductoCodigo($codigo);
         $tipo_articulo = $consulta_codigo[0]->id_clase_articulo;
-        if ($tipo_articulo != 3 ) {
+        if ($tipo_articulo != 3) {
             // validacion de informacion variable 
             $caracter = "-";
             $posicion_coincidencia = strpos($codigo, $caracter);
@@ -388,7 +388,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         ];
         echo json_encode($respuesta);
     }
-    public function reportar_cant_reproceso()
+    public function reportar_cant_reproceso() //aqui
     {
         header('Content-Type: application/json');
         $datos = $_POST;
@@ -396,7 +396,8 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         if (empty($valida_reporte)) {
             $data = [
                 'id_pedido_item' => $datos['id_pedido_item'],
-                'cantidad_factura' => $_POST['salida'],
+                'cantidad_factura' => $_POST['salida'], //aqui
+                'ubicacion_material' => $datos['ubicacion_material'] ?? 0,
                 'id_usuario' => $_SESSION['usuario']->getid_usuario(),
                 'estado' => 1,
                 'fecha_crea' => date('y-m-d'),
@@ -406,6 +407,7 @@ class AlmacenTecnologiaControlador extends GenericoControlador
         } else {
             $nueva_cantidad = $_POST['salida'] + $valida_reporte[0]->cantidad_factura;
             $data['cantidad_factura'] = $nueva_cantidad;
+            $data['ubicacion_material'] = $datos['ubicacion_material'] ?? 0;
             $condicion = 'id_entrega=' . $valida_reporte[0]->id_entrega;
             $this->EntregasLogisticaDAO->editar($data, $condicion);
         }

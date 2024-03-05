@@ -5,6 +5,7 @@ $(document).ready(function () {
     envia();
     tablas();
     ubicaciones();
+    ubicaciones_repro();
 });
 
 var click = function () {
@@ -173,7 +174,7 @@ var logistica_checked_completo = function (tbody, table) {
 var UBICACIONES = [];
 var DATOS_TABLA = [];
 var tablas = function () {
-    $('#dt_alistamiento_bod_completo, #dt_alistamiento_bod_incompleto').on('click', 'tr button.report_cant_factu', function () {
+    $('#dt_alistamiento_bod_completo, #dt_alistamiento_bod_incompleto').on('click', 'tr button.report_cant_factu', function () { //aqui
         $('#ubicacion').modal('show');
         UBICACIONES = [];
         if (DATOS_TABLA.length != 0 || DATOS_TABLA != '') {
@@ -185,7 +186,7 @@ var tablas = function () {
         var data = $(`${tablaDT}`).DataTable().row($(this).parents("tr")).data();
         data.alistamiento = alistamiento;// llega como atributo
         data.tabla_dt = tablaDT;
-        DATOS_TABLA = data;
+        DATOS_TABLA = data; //aqui2
     })
 }
 
@@ -202,6 +203,30 @@ var ubicaciones = function () {
         }
         var ubicacion_com = array[2] + array[3];
         $('#ubicacion_materialmodal').val('');
+        var agregar = UBICACIONES.find(element => element == ubicacion_com) ?? false;
+        if (!agregar) {
+            UBICACIONES.push(ubicacion_com);
+        } else {
+            alertify.error('Ya se cargo esta ubicacion');
+        }
+        cargar_span();
+    })
+}
+
+var ubicaciones_repro = function () {
+    $('#ubicacion_materialRepro').on('change', function () {
+        // Logica de ubicaciones 
+        var ubicacion = $('#ubicacion_materialRepro').val();
+        $('#ubicacion_materialRepro').val('');
+        var array = ubicacion.split(";");
+        if (array[0] != '!$' || array[1] != 'UBI') {
+            alertify.error('La ubicacion que esta tratando de ingresar no cumple');
+            $('#ubicacion_materialRepro').val('');
+            $('#ubicacion_materialRepro').focus();
+            return;
+        }
+        var ubicacion_com = array[2] + array[3];
+        $('#ubicacion_materialRepro').val('');
         var agregar = UBICACIONES.find(element => element == ubicacion_com) ?? false;
         if (!agregar) {
             UBICACIONES.push(ubicacion_com);
@@ -286,20 +311,32 @@ var enviar_reproceso = function (tbody, table, reload, alistamiento) {
         });
     });
 }
-var reportar_cant_reproceso = function (tbody, table) {
+var reportar_cant_reproceso = function (tbody, table) {//aqui
     $(tbody).on('click', 'tr button.reportar_cant_reproceso', function () {
         var data = table.row($(this).parents("tr")).data();
         $("#bt_reprocesar_item").attr('data', JSON.stringify(data))
+        UBICACIONES = [];
+        if (DATOS_TABLA.length != 0 || DATOS_TABLA != '') {
+            DATOS_TABLA = [];
+        }
+        DATOS_TABLA = data;
+        cargar_span();
     });
 
 }
-var envio_cantidad_reproceso = function () {
+var envio_cantidad_reproceso = function () {//fin
     $(`#bt_reprocesar_item`).on('click', function () {
         var data = JSON.parse($(this).attr('data'));
         var cantidad = $("#cantidad").val();
-        if (cantidad == 0 || cantidad == '') {
+        data.ubicacion_material = 0;
+        if (cantidad == 0 || cantidad == '') { // falta validar ubicacion
             alertify.error('La cantidad no puede ser 0 o vacia.');
+            return
+        } else if (REQ_UBICACION && UBICACIONES.length == 0) {
+            alertify.error('Tiene que colocar una ubicacion');
+            return;
         } else {
+            data.ubicacion_material = UBICACIONES.toString();
             var obj_inicial = $(`#bt_reprocesar_item`).html();
             btn_procesando(`bt_reprocesar_item`);
             if (parseInt(cantidad) > Math.round(data.salida)) {

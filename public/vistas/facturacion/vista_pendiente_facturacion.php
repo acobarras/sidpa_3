@@ -5,34 +5,66 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Tabla Facturación</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link " id="codigo_consumo-tab" data-bs-toggle="tab" href="#codigo_consumo" role="tab" aria-controls="codigo_consumo" aria-selected="true">Consulta código consumo </a>
+                </li>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <!-- primer link -->
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <br>
-                    <div class="panel-heading text-center mb-3">
-                        <h3><b>Tabla Facturación</b></h3>
+                    <div class="shadow-sm p-3 my-3 mx-2 bg-body-tertiary rounded">
+                        <br>
+                        <div class="panel-heading text-center mb-3">
+                            <h3><b>Tabla Facturación</b></h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table_pendientes_facturar" class="table table-bordered table-hover table-responsive-lg table-responsive-md" cellspacing="0" width="100%">
+                                <thead style="background: #002b5f;color: white">
+                                    <tr>
+                                        <td>Fecha Compro</td>
+                                        <td>Cliente</td>
+                                        <td>Orden Compra</td>
+                                        <td>Asesor</td>
+                                        <td>Reciben Parcial</td>
+                                        <td>Facturar Por</td>
+                                        <td>Forma Pago</td>
+                                        <td>Item</td>
+                                        <td>Etiquetas</td>
+                                        <td>Tecnologia</td>
+                                        <td>Pedido</td>
+                                        <td>Estado</td>
+                                        <td>Opciones</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table id="table_pendientes_facturar" class="table table-bordered table-hover table-responsive-lg table-responsive-md" cellspacing="0" width="100%">
-                            <thead style="background: #002b5f;color: white">
-                                <tr>
-                                    <td>Fecha Compro</td>
-                                    <td>Cliente</td>
-                                    <td>Orden Compra</td>
-                                    <td>Asesor</td>
-                                    <td>Reciben Parcial</td>
-                                    <td>Facturar Por</td>
-                                    <td>Forma Pago</td>
-                                    <td>Item</td>
-                                    <td>Etiquetas</td>
-                                    <td>Tecnologia</td>
-                                    <td>Pedido</td>
-                                    <td>Estado</td>
-                                    <td>Opciones</td>
-                                </tr>
-                            </thead>
-                        </table>
+                </div>
+                <!-- Segundo link -->
+                <div class="tab-pane fade show" id="codigo_consumo" role="tabpanel" aria-labelledby="codigo_consumo-tab">
+                    <div class="shadow-sm p-3 my-3 mx-2 bg-body-tertiary rounded">
+                        <br>
+                        <div class="panel-heading text-center mb-3">
+                            <h3><b>Consulta código</b></h3>
+                        </div>
+                        <div class="col-7 justify-content-center d-flex m-auto">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Código:</span>
+                                <input type="text" id="codigo_con" class="form-control" placeholder="Código" aria-label="Código" aria-describedby="basic-addon1">
+                                <button type="button" title="Buscar" class="input-group-text text-success" id="icono_busqueda"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table_codigos_consumo" class="table table-bordered table-hover table-responsive-lg table-responsive-md" cellspacing="0" width="100%">
+                                <thead style="background: #002b5f;color: white">
+                                    <tr>
+                                        <td>Código</td>
+                                        <td>Descripción</td>
+                                        <td>Consumo</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
