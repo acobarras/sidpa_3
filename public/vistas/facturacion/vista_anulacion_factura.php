@@ -11,7 +11,7 @@
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <br>
                     <div class="panel-heading text-center mb-3">
-                        <h3><b>Anulación Factura</b></h3>
+                        <h3><b>Anulación y Remplazo de Factura</b></h3>
                     </div>
                     <form class="panel-body" id="consulta_factura">
                         <div class="row">
@@ -20,7 +20,7 @@
                                     <label for="numero_factura_consulta" class="col-2">N° factura:</label>
                                     <div class="col-10">
                                         <input type="text" class="form-control" id="numero_factura_consulta" name="numero_factura_consulta">
-                                        <span class="text-danger"><b>La consulta se realiza por número de factura, solo cuando se debe reemplazar de lo contrario no se debe realizar ninguna acción </b></span>
+                                        <span class="text-danger"><b>La consulta se realiza por número de factura, si desea anular todo el documento seleccione el boton anular, si solo desea remplazar la factura seleccione reemplazar </b></span>
                                     </div>
                                 </div>
                             </div>

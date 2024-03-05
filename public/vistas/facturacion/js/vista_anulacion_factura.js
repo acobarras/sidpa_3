@@ -16,8 +16,11 @@ var consulta_factura = function () {
                     if (res.status == -1) {
                         alertify.error(res.msg);
                     } else {
-                        $('#boton_anular').html(`<button class="btn btn-danger btn-lg boton-x btn_anular" id="btn_anular" type="submit" data_fact='${JSON.stringify(res)}'>Anular</button>`)
-                        enviar_anulacion();
+                        $('#boton_anular').html(`
+                        <button class="btn btn-danger btn-lg boton-x btn_anular" data_id="1" data_nombre="btn_anular" id="btn_anular" type="submit" data_fact='${JSON.stringify(res)}'>Anular</button>
+                        <button class="btn btn-success btn-lg boton-x btn_anular" data_id="2" data_nombre="btn_remplazar" id="btn_remplazar" type="submit" data_fact='${JSON.stringify(res)}'>Remplazar</button>
+                        `)
+                        reemplazar_factura();
                         var table = $("#tab_informe_facturas").DataTable({
                             "data": res.items,
                             "columns": [
@@ -77,19 +80,28 @@ var consulta_factura = function () {
     });
 }
 
-var enviar_anulacion = function () {
+var reemplazar_factura = function () {
     $('.btn_anular').on('click', function () {
         var data_fac = JSON.parse($(this).attr('data_fact'));
-        alertify.confirm('Anulacion Factura', 'Esta seguro de eliminar esta factura?.',
+        var boton = JSON.parse($(this).attr('data_id'));
+        var nombre_boton = $(this).attr('data_nombre');
+        if (boton == 1) {
+            var texto_alert = 'Anular';
+            $('#btn_remplazar').addClass('d-none');
+        } else {
+            var texto_alert = 'Remplazar';
+            $('#btn_anular').addClass('d-none');
+        }
+        alertify.confirm('Alerta Factura', 'Esta seguro que desea ' + texto_alert + ' esta factura?.',
             function () {
-                var obj_inicial = $(`#btn_anular`).html();
-                btn_procesando_tabla(`btn_anular`);
+                var obj_inicial = $(`#${nombre_boton}`).html();
+                btn_procesando_tabla(`${nombre_boton}`);
                 $.ajax({
                     url: `${PATH_NAME}/envia_anulacion`,
                     type: "POST",
-                    data: { data_fac },
+                    data: { data_fac, boton },
                     success: function (res) {
-                        btn_procesando_tabla(`btn_anular`, obj_inicial, 1);
+                        btn_procesando_tabla(`${nombre_boton}`, obj_inicial, 1);
                         if (res.status == -1) {
                             alertify.error(res.msg);
                         } else {
