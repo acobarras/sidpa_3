@@ -38,7 +38,7 @@ class AumentoPreciosControlador extends GenericoControlador
     {
         header('Content-type: application/json');
         if ($_POST['clientes'][0] == 0) {
-            $condicion = "WHERE t3.id_clase_articulo = 2 AND t4.estado_cli_prov=1 AND t1.estado_client_produc=1";
+            $condicion = "WHERE t3.id_clase_articulo =" . $_POST['tipo_articulo'] . " AND t4.estado_cli_prov=1 AND t1.estado_client_produc=1";
             $consulta_clientes = $this->clientes_proveedorDAO->consultar_clientes_aumento($condicion);
         } else {
             $clientes = '';
@@ -49,7 +49,7 @@ class AumentoPreciosControlador extends GenericoControlador
                     $clientes = $clientes . ',' . $value;
                 }
             }
-            $condicion = "WHERE t3.id_clase_articulo = 2 AND t4.nit IN($clientes) 
+            $condicion = "WHERE t3.id_clase_articulo =" . $_POST['tipo_articulo'] . " AND t4.nit IN($clientes) 
             AND t4.estado_cli_prov=1 AND t1.estado_client_produc=1";
             $consulta_clientes = $this->clientes_proveedorDAO->consultar_clientes_aumento($condicion);
         }

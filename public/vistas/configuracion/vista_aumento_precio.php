@@ -16,7 +16,16 @@
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
+                            <div class="mt-4">
+                                <label class="fw-bolder" for="tipo_articulo">Etiquetas:</label>
+                                <input type="radio" class="tipo_articulo select_acob" name="tipo_articulo" id="tipo_articulo_si" value="2">
+
+                                <label class="fw-bolder" for="tipo_articulo">Tecnologia:</label>
+                                <input type="radio" class="tipo_articulo select_acob" name="tipo_articulo" id="tipo_articulo_no" value="3">
+                            </div>
+                        </div>
+                        <div class="col-2">
                             <div class="mt-4">
                                 <label class="fw-bolder" for="aumento">Aumento:</label>
                                 <input type="radio" class="aumento select_acob" name="aumento" id="aumento_si" value="1">
@@ -25,7 +34,7 @@
                                 <input type="radio" class="aumento select_acob" name="aumento" id="aumento_no" value="2">
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class=" mt-4 input-group">
                                 <label for="porcentaje" class="form-label">Porcentaje(%) </label>
                                 <input type="number" class="form-control" name="porcentaje" id="porcentaje">

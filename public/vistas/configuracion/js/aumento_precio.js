@@ -8,10 +8,11 @@ var enviar_aumento_cliente = function () {
         var form1 = $(this).serializeArray();
         var clientes = $('#num_cliente').val();
         var porcentaje = $('#porcentaje').val();
-        var excepcion = ['num_cliente'];
+        var excepcion = ['num_cliente', 'tipo_articulo', 'aumento'];
         if (clientes.length == 0) {
             clientes = 0;
         }
+        // Validar el radio de aumento o disminucion
         if ($("#aumento_si").prop('checked') == false && $("#aumento_no").prop('checked') == false) {
             alertify.error('debe seleccionar si es aumento o disminuciòn');
             return;
@@ -26,6 +27,21 @@ var enviar_aumento_cliente = function () {
         if ($("#aumento_si").prop('checked') == false && $("#aumento_no").prop('checked') == true) {
             var aumento = 2;
         }
+        // validar si es tecnologia o etiquetas
+        if ($("#tipo_articulo_si").prop('checked') == false && $("#tipo_articulo_no").prop('checked') == false) {
+            alertify.error('debe seleccionar si es tecnologia o etiquetas');
+            return;
+        }
+        if ($("#tipo_articulo_si").prop('checked') == true && $("#tipo_articulo_no").prop('checked') == true) {
+            alertify.error('debe seleccionar si es tecnologia o etiquetas');
+            return;
+        }
+        if ($("#tipo_articulo_si").prop('checked') == true && $("#tipo_articulo_no").prop('checked') == false) {
+            var tipo_articulo = 2;
+        }
+        if ($("#tipo_articulo_si").prop('checked') == false && $("#tipo_articulo_no").prop('checked') == true) {
+            var tipo_articulo = 3;
+        }
         var valida = validar_formulario(form1, excepcion);
         var obj_inicial = $('#envio_aumento_precio').html();
         if (valida) {
@@ -37,7 +53,8 @@ var enviar_aumento_cliente = function () {
                         'clientes': clientes,
                         'aumento': aumento,
                         'porcentaje': porcentaje,
-                        'ambos_precios': valor
+                        'ambos_precios': valor,
+                        'tipo_articulo': tipo_articulo,
                     };
                     enviar_ajax(envio, obj_inicial);
                 },
@@ -47,7 +64,8 @@ var enviar_aumento_cliente = function () {
                         'clientes': clientes,
                         'aumento': aumento,
                         'porcentaje': porcentaje,
-                        'ambos_precios': valor
+                        'ambos_precios': valor,
+                        'tipo_articulo': tipo_articulo,
                     };
                     enviar_ajax(envio, obj_inicial);
                 }).set('labels', { ok: 'Si', cancel: 'No' });
