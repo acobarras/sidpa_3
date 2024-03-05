@@ -134,4 +134,17 @@ class clientes_proveedorDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+    public function consultar_clientes_aumento($condicion)
+    {
+        $sql = "SELECT t4.nombre_empresa ,t3.nombre_articulo, t4.nit,t1.*,t2.codigo_producto
+        FROM cliente_producto t1 
+        INNER JOIN productos t2 ON t1.id_producto = t2.id_productos 
+        INNER JOIN tipo_articulo t3 ON t2.id_tipo_articulo = t3.id_tipo_articulo 
+        INNER JOIN cliente_proveedor t4 ON t1.id_cli_prov= t4.id_cli_prov 
+        $condicion";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

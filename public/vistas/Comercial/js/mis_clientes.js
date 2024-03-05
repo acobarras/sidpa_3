@@ -36,8 +36,20 @@ var carga_dir_nueva = function () {
  * SIGUIENTES DOS FUNCIONES INHABILITAN 20 DIAS LA FECHA DE COMPROMISO PROGRAMADO
  * PARA ELLOS SE UTILIZO LA LIBRERIA DATAEPIKER.JS Y MOMENT.JS 
  */
+var fechasBloqueadas = ["2024-03-28", "2024-03-29"];
+
 $("#fecha_compro_programado").datepicker({
-    beforeShowDay
+    // Define una función para deshabilitar fechas específicas
+    beforeShowDay: function (date) {
+        var formattedDate = $.datepicker.formatDate('yy-mm-dd', date);
+        // Verifica si la fecha está en la lista de fechas bloqueadas
+        if ($.inArray(formattedDate, fechasBloqueadas) !== -1) {
+            // Si la fecha está en la lista, la deshabilita (devuelve [false, ''])
+            return [false, ''];
+        }
+        // Si la fecha no está en la lista, la habilita (devuelve [true, ''])
+        return [true, ''];
+    }
 });
 
 function beforeShowDay(date) {
