@@ -104,16 +104,17 @@ class EntregasLogisticaDAO extends GenericoDAO
         if ($_SESSION['usuario']->getId_roll() == 1 || $_SESSION['usuario']->getId_roll() == 10) {
             $consulta = '';
         }
-        $sql = "SELECT t1.fecha_factura, t1.fecha_cargue, t1.estado, t1.entre_por, t1.tipo_documento, t2.num_factura, t2.num_remision, 
-            t2.tipo_documento AS id_tipo_documento, t4.fecha_compromiso, t4.num_pedido, t4.parcial, t4.id_dire_entre, t4.id_dire_radic,
-            t5.forma_pago, t5.nombre_empresa, t6.nombre_estado
-            FROM entregas_logistica t1 
-            INNER JOIN control_facturas t2 ON t1.id_factura = t2.id_control_factura
-            INNER JOIN pedidos_item t3 ON t1.id_pedido_item = t3.id_pedido_item
-            INNER JOIN pedidos t4 ON t3.id_pedido = t4.id_pedido
-            INNER JOIN cliente_proveedor t5 ON t4.id_cli_prov = t5.id_cli_prov
-            INNER JOIN estado_entregas t6 ON t1.estado = t6.id_estado_entrega
-            WHERE t1.estado IN(3) $consulta GROUP BY t2.num_factura, t2.num_remision";
+        $sql = "SELECT t1.id_entrega,t1.fecha_factura, t1.fecha_cargue, t1.estado, t1.entre_por, t1.tipo_documento,t2.id_control_factura,t2.orden_ruta,t2.num_factura, t2.num_remision, 
+        t2.tipo_documento AS id_tipo_documento, t4.fecha_compromiso, t4.num_pedido, t4.parcial, t4.id_dire_entre, t4.id_dire_radic,
+        t5.forma_pago, t5.nombre_empresa, t6.nombre_estado
+        FROM entregas_logistica t1 
+        INNER JOIN control_facturas t2 ON t1.id_factura = t2.id_control_factura
+        INNER JOIN pedidos_item t3 ON t1.id_pedido_item = t3.id_pedido_item
+        INNER JOIN pedidos t4 ON t3.id_pedido = t4.id_pedido
+        INNER JOIN cliente_proveedor t5 ON t4.id_cli_prov = t5.id_cli_prov
+        INNER JOIN estado_entregas t6 ON t1.estado = t6.id_estado_entrega
+        WHERE t1.estado IN(3) $consulta 
+        GROUP BY t2.num_factura, t2.num_remision ORDER BY t2.orden_ruta";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(PDO::FETCH_OBJ);

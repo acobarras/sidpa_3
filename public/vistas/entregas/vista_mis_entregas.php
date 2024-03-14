@@ -18,6 +18,7 @@
                                 <th>Pedido</th>
                                 <th>Documento</th>
                                 <th>Cliente</th>
+                                <th>Orden Ruta</th>
                                 <th>Ruta</th>
                                 <th>Dirección Entrega</th>
                                 <th>Transportador</th>
@@ -58,6 +59,31 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" data-id="3" data-bs-dismiss="modal" id="envio-motivo">Grabar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para el orden de las Entregas -->
+<div class="modal fade bd-example-modal-sm" id="orden_rutaModal" tabindex="-1" role="dialog" aria-labelledby="orden_rutaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <form class="modal-content" id="orden_ruta_entrega">
+            <div class="modal-header header_aco">
+                <div class="img_modal mx-2 ">
+                    <p> </p>
+                </div>
+                <h3 class="modal-title" id="orden_rutaModalLabel">Orden Ruta Entregas</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive" style="border: 1px solid #ccc;padding: 10px;border-radius: 5px">
+                    <label for="orden_ruta" class="form-label">Orden Ruta Entrega:</label>
+                    <input type="text" id="orden_ruta" class="form-control orden_ruta" name="orden_ruta" style='border:black solid 1px;'>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-id="" id="envio_orden_ruta">Grabar</button>
             </div>
         </form>
     </div>

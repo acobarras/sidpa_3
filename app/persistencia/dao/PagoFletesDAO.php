@@ -14,7 +14,7 @@ class PagoFletesDAO extends GenericoDAO {
 
     public function ruta_adicional_transportador($id_transportador)
     {
-        $sql = "SELECT * FROM pago_fletes WHERE id_transportador = $id_transportador AND estado IN(2)";
+        $sql = "SELECT * FROM pago_fletes WHERE id_transportador IN ($id_transportador) AND estado IN(2)";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);

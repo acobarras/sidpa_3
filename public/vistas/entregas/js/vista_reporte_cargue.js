@@ -40,7 +40,7 @@ var consulta_documento = function () {
     });
 }
 
-var tabla_documentos = function(limpio = '') {
+var tabla_documentos = function (limpio = '') {
     var data = DATOS_TABLA;
     if (limpio != '') {
         data = [];
@@ -71,7 +71,7 @@ consulta_nuevo_documento = function () {
             type: "POST",
             data: { numero_lista_de_empaque },
             success: function (res) {
-                if (PRINCIPAL.id_cli_prov == res.cabecera.id_cli_prov) {   
+                if (PRINCIPAL.id_cli_prov == res.cabecera.id_cli_prov) {
                     var data_item = res.items;
                     data_item.forEach(element => {
                         DATOS_TABLA.push(element);
@@ -83,7 +83,7 @@ consulta_nuevo_documento = function () {
                 $('#nuevo_documento').val('');
                 btn_procesando('agrega_documento', obj_inicial, 1);
                 $('#agrega_documento').attr('disabled', true);
-                
+
             }
         });
     });
@@ -100,7 +100,7 @@ var reportar_documento = function () {
         btn_procesando('reportar_documento', obj_inicial);
         var envio = {
             'valor_flete': valor_flete,
-            'items': DATOS_TABLA 
+            'items': DATOS_TABLA
         }
         $.ajax({
             url: `${PATH_NAME}/entregas/reporte_cargue_transportador`,
@@ -109,12 +109,14 @@ var reportar_documento = function () {
             success: function (res) {
                 if (res == 1) {
                     alertify.success('Registro guardado exitosamente.');
-                    $('#datos_documento span').empty().html('N/A');
-                    $('#valor_flete').val('');
-                    $('#numero_factura_consulta').val('');
-                    tabla_documentos(1);
-                    btn_procesando('reportar_documento', obj_inicial, 1);                    
+                } else {
+                    alertify.error('Lo sentimos en este momento no puede generar un cargue por que tiene entregas pendientes por gestionar');
                 }
+                $('#datos_documento span').empty().html('N/A');
+                $('#valor_flete').val('');
+                $('#numero_factura_consulta').val('');
+                tabla_documentos(1);
+                btn_procesando('reportar_documento', obj_inicial, 1);
             }
         });
     });

@@ -122,6 +122,32 @@ class control_facturacionDAO extends GenericoDAO
         return $resultado;
     }
 
+    public function consulta_orden_entrega($id_persona)
+    {
+        $fecha_hoy = date('Y-m-d');
+        $sql = "SELECT t1.orden_ruta FROM control_facturas t1 
+        INNER JOIN entregas_logistica t2 ON t2.id_factura=t1.id_control_factura 
+        WHERE t2.entre_por = $id_persona 
+        AND t2.fecha_cargue='$fecha_hoy' ORDER BY t1.orden_ruta DESC LIMIT 1;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
+
+    public function consultar_orden_entregas($id_person_entrega, $num_orden)
+    {
+        // $fecha_hoy = date('Y-m-d');
+        $fecha_hoy = date('2024-03-12');
+        $sql = "SELECT * FROM control_facturas t1
+        INNER JOIN entregas_logistica t2 ON t2.id_factura=t1.id_control_factura
+        WHERE t2.entre_por = $id_person_entrega AND t2.fecha_cargue='$fecha_hoy' AND t1.orden_ruta=$num_orden 
+        GROUP BY t1.id_control_factura ORDER BY orden_ruta ASC";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
     // public function ConsultaPendienteReporte()
     // {
     //     $sql = "SELECT t1.tipo_documento, t1.num_factura, t1.num_lista_empaque, t5.nombre_empresa,

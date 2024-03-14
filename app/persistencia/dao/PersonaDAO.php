@@ -23,6 +23,15 @@ class PersonaDAO extends GenericoDAO
         return $resultado;
     }
 
+    public function consultar_usuarios_roll()
+    {
+        $sql = "SELECT * FROM usuarios";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
+
     public function jefe_imediato()
     {
         $sql = "SELECT * FROM persona WHERE tipo = 4 AND estado != 0";

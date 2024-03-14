@@ -11,6 +11,7 @@ use MiApp\persistencia\dao\control_facturacionDAO;
 use MiApp\persistencia\dao\PagoFletesDAO;
 use MiApp\persistencia\dao\SeguimientoOpDAO;
 use MiApp\persistencia\dao\SeguimientoFacturaDAO;
+use MiApp\persistencia\dao\UsuarioDAO;
 
 class MisEntregasControlador extends GenericoControlador
 {
@@ -22,6 +23,7 @@ class MisEntregasControlador extends GenericoControlador
     private $PagoFletesDAO;
     private $SeguimientoOpDAO;
     private $SeguimientoFacturaDAO;
+    private $UsuarioDAO;
 
     public function __construct(&$cnn)
     {
@@ -36,6 +38,7 @@ class MisEntregasControlador extends GenericoControlador
         $this->PagoFletesDAO = new PagoFletesDAO($cnn);
         $this->SeguimientoOpDAO = new SeguimientoOpDAO($cnn);
         $this->SeguimientoFacturaDAO = new SeguimientoFacturaDAO($cnn);
+        $this->UsuarioDAO = new UsuarioDAO($cnn);
     }
 
     public function vista_mis_entregas()
@@ -45,6 +48,7 @@ class MisEntregasControlador extends GenericoControlador
             'entregas/vista_mis_entregas',
             [
                 'personas' => $this->PersonaDAO->consultar_personas(),
+                'transportadores' => $this->UsuarioDAO->consultar_roll(11),
             ]
         );
     }
@@ -54,7 +58,11 @@ class MisEntregasControlador extends GenericoControlador
         header('Content-Type: application/json');
         $id_persona = $_POST['IDPERSONA'];
         $tabla  = $this->EntregasLogisticaDAO->consultar_mis_emtregas($id_persona);
+        $transporta = [];
         foreach ($tabla as $value) {
+            if (!in_array($value->entre_por, $transporta)) {
+                array_push($transporta, $value->entre_por);
+            }
             $nombre_persona = $this->PersonaDAO->consultar_personas_id($value->entre_por);
             $dir_entrega = $this->direccionDAO->consultaIdDireccion($value->id_dire_entre);
             if ($dir_entrega[0]->nombre_departamento == 'BOGOTÁ D.C') {
@@ -74,6 +82,9 @@ class MisEntregasControlador extends GenericoControlador
             $value->roll = $_SESSION['usuario']->getId_roll();
             $value->id_logeado = $_SESSION['usuario']->getid_usuario();
         }
+        if ($_SESSION['usuario']->getId_roll() == 1 || $_SESSION['usuario']->getId_roll() == 10) {
+            $id_persona = implode(',', $transporta);
+        }
         $mas_diligencias = $this->PagoFletesDAO->ruta_adicional_transportador($id_persona);
         foreach ($mas_diligencias as $diligencia) {
             $persona = $this->PersonaDAO->consultar_personas_id($diligencia->id_transportador);
@@ -82,8 +93,9 @@ class MisEntregasControlador extends GenericoControlador
                 'num_pedido' => 'N/A',
                 'id_pago_flete' => $diligencia->id_pago_flete,
                 'documento' => $diligencia->documento,
-                'nombre_empresa' => 'Encargo' . NOMBRE_EMPRESA,
+                'nombre_empresa' => 'Encargo ' . NOMBRE_EMPRESA,
                 'ruta' => 'N/A',
+                'orden_ruta' => 'N/A',
                 'direccion' => $diligencia->observacion,
                 'transportador' => $persona[0]->nombres,
                 'forma_pago' => 'N/A',
@@ -95,6 +107,32 @@ class MisEntregasControlador extends GenericoControlador
         }
         $res['data'] = $tabla;
         echo json_encode($res);
+        return;
+    }
+
+    public function orden_ruta_entrega()
+    {
+        header('Content-Type: application/json');
+        $datos_factura = $_POST['data_fila'];
+        $num_orden_entrega = $_POST['numero'];
+        $orden_entrega = $this->control_facturacionDAO->consultar_orden_entregas($datos_factura['entre_por'], $num_orden_entrega);
+        if (empty($orden_entrega)) {
+            $edita_orden['orden_ruta'] = $num_orden_entrega;
+            $this->control_facturacionDAO->editar($edita_orden, ' id_control_factura =' . $datos_factura['id_control_factura']);
+        } else {
+            // se edita el numero de orden de la lista de empaque
+            $edita_orden['orden_ruta'] = $num_orden_entrega;
+            $this->control_facturacionDAO->editar($edita_orden, ' id_control_factura =' . $datos_factura['id_control_factura']);
+
+            // se edita la lista de empaque que tenia el numero y se cambia por el numero de la lista de empaque modificada
+            $editar_orden_ant['orden_ruta'] = $datos_factura['orden_ruta'];
+            $this->control_facturacionDAO->editar($editar_orden_ant, ' id_control_factura =' . $orden_entrega[0]->id_control_factura);
+        }
+        $respu = [
+            'status' => 1,
+            'msg' => 'Modificacion exitosa'
+        ];
+        echo json_encode($respu);
         return;
     }
 
