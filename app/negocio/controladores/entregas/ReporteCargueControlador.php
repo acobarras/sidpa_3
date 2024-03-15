@@ -77,7 +77,7 @@ class ReporteCargueControlador extends GenericoControlador
         $contador = [];
         $id_persona = $_SESSION['usuario']->getId_persona();
         // VALIDACION DE QUE NO TENGA ENTREGAS PENDIENTES
-        $tabla  = $this->EntregasLogisticaDAO->consultar_mis_emtregas($id_persona);
+        $tabla  = $this->EntregasLogisticaDAO->consultar_mis_emtregas($id_persona, $estado = 2);
         if (!empty($tabla)) {
             $respu = -1;
         } else {
@@ -95,7 +95,7 @@ class ReporteCargueControlador extends GenericoControlador
                     $edita_orden_control = [
                         'orden_ruta' => $contar,
                     ];
-                    $condicion_edita_orden = 'id_entrega =' . $item['id_entrega'];
+                    $condicion_edita_orden = 'id_control_factura =' . $item['id_control_factura'];
                     $this->control_facturacionDAO->editar($edita_orden_control, $condicion_edita_orden);
                 }
                 // Se cambia el estado a entregas logistica y se coloca la fecha de cargue

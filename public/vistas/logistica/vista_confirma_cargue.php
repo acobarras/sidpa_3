@@ -31,6 +31,7 @@
                             </table>
                             <div class="mb-3 text-center">
                                 <button id="acepta_flete" class="btn btn-success">Acepta Flete</button>
+                                <button id="rechaza_flete" class="btn btn-danger">Rechazar Flete</button>
                             </div>
                         </div>
                     </div>

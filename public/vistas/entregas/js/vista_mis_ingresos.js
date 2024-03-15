@@ -39,6 +39,7 @@ var consulta_ingresos = function () {
                                 }
                             },
                             { "data": "documento" },
+                            { "data": "nombre_empresa" },
                             { "data": "valor_documento", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
                             { "data": "valor_flete", render: $.fn.dataTable.render.number('.', ',', 0, '$ ') },
                             { "data": "observacion" },

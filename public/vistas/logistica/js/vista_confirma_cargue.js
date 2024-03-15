@@ -56,7 +56,6 @@ var agrupar_items = function () {
         } else {
             //recorrer la lista de items y eliminar el item desmarcado
             for (var i = 0; i < arrayitems.length; i++) {
-                console.log(i);
                 if (data.id_pago_flete === arrayitems[i].id_pago_flete) {
                     arrayitems.splice(i, 1);
                 }
@@ -73,21 +72,58 @@ var acepta_flete = function () {
         }
         var obj_inicial = $('#acepta_flete').html();
         btn_procesando('acepta_flete');
-        $.ajax({
-            url: `${PATH_NAME}/logistica/aceptar_fletes`,
-            type: 'POST',
-            data: { 'items': arrayitems },
-            success: function (res) {
-                arrayitems = [];
-                if (res) {
-                    alertify.success('Datos ingresdados correctamente.');
-                } else {
-                    alertify.error('Lo sentimos algo sucedio solicite soporte con el area');
-                }
-                $('#tabla_confirma_flete').DataTable().ajax.reload();
-                btn_procesando('acepta_flete', obj_inicial, 1);
+        var estado = 1;
+        enviar_flete(arrayitems, estado, obj_inicial);
+        // $.ajax({
+        //     url: `${PATH_NAME}/logistica/aceptar_fletes`,
+        //     type: 'POST',
+        //     data: { 'items': arrayitems, estado },
+        //     success: function (res) {
+        //         // arrayitems = [];
+        //         // if (res) {
+        //         //     alertify.success('Datos ingresdados correctamente.');
+        //         // } else {
+        //         //     alertify.error('Lo sentimos algo sucedio solicite soporte con el area');
+        //         // }
+        //         // $('#tabla_confirma_flete').DataTable().ajax.reload();
+        //         // btn_procesando('acepta_flete', obj_inicial, 1);
+        //     }
+        // });
+    });
+    $('#rechaza_flete').on('click', function () {
+        if (arrayitems == '') {
+            alertify.error('Elija almenos un item para continuar.');
+            return;
+        }
+        alertify.confirm('Flete', 'Esta seguro de rechazar los datos seleccionados?',
+            function () {
+                var obj_inicial = $('#rechaza_flete').html();
+                btn_procesando('rechaza_flete');
+                var estado = 2;
+                enviar_flete(arrayitems, estado, obj_inicial);
+            },
+            function () {
+                alertify.error('cancelado');
+            });
+
+    });
+}
+
+var enviar_flete = function (array, estado, obj_inicial) {
+    $.ajax({
+        url: `${PATH_NAME}/logistica/aceptar_fletes`,
+        type: 'POST',
+        data: { 'items': array, estado },
+        success: function (res) {
+            arrayitems = [];
+            if (res) {
+                alertify.success('Datos ingresdados correctamente.');
+            } else {
+                alertify.error('Lo sentimos algo sucedio solicite soporte con el area');
             }
-        });
+            $('#tabla_confirma_flete').DataTable().ajax.reload();
+            btn_procesando('acepta_flete', obj_inicial, 1);
+        }
     });
 }
 

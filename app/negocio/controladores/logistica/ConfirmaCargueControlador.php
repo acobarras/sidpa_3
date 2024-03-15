@@ -41,22 +41,29 @@ class ConfirmaCargueControlador extends GenericoControlador
         $data['data'] = $datos;
         echo json_encode($data);
     }
-    
+
     public function aceptar_fletes()
     {
         header('Content-Type: application/json');
         $items = $_POST['items'];
-        foreach ($items as $value) {
-            $edita_pago_flete = [
-                'estado' => 4
-            ];
-            $condicion_edita_pago_flete = 'id_pago_flete ='. $value['id_pago_flete'];
-            $edita = $this->PagoFletesDAO->editar($edita_pago_flete,$condicion_edita_pago_flete);
+        if ($_POST['estado'] == 1) {
+            foreach ($items as $value) {
+                $edita_pago_flete = [
+                    'estado' => 4
+                ];
+                $condicion_edita_pago_flete = 'id_pago_flete =' . $value['id_pago_flete'];
+                $edita = $this->PagoFletesDAO->editar($edita_pago_flete, $condicion_edita_pago_flete);
+            }
+        } else {
+            foreach ($items as $value) {
+                $condicion = 'id_pago_flete =' . $value['id_pago_flete'];
+                $edita = $this->PagoFletesDAO->eliminar($condicion);
+            }
         }
         echo json_encode($edita);
         return;
     }
-    
+
     public function editar_valor_flete()
     {
         header('Content-Type: application/json');
@@ -65,11 +72,9 @@ class ConfirmaCargueControlador extends GenericoControlador
         $edita_pago_flete = [
             'valor_flete' => $numero
         ];
-        $condicion_edita_pago_flete = 'id_pago_flete ='.$data['id_pago_flete'];
-        $respu = $this->PagoFletesDAO->editar($edita_pago_flete,$condicion_edita_pago_flete);
+        $condicion_edita_pago_flete = 'id_pago_flete =' . $data['id_pago_flete'];
+        $respu = $this->PagoFletesDAO->editar($edita_pago_flete, $condicion_edita_pago_flete);
         echo json_encode($respu);
         return;
     }
 }
-
-?>

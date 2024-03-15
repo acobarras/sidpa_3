@@ -57,7 +57,7 @@ class MisEntregasControlador extends GenericoControlador
     {
         header('Content-Type: application/json');
         $id_persona = $_POST['IDPERSONA'];
-        $tabla  = $this->EntregasLogisticaDAO->consultar_mis_emtregas($id_persona);
+        $tabla  = $this->EntregasLogisticaDAO->consultar_mis_emtregas($id_persona, $estado = 1);
         $transporta = [];
         foreach ($tabla as $value) {
             if (!in_array($value->entre_por, $transporta)) {
@@ -83,7 +83,7 @@ class MisEntregasControlador extends GenericoControlador
             $value->id_logeado = $_SESSION['usuario']->getid_usuario();
         }
         if ($_SESSION['usuario']->getId_roll() == 1 || $_SESSION['usuario']->getId_roll() == 10) {
-            $id_persona = implode(',', $transporta);
+            $id_personas = implode(',', $transporta);
         }
         $mas_diligencias = $this->PagoFletesDAO->ruta_adicional_transportador($id_persona);
         foreach ($mas_diligencias as $diligencia) {

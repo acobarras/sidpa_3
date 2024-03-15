@@ -18,7 +18,7 @@
                         </div>
                         <div class="panel-body">
                             <form class="row mb-3" id="form_consulta_ingresos">
-                                <?php if ($_SESSION['usuario']->getId_roll() == 1) { ?>
+                                <?php if ($_SESSION['usuario']->getId_roll() == 1||$_SESSION['usuario']->getId_roll() == 10) { ?>
                                     <div class="col-3">
                                         <div class="mb-3">
                                             <label for="transportador" class="form-label">Transportador:</label>
@@ -57,6 +57,7 @@
                                             <th>Fecha Cargue</th>
                                             <th>Transportador</th>
                                             <th>Documento</th>
+                                            <th>Cliente</th>
                                             <th>Valor Documento</th>
                                             <th>Valor Flete</th>
                                             <th>Observaciones</th>
