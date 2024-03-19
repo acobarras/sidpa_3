@@ -12,7 +12,7 @@ var consulta_ingresos = function () {
     $('#form_consulta_ingresos').submit(function (e) {
         e.preventDefault();
         var form = $(this).serializeArray();
-        if (ROLL != 1) {
+        if (ROLL != 1 && ROLL != 10) {
             var falta = { name: 'transportador', value: ID_PERSONA };
             form.push(falta);
         }
