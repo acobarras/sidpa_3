@@ -430,6 +430,7 @@ class PDF
                             <th style='width: 63mm;' >Descripción</th>
                             <th style='width: 0mm;' >Ubicación</th>
                             <th style='width: 0mm;' >Cantidad</th>
+                            <th style='width: 15mm;'>Q.Bodega</th>
                             <th style='width: 0mm;' >mL</th>
                             <th style='width: 0mm;' >m²</th>
                             <th style='width: 0mm;' >Operario</th>
@@ -458,6 +459,7 @@ class PDF
                             <td style='width: 10mm;' >" . $items[$i]['descripcion_productos'] . "</td>
                             <td style='width: 10mm;' >" . $items[$i]['ubi_troquel'] . "||" . $ficha_tecnica . "</td>
                             <td style='width: 10mm;' >" . number_format($items[$i]['cant_op'], 0, ',', '.') . "</td>
+                            <td style='width: 10mm;' >" . number_format($items[$i]['cant_bodega'], 0, ',', '.') . "</td>
                             <td style='width: 10mm;' ><b>" . round($metros_lineales) . "</b></td>
                             <td style='width: 10mm;' ><b>" . number_format($metros_cuadrados, 2, ',', '.') . "</b></td>
                             <td style='width: 10mm;margin:0 15px;' ></td>

@@ -2,6 +2,8 @@ $(document).ready(function () {
     alertify.set('notifier', 'position', 'bottom-left');
     tabla_mis_entregas();
     enviar_datos_modal();
+    enviar_entrega();
+    imagen();
 });
 GLOBAL_DATA = [];
 
@@ -39,16 +41,16 @@ var tabla_mis_entregas = function () {
                     } else {
                         if (row.id_tipo_documento == 8 || row.id_tipo_documento == 9 || row.id_tipo_documento == 6) {
                             if (row.estado == 6) {
-                                var boton = `<button type="button" data-id="4" class="reporte btn btn-success">
+                                var boton = `<button type="button" data-id="4" class="reporte btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalImagen">
                                 <span class="fas fa-check"></span>
                                 </button> `;
                             } else {
-                                var boton = `<button type="button" data-id="1" class="reporte btn btn-success">
+                                var boton = `<button type="button" data-id="1" class="reporte btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalImagen">
                                 <span class="fas fa-check-double"></span>
                                 </button> `;
                             }
                         } else {
-                            var boton = `<button type="button" data-id="2" class="reporte view btn btn-warning">
+                            var boton = `<button type="button" data-id="2" class="reporte view btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalImagen">
                             <span class="fas fa-check"></span>
                             </button> `;
                         }
@@ -146,27 +148,69 @@ var enviar_orden = function () {
         });
     })
 }
+var DATOS = [];
 
-var reporte_entregas = function (tbody, table) {
-    $(tbody).on("click", "button.reporte", function () {
-        var data = table.row($(this).parents("tr")).data();
+var reporte_entregas = function () {
+    $("#table_mis_entregas tbody").on("click", "button.reporte", function () {
+        var data = $('#table_mis_entregas').DataTable().row($(this).parents("tr")).data();
+        if (DATOS.length != 0) {
+            DATOS = [];
+        }
+        DATOS.push(JSON.stringify(data));
+        var id = $(this).attr('data-id');
+        $('#enviar_entrega').attr('data-id', id);
+    });
+}
+
+var imagen = function () {
+    $('#foto_entrega').on('change', function () {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var dataURL = reader.result;
+            $('#imagen_entrega').html('<img class="cuadro_imagenes" style="margin-left: 0%;" src="' + dataURL + '" />');
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    })
+}
+
+var enviar_entrega = function () {
+    $('#enviar_entrega').on('click', function () {
         var id = $(this).attr('data-id');
         var observacion = '';
+        // hacer validacion de la imagen
+        var formData = new FormData();
+        var img_valida = $('#foto_entrega')[0].files;
+        var files = $('#foto_entrega')[0].files[0];
+        if (img_valida.length === 0) {
+            alertify.error('Se necesita una imagen para continuar');
+            return;
+        }
+        formData.append('file', files);
+        formData.append('data', DATOS);
+        formData.append('id', id);
+        formData.append('observacion', observacion);
+        var obj_inicial = $('#enviar_entrega').html();
+        btn_procesando('enviar_entrega', obj_inicial);
         $.ajax({
             url: `${PATH_NAME}/entregas/movimiento_entrega`,
             type: 'POST',
-            data: { data, id, observacion },
+            data: formData,
+            contentType: false,
+            processData: false,
             success: function (res) {
                 // recargar tabla
                 if (res) {
+                    btn_procesando('enviar_entrega', obj_inicial, 1);
                     alertify.success('Datos ingredados correctamente');
                     $('#table_mis_entregas').DataTable().ajax.reload();
+                    $('#ModalImagen').modal('hide');
+                    $("#imagen_entrega").empty().html(`<i class="fas fa-camera camara"></i>`);
                 } else {
                     alertify.error('Ocurrio un error comuniquese con su desarrollador');
                 }
             }
         });
-    });
+    })
 }
 
 var motivos_entrega = function (tbody, table) {//boton rojo

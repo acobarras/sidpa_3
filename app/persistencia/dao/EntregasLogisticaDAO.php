@@ -100,18 +100,22 @@ class EntregasLogisticaDAO extends GenericoDAO
 
     public function consultar_mis_emtregas($id_persona = '', $estado)
     {
-        // $fecha_hoy = date('Y-m-d');
-        // if ($estado == 1) {
-        //     $consulta2 = "AND t1.fecha_cargue='$fecha_hoy'";
-        // } else {
-        //     $consulta2 = "AND t1.fecha_cargue!='$fecha_hoy'";
-        // }
-        $consulta2 = '';
-        $consulta = "AND t1.entre_por = $id_persona";
-        if ($_SESSION['usuario']->getId_roll() == 1 || $_SESSION['usuario']->getId_roll() == 10) {
-            $consulta = '';
+        $fecha_hoy = date('Y-m-d');
+        if ($estado == 1) {
+            // ESTA CONSULTA VIENE PARA LISTAR MIS ENTREGAS
+            $consulta2 = "";
+            $consulta = "AND t1.entre_por = $id_persona";
+            if ($_SESSION['usuario']->getId_roll() == 1 || $_SESSION['usuario']->getId_roll() == 10) {
+                $consulta = '';
+            }
+        } else {
+            // ESTA CONSULTA VIENE PARA VALIDAR SI EL USUARIO TIENE ENTREGAS PENDIENTES ANTERIOR
+            $consulta2 = "AND t1.fecha_cargue!='$fecha_hoy'";
+            $consulta = "AND t1.entre_por = $id_persona";
         }
-        $sql = "SELECT t1.id_entrega,t1.fecha_factura, t1.fecha_cargue, t1.estado, t1.entre_por, t1.tipo_documento,t2.id_control_factura,t2.orden_ruta,t2.num_factura, t2.num_remision, t2.tipo_documento AS id_tipo_documento, t4.fecha_compromiso, t4.num_pedido, t4.parcial, t4.id_dire_entre, t4.id_dire_radic, t5.forma_pago, t5.nombre_empresa, t6.nombre_estado FROM entregas_logistica t1 
+        // $consulta2 = '';
+        $sql = "SELECT t1.id_entrega,t1.fecha_factura, t1.fecha_cargue, t1.estado, t1.entre_por, t1.tipo_documento,t2.id_control_factura,t2.orden_ruta,t2.num_factura, t2.num_remision, t2.tipo_documento AS id_tipo_documento, t4.fecha_compromiso, t4.num_pedido, t4.parcial, t4.id_dire_entre, t4.id_dire_radic, t5.forma_pago, t5.nombre_empresa, t6.nombre_estado 
+        FROM entregas_logistica t1 
         INNER JOIN control_facturas t2 ON t1.id_factura = t2.id_control_factura 
         INNER JOIN pedidos_item t3 ON t1.id_pedido_item = t3.id_pedido_item 
         INNER JOIN pedidos t4 ON t3.id_pedido = t4.id_pedido 

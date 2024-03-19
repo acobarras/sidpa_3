@@ -136,13 +136,51 @@ class MisEntregasControlador extends GenericoControlador
         return;
     }
 
+    public static function inserta_img($nombre, $ubi, $nuevo_nombre)
+    {
+        if (isset($nombre)) {
+            $ruta = $nombre['tmp_name'];
+            $des = CARPETA_IMG . PROYECTO . "/fotos_entregas/" . $nuevo_nombre;
+            move_uploaded_file($ruta, $des);
+        }
+        return $nuevo_nombre;
+    }
+
     public function movimiento_entrega()
     {
         header('Content-Type: application/json');
         // se editan 2 tablas
         // se insertan 2 tablas
-        $datos = $_POST['data'];
+        $data = $_POST['data'];
         $boton = $_POST['id'];
+        // INSERTAR IMAGEN
+        $datos = json_decode($data, true);
+        $foto = $_FILES['file'];
+        $extension = pathinfo($foto['name'], PATHINFO_EXTENSION);
+        $foto['name'] = 'entrega_documento' . $datos['id_control_factura'] . '.' . $extension;
+        $nuevo_nombre = 'entrega_documento' . $datos['id_control_factura'] . '.' . $extension;
+        $ubicacion = 'fotos_entregas';
+        $img = MisEntregasControlador::inserta_img($foto, $ubicacion, $nuevo_nombre);
+
+        // VALIDACION DE HORA DEL REPORTE
+        $fecha_hoy = date('Y-m-d');
+        $hora = date('H:i:s');
+        if ($hora <= '07:00:00') {
+            $fecha_reporte = date("d-m-Y", strtotime($fecha_hoy . "- 1 days"));
+            $hora_reporte = '17:00:00';
+        } else {
+            $fecha_reporte = date('Y-m-d');
+            $hora_reporte = date('H:i:s');
+        }
+
+        if ($datos['id_control_factura'] != 0) {
+            $edita_campo_img = [
+                'img_entrega' => $nuevo_nombre,
+            ];
+            $condicion_img = 'id_control_factura =' . $datos['id_control_factura'];
+            $edita_control = $this->control_facturacionDAO->editar($edita_campo_img, $condicion_img);
+        }
+
         $observacion = $_POST['observacion'];
         $estado_entregas = ENTREGA[$boton]['estado'];
         $id_actividad = ENTREGA[$boton]['id_actividad'];
@@ -156,6 +194,7 @@ class MisEntregasControlador extends GenericoControlador
         $entre_logistica = [];
         $entre_logistica['estado'] = $estado_entregas;
         if ($boton == 1 || $boton == 2) {
+            $entre_logistica['fecha_entrega'] = $fecha_reporte;
             $entre_logistica['fecha_entrega'] = date('Y-m-d');
         }
         // Saco la cantidad de documentos que hay en la tabla y cambio el estado de la tabla entregas logistica
@@ -199,8 +238,8 @@ class MisEntregasControlador extends GenericoControlador
                         'observacion' => $observacion,
                         'estado' => 1,
                         'id_usuario' => $_SESSION['usuario']->getid_usuario(),
-                        'fecha_crea' => date('Y-m-d'),
-                        'hora_crea' => date('H:i:s')
+                        'fecha_crea' => $fecha_reporte,
+                        'hora_crea' => $hora_reporte
                     ];
                     $this->SeguimientoOpDAO->insertar($seguimiento_op);
                 }

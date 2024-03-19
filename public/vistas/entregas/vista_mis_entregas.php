@@ -89,5 +89,32 @@
     </div>
 </div>
 
+
+<!-- modal para agregar la imagen de la entrega -->
+<div class="modal fade" id="ModalImagen" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModalImagenLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ModalImagenLabel">Comprobante de entrega</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center"><b class="color-danger">Nota:</b> Se debe Realizar la carga del documento firmado por el cliente.</h6>
+                <div class="mb-3 col-12 row cuadro_imagenes" style="margin-left: 29%;">
+                    <div class="image-upload">
+                        <label for="foto_entrega" style="display:block;">
+                            <spam id="imagen_entrega"><i class="fas fa-camera camara"></i></spam>
+                        </label>
+                        <input class="d-none" id="foto_entrega" type="file" name="foto_entrega" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="enviar_entrega">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php include PUBLICO . '/vistas/plantilla/footer.php'; ?>
 <script src="<?= PUBLICO ?>/vistas/entregas/js/vista_mis_entregas.js"></script>
