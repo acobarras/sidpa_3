@@ -42,7 +42,7 @@ class ComisionControlador extends GenericoControlador
 
     public function liquida_comision()
     {
-        header('Content-Type:cation/json');
+        header('Content-Type:application/json');
         $asesor = $_POST['asesor'];
         $id_persona_asesor = '';
         if ($asesor == 'sin_pago') {
@@ -72,23 +72,9 @@ class ComisionControlador extends GenericoControlador
             $id_persona_asesor = $id_persona[0]->id_persona;
             $condicion = "WHERE t1.fecha_pago >= '" . $fecha_inicial . "' AND t1.fecha_pago <= '" . $fecha_fin . "' AND t1.asesor =" . $id_persona_asesor;
         }
-        $data = $this->PortafolioDAO->Consultaportafolio($condicion);
-        foreach ($data as $value) {
-            if ($value->fecha_pago == '') {
-                $dias = 'N/A';
-            } else {
-                $fecha_vencimiento = date_create($value->fecha_vencimiento);
-                $fecha_pago = date_create($value->fecha_pago);
-                $interval = date_diff($fecha_vencimiento, $fecha_pago);
-                $interval->format('%R%a');
-                $dias = $interval->days;
-            }
-            $value->nombre_estado = ESTADO_PORTAFOLIO[$value->estado_portafolio];
-            $value->dias_vencimiento = $dias;
-            $value->subtotal = $value->total_cintas + $value->total_etiquetas + $value->total_alquiler + $value->total_tecnologia + $value->total_soporte;
-            $value->sumatoria_tecsop =  $value->total_tecnologia + $value->total_soporte;
-        }
+        $data = $this->PortafolioDAO->Consultaportafolio($condicion, $fecha_inicial, $fecha_fin);
         echo json_encode($data);
         return;
     }
 }
+

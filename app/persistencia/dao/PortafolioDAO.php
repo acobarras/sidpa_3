@@ -46,15 +46,39 @@ class PortafolioDAO extends GenericoDAO
         return $resultado;
     }
 
-    public function Consultaportafolio($condicion)
+    public function Consultaportafolio($condicion, $fecha_inicial = '', $fecha_fin = '')
     {
-
-        $sql = "SELECT t1.*,t2.nombre_empresa,t2.nit,t2.id_usuarios_asesor,t3.nombres,t3.apellidos, (CASE WHEN t2.pertenece != 0 THEN t4.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania 
-                FROM portafolio t1
-                INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov 
-                INNER JOIN persona t3 ON t1.asesor = t3.id_persona
-                LEFT JOIN empresas t4 ON t2.pertenece = t4.id_empresa OR t2.pertenece = 0
-                $condicion";
+        if ($condicion == '') {
+            $sql = "SELECT SUM(t1.total_cintas+t1.total_alquiler+t1.total_tecnologia+t1.total_soporte) AS totalTecnologia, SUM(t1.total_fletes+t1.total_m_prima) AS total_sin_comision, t1.*,t2.nombre_empresa,t2.nit,t2.id_usuarios_asesor,t3.nombres,t3.apellidos, t3.comi_etiq, t3.comi_tecn, (CASE WHEN t2.pertenece != 0 THEN t4.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania, ABS(DATEDIFF(t1.fecha_vencimiento, t1.fecha_pago)) AS dias_vencimiento, SUM(t1.total_cintas + t1.total_etiquetas + t1.total_alquiler + t1.total_tecnologia + t1.total_soporte) AS subtotal, SUM(t1.total_tecnologia + t1.total_soporte) AS sumatoria_tecsop, t5.nombre_estado 
+            FROM portafolio t1 
+            INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov 
+            INNER JOIN persona t3 ON t1.asesor = t3.id_persona 
+            LEFT JOIN empresas t4 ON t2.pertenece = t4.id_empresa OR t2.pertenece = 0
+            INNER JOIN estados_portafolio t5 ON t1.estado_portafolio = t5.id_estado_portafolio
+            $condicion GROUP BY t1.id_portafolio  ORDER BY t1.num_factura ASC, t2.pertenece ASC, t1.asesor DESC";
+        } else {
+            $sql = "SELECT SUM(t1.total_cintas+t1.total_alquiler+t1.total_tecnologia+t1.total_soporte) AS totalTecnologia, SUM(t1.total_fletes+t1.total_m_prima) AS total_sin_comision, t1.*, t2.nombre_empresa, t2.nit, t2.id_usuarios_asesor, t3.nombres, t3.apellidos, t3.comi_etiq, t3.comi_tecn, (CASE WHEN t2.pertenece != 0 THEN t4.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania, COALESCE(t5.venta_mes, 0) AS venta_mes, COALESCE(t5.recaudo_mes, 0) AS recaudo_mes, ABS(DATEDIFF(t1.fecha_vencimiento, t1.fecha_pago)) AS dias_vencimiento, SUM(t1.total_cintas + t1.total_etiquetas + t1.total_alquiler + t1.total_tecnologia + t1.total_soporte) AS subtotal, SUM(t1.total_tecnologia + t1.total_soporte) AS sumatoria_tecsop, t5.nombre_estado FROM portafolio t1 
+            INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov 
+            INNER JOIN persona t3 ON t1.asesor = t3.id_persona 
+            LEFT JOIN empresas t4 ON t2.pertenece = t4.id_empresa OR t2.pertenece = 0
+            INNER JOIN estados_portafolio t5 ON t1.estado_portafolio = t5.id_estado_portafolio
+            LEFT JOIN ( SELECT asesor, SUM(venta_mes) AS venta_mes, SUM(recaudo_mes) AS recaudo_mes FROM ( SELECT asesor, SUM(total_etiquetas+total_cintas+total_alquiler+total_tecnologia+total_soporte+total_fletes+total_m_prima) AS venta_mes, NULL AS recaudo_mes FROM portafolio 
+            WHERE fecha_factura >= '$fecha_inicial' AND fecha_factura <= '$fecha_fin' 
+            GROUP BY asesor 
+            UNION SELECT asesor, NULL AS venta_mes, SUM(total_etiquetas+total_cintas+total_alquiler+total_tecnologia+total_soporte+total_fletes+total_m_prima) AS recaudo_mes FROM portafolio 
+            WHERE fecha_pago >= '$fecha_inicial' AND fecha_pago <= '$fecha_fin' GROUP BY asesor) AS combined_data GROUP BY asesor) AS t5 ON t1.asesor = t5.asesor 
+            $condicion  
+    GROUP BY 
+        t1.id_portafolio 
+    ORDER BY 
+        t1.num_factura ASC, t2.pertenece ASC, t1.asesor DESC;";
+        }
+        // $sql = "SELECT t1.*,t2.nombre_empresa,t2.nit,t2.id_usuarios_asesor,t3.nombres,t3.apellidos, (CASE WHEN t2.pertenece != 0 THEN t4.nombre_compania ELSE 'SIN ASIGNAR' END) AS nombre_compania 
+        //         FROM portafolio t1
+        //         INNER JOIN cliente_proveedor t2 ON t1.id_cli_prov = t2.id_cli_prov 
+        //         INNER JOIN persona t3 ON t1.asesor = t3.id_persona
+        //         LEFT JOIN empresas t4 ON t2.pertenece = t4.id_empresa OR t2.pertenece = 0
+        //         $condicion";
         $sentencia = $this->cnn->prepare($sql);
         $sentencia->execute();
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
