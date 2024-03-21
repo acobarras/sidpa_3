@@ -151,16 +151,20 @@ class MisEntregasControlador extends GenericoControlador
         header('Content-Type: application/json');
         // se editan 2 tablas
         // se insertan 2 tablas
-        $data = $_POST['data'];
+        $datos = $_POST['data'];
         $boton = $_POST['id'];
+        $nuevo_nombre = '';
         // INSERTAR IMAGEN
-        $datos = json_decode($data, true);
-        $foto = $_FILES['file'];
-        $extension = pathinfo($foto['name'], PATHINFO_EXTENSION);
-        $foto['name'] = 'entrega_documento' . $datos['id_control_factura'] . '.' . $extension;
-        $nuevo_nombre = 'entrega_documento' . $datos['id_control_factura'] . '.' . $extension;
-        $ubicacion = 'fotos_entregas';
-        $img = MisEntregasControlador::inserta_img($foto, $ubicacion, $nuevo_nombre);
+        if ($boton != 3) {
+            $data = $_POST['data'];
+            $datos = json_decode($data, true);
+            $foto = $_FILES['file'];
+            $extension = pathinfo($foto['name'], PATHINFO_EXTENSION);
+            $foto['name'] = 'entrega_documento' . $datos['id_control_factura'] . '.' . $extension;
+            $nuevo_nombre = 'entrega_documento' . $datos['id_control_factura'] . '.' . $extension;
+            $ubicacion = 'fotos_entregas';
+            $img = MisEntregasControlador::inserta_img($foto, $ubicacion, $nuevo_nombre);
+        }
 
         // VALIDACION DE HORA DEL REPORTE
         $fecha_hoy = date('Y-m-d');

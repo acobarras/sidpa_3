@@ -302,4 +302,19 @@ class EntregasLogisticaDAO extends GenericoDAO
         $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
         return $resultado;
     }
+
+    public function consulta_pedidos_ubicacion($ubicacion)
+    {
+        $sql = "SELECT t1.id_entrega,t1.cantidad_factura,t1.ubicacion_material,t1.estado AS estado_entrega,
+        t2.codigo,t2.item,t3.num_pedido,t4.nombre_empresa 
+        FROM entregas_logistica t1 
+        INNER JOIN pedidos_item t2 ON t2.id_pedido_item=t1.id_pedido_item 
+        INNER JOIN pedidos t3 ON t3.id_pedido=t2.id_pedido 
+        INNER JOIN cliente_proveedor t4 ON t4.id_cli_prov=t3.id_cli_prov 
+        WHERE t1.ubicacion_material LIKE'%$ubicacion%' AND t1.estado=1;";
+        $sentencia = $this->cnn->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+        return $resultado;
+    }
 }

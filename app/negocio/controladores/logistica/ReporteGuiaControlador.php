@@ -7,6 +7,7 @@ use MiApp\negocio\util\Validacion;
 use MiApp\persistencia\dao\control_facturacionDAO;
 use MiApp\persistencia\dao\SeguimientoOpDAO;
 use MiApp\persistencia\dao\SeguimientoFacturaDAO;
+use MiApp\persistencia\dao\EntregasLogisticaDAO;
 
 class ReporteGuiaControlador extends GenericoControlador
 {
@@ -14,6 +15,7 @@ class ReporteGuiaControlador extends GenericoControlador
     private $control_facturacionDAO;
     private $SeguimientoOpDAO;
     private $SeguimientoFacturaDAO;
+    private $EntregasLogisticaDAO;
 
     public function __construct(&$cnn)
     {
@@ -24,6 +26,7 @@ class ReporteGuiaControlador extends GenericoControlador
         $this->control_facturacionDAO = new control_facturacionDAO($cnn);
         $this->SeguimientoOpDAO = new SeguimientoOpDAO($cnn);
         $this->SeguimientoFacturaDAO = new SeguimientoFacturaDAO($cnn);
+        $this->EntregasLogisticaDAO = new EntregasLogisticaDAO($cnn);
     }
 
     public function vista_reporte_guia()
@@ -72,6 +75,26 @@ class ReporteGuiaControlador extends GenericoControlador
         ];
         $this->SeguimientoFacturaDAO->insertar($seguimiento_factura);
         echo json_encode(true);
+        return;
+    }
+
+    public function consultar_ubi_despacho()
+    {
+        header('Content-Type: application/json');
+        $pedidos_item = $this->EntregasLogisticaDAO->consulta_pedidos_ubicacion($_POST['num_ubicacion']);
+        echo json_encode($pedidos_item);
+        return;
+    }
+
+    public function cambio_ubicacion_despacho()
+    {
+        header('Content-Type: application/json');
+        $edita = [
+            'ubicacion_material' => $_POST['nueva_ubi'],
+        ];
+        $condicion = "id_entrega =" . $_POST['data']['id_entrega'];
+        $editar = $this->EntregasLogisticaDAO->editar($edita, $condicion);
+        echo json_encode($editar);
         return;
     }
 }
