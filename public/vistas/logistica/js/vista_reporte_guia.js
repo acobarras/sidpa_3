@@ -91,12 +91,26 @@ var consultar_ubicacion = function () {
         var form = $(this).serializeArray();
         var valida = validar_formulario(form);
         var obj_inicial = $('#boton_consultar').html();
+
+        var ubicacion = $('#num_ubicacion').val().toUpperCase();
+        if (ubicacion.startsWith("!$")) {
+            var array = ubicacion.split(";");
+            if (array[0] != '!$' || array[1] != 'UBI') {
+                alertify.error('La ubicacion que esta tratando de ingresar no cumple');
+                $('#num_ubicacion').val('');
+                $('#num_ubicacion').focus();
+                return;
+            }
+            var ubicacion_com = array[2] + array[3];
+        } else {
+            var ubicacion_com = ubicacion;
+        }
         if (valida) {
             btn_procesando('boton_consultar');
             $.ajax({
                 type: "POST",
                 url: `${PATH_NAME}/logistica/consultar_ubi_despacho`,
-                data: form,
+                data: { num_ubicacion: ubicacion_com },
                 success: function (respu) {
                     btn_procesando('boton_consultar', obj_inicial, 1);
                     var table = $('#tabla_pedido_ubi').DataTable({
