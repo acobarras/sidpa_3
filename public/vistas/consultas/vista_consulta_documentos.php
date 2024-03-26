@@ -81,6 +81,7 @@
                                     <span id="nombre_ciudad" class="form-control"></span>
                                 </div>
                             </div>
+
                             <div class="col-6">
                                 <div class="input-group">
                                     <label class="input-group-text">Dirección:</label>
@@ -99,6 +100,17 @@
                                 <div class="input-group">
                                     <label class="input-group-text">Doc.Relacionado:</label>
                                     <span class="form-control cabecera" id="documento_relacionado"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3 d-none" id="div_imagen">
+                            <h4 class="text-center">Imagen Comprobante de entrega</h4>
+                            <div class="col-12 cuadro_imagenes" style="margin-left:45%">
+                                <div class="image-upload">
+                                    <label for="img_entrega" style="display:block;">
+                                        <spam id="imagen_entrega"><i class="fas fa-camera camara"></i></spam>
+                                    </label>
+                                    <input class="d-none" id="img_entrega" name="img_entrega" />
                                 </div>
                             </div>
                         </div>
