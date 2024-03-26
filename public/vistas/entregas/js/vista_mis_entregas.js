@@ -163,8 +163,20 @@ var reporte_entregas = function () {
 }
 
 var imagen = function () {
-    $('#foto_entrega').on('change', function () {
-        var reader = new FileReader();
+    $('#foto_entrega').on('change', function (e) {
+        // const EXTENCION_PERMI = ['.jpg', '.png'];
+
+        // var reader = new FileReader();
+        // reader.readAsDataURL(e.target.files[0]);
+        // var nombre_foto = e.target.files[0].name;
+        // var extension = nombre_foto.substring(nombre_foto.lastIndexOf('.'), nombre_foto.length);
+
+        // if ($.inArray(extension, EXTENCION_PERMI) == -1) {
+        //     alertify.error('no se pueden cargar archivos de este tipo, por favor cargue la imagen correcta');
+        //     $('#ModalImagen').modal('hide');
+        //     return;
+        // }
+
         reader.onload = function () {
             var dataURL = reader.result;
             $('#imagen_entrega').html('<img class="cuadro_imagenes" style="margin-left: 0%;" src="' + dataURL + '" />');

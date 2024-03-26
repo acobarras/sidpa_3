@@ -22,6 +22,19 @@ var consulta_documentos = function () {
             success: function (res) {
                 PRINCIPAL = res.cabecera;
                 rellenar_span(res.cabecera);
+                if (PRINCIPAL.img_entrega != '') {
+                    var extension = PRINCIPAL.img_entrega.split('.').pop().toLowerCase();
+                    if (extension == 'pdf') {
+                        $('#div_imagen').removeClass('d-none');
+                        $('#imagen_entrega').html(`<iframe class="cuadro_imagenes" style="margin-left: 0%;" src=${IMG}${PROYECTO}/fotos_entregas/${PRINCIPAL.img_entrega}></iframe>`);
+
+                    } else {
+                        $('#div_imagen').removeClass('d-none');
+                        $('#imagen_entrega').html(`<img class="cuadro_imagenes" style="margin-left: 0%;" src=${IMG}${PROYECTO}/fotos_entregas/${PRINCIPAL.img_entrega}>`);
+                    }
+                } else {
+                    $('#div_imagen').addClass('d-none');
+                }
                 var numero_relacionado = res.cabecera.num_remision;
                 if (res.cabecera.tipo_documento == 8 || res.cabecera.tipo_documento == 9) {
                     numero_relacionado = res.cabecera.num_factura;
